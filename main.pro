@@ -1,67 +1,86 @@
-;; Last modified:   02 June 2017 14:41:11
+;; Last modified:   18 July 2017 11:01:20
+
+;+
+; ROUTINE:      main.pro
+;
+; PURPOSE:      Describe steps in project
+;               Run as script for common variables
+;               Syntax for all user-defined subroutines (and some others)
+;               Explanation of variables restored from .sav files
+;
+; USEAGE:       @main.pro
+;
+; INPUT:        N/A
+;
+; KEYWORDs:     N/A
+;
+; OUTPUT:       N/A
+;
+; TO DO:        Can't find subroutine that produced coordinates of missing hmi data,
+;                   but numbers are saved in linear_interp.pro
+;
+; AUTHOR:       Laurel Farris
+;
+;KNOWN BUGS:
+;-
 
 
-step = 6
+;; Calling sequence for subroutines:
 
-case step of 
-    1: begin
-        ;; Read fits files
-        resolve_routine, 'read_my_fits', /either
-        ;path = '/solarstorm/laurel07/Data/aia/aia*2011*.fits'
-        ;READ_MY_FITS, aia_index, aia_data, path=path, nodata=0
-        path = '/solarstorm/laurel07/Data/HMI/hmi*2011*continuum.fits'
-        READ_MY_FITS, hmi_index, hmi_data, path=path, nodata=0
-        end
-    2: begin
-        ;; Images
-        w = window()
-        for i = 0, 5 do begin
-            im = image( data[*,*,i+50], current=1, layout=[2,3,i+1] )
-        endfor
-        end
-    3: begin
-        ;; Watch movie of images to see what flare looks like
-        xstepper, data ;, info_array, xsize=xsize, ysize=ysize, /interp, start=start, /noscale
-        end
-    4: begin
-        ;; Align data (may need to adjust according to xcen, ycen, but only if using
-        ;;    data from different instruments... which I probably won't be.)
-        ALIGN, cube
-        end
-    5: begin
-        ;; Sum entire disk
-        d = fltarr(381)
-        for i = 0, 380 do begin
-            ;d[i] = total( hmi_data[*,*,i+1] ) - total( hmi_data[*,*,i] )
-            d[i] = total( hmi_data[*,*,i] )
-        endfor
-        end
-    6: begin
-        ;; Fourier analysis
-        delt = 45
+;;  read_my_fits, index, data, path=path, z1=z1, z2=z2, nodata=nodata
 
-        ;; Array containing power and phase at each frequency (according to comments).
-        result = Fourier2( d, delt )
+;;  align, data_cube
 
-        frequency = result[0,*]
-        power_spectrum = result[1,*]
-        phase = result[2,*]
-        amplitude = result[3,*]
+;;  result = linear_interp( old_array, indices )
+;;      for HMI[800,800,360]  IDL> .run linear_interp
 
-        ytitle=["frequency", "power spectrum", "phase", "amplitude"]
+;;  hmi_rotate, cube
 
-        ;resolve_routine, "graphic_configs"
-        e = graphic_configs(2)
-        w = my_window( 700, 700, /del )
-        for i = 0, 3 do begin
-            p = plot(result[i,*], layout=[2,2,i+1], /current, $
-            ytitle=ytitle[i], xtitle="",  _EXTRA=e)
-        endfor
-        w2 = my_window( 700,500 )
-        p1 = plot(d, layout=[1,1,1], _EXTRA=e)
-        end
-      
-endcase
+;;  radius( arr, x0=x0, y0=y0 )
+
+;;  fourier2( Flux, Delt, rad=rad, pad=pad, norm=norm, signif=signif, display=display )
+
+;;  @graphic_configs ... will have to add/change properties specific to each graphic.
+
+;;  save_figs, "filename"
+
+;;  xstepper, cube, info, xsize=512, ysize=512   (not user-written)
 
 
-end
+;---------------------------------------------------------------------------------------------
+;; (1) Read fits files
+
+;; Filenames of current data (examples)
+;  aia.lev1.131A_2012-06-01T01_00_09.62Z.image_lev1.fits
+;  hmi.ic_45s.2011.02.15_00_01_30_TAI.continuum.fits
+
+;; Paths to data
+hmi_path = '/solarstorm/laurel07/Data/HMI/'
+aia_path = '/solarstorm/laurel07/Data/AIA/'
+
+
+
+;---------------------------------------------------------------------------------------------
+;; (2) Restore aligned HMI data
+
+; restore, "hmi_aligned.sav"
+; VAR = cube -->  800 x 800 x 360   aligned and trimmed
+
+
+;; (3) Interpolate to get missing data
+
+; Get coordinates of missing data
+; ?
+
+; IDL> .run linear_interp
+; VAR = cube2 --> 800 x 800 x 364  alined, trimmed, interpolated
+
+
+
+;; (4) Fourier analysis
+
+;result = fourier2( array, delt, rad=rad, pad=pad, norm=norm, signif=signif, display=display )
+; frequency = result[0,*]
+; power_spectrum = result[1,*]
+; phase = result[2,*]
+; amplitude = result[3,*]
