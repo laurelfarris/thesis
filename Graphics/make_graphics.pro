@@ -1,4 +1,4 @@
-;; Last modified:   12 July 2017 14:24:37
+;; Last modified:   17 August 2017 16:43:31
 
 ;; Syntax:  graphic = MAKE_GRAPHICS( data, lx, ly [, scale=1.0, /make_image, /make_plot )
 
@@ -96,9 +96,30 @@ end
 ;    if keyword_set(cbar) then begin
         ; adjust window dimensions and graphic positions to make room for it
 ;    endif
+
+
+    ;; Create colorbar, using current graphic to position
+    pos = graphic.position
+    cx1 = pos[2]
+    cy1 = pos[1]
+    cx2 = cx1 + 0.03
+    cy2 = pos[3]
+
+
+    cbar = colorbar( $
+        position = [cx1,cy1,cx2,cy2], $
+        _EXTRA=cbar_props )
+
+    ;; Shift graphics by amount d relative to window.
+    d = 0.05
+    im.position = im.position - [d, 0.0, d, 0.0]
+
+;; Text--------------------------------------------------------------------------------------------
+    txt = text(0.01, 0.01, filename, font_size=9, font_name=font_name)
+    txt2 = text(0.7, 0.01, systime(), font_size=9, font_name=font_name)
+
+
+
+
 ;; Save-------------------------------------------------------------------------------------------
 ;    if keyword_set(savefile) then SAVE_FIGS, filename
-
-;; Do I still need this?
-;data = [ [[aia_1600_data[*,*,0]]], [[aia_1700_data[*,*,0]]] ]
-;MY_IMAGE, hmi_data[*,*,0:3], image_props, 2, 2

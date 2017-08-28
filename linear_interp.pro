@@ -1,9 +1,10 @@
-;; Last modified:   18 July 2017 11:05:09
+;; Last modified:   18 August 2017 11:54:17
 
 ;+
 ; ROUTINE:      linear_interp.pro
 ;
-; PURPOSE:      Linear interpolation at coordinates specified by caller
+; PURPOSE:      Linear interpolation at coordinates specified by caller.
+;               Each index[i-1] and index[i] are averaged, with new image inserted between them
 ;
 ; USEAGE:       LINEAR_INTERP, array, indices
 ;
@@ -15,8 +16,7 @@
 ; OUTPUT:       Array with N more elements in the z direction, where N is equal to the
 ;               number of elements in the indices array
 ;
-; TO DO:        Can't find subroutine that produced coordinates of missing hmi data,
-;                   but numbers are saved in linear_interp.pro
+; TO DO:
 ;
 ; AUTHOR:       Laurel Farris
 ;
@@ -24,16 +24,47 @@
 ;-
 
 
-function LINEAR_INTERP, old_array, indices
+function LINEAR_INTERP, old_array, index, cadence
 
-    descending = indices[ reverse(sort(indices)) ]
+    ; Get indices of missing data
 
-    array = old_array
-    foreach i, descending do begin
-        new_element = ( array[*,*,i] + array[*,*,i+1] ) / 2.
-        array = [ [[array[*,*,0:i]]], [[new_element]], [[array[*,*,i+1:*]]] ]
-    endforeach
 
-    return, array
+    t = []
+    for i = 0, n_elements(index)-1 do $
+        t = [ t, GET_TIMESTAMP(index[i].date_obs, /sunits) ]
+
+    dt = t - shift(t,1)
+    interp_coords = ( where(dt ne cadence) )
+
+
+    if n_elements(interp_coords) gt 1 then begin
+
+        descending = ( interp_coords[ reverse(sort(interp_coords)) ] )[0:-2]
+
+        array = old_array
+        foreach i, descending do begin
+            new_element = ( array[*,*,i-1] + array[*,*,i] ) / 2.
+            array = [ [[array[*,*,0:i-1]]], [[new_element]], [[array[*,*,i:*]]] ]
+        endforeach
+
+        return, array
+
+        print, "Nothing to interpolate"
+
+    endif
+
+
+    return, 0
+
+
+end
+
+
+hmi = LINEAR_INTERP( hmi, hmi_index, hmi_cad )
+a6 = LINEAR_INTERP( a6, aia_1600_index, aia_cad )
+a7 = LINEAR_INTERP( a7, aia_1700_index, aia_cad )
+
+
+
 
 end

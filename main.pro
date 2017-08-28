@@ -1,4 +1,4 @@
-;; Last modified:   18 July 2017 11:01:20
+;; Last modified:   18 August 2017 12:01:31
 
 ;+
 ; ROUTINE:      main.pro
@@ -55,25 +55,32 @@
 ;  hmi.ic_45s.2011.02.15_00_01_30_TAI.continuum.fits
 
 ;; Paths to data
-hmi_path = '/solarstorm/laurel07/Data/HMI/'
-aia_path = '/solarstorm/laurel07/Data/AIA/'
+hmi_path = '/solarstorm/laurel07/Data/HMI/*hmi*.fits'
+aia_1600_path = '/solarstorm/laurel07/Data/AIA/*aia*1600*.fits'
+aia_1700_path = '/solarstorm/laurel07/Data/AIA/*aia*1700*.fits'
 
+;; Cadence
+hmi_cad = 45.0
+aia_cad = 24.0
 
+fontname = "Helvetica"
+fontsize = 9
 
 ;---------------------------------------------------------------------------------------------
 ;; (2) Restore aligned HMI data
 
-; restore, "hmi_aligned.sav"
-; VAR = cube -->  800 x 800 x 360   aligned and trimmed
-
+;; restore, "Sav_files/hmi_aligned.sav"
+; IDL> .run restore_data
+; VAR = ?
 
 ;; (3) Interpolate to get missing data
 
-; Get coordinates of missing data
-; ?
+; Get coordinates of missing data (linear_interp.pro does this)
 
 ; IDL> .run linear_interp
-; VAR = cube2 --> 800 x 800 x 364  alined, trimmed, interpolated
+; VAR = hmi -->  500 x 330 x 364   aligned, trimmed, and interpolated
+; VAR = a6  -->  500 x 330 x 682   aligned, trimmed, and interpolated
+; VAR = a7  -->  500 x 330 x 682   aligned, trimmed, and interpolated
 
 
 

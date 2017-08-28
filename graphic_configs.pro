@@ -1,41 +1,18 @@
-;; Last modified:   01 August 2017 23:16:36
+;; Last modified:   17 August 2017 16:18:09
 ; Programmer:       Laurel Farris
 
-
-; Calling sequence: e = GRAPHIC_CONFIGS, n
-;   n = 0  colorbar
-;   n = 1  image
-;   n = 2  plot
-;   n = 3  scatterplot
-; 
-; graphic = IDLFUNC( data, _EXTRA=e )
-
-
-;function GRAPHIC_CONFIGS
-
-;; Cute coding to arrange multiple windows, according to location of the ones already generated.
-;w = window( dimensions=scale*[500, 500], location=[800,100.0] )
-
-fontsize = 9
-fontname = "Helvetica"
-fontstyle = 0 ; 0=normal, 1=bold, 2=italic, 3=bold italic
-
-;; All properties
 all_props = { $
-
     ;buffer : 1, $
     ;current    : 1, $
+    ;overplot : , $
     ;device     : 0, $
-    ;dimensions : , $
+    ;dimensions : , $   ; of window
+    ;location : , $     ; of window
     ;layout : , $
-    ;location : , $
     ;margin : , $
     ;no_toolbar
     ;nodata : , $
-    ;overplot : , $
     ;widgets : , $
-
-
     ;rgb_table  : intarr(256,3), $
     ;rgb_table  : colortable( [[255,255,255],[000,000,000] ] ), $
     ;font_color
@@ -50,43 +27,45 @@ all_props = { $
     ytickfont_size : fontsize, $
     ;xtickfont_style : fontstyle, $
     ;ytickfont_style : fontstyle, $
-    xshowtext : 1, $
-    yshowtext : 1, $
     ;xtext_orientation : , $ ; angle of tick labels [degrees]
     ;ytext_orientation : , $
     ;xtextpos : 0, $ ; 1 = above axis, 0 = below axis (default)
-    ;ytextpos : 0, $
+    ;ytextpos : 0, $ ; 1 = to right of axis, 0 = to the left (?? didn't actually say...)
     ;xtitle     : , $
     ;ytitle     : , $
+
+    xshowtext : 1, $
+    yshowtext : 1, $
     ;xtickname     : , $
     ;ytickname     : , $
-    ;xtickformat  : "" $
-    ;ytickformat: '(E5.0)', $
-    axis_style : 2, $   ; 0=No axes & decreased margins, 1=single, 2=box, 3=crosshair, 4=1, but margins stay the same
-    ;xticklen : 0.03, $ ; length of major tick marks, relative to graphic
-    ;yticklen : 0.03, $
-    xsubticklen : 0.5, $ ; ratio of minor to major tick length (default = 0.5)
-    ysubticklen : 0.5, $ ; ratio of minor to major tick length (default = 0.5)
-    ;xthick : 1, $ ; 0.0 --> 10.0
-    ;ythick : 1, $
-    ;xtickdir : 0, $ ; 0=inwards (default), 1=outwards
-    ;ytickdir : 0, $
-    ;xticklayout : , $  ; 1=suppress, 2=boxed
-    ;yticklayout : , $
-    ;xmajor : -1, $  ; Number of major tick marks (-1 --> auto-compute,  0 --> suppress)
-    ;ymajor : -1, $
-    ;xminor : 5, $  ; Number of minor tick marks (between each pair of major? Or total?)
-    ;yminor : 5, $
-    ;xtickinterval : ;; interval BETWEEN major tick marks
-    ;ytickinterval : ;; interval BETWEEN major tick marks
-    ;xlog : 0, $
-    ;ylog : 0, $
-    ;xstyle : , $  ; (0=nice, 1=exact, 2=>nice, 3=>exact)
-    ;ystyle : , $
     ;xtickunits     : , $
     ;ytickunits     : , $
     ;xtickvalues     : , $
     ;ytickvalues     : , $
+    ;xtickformat  : "" $
+    ;ytickformat: '(E5.0)', $
+    ;xticklayout : , $  ; 1=suppress (show labels, not tick marks or axis), 2=boxed
+    ;yticklayout : , $
+
+    axis_style : 2, $   ; 0=No axes & decreased margins, 1=single, 2=box, 3=crosshair, 4=1, but margins stay the same
+    ;xticklen : 0.03, $ ; length of major tick marks, relative to graphic
+    ;yticklen : 0.03, $
+    xsubticklen : 0.5, $ ; ratio of minor to major tick length (default = 0.5)
+    ysubticklen : 0.5, $
+    ;xthick : 1, $ ; 0.0 --> 10.0
+    ;ythick : 1, $
+    ;xtickdir : 0, $ ; 0=inwards (default), 1=outwards
+    ;ytickdir : 0, $
+    ;xmajor : -1, $  ; Number of major tick marks (-1 --> auto-compute,  0 --> suppress)
+    ;ymajor : -1, $
+    ;xminor : 5, $  ; Number of minor tick marks between each pair of major ticks
+    ;yminor : 5, $
+    ;xtickinterval : ;; interval BETWEEN major tick marks [data units?]
+    ;ytickinterval :
+    ;xlog : 0, $
+    ;ylog : 0, $
+    ;xstyle : , $  ; (0=nice, 1=exact, 2=>nice, 3=>exact)
+    ;ystyle : , $
     ;xtransparency     : , $
     ;ytransparency     : , $
     ;xgridstyle
@@ -108,7 +87,10 @@ all_props = { $
     ;mapgrid (get only)
     ;mapprojection (get only)
     ;map_projection
-    ;max_value : 0.0, $
+    ;xrange
+    ;yrange
+    ;zvalue  ; = height of z plane (=0 by default)
+    ;max_value : 0.0, $   ; max/min values can be thought of as "zrange"
     ;min_value : 0.0, $
     ;name
     ;position
@@ -117,10 +99,43 @@ all_props = { $
     ;uvalue
     ;window (get only)
     ;window_title
-    ;xrange
-    ;yrange
-    ;zvalue
 }
+
+
+; 
+; graphic = IDLFUNC( data, _EXTRA=e )
+; --> running properties as keywords seems to be a lot faster
+
+
+;; Cute coding to arrange multiple windows, according to location of the ones already generated.
+
+fontsize = 9
+fontname = "Helvetica"
+fontstyle = 0 ; 0=normal, 1=bold, 2=italic, 3=bold italic
+
+;; Window
+;w = WINDOW( $
+;   location = [x-offset, y-offset] )  ; on computer screen
+;   dimensions = [w,h], $  pixels
+;   /buffer, $
+;   title = "", $
+
+; scale = [1,1]  ;; default
+;w = window( dimensions=scale*[500, 500], location=[800,100.0] )
+
+
+;; Graphic object array
+;graphic = OBJARR(N)  ; for N objects
+;for i = 0, N-1 ... graphic[i] = IMAGE(...)
+
+
+;; Graphic methods
+
+;; Axes - can retrieve array of AXIS objects
+;p = PLOT(...)
+;ax = p.AXES
+;ax[0].title = "..."
+;ax[2].hide = 1
 
 ;; Plot properties
 plot_props = { $
@@ -148,7 +163,7 @@ plot_props = { $
     ;vert_colors
 }
 
-;; Images
+;; Images----------------------------------------------------------------------------------------
 image_props = { $
     ;; Keywords
     ;geotiff : , $
@@ -160,8 +175,8 @@ image_props = { $
     ;; Properties
     ;grid_units
     ;interpolate
-    ;scale_center
-    ;scale_factor
+    ;scale_center  ; moves relative to image axes, not entire window
+    ;scale_factor  ;  ditto
     }
 
 ; im = image( Data [, X, Y] [, Keywords=value] [, Properties=value] )
@@ -169,7 +184,8 @@ image_props = { $
 
 
 
-;; Colorbar properties
+;; Colorbar----------------------------------------------------------------------------------------
+
 cbar_props = { $
     ;name        : "Color Bar", $
     orientation : 1, $
@@ -189,5 +205,13 @@ cbar_props = { $
     tickformat  : "" $
     }
 
+; orientation BEFORE position! Otherwise colors will change in the wrong direction
+; Set position according to graphics layout somehow?
 
     ;txt = text( x, y, filename, font_size=fontsize-2, font_name=fontname)
+
+
+
+
+;; Contours----------------------------------------------------------------------------------------
+;graphic = contour( data, x, y, ... )

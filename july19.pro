@@ -1,4 +1,7 @@
-;; Last modified:   19 July 2017 22:56:55
+;; Last modified:   12 August 2017 16:54:22
+
+;; Useful things:
+;;      Using headers to get time/indices of missing data
 
 
 goto, START
