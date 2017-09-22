@@ -1,4 +1,4 @@
-;; Last modified:   18 August 2017 10:17:08
+;; Last modified:   21 September 2017 02:32:23
 
 ;+
 ; ROUTINE:      main.pro
@@ -33,7 +33,7 @@ fls = file_search(hmi_path)
 read_sdo, fls[22:*], hmi_index, data, /nodata
 
 ; Restore hmi data
-restore, 'Sav_files/hmi_aligned.sav'
+restore, sav_path + 'hmi_aligned.sav'
 
 ;; Crop hmi images, relative to 800x800
 x1 = 200
@@ -53,7 +53,7 @@ fls = ( file_search(aia_1600_path) )[1:*]
 read_sdo, fls[67:*], aia_1600_index, data, /nodata
 
 ; Restore AIA 1600 data
-restore, 'Sav_files/aia_1600_aligned.sav'
+restore, sav_path + 'aia_1600_aligned.sav'
 cube = cube[*,*,1:*]
 
 ;; Crop aia images, relative to 800x800
@@ -71,7 +71,7 @@ fls = file_search(aia_1700_path)
 read_sdo, fls[67:*], aia_1700_index, data, /nodata
 
 ; Restore AIA 1700 data
-restore, 'Sav_files/aia_1700_aligned.sav'
+restore, sav_path + 'aia_1700_aligned.sav'
 
 ;; Crop aia images, relative to 800x800
 a7 = cube[ x1:x2-1, y1:y2-1, 67:* ]

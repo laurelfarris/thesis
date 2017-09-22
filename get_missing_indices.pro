@@ -1,9 +1,10 @@
-;; Last modified:   15 August 2017 16:32:28
+;; Last modified:   21 September 2017 02:27:22
 
 ;+
 ; ROUTINE:      get_missing_indices.pro
 ;
 ; PURPOSE:      Get indices of missing data
+;               (where dt not equal to cadence)
 ;
 ; USEAGE:
 ;

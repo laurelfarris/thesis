@@ -1,4 +1,4 @@
-;; Last modified:   18 August 2017 12:01:31
+;; Last modified:   21 September 2017 11:02:17
 
 ;+
 ; ROUTINE:      main.pro
@@ -55,21 +55,33 @@
 ;  hmi.ic_45s.2011.02.15_00_01_30_TAI.continuum.fits
 
 ;; Paths to data
+
 hmi_path = '/solarstorm/laurel07/Data/HMI/*hmi*.fits'
 aia_1600_path = '/solarstorm/laurel07/Data/AIA/*aia*1600*.fits'
 aia_1700_path = '/solarstorm/laurel07/Data/AIA/*aia*1700*.fits'
+sav_path = '../Sav_files/'
 
 ;; Cadence
 hmi_cad = 45.0
 aia_cad = 24.0
 
-fontname = "Helvetica"
-fontsize = 9
-
+fontname = "Times"
+fontsize = 12
+font_props = { $
+    font_name : fontname, $
+    font_size : fontsize, $
+    font_style : 1 $
+}
+;    xtickfont_name : fontname, $
+;    ytickfont_name : fontname, $
+;    xtickfont_size : fontsize, $
+;    ytickfont_size : fontsize, $
+;    xtickfont_style : 0, $
+;    ytickfont_style : 0 $
+;
 ;---------------------------------------------------------------------------------------------
 ;; (2) Restore aligned HMI data
 
-;; restore, "Sav_files/hmi_aligned.sav"
 ; IDL> .run restore_data
 ; VAR = ?
 

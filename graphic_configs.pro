@@ -1,4 +1,4 @@
-;; Last modified:   17 August 2017 16:18:09
+;; Last modified:   21 September 2017 00:26:48
 ; Programmer:       Laurel Farris
 
 all_props = { $
@@ -107,11 +107,10 @@ all_props = { $
 ; --> running properties as keywords seems to be a lot faster
 
 
-;; Cute coding to arrange multiple windows, according to location of the ones already generated.
-
 fontsize = 9
 fontname = "Helvetica"
 fontstyle = 0 ; 0=normal, 1=bold, 2=italic, 3=bold italic
+
 
 ;; Window
 ;w = WINDOW( $
