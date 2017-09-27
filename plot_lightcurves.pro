@@ -1,4 +1,4 @@
-;; Last modified:   18 August 2017 12:17:10
+;; Last modified:   26 September 2017 11:47:49
 
 @main
 
@@ -93,5 +93,23 @@ lc[2] = plot( ax, a7y, /overplot, color='firebrick', _EXTRA=props )
 
 
 ;txt = text( x, y, filename, font_size=fontsize-2, font_name=fontname)
+
+
+STOP
+
+; Add vertical line at flare start/peak/etc. times (25 Sep 2017)-------------------
+
+; start/peak times, according to GOES (or AIA? or both??)
+x1 =
+x2 =
+
+; Min/max y values of lightcurve plot
+y1 =
+y2 =
+
+vert = plot( [x1, x1], [y1,y2], linestyle=2, /overplot )
+vert = plot( [x2, x2], [y1,y2], linestyle=2, /overplot )
+
+
 
 end

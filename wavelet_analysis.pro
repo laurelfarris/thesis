@@ -1,4 +1,4 @@
-;; Last modified:   25 August 2017 12:47:51
+;; Last modified:   26 September 2017 11:51:59
 
 ; Wavelet analysis
 
@@ -84,5 +84,39 @@ im = image( wa_data, $
     )
 
 ;save_figs, "wa_hmi_zoom"
+
+end
+
+
+
+pro better_wa
+
+    SDBWAVE, hmi_flux, $
+        print=print, $
+        pc=pc, $
+        title="HMI wavelet analysis", $
+        nocon=nocon, $
+        delt=45.0,$
+        mother=mother, $  ; Default = 'morlet'
+        offset=offset, $
+        cone=cone, $
+        fast=fast, $
+        outscale=outscale,$
+        outper=outper, $
+        outfreq=outfreq, $
+        outtime=outtime, $
+        color=color, $
+        fig=fig,$
+        short=short, $
+        long=long, $
+        ylog=ylog, $
+        lthick=lthick, $
+        sig_fudge=sig_fudge,$
+        maxper=maxper, $
+        conf=conf;xticksep=xticksep
+
+
+
+
 
 end
