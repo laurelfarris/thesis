@@ -1,4 +1,4 @@
-;; Last modified:   21 September 2017 11:02:17
+;; Last modified:   04 October 2017 23:14:23
 
 ;+
 ; ROUTINE:      main.pro
@@ -44,7 +44,11 @@
 
 ;;  save_figs, "filename"
 
-;;  xstepper, cube, info, xsize=512, ysize=512   (not user-written)
+;;  xstepper, cube, 
+;;     info - string array, shows up instead of index num, and at bottom of each image
+;;     xsize = 512, ysize = 512,
+;;     start = index of starting image
+;;     subscripts = subscripts
 
 
 ;---------------------------------------------------------------------------------------------
@@ -67,17 +71,21 @@ aia_cad = 24.0
 
 fontname = "Times"
 fontsize = 12
-font_props = { $
+main_props = { $
     font_name : fontname, $
     font_size : fontsize, $
-    font_style : 1 $
+    font_style : 1, $
+    xtickfont_name : fontname, $
+    ytickfont_name : fontname, $
+    xtickfont_size : fontsize-1, $
+    ytickfont_size : fontsize-1, $
+    xtickfont_style : 1, $
+    ytickfont_style : 1, $
+    xsubticklen : 0.5, $
+    ysubticklen : 0.5 $
 }
-;    xtickfont_name : fontname, $
-;    ytickfont_name : fontname, $
-;    xtickfont_size : fontsize, $
-;    ytickfont_size : fontsize, $
-;    xtickfont_style : 0, $
-;    ytickfont_style : 0 $
+
+
 ;
 ;---------------------------------------------------------------------------------------------
 ;; (2) Restore aligned HMI data

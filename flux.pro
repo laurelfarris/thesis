@@ -1,4 +1,4 @@
-;; Last modified:   15 August 2017 20:00:55
+;; Last modified:   04 October 2017 17:24:25
 
 ;+
 ; ROUTINE:      flux.pro
@@ -39,7 +39,7 @@ end
 
 
 hmi_flux = flux( hmi )
-a6_flux = flux( a6 )
-a7_flux = flux( a7 )
+aia_1600_flux = flux( a6 )
+aia_1700_flux = flux( a7 )
 
 end

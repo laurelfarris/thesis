@@ -1,4 +1,4 @@
-;; Last modified:   18 August 2017 11:54:17
+;; Last modified:   29 September 2017 11:58:18
 
 ;+
 ; ROUTINE:      linear_interp.pro
@@ -26,13 +26,12 @@
 
 function LINEAR_INTERP, old_array, index, cadence
 
-    ; Get indices of missing data
-
-
+    ; Give index.dat_obs to return obs time in seconds ('sunits')
     t = []
     for i = 0, n_elements(index)-1 do $
         t = [ t, GET_TIMESTAMP(index[i].date_obs, /sunits) ]
 
+    ; Get indices of missing data
     dt = t - shift(t,1)
     interp_coords = ( where(dt ne cadence) )
 
@@ -49,20 +48,20 @@ function LINEAR_INTERP, old_array, index, cadence
 
         return, array
 
+    endif else begin
         print, "Nothing to interpolate"
-
-    endif
-
-
-    return, 0
+        return, old_array
+    endelse
 
 
 end
 
+@main
 
-hmi = LINEAR_INTERP( hmi, hmi_index, hmi_cad )
-a6 = LINEAR_INTERP( a6, aia_1600_index, aia_cad )
-a7 = LINEAR_INTERP( a7, aia_1700_index, aia_cad )
+
+hmi = LINEAR_INTERP( hmi_data, hmi_index, hmi_cad )
+a6 = LINEAR_INTERP( aia_1600_data, aia_1600_index, aia_cad )
+a7 = LINEAR_INTERP( aia_1700_data, aia_1700_index, aia_cad )
 
 
 

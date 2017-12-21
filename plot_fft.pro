@@ -1,4 +1,4 @@
-;; Last modified:   21 September 2017 11:06:41
+;; Last modified:   04 October 2017 18:54:23
 
 ;; Subroutines:     fourier2 --> returns "Array containing power and phase
 ;;                                              at each frequency"
@@ -14,17 +14,6 @@
 
 pro plot_fft, flux, cad, props, i, zoomin=zoomin
 
-    @main
-
-    result = fourier2( flux, cad, /norm )
-    frequency = result[0,*]
-    power_spectrum = result[1,*]
-
-    ;; Entire thing
-    x = frequency
-    y = power_spectrum
-    period = 1./frequency
-    period_min = (1./60.)/x  ;; minutes
 
     ;; Zoom in
     if keyword_set( zoomin ) then begin
@@ -37,20 +26,23 @@ pro plot_fft, flux, cad, props, i, zoomin=zoomin
         props.yrange = [0.0, 1.0]
         ;props.yrange = [0.0003, 6.1]
         props.ytitle = "power (normalized)"
-    endif
+        tvalues = (1./60.)/[2.0, 3.0, 4.0, 5.0]
+    endif else begin
+        props.ytitle = "log power (normalized)"
+        tvalues = (1./60.)/[2.0, 3.0, 4.0, 5.0]
+    endelse
 
     b = 0.08
-    l = 0.08
+    l = 0.10
     t = 0.1
     r = 0.01
     gap = 0.02
-    pos = positions( 3, 3, b=b, l=l, t=t, r=r, gap=gap )
+    pos = positions( 3, 3, b, l, t, r, gap )
     pos = pos[*,i-1]
 
 
     ;; Make plots
     p = plot( x, y, /current, $
-        ;layout=[3,3,i], margin=0.10, $
         position=pos, $
         _EXTRA=props )
 
@@ -61,27 +53,29 @@ pro plot_fft, flux, cad, props, i, zoomin=zoomin
 
     ;; Add vertical line at 3-min
     f3 = 1./180.
+    f5 = 1./300.
     v1 = props.yrange[0]
     v2 = props.yrange[1]
     vert = plot( [f3, f3], [v1,v2], linestyle=2, /overplot ) 
+    vert2 = plot( [f5, f5], [v1,v2], linestyle=2, /overplot ) 
 
     ;; Add axis to show period
-    if zoomin eq 1 then begin
-        tvalues = (1./60.)/[2.0, 3.0, 4.0, 5.0]  ;; Hz
-        nmaj = n_elements(tvalues)
-        ax[2].major = nmaj
-        ax[2].minor = 5
-        ax[2].tickvalues = tvalues
-        if pos[3] ge (1.0-t) then begin
-            ax[2].showtext = 1
-            ax[2].title = "period [min]"
-            ax[2].tickname = reverse( string( (1./tvalues)/60., format='(F6.1)' ) )
-        endif
-        ;if (i le 3) then ax[2].title = "period [min]" else ax[2].title = ""
-        ;period_label = GET_LABELS( period_min, nmaj )
-        ;ax[2].tickname = string( period_label, format='(F6.1)' )
+    ; convert desired periods (min) to Hz to find locs on x-axis
+    nmaj = n_elements(tvalues)
+    ax[2].major = nmaj
+    ax[2].minor = 5
+    ax[2].tickvalues = tvalues
+    if pos[3] ge (1.0-t) then begin
+        ax[2].showtext = 1
+        ax[2].title = "period [min]"
+        ax[2].tickname = reverse( string( (1./tvalues)/60., format='(F6.1)' ) )
     endif
+    ;if (i le 3) then ax[2].title = "period [min]" else ax[2].title = ""
+    ;period_label = GET_LABELS( period_min, nmaj )
+    ;ax[2].tickname = string( period_label, format='(F6.1)' )
 
+    
+    ;; Column lables (HMI, AIA 1600, AIA 1700)
     ty = 1.0 - t/3.0
     tx = pos[0] + (pos[2]-pos[0])/2
     titles = ["HMI","AIA 1600$\AA$","AIA 1700$\AA$"]
@@ -95,12 +89,20 @@ pro plot_fft, flux, cad, props, i, zoomin=zoomin
     if i eq 3 then t = text( tx, ty, titles[2], _EXTRA=text_props )
 
 
+    ;; Better way, except IDL thinks the titles should go right on
+    ;; top of the axis labels... also not using the same font :(
+    ;;     29 Sep 2017
+    ;if i eq 7 then p.title="HMI"
+    ;if i eq 8 then p.title="AIA 1600"
+    ;if i eq 9 then p.title="AIA 1700"
+
+
 end
 
 @main
 
-wx = 800
-wy = 650
+wx = 1200
+wy = 900
 w = window( dimensions=[wx,wy] )
 
 props = { $
@@ -122,7 +124,9 @@ props = { $
     xthick : 1.5, $
     ythick : 1.5, $
     xtitle : "frequency [Hz]", $
-    ytitle : "log power (normalized)" $
+    ;ytickformat :  , $
+    ytext_orientation : 45, $
+    ytitle : "" $
     ;xtickformat : '(F6.3)' $
     }
 

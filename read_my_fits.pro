@@ -1,4 +1,4 @@
-;; Last modified:   15 July 2017 15:38:19
+;; Last modified:   01 November 2017 15:53:11
 ;; Filename:        read_my_fits.pro
 ;; Programmer:      Laurel Farris
 
@@ -8,19 +8,6 @@
 
 ;; Why did I feel the need to have an entire subroutine for this?
 ;; Probably from the multi-bandpass fiasco.
-
-
-pro read_hmi
-
-    ;; Path to HMI data fits files
-    hmi_path = '/solarstorm/laurel07/Data/HMI/'
-    fls = file_search(hmi_path + '*.fits')
-    fls = fls[22:*]
-    READ_SDO, fls, hmi_index, hmi_data, nodata=1
-    hmi_rotate, hmi_data
-    ;save, hmi_data[]  ... see align.pro for coordinates
-
-end
 
 
 pro read_aia, aia_1700_data
@@ -44,6 +31,26 @@ end
 ;    data[*,*,i] = shift( data[*,*,i], round(index[0].xcen), round(index[0].ycen), 0 )
 ;endfor
 
-read_aia, data
+path = '/solarstorm/laurel07/Data/AIA/*1700A*.fits'
+fls = (file_search(path))[0]
+READ_SDO, fls, aiaindex, aiadata2, nodata=0
+STOP
+
+;; Path to HMI data fits files
+path = '/solarstorm/laurel07/Data/HMI/*.fits'
+fls = (file_search(path))[0]
+READ_SDO, fls, hmiindex, hmidata, nodata=0
+
+path = '/solarstorm/laurel07/Data/AIA/*1600A*.fits'
+fls = (file_search(path))[0]
+READ_SDO, fls, aiaindex, aiadata, nodata=0
+
+
+    
+
+
+;; This line would still be needed... (25 Oct. 2017)
+;hmi_rotate, hmi_data
+;save, hmi_data[]  ... see align.pro for coordinates
 
 end

@@ -1,4 +1,4 @@
-;; Last modified:   17 August 2017 14:51:19
+;; Last modified:   01 October 2017 00:11:51
 
 ;; Subroutines:     fourier2 --> returns "Array containing power and phase
 ;;                                              at each frequency"
@@ -28,16 +28,17 @@ function FA_2D, cube, delt, T, dT
 
             result = fourier2( cube[x,y,*], delt )
             f = result[0,*]     ; frequency 
-            ps = result[1,*]    ; power_spectrum 
+            ps = reform(result[1,*])    ; power_spectrum 
 
             ;; Use passband of power at range of periods ~ 2.75-3.15 minutes
             f1 = (1./(T+dt))
             f2 = (1./(T-dt))
-            i1 = ( where( f gt f1) )[0]
-            i2 = ( where( f lt f2) )[-1]
+            i1 = ( where( f ge f1) )[0]
+            i2 = ( where( f le f2) )[-1]
             power_image[x,y] = mean( ps[i1:i2] )
         endfor
     endfor
+    print, n_elements(ps[ i1:i2 ])
     return, power_image
 end
 
