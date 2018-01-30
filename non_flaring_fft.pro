@@ -1,4 +1,4 @@
-;; Last modified:   26 September 2017 01:47:28
+;; Last modified:   29 January 2018 17:31:40
 
 ;+
 ; ROUTINE:      fourier_test.pro
@@ -22,7 +22,7 @@
 ;-
 
 
-pro fourier_test, x, y
+pro NON_FLARING_FFT, x, y
 
     props = { $
         font_name : "Times", $
@@ -48,16 +48,16 @@ end
 cube = hmi[1000:1099,1000:1099,*]
 
 ; Coordinates for each location
-umb = [50, 50]
-pen = [60, 60]
-quiet = [90, 90]
+umbra = [50, 50]
+penumbra = [60, 60]
+quiet_sun = [90, 90]
 
 ; Cadence for HMI
 delt = 45.0
 
-umb_result = fourier2( cube[ umb[0], umb[1], * ], delt )
-pen_result = fourier2( cube[ pen[0], pen[1], * ], delt )
-quiet_result = fourier2( cube[ quiet[0], quiet[1], * ], delt )
+umbra_result   = FOURIER2( cube[ umbra[0], umbra[1], * ], delt )
+penumbra_result   = FOURIER2( cube[ penumbra[0], penumbra[1], * ], delt )
+quiet_sun_result = FOURIER2( cube[ quiet_sun[0], quiet_sun[1], * ], delt )
 
 
 
@@ -65,11 +65,11 @@ quiet_result = fourier2( cube[ quiet[0], quiet[1], * ], delt )
 ; Bigger time series --> better looking curve (I think).
 
 arr = [ $
-    umb_result[1,*], $
-    pen_result[1,*], $
-    quiet_result[1,*] $
+    umbra_result[1,*], $
+    penumbra_result[1,*], $
+    quiet_sun_result[1,*] $
     ]
 
-fourier_test, umb_result[0,*], arr
+NON_FLARING_FFT, umbra_result[0,*], arr
 
 end

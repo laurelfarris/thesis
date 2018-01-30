@@ -1,113 +1,129 @@
-;; Last modified:   04 October 2017 23:14:23
+;; Last modified:   29 January 2018 19:39:39
 
 ;+
-; ROUTINE:      main.pro
+; ROUTINE:      Main.pro
 ;
-; PURPOSE:      Describe steps in project
-;               Run as script for common variables
-;               Syntax for all user-defined subroutines (and some others)
-;               Explanation of variables restored from .sav files
+; PURPOSE:      This is primarily for use as a reference:
+;               It describes each step in the data analysis,
+;               provides syntax for all user-defined subroutines,
+;               and describes variable specs at each step (type, size, etc.)
 ;
-; USEAGE:       @main.pro
+;               Run this as a script to execute all routines to
+;                PREP data for analysis.
 ;
-; INPUT:        N/A
-;
-; KEYWORDs:     N/A
-;
-; OUTPUT:       N/A
-;
-; TO DO:        Can't find subroutine that produced coordinates of missing hmi data,
-;                   but numbers are saved in linear_interp.pro
+; USEAGE:       IDL> @main.pro
 ;
 ; AUTHOR:       Laurel Farris
 ;
-;KNOWN BUGS:
+; TO DO:        read_my_fits.pro needs some work
+;
 ;-
 
 
 ;; Calling sequence for subroutines:
 
-;;  read_my_fits, index, data, path=path, z1=z1, z2=z2, nodata=nodata
+;; Interpolate
+;  IDL> result = linear_interp( old_array, header, cadence )
 
-;;  align, data_cube
+;; Fourier analysis
+;  IDL> result = fourier2( $
+;    Flux, Delt, rad=rad, pad=pad, norm=norm, signif=signif, display=display )
+; frequency      = result[0,*]
+; power_spectrum = result[1,*]
+; phase          = result[2,*]
+; amplitude      = result[3,*]
 
-;;  result = linear_interp( old_array, indices )
-;;      for HMI[800,800,360]  IDL> .run linear_interp
+;; Read fits files
+;  IDL> read_my_fits, index, data, path=path, z1=z1, z2=z2, nodata=nodata
 
-;;  hmi_rotate, cube
+;; Align data
+;  align, data_cube
 
-;;  radius( arr, x0=x0, y0=y0 )
+;  hmi_rotate, cube
 
-;;  fourier2( Flux, Delt, rad=rad, pad=pad, norm=norm, signif=signif, display=display )
+;  radius( arr, x0=x0, y0=y0 )
 
-;;  @graphic_configs ... will have to add/change properties specific to each graphic.
+;  @graphic_configs ... will have to add/change properties specific to each graphic.
 
-;;  save_figs, "filename"
+;  save_figs, "filename"
 
-;;  xstepper, cube, 
-;;     info - string array, shows up instead of index num, and at bottom of each image
-;;     xsize = 512, ysize = 512,
-;;     start = index of starting image
-;;     subscripts = subscripts
+;  xstepper, cube,
+;     info - string array, shows up instead of index num, and at bottom of each image
+;     xsize = 512, ysize = 512,
+;     start = index of starting image
+;     subscripts = subscripts
 
 
-;---------------------------------------------------------------------------------------------
-;; (1) Read fits files
-
-;; Filenames of current data (examples)
+; Filenames of current data (examples)
 ;  aia.lev1.131A_2012-06-01T01_00_09.62Z.image_lev1.fits
 ;  hmi.ic_45s.2011.02.15_00_01_30_TAI.continuum.fits
 
-;; Paths to data
 
+;---------------------------------------------------------------------------------------------
+;; Variables needed to prep data
+
+; Paths to data
 hmi_path = '/solarstorm/laurel07/Data/HMI/*hmi*.fits'
 aia_1600_path = '/solarstorm/laurel07/Data/AIA/*aia*1600*.fits'
 aia_1700_path = '/solarstorm/laurel07/Data/AIA/*aia*1700*.fits'
 sav_path = '../Sav_files/'
 
-;; Cadence
-hmi_cad = 45.0
-aia_cad = 24.0
-
-fontname = "Times"
-fontsize = 12
-main_props = { $
-    font_name : fontname, $
-    font_size : fontsize, $
-    font_style : 1, $
-    xtickfont_name : fontname, $
-    ytickfont_name : fontname, $
-    xtickfont_size : fontsize-1, $
-    ytickfont_size : fontsize-1, $
-    xtickfont_style : 1, $
-    ytickfont_style : 1, $
-    xsubticklen : 0.5, $
-    ysubticklen : 0.5 $
-}
+; Cadence
+hmi_cadence = 45.0
+aia_cadence = 24.0
 
 
-;
 ;---------------------------------------------------------------------------------------------
-;; (2) Restore aligned HMI data
+;; Restore data
 
-; IDL> .run restore_data
-; VAR = ?
+; Run routine to RESTORE data
+RESTORE_HMI, hmi_index, hmi_data
+RESTORE_AIA, aia_1600_index, aia_1600_data, wave=1600
+RESTORE_AIA, aia_1700_index, aia_1700_data, wave=1700
+; VAR = hmi_data       -->  500 x 330 x ???   aligned and trimmed
+; VAR = aia_1600_data  -->  500 x 330 x ???   aligned and trimmed
+; VAR = aia_1700_data  -->  500 x 330 x ???   aligned and trimmed
 
-;; (3) Interpolate to get missing data
 
-; Get coordinates of missing data (linear_interp.pro does this)
+;---------------------------------------------------------------------------------------------
+;; Interpolate to get missing data. Use coords to manually generate the
+;;   missing observation times.
 
-; IDL> .run linear_interp
+LINEAR_INTERP, hmi_data, hmi_index, hmi_cadence, hmi_coords
+LINEAR_INTERP, aia_1600_data, aia_1600_index, aia_cadence, a6_coords
+LINEAR_INTERP, aia_1700_data, aia_1700_index, aia_cadence, a7_coords
 ; VAR = hmi -->  500 x 330 x 364   aligned, trimmed, and interpolated
 ; VAR = a6  -->  500 x 330 x 682   aligned, trimmed, and interpolated
 ; VAR = a7  -->  500 x 330 x 682   aligned, trimmed, and interpolated
 
 
+;---------------------------------------------------------------------------------------------
+;; Get flux to make lightcurves
+hmi_flux      = total( total(hmi,1), 1 )
+aia_1600_flux = total( total(a6, 1), 1 )
+aia_1700_flux = total( total(a7, 1), 1 )
 
-;; (4) Fourier analysis
 
-;result = fourier2( array, delt, rad=rad, pad=pad, norm=norm, signif=signif, display=display )
-; frequency = result[0,*]
-; power_spectrum = result[1,*]
-; phase = result[2,*]
-; amplitude = result[3,*]
+;---------------------------------------------------------------------------------------------
+;; Get indices to separate data in Before, During, and After
+
+
+; Flare start/end times from Milligan et al. 2017
+flare_start = '01:30'
+flare_end   = '02:30'
+
+
+
+
+get_bda_indices, hmi_index, ht1, ht2
+get_bda_indices, aia_1600_index, a6t1, a6t2
+get_bda_indices, aia_1700_index, a7t1, a7t2
+
+
+
+;---------------------------------------------------------------------------------------------
+;.run plot_fft
+
+
+
+end

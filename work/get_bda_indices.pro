@@ -1,4 +1,4 @@
-;; Last modified:   18 August 2017 12:01:16
+;; Last modified:   30 January 2018 11:36:31
 
 ;+
 ; ROUTINE:      get_indices.pro
@@ -13,7 +13,7 @@
 ;
 ; OUTPUT:       N/A
 ;
-; TO DO:        
+; TO DO:
 ;
 ; AUTHOR:       Laurel Farris
 ;
@@ -25,6 +25,8 @@ pro get_bda_indices, index, t1, t2
 
     ;; find coordinates of image at start of flare and image at end of flare
     times = strmid(index.date_obs, 11, 5)
+
+    ;; TIMES SHOULD NOT BE HARDCODED!!
     t1 = (where( times eq '01:20' ))[0]
     t2 = (where( times eq '03:10' ))[-1]
 
@@ -48,9 +50,11 @@ pro get_bda_indices, index, t1, t2
 
 end
 
+
 get_bda_indices, hmi_index, ht1, ht2
 get_bda_indices, aia_1600_index, a6t1, a6t2
 get_bda_indices, aia_1700_index, a7t1, a7t2
+
 
 
 end

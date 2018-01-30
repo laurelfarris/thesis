@@ -1,4 +1,4 @@
-;; Last modified:   04 October 2017 23:18:53
+;; Last modified:   29 January 2018 16:42:23
 
 ;+
 ; ROUTINE:      main.pro
@@ -98,14 +98,5 @@ pro RESTORE_AIA, index, cube2, wave=wave
     x = 365
     y = 440
     cube2 = cube[ x-r:x+r-1, y-r:y+r-1, 67:* ]
-
-end
-
-
-
-RESTORE_HMI, hmi_index, hmi_data
-RESTORE_AIA, aia_1600_index, aia_1600_data, wave=1600
-RESTORE_AIA, aia_1700_index, aia_1700_data, wave=1700
-
 
 end
