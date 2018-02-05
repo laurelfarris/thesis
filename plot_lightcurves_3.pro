@@ -1,4 +1,4 @@
-;; Last modified:   05 February 2018 15:50:45
+;; Last modified:   05 February 2018 16:24:34
 
 pro plot_lightcurves, x, y
 
@@ -38,47 +38,70 @@ end
 a6flux = total( total(a6,1), 1 )
 a7flux = total( total(a7,1), 1 )
 
-a6struc = { $
+aia1600 = { $
+    jd : a6jd, $
     flux : a6flux, $
     smooth_flux : smooth(a6flux,8), $
+    background : mean(a6flux[0:9]), $
     name : "AIA 1600$\AA$", $
     color : 'dark orange' $
 }
-a7struc = { $
-    x : a7jd, $ 
-    y1 : a7flux, $
-    y2 : smooth(a7flux,8), $
+aia1700 = { $
+    jd : a7jd, $
+    flux : a7flux, $
+    smooth_flux : smooth(a7flux,8), $
+    background : mean(a7flux[0:9]), $
     name : "AIA 1700$\AA$", $
     color : 'dark cyan' $
 }
 
+s = create_struct( 'aia1600', aia1600, 'aia1700', aia1700 )
 
-plot_lightcurves, a6jd
+plot_lightcurves, s.aia1600.jd, s.aia1600.flux
 
-;p[1] = plot( x, a6sm, /overplot, linestyle=2, name="Boxcar smoothed")
-;p[2] = plot( [x[0],x[-1]], [bg,bg], /overplot, linestyle=1, thick=1.0, name="Background")
-
-
-
+n = n_tags(s)
+p = objarr(n)
+sm = objarr(n)
+bg = objarr(n)
+for i=0,n-1 do begin
+    p[i] = plot( s.(i).jd, s.(i).flux, $
+        /overplot, $
+        color=s.(i).color, $
+        name=s.(i).name $
+        )
+    sm[i] = plot( s.(i).jd, s.(i).smooth_flux, $
+        /overplot, $
+        linestyle=2, $
+        name="Boxcar smoothed"
+    bg[i] = plot( p[i].xrange, [s.(i).background,s.(i).background], $
+        /overplot, $
+        linestyle=1, $
+        thick=1.0, $
+        name="Background")
+endfor
 
 STOP
 flare_start = '01:30'
 flare_end   = '02:30'
 
 ; Indices of flare start/stop
-time = strmid( index.t_obs, 11, 5 )
+time = strmid( a6index.t_obs, 11, 5 )
 t1 = ( where( time eq flare_start ) )[ 0]
 t2 = ( where( time eq flare_end   ) )[-1]
 
+x = [ a6jd[t1], a6jd[t2] ]
+for i = 0, 1 do begin
+    v = plot( [ x[i], x[i] ], p.yrange, $
+        /overplot, $
+        linestyle=2, $
+        thick=1.0 $
+        )
+endfor
+
+
+
 
 STOP
-
-;; Smooth lightcurve
-a6smooth = smooth(a6flux,8)
-a7smooth = smooth(a7flux,8)
-
-
-
 
 ;; Detrended signal
 a6diff = (a6flux - a6smooth)/a6smooth
@@ -114,12 +137,8 @@ p5 = plot( x, a7sm, /overplot, linestyle=2, thick=1.5 )
 p6 = plot( [x[0],x[-1]], [bg,bg], $
     /overplot, linestyle=1, thick=1.0)
 
-
 leg = legend( target=[p1,p2,p3,p4], font_size=10, $
     position=[0.9,0.9], linestyle=6, shadow=0 )
-
-
-
 
 ;; Detrended lightcurves
 y = a6_detrended
