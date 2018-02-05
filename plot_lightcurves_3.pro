@@ -1,45 +1,89 @@
-;; Last modified:   01 February 2018 21:51:56
+;; Last modified:   05 February 2018 15:50:45
 
-GOTO, START
+pro plot_lightcurves, x, y
 
-props = { $
-    font_size      : 12, $
-    xtickname      : ['01:30','01:40','01:50','02:00','02:10','02:20','02:30'], $
-    xtickfont_size : 10, $
-    ytickfont_size : 10, $
-    xtitle         : "Start time (15-Feb-11 01:30:00)", $
-    ytitle         : "Normalized Intensity", $
-    thick          : 1.5, $
-    xmajor         : 7, $
-    xminor         : 10, $
-    stairstep      : 1, $
-    xstyle         : 1, $
-    ystyle         : 2, $
-    axis_style     : 2 $
-}
+    ;; Properties for entire panel
+    props = { $
+        font_size      : 12, $
+        xtickfont_size : 10, $
+        ytickfont_size : 10, $
+        xtitle         : "Start time (15-Feb-11 00:30:00)", $
+        ytitle         : "Normalized Intensity", $
+        thick          : 1.5, $
+        xmajor         : 7, $
+        xminor         : 5, $
+        xtickname      : ['01:30','01:40','01:50','02:00','02:10','02:20','02:30'], $
+        stairstep      : 1, $
+        xstyle         : 1, $
+        ystyle         : 2, $
+        axis_style     : 2 $
+    }
+
+    ;; Make plots
+    dw
+    wx = 1100
+    wy = 550
+    w = window( dimensions=[wx,wy] )
+
+    lc = plot( x, y, /nodata, /current, $
+        layout=[1,1,1], $
+        margin=[0.1, 0.1, 0.1, 0.1], $
+        _EXTRA=props )
 
 
-;; Lightcurves----------------------------------------------------------
 
+end
 
 ;; Get total flux
 a6flux = total( total(a6,1), 1 )
 a7flux = total( total(a7,1), 1 )
 
+a6struc = { $
+    flux : a6flux, $
+    smooth_flux : smooth(a6flux,8), $
+    name : "AIA 1600$\AA$", $
+    color : 'dark orange' $
+}
+a7struc = { $
+    x : a7jd, $ 
+    y1 : a7flux, $
+    y2 : smooth(a7flux,8), $
+    name : "AIA 1700$\AA$", $
+    color : 'dark cyan' $
+}
+
+
+plot_lightcurves, a6jd
+
+;p[1] = plot( x, a6sm, /overplot, linestyle=2, name="Boxcar smoothed")
+;p[2] = plot( [x[0],x[-1]], [bg,bg], /overplot, linestyle=1, thick=1.0, name="Background")
+
+
+
+
+STOP
+flare_start = '01:30'
+flare_end   = '02:30'
+
+; Indices of flare start/stop
+time = strmid( index.t_obs, 11, 5 )
+t1 = ( where( time eq flare_start ) )[ 0]
+t2 = ( where( time eq flare_end   ) )[-1]
+
+
+STOP
+
 ;; Smooth lightcurve
 a6smooth = smooth(a6flux,8)
 a7smooth = smooth(a7flux,8)
+
+
+
 
 ;; Detrended signal
 a6diff = (a6flux - a6smooth)/a6smooth
 a7diff = (a7flux - a7smooth)/a7smooth
 
-
-;; Make plots
-dw
-wx = 1100
-wy = 550
-w = window( dimensions=[wx,wy] )
 
 ;; 1600
 x = a6jd
@@ -50,19 +94,6 @@ y = y/max(y)
 bg = mean(y[0:10])
 a6sm = smooth(y,8)
 
-
-p1 = plot( x, y, /current, $
-    layout=[1,2,1], $
-    margin=[0.1, 0.0, 0.1, 0.1], $
-    color='dark orange', $
-    name="AIA 1600$\AA$", $
-    xshowtext=0, $
-    yrange=[-0.1,1.3], $
-    _EXTRA=props )
-p2 = plot( x, a6sm, /overplot, linestyle=2, thick=1.5, $
-    name="Boxcar smoothed")
-p3 = plot( [x[0],x[-1]], [bg,bg], $
-    /overplot, linestyle=1, thick=1.0, name="Background")
 
 
 ;; 1700

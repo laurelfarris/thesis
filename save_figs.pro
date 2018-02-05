@@ -1,9 +1,9 @@
-;; Last modified:   25 August 2017 21:23:00
+;; Last modified:   05 February 2018 09:36:22
 
 PRO save_figs, filename
 
     fig_path = "/home/users/laurel07/Dropbox/Figures/Thesis_project/"
-    filename = filename + ".png"
+    filename = filename + ".pdf"
 
     ;; fls will return a string array of 1, or an empty string
     fls = file_search( fig_path + filename )
