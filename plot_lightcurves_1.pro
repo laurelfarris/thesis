@@ -1,9 +1,30 @@
-;; Last modified:   26 September 2017 11:47:49
+;; Last modified:   02 February 2018 21:02:35
+
+function GET_LABELS, label_1, n_major
+
+    ;; Difference between each tick label
+    increment = n_elements(label_1)/n_major
+
+
+    ;; No "-1" in FOR loop... want this to be inclusive.
+    indices = []
+    for i=0, n_major do begin
+        indices = [ indices, i*increment ]
+    endfor
+    return, label_1[indices]
+end
+
+
 
 @main
 
 lc = objarr(3)
 
+;----------------------------------------------------------------------------------------------
+;; Normalize lightcurves so they're all visible and pretty in plot.
+
+
+; Shift all lightcurves so that their minimum value is zero
 hy = hmi_flux - min(hmi_flux)
 a6y = a6_flux - min(a6_flux)
 a7y = a7_flux - min(a7_flux)
@@ -18,12 +39,12 @@ hx = findgen(n_elements(hy))
 const = max(ax)/max(hx)
 hx = hx*const
 
-
-;; Difference plots (August 18)
+; Difference plots (August 18)
 hy = hy - shift(hy, 1)
 a6y = a6y - shift(a6y, 1)
 a7y = a7y - shift(a7y, 1)
-;;----------------------
+
+;----------------------------------------------------------------------------------------------
 
 
 ;; Make labels for x axis (time)

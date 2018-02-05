@@ -1,4 +1,4 @@
-;; Last modified:   29 January 2018 19:39:39
+;; Last modified:   30 January 2018 13:31:59
 
 ;+
 ; ROUTINE:      Main.pro
@@ -35,6 +35,11 @@
 
 ;; Read fits files
 ;  IDL> read_my_fits, index, data, path=path, z1=z1, z2=z2, nodata=nodata
+
+;; GET_LABELS
+   ; result = GET_LABELS( array, n )
+   ; short subroutine that returns array of length n+1,
+   ; where n+1 = number of labels you want to show on plot.
 
 ;; Align data
 ;  align, data_cube
@@ -80,9 +85,13 @@ aia_cadence = 24.0
 RESTORE_HMI, hmi_index, hmi_data
 RESTORE_AIA, aia_1600_index, aia_1600_data, wave=1600
 RESTORE_AIA, aia_1700_index, aia_1700_data, wave=1700
+
 ; VAR = hmi_data       -->  500 x 330 x ???   aligned and trimmed
 ; VAR = aia_1600_data  -->  500 x 330 x ???   aligned and trimmed
-; VAR = aia_1700_data  -->  500 x 330 x ???   aligned and trimmed
+; VAR = aia_1700_data  -->  500 x 330 x 678   aligned and trimmed
+
+; VAR = aia_1600_data  -->  327 x 327 x ???   aligned and trimmed, 200" x 200"
+; VAR = aia_1700_data  -->  327 x 327 x 678   aligned and trimmed, 200" x 200"
 
 
 ;---------------------------------------------------------------------------------------------

@@ -1,4 +1,4 @@
-;; Last modified:   02 October 2017 16:05:12
+;; Last modified:   02 February 2018 20:36:19
 
 ;; Subroutines:     fourier2 --> returns "Array containing power and phase
 ;;                                              at each frequency"
@@ -227,8 +227,3 @@ plot_fft, hmi_flux[ht2+1:*], hmi_cad, props, 1, zoomin=zoomin
 ;save_figs, "fa_spec_zoom"
 ;dw
 end
-
-
-
-
-
