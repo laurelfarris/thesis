@@ -1,4 +1,4 @@
-;; Last modified:   30 January 2018 13:31:59
+;; Last modified:   14 February 2018 14:38:58
 
 ;+
 ; ROUTINE:      Main.pro
@@ -80,11 +80,12 @@ aia_cadence = 24.0
 
 ;---------------------------------------------------------------------------------------------
 ;; Restore data
+; aia_1600_misaligned.sav --> cube [ 800  800 750]
+; aia_1700_misaligned.sav --> cube [ 800  800 745]
 
-; Run routine to RESTORE data
-RESTORE_HMI, hmi_index, hmi_data
-RESTORE_AIA, aia_1600_index, aia_1600_data, wave=1600
-RESTORE_AIA, aia_1700_index, aia_1700_data, wave=1700
+;; aligned using different area of sun
+; aia_1600_aligned.sav    --> cube [1000 1000 750]
+; aia_1700_aligned.sav    --> cube [1000 1000 745]
 
 ; VAR = hmi_data       -->  500 x 330 x ???   aligned and trimmed
 ; VAR = aia_1600_data  -->  500 x 330 x ???   aligned and trimmed
@@ -98,12 +99,7 @@ RESTORE_AIA, aia_1700_index, aia_1700_data, wave=1700
 ;; Interpolate to get missing data. Use coords to manually generate the
 ;;   missing observation times.
 
-LINEAR_INTERP, hmi_data, hmi_index, hmi_cadence, hmi_coords
-LINEAR_INTERP, aia_1600_data, aia_1600_index, aia_cadence, a6_coords
-LINEAR_INTERP, aia_1700_data, aia_1700_index, aia_cadence, a7_coords
-; VAR = hmi -->  500 x 330 x 364   aligned, trimmed, and interpolated
-; VAR = a6  -->  500 x 330 x 682   aligned, trimmed, and interpolated
-; VAR = a7  -->  500 x 330 x 682   aligned, trimmed, and interpolated
+LINEAR_INTERP, array=a7data, jd=a7jd, cadence=24 
 
 
 ;---------------------------------------------------------------------------------------------
