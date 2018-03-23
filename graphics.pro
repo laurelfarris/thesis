@@ -1,42 +1,21 @@
-;; Last modified:   05 March 2018 17:31:34
 
 ; Last modified:    Sat 09 Apr 2017
 ; Programmer:       Laurel Farris
 ; Description:      General configurations that apply to all graphics.
-;                       Call once to define common block, then shouldn't have to call again.
+
+
+; for myPlot, make xdata and ydata keywords, and use indgen(...) for xdata
+; when not specified.
+
+; Make a split routine for just making plots that don't intend to put
+; in paper? This would be a good place to keep lines for adding titles,
+; legends, text, anything to keep track of all important info.
+; Maybe just make one best suited for making graphics when advisor is
+; looking over my shoulder: shows every bit of important information,
+; no matter how ugly.
 
 
 
-alph = string( bindgen(1,26)+(byte('a'))[0] )
-
-dpi = 96
-
-width=5.0
-height=5.0
-
-cols = 1
-rows = 1
-
-margin = [0.75, 0.50, 1.0, 0.75]
-xgap=1.00
-ygap=0.10
-
-position = positions( $
-    layout=[cols,rows], $
-    margin=margin, $
-    width=width, $
-    height=height, $
-    xgap=xgap, $
-    ygap=ygap, $
-    dpi=dpi )
-if n_elements(size(position, /dimensions)) le 1 then $
-    position = reform(position, 4, 1)
-
-wx = max( position[2,*] ) + margin[2]
-wy = max( position[3,*] ) + margin[3]
-win = window( dimensions=[wx, wy]*dpi, location=[2,0]*dpi )
-
-position = position*dpi
 fontsize = 10
 
 plot_props = { $

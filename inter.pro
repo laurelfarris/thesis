@@ -42,6 +42,10 @@ end
 
 function interpolate_shifts, shifts
 
+    ; This is pretty close to 'inter' function in 2018-03-07.pro,
+    ; except here I figured out how to calculate good shifts based on bad ones,
+    ; rather than entering them manually.
+
     ;; number of shifts/images
     sz = size( shifts, /dimensions )
     N = fix(sz[1])

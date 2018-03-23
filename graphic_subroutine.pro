@@ -29,8 +29,10 @@ function ALL_PROPS
 end
 
 
-function MY_PLOT, x, y, layout=layout, image_dimensions=image_dimensions, txt=txt,_EXTRA=ex
+function MY_PLOT, x=x, y=y, layout=layout, image_dimensions=image_dimensions, txt=txt,_EXTRA=ex
     ;; Call to plot ANY data. Specifics are set in the main level
+    ; (23 March 2018) Modified x and y to be optional keywords.
+    ; Mostly for x - then create x=indgen(...) if not set.
 
 
     ;; Layout
