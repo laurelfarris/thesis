@@ -1,17 +1,18 @@
-;; Last modified:   05 March 2018 17:27:30
+; Last modified:   05 March 2018 17:27:30
 
-;; Returns position in INCHES.
-;; Need to multiply by dpi, and set /device keyword.
+; Returns position in INCHES,
+;    as a 4 x N array (where N = rows * cols )
 
+; Need to set /device keyword.
 
-
-;; Need a better way to set up default values...
+; Need a better way to set up default values...
 
 
 function GET_POSITION, $
     layout=layout, $
     margin=margin, $
-    width=width, height=height, $
+    width=width, $
+    height=height, $
     xgap=xgap, $
     ygap=ygap, $
     dpi=dpi
@@ -47,8 +48,8 @@ function GET_POSITION, $
     top = margin[3]
     ; gap = 0.10 for panels right next to each other
     ; gap = 1.00 to leave room for tick/axis labels.
-    xgap = 1.0
-    ygap = 1.0
+    if not keyword_set(xgap) then xgap = 1.0
+    if not keyword_set(ygap) then ygap = 1.0
 
     ;----------------------------------------------------------------------------------
     ; Position arrays, to make the following code easier to write.
@@ -57,8 +58,8 @@ function GET_POSITION, $
 
     i = 0
     ;; y in reverse to put layout in same order as default.
-    for x = 0, cols-1 do begin
-        for y = rows-1, 0, -1 do begin
+    for y = rows-1, 0, -1 do begin
+        for x = 0, cols-1 do begin
             x1[i] = x * (xgap+width)  + left
             y1[i] = y * (ygap+height) + bottom
             i = i + 1
@@ -79,7 +80,27 @@ function GET_POSITION, $
     if n_elements(size(pos, /dimensions)) le 1 then $
         pos = reform(pos, 4, 1)
 
-    return, pos
+    ;wy = 1050.
+    ;wx = wy * ( max(pos[2,*]) / max(pos[3,*]) )
+    ;if wx gt 1920 then begin
+    ;    frac = 1920./wx
+    ;    wx = 1920.
+    ;    wy = wy * frac
+    ;endif
+
+    wx = max( pos[2,*] ) + margin[2]
+    wy = max( pos[3,*] ) + margin[3]
+    ;wx = max( pos[2,*] ) + min( pos[0,*] )
+    ;wy = max( pos[3,*] ) + min( pos[1,*] )
+
+    ; if there is already a window present, place this one in a different
+    ; location so that both can be seen. See window methods, etc.
+    ; Can I buffer this one at first, then show it later?
+    ; Want to be able to call this without creating a window every time.
+    ; Or set a keyword to make a window or not.
+    win =  window( dimensions=[wx, wy]*dpi, location=[96,0])
+
+    return, pos*dpi
 
 
 end

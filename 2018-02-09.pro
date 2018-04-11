@@ -1,7 +1,5 @@
 ;; Last modified:   09 February 2018 08:54:27
 
-goto, start
-
 
 restore, 'aia_1600_cube.sav'
 image1 = cube[ *,*,0 ]
@@ -20,17 +18,11 @@ y1 = (sz[1])/2 - imageHeight/2
 y2 = y1 + imageHeight - 1
 
 
-u1 = im1[ uniq(im1, sort(im1)) ]
-u2 = im2[ uniq(im2, sort(im2)) ]
 
-p1 = plot( u1 )
-p2 = plot( u2 )
-
-
-
-
-
-start:;---------------------------------------------------------------------------------
+;---------------------------------------------------------------------------------
+;; Trying to scale AIA 1600 and 1700 images so their min/max
+;;   values are rougly the same... at least I think that's what I
+;;   was doing (06 April 2018).
 
 ;; New variables so that if I mess up or want to change them,
 ;;  'image1' and 'image2' are unchanged, and don't have to restore
@@ -40,13 +32,20 @@ im2 = float(image2[ x1:x2, y1:y2 ])
 
 im1 = im1-min(im1)
 ;im1 = im1^0.3
+im1 = im1^0.5
 
 im2 = im2-min(im2)
 im2 = (im2/max(im2))*max(im1)
 ;im2 = im2^0.5
 
-im1 = im1^0.5
+
+u1 = im1[ uniq(im1, sort(im1)) ]
+u2 = im2[ uniq(im2, sort(im2)) ]
+p1 = plot( u1 )
+p2 = plot( u2 )
+
 dat = [ [[ im1 ]], [[ im2 ]] ]
+;---------------------------------------------------------------------------------
 
 ;; Absolute coords
 ;;  Need to define this BEFORE taking subset of 1000x1000 cube...

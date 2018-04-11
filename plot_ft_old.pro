@@ -1,3 +1,6 @@
+; Last modified:   06 February 2018 13:32:26
+
+
 ;; Last modified:   04 October 2017 18:54:23
 
 ;; Subroutines:     fourier2 --> returns "Array containing power and phase
@@ -99,56 +102,110 @@ pro plot_fft, flux, cad, props, i, zoomin=zoomin
 
 end
 
-@main
-
-wx = 1200
-wy = 900
-w = window( dimensions=[wx,wy] )
-
-props = { $
-    ;font_props, $
-    ;xtickfont_name : fontname, ytickfont_name : fontname, $
-    ;xtickfont_size : fontsize, ytickfont_size : fontsize, $
-    ;font_size : fontsize, $
-    ;font_name : fontname, $
-    ;font_style : 1, $
-    color : "dark blue", $
-    xticklen : wx/30000.,  yticklen : wy/30000., $
-    xminor : 5, $
-    xstyle : 1, $
-    ;xrange : [0.003, 0.011], $
-    ;yrange : alog10( [0.00001,130.0] ), $
-    yrange : [0.00001,130.0], $
-    ylog : 1, $
-    title : "", $
-    xthick : 1.5, $
-    ythick : 1.5, $
-    xtitle : "frequency [Hz]", $
-    ;ytickformat :  , $
-    ytext_orientation : 45, $
-    ytitle : "" $
-    ;xtickformat : '(F6.3)' $
-    }
 
 
-props = create_struct( font_props, props )
+pro ARRS, S, frequency, power
 
-zoomin=1
+    ; assign array and result to proper structure.
+    ; This bit goes in its own subroutine as well.
+    dz = 50
+    z = [0:224:9]
+    result = fourier2( indgen(dz), S.cadence )
+    frequency = reform( result[0,*] )
+    power = fltarr( n_elements(z), n_elements(frequency) )
+
+    for i = 0, n_elements(z)-1 do begin
+        result = fourier2( S.flux[i:i+dz], S.cadence )
+        power[i,*] = result[1,*]
+    endfor
+    ; get indices of frequencies of interest for plotting.
+    ;period = 1./frequency
+    ;locs = where( period gt 110 AND period lt 210 )
+    ;period = period[locs]
+end
 
 
-plot_fft, hmi_flux[0:ht1-1], hmi_cad, props, 7, zoomin=zoomin
-plot_fft, hmi_flux[ht1:ht2], hmi_cad, props, 4, zoomin=zoomin
-plot_fft, hmi_flux[ht2+1:*], hmi_cad, props, 1, zoomin=zoomin
+goto, start
 
-plot_fft, a6_flux[0:a6t1-1], aia_cad, props, 8, zoomin=zoomin
-plot_fft, a6_flux[a6t1:a6t2], aia_cad, props, 5, zoomin=zoomin
-plot_fft, a6_flux[a6t2+1:*], aia_cad, props, 2, zoomin=zoomin
+ARRS, aia1700, frequency, power
 
-plot_fft, a7_flux[0:a7t1-1], aia_cad, props, 9, zoomin=zoomin
-plot_fft, a7_flux[a7t1:a7t2], aia_cad, props, 6, zoomin=zoomin
-plot_fft, a7_flux[a7t2+1:*], aia_cad, props, 3, zoomin=zoomin
+aia1700 = create_struct( aia1700, $
+    'frequency', frequency, $
+    'power', power )
 
-;save_figs, "fa_spec"
-;save_figs, "fa_spec_zoom"
-;dw
+
+stop
+
+start:;-----------------------------------------------------------------------------------
+
+; txt = text( string='S.(i).time[z]'
+@graphics
+cols = 3
+rows = 3
+
+;zoomin=1
+; Periods of interest (seconds)
+;power = power[locs]
+int = 1./[120,180,200]
+
+position = get_position( $
+    layout=[cols,rows],  $
+    margin=1.0, $
+    width=1.7, $
+    height=1.7 $
+)
+win = get_window( position )
+dims = win.dimensions
+
+p1 = objarr(rows*cols)
+p2 = objarr(rows*cols)
+for i=0, rows*cols-1 do begin
+
+    p1[i] = plot( $
+        S.(0).frequency, S.(0).power[i,*], /current, /device, $
+;        layout=[cols,rows,i+1], margin=0.10, $
+;        yrange=[min(S.(1).power), max(S.(1).power)], $
+        position=position[*,i], $
+        xtitle = "frequency (Hz)", $
+        ytitle = "Log(power)", $
+        ylog = 1, $
+        xshowtext=0, $
+        yshowtext=0, $
+        thick = 1.5, $
+        color = S.(0).color, $
+        _EXTRA=plot_props)
+
+    p2[i] = plot( $
+        S.(1).frequency, S.(1).power[i,*], /overplot, $
+        ;ylog = 1, $
+        thick = 1.5, $
+        color = S.(1).color, $
+        _EXTRA=plot_props)
+
+    ; Show start time of each power spectrum
+    txt = text( $
+        0.9, 0.85, S.(0).time[z[i]], /relative, $
+        alignment=1.0, $
+        font_size=9, target=p1[i], color='black' $
+    )
+
+    ; overplot vertical lines at 120, 180, and 200 seconds.
+    for j=0,n_elements(int)-1 do begin
+        v = plot( $
+            [int[j],int[j]], $
+            p2[i].yrange, $
+            /overplot, $
+            linestyle=j+1 )
+    endfor
+    
+    ax = p1[i].axes
+    ;pos = p1[i].position * [ dims[0], dims[1], dims[0], dims[1] ]
+    pos = round(p1[i].position * [ dims[0], dims[1], dims[0], dims[1] ])
+    if pos[0] le round(min(position[0,*])) then ax[1].showtext=1
+    if pos[1] le round(min(position[1,*])) then ax[0].showtext=1
+
+endfor
+
+
+
 end

@@ -2,13 +2,13 @@
 
 
 
-pro step, cube, scale=scale
+pro xstepper2, cube, scale=scale
 
-    sz = size( cube, /dimensions )
+    sz = float(size( cube, /dimensions ))
 
     if not keyword_set(scale) then scale = 1
 
-    y = 800 * scale
+    y = 800 * float(scale)
     x = y * (sz[0]/sz[1])
 
     xstepper, cube, xsize=x, ysize=y
