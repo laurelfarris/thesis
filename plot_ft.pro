@@ -18,7 +18,7 @@ pro plot_ft, xdata, A, i, pos
         ylog=1, $
         color=A[0].color, $
         name=A[0].name $
-        )
+    )
     p[1] = plot2( xdata, A[1].power[*,i], $
         /overplot, $
         ylog=1, $
@@ -26,7 +26,7 @@ pro plot_ft, xdata, A, i, pos
         sym_filled=1, $
         color=A[1].color, $
         name=A[1].name $
-        )
+    )
 
     ax = p[0].axes
 
@@ -51,6 +51,7 @@ pro plot_ft, xdata, A, i, pos
     tx = (tpos[2] * d[0]) - offset
     ty = (tpos[3] * d[1]) - offset
     t = text2( tx, ty, A[0].time[i] + ' - ' + A[0].time[i+dz], /device, $
-        alignment=1, vertical_alignment=1 )
+        alignment=1, vertical_alignment=1 $
+    )
 
 end

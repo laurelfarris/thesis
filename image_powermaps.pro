@@ -77,9 +77,14 @@ width = 2.0
 height = width * (330./500.)
 gap = 0.05
 dpi = 96
-pos = get_position( layout=[cols,rows], $
+pos = get_position( $
+    cols=cols, $
+    rows=rows, $
     margin=[gap, gap, 1.5, gap], $
-    width=width, height=height, $
+    width=width,  $
+    ratio=(330./500), $
+    ;height=height, $
+    dpi = 76, $
     xgap=gap, ygap=gap )
 
 ; Image power maps
@@ -88,15 +93,13 @@ time = aia1600.time[z]
 
 
 
-stop
-
-;image_powermaps, aia1600map^0.5, 'powermaps_AIA1600_zoomed', time
+;image_powermaps, A[0].map^0.5, 'powermaps_AIA1600_zoomed', time
 ;mysave, 'powermaps_AIA1600_zoomed'
-;image_powermaps, aia1700map^0.5, 'powermaps_AIA1700_zoomed', time
+;image_powermaps, A[1].map^0.5, 'powermaps_AIA1700_zoomed', time
 ;mysave, 'powermaps_AIA1700_zoomed'
 
-;map = A[0].map[*,*,z]
-;image_powermaps, map^0.5, 'powermaps_AIA1600', time, pos
+map = A[0].map[*,*,z]
+image_powermaps, map^0.5, 'powermaps_AIA1600', time, pos
 
 map = A[1].map[*,*,z]
 image_powermaps, map^0.5, 'powermaps_AIA1700', time, pos

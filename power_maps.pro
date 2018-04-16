@@ -1,24 +1,6 @@
 ; Last modified:   08 April 2018
 ;
 
-pro plot_power_vs_time, z, map
-
-    ;; map = 3D array of maps (x,y,t)
-
-    win = window( dimensions=[1200, 800] )
-
-    xdata = z
-    ydata = total( total( map, 1), 1 )
-
-    p = plot2( xdata, ydata, /current, $
-        xtickvalues=[0:199:25], $
-        xtickname=time[0:199:25], $
-        xtitle='observation time (15 February 2011)', $
-        ytitle='3-minute power' $
-    )
-end
-
-
 function power_maps, $
     data, $
     z=z, dz=dz, $
@@ -47,7 +29,6 @@ function power_maps, $
     ; Indices of power/frequency arrays within desired bandpass.
     ;   dz = # images (length of time) over which to calculate each FT.
     ind = get_frequencies( cadence=24, dz=dz, T=T )
-    stop
 
     sz = size( data, /dimensions )
     n = n_elements(z)
@@ -60,18 +41,18 @@ function power_maps, $
 
             ; subtract 1 from dz so that total # images is eqal to dz
             flux = data[ x, y,   z[i] : z[i]+dz-1]
-
-            sat = where( flux ge 15000. )
-
-            if sat ne -1 then begin
-                map[x,y,i] = 0
-                break
-            endif else begin
+            sat = [where( flux ge 15000. )]
+            ;if sat[0] ne -1 then begin
+            ;    map[x,y,i] = 0
+            ;    break
+            ;endif else begin
+            if sat[0] eq -1 then begin
                 result = fourier2( flux, cadence )
                 power = reform( result[1,*] )
                 map[x,y,i] = total( power[ind] )
                 ;map[x,y,i] = mean( power[ind] )
-            endelse
+            endif
+            ;endelse
         endfor
         endfor
     endfor
@@ -93,12 +74,17 @@ end
 dz = 64
 
 ; starting indices/time for each FT (length = # resulting maps)
-z_end = (where( aia1600.time eq '01:20' ))[0]
-z = [0:z_end]
+;z_end = (where( aia1600.time eq '01:20' ))[0]
+;z = [0:z_end]
+z = [190,254,318]
 
 ;temp = S.(0).data[40:139,90:189,*]
-aia1600map = power_maps( A[0].data, z=z, dz=dz, ind=ind, cadence=24. )
-aia1600 = create_struct( aia1600, 'map', aia1600map )
+;aia1600map = power_maps( A[0].data, z=z, dz=dz, ind=ind, cadence=24. )
+;aia1600 = create_struct( aia1600, 'map', aia1600map )
+
+
+;map1 = power_maps( A[0].data, z=z, dz=dz, T=[170,195], cadence=24. )
+stop
 
 ;temp = S.(1).data[40:139,90:189,*]
 aia1700map = power_maps( A[1].data, z=z, dz=dz, ind=ind, cadence=24. )

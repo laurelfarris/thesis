@@ -85,8 +85,6 @@ function PREP, channel, index=index
     if not keyword_set(index) then $
         read_my_fits, channel, index=index;, data=data
 
-
-
     jd = get_jd( index )
     restore, '../aia_' + channel + '_aligned.sav'
     linear_interp, cube, jd=jd, cadence=24
@@ -96,7 +94,7 @@ function PREP, channel, index=index
     flux_norm = flux - min(flux)
     flux_norm = flux_norm / max(flux_norm)
 
-    restore, 'aia' + channel + 'map.sav'
+    restore, '../aia' + channel + 'map.sav'
 
     ; Could set power_spec and power_map to same 2D indices as data,
     ; but no way to determine what the third dimension should be,
@@ -117,29 +115,27 @@ function PREP, channel, index=index
         color : '' $
     }
 
-    struc.time = strmid(index.t_obs,11,5)
+    struc.time = strmid(index.t_obs,11,8)
 
     return, struc
 
 end
 
 
-; Should separate part that calls read_my_fits. Even reading
-; just the headers takes too long.
 
 ; Be sure to change cadence for HMI! (or other data)
-aia1600 = PREP( '1600' )
+
+read_my_fits, '1600', index=index;, data=data
+aia1600 = PREP( '1600', index=aia1600index )
 aia1600.color = 'dark orange'
 
-aia1700 = PREP( '1700' )
+read_my_fits, '1700', index=index;, data=data
+aia1700 = PREP( '1700', index=aia1700index )
 aia1700.color = 'dark cyan'
 
-
-
-
+A = [ aia1600, aia1700 ]
 
 ;; Structure of structures, or array of structures? What to do?
 ;S = {  aia1600 : aia1600, aia1700 : aia1700  }
-;A = [ aia1600, aia1700 ]
 
 end

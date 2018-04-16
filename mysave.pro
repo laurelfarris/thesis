@@ -2,7 +2,8 @@
 
 pro mysave, basename
 
-    path = "/home/users/laurel07/Dropbox/Figures/Thesis_project/"
+    ;path = "/home/users/laurel07/Dropbox/Figures/Thesis_project/"
+    path = '/home/users/laurel07/'
     ;fwin = getwindows( names=basename )
     filename = basename + '.pdf'
 

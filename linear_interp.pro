@@ -46,6 +46,8 @@ pro LINEAR_INTERP, array, jd=jd, cadence=cadence
 
     if n_elements(interp_coords) gt 1 then begin
 
+        print, "Interpolating..."
+
         ; Create interpolated images and put them in the data cube in
         ; DESCENDING order to preserve the indices of the missing data.
         descending = (interp_coords[reverse(sort(interp_coords))])[0:-2]

@@ -66,7 +66,7 @@ function plot2, xinput, yinput, _EXTRA=e
         x = xinput
     endelse
 
-    fontsize = 10
+    fontsize=10
     p = plot( $
         x, y, $
         font_size = fontsize, $
@@ -75,8 +75,8 @@ function plot2, xinput, yinput, _EXTRA=e
         axis_style = 2, $
         xtickdir = 0, $
         ytickdir = 0, $
-        xticklen = 0.02, $
-        yticklen = 0.02, $
+;        xticklen = 0.02, $
+;        yticklen = 0.02, $
         xsubticklen = 0.5, $
         ysubticklen = 0.5, $
         xminor = 5, $
@@ -88,10 +88,16 @@ function plot2, xinput, yinput, _EXTRA=e
 end
 
 
-function text2, x, y, str, _EXTRA=e
+function text2, x, y, str=str, i, _EXTRA=e
 
+    ; If one graphic is selected, it's returned in array 'graphics'.
+    ; Need a way to select ALL graphics (without clicking)
+    ;  in current window. ; See 'dw' routine.
 
-    fontsize = 10
+    alph = string( bindgen(1,26)+(byte('a'))[0] )
+    alph2 = '(' + alph + ')'
+    if not keyword_set(str) then str = alph2[i]
+    fontsize=10
     t = text( $
         x, y, $
         str, $
@@ -106,15 +112,6 @@ function text2, x, y, str, _EXTRA=e
         _EXTRA=e )
     return, t
 
-
-    ; Extra stuff to figure out later:
-
-    ; If one graphic is selected, it's returned in array 'graphics'.
-    ; Need a way to select ALL graphics (without clicking)
-    ;  in current window.
-    ; See 'dw' routine.
-
-    alph = string( bindgen(1,26)+(byte('a'))[0] )
     graphics = p.Window.GetSelect()
     for i = 0, n_elements(graphics)-1 do begin
         t = text( $
@@ -128,9 +125,8 @@ function text2, x, y, str, _EXTRA=e
     endfor
 end
 
-
 function legend2, _EXTRA=e
-    fontsize = 10
+    fontsize=9
     leg = legend( $
         font_size = fontsize, $
         linestyle = 6, $

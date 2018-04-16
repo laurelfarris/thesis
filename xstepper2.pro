@@ -2,7 +2,7 @@
 
 
 
-pro xstepper2, cube, scale=scale
+pro xstepper2, cube, scale=scale, _EXTRA=e
 
     sz = float(size( cube, /dimensions ))
 
@@ -11,6 +11,6 @@ pro xstepper2, cube, scale=scale
     y = 800 * float(scale)
     x = y * (sz[0]/sz[1])
 
-    xstepper, cube, xsize=x, ysize=y
+    xstepper, cube, xsize=x, ysize=y, _EXTRA=e
 
 end

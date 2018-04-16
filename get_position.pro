@@ -5,53 +5,29 @@
 
 ; Need to set /device keyword.
 
-; Need a better way to set up default values...
-
 
 function GET_POSITION, $
-    layout=layout, $
+    cols=cols, $
+    rows=rows, $
     margin=margin, $
     width=width, $
-    height=height, $
+    ;height=height, $
+    ratio=ratio, $
     xgap=xgap, $
     ygap=ygap, $
     dpi=dpi
 
 
-    ; DPI = 96 easier to see on computer,
-    ; but 72 gives correct dimensions when writing to file.
-    if not keyword_set(dpi) then dpi = 96
+    ; width, height - dimensions of each graphic panel.
+    ; Does NOT include space used by tick labels, axis titles, etc.
 
-    ; Layout
-    if not keyword_set(layout) then begin
-        cols=1
-        rows=1
-    endif else begin
-        cols=layout[0]
-        rows=layout[1]
-    endelse
+    height = width * ratio
 
-    ; Dimensions of each graphic panel. Does NOT include
-    ;  space used by tick labels, axis titles, etc.
-    if not keyword_set(width) then width = 5.0/cols
-    if not keyword_set(height) then height=width
-
-    ; Margins - setting to 1 inch on all four sides. Trim later.
-    ; User shouldn't have to set this... would like to automatically set
-    ;  based on whether tick/axis labels, title, etc. are present.
-    ; Ditto for inter-panel gaps.
-    if not keyword_set(margin) then margin=make_array(4, value=1.0)
-    if n_elements(margin) eq 1 then margin=make_array(4, value=margin)
     left = margin[0]
     bottom = margin[1]
     right = margin[2]
     top = margin[3]
-    ; gap = 0.10 for panels right next to each other
-    ; gap = 1.00 to leave room for tick/axis labels.
-    if not keyword_set(xgap) then xgap = 1.0
-    if not keyword_set(ygap) then ygap = 1.0
 
-    ;----------------------------------------------------------------------------------
     ; Position arrays, to make the following code easier to write.
     x1 = fltarr( rows*cols )
     y1 = fltarr( rows*cols )
@@ -101,6 +77,49 @@ function GET_POSITION, $
     win =  window( dimensions=[wx, wy]*dpi, location=[96,0])
 
     return, pos*dpi
+
+
+end
+
+
+
+function get_position2, layout=layout, _EXTRA=e
+
+
+    ; dpi = 72 for printing to file, 96 for better viewing
+
+    ; Margins
+    ; User shouldn't have to set this... would like to automatically set
+    ;  based on whether tick/axis labels, title, etc. are present.
+    ; Ditto for inter-panel gaps.
+
+
+    ;if not keyword_set(margin) then margin=make_array(4, value=1.0)
+    ;if n_elements(margin) eq 1 then margin=make_array(4, value=margin)
+    ; gap = 0.10 for panels right next to each other
+    ; gap = 1.00 to leave room for tick/axis labels.
+
+    if not keyword_set(layout) then layout=[1,1]
+
+    cols = layout[0]
+    rows = layout[1]
+
+    pos = get_position( $
+        cols=cols, $
+        rows=rows, $
+        width=5.0/cols, $
+        ratio=1.0, $
+        ;height=5.0/cols, $
+        margin=[1.0,0.5,0.3,0.3], $
+        xgap=1.0, $
+        ygap=1.0, $
+        dpi=72, $
+        _EXTRA=e $
+    )
+    
+    return, pos
+
+
 
 
 end
