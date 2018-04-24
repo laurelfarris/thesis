@@ -1,108 +1,91 @@
 
 
 pro image_powermaps, map, name, time, pos
-    ; No science here! Just graphics
 
-    ;wy = 1000
-    ;total_ratio = (float(sz[0])*cols)/(float(sz[1])*rows)
-    ;total_ratio = (sz[0]*cols)/(sz[1]*rows)
-    ;wx = wy * total_ratio 
+    common defaults
 
-    ;win = window( dimensions=[wx,wy], name=name )
-;    fwin = getwindows( names=basename )
-
-    sz = size(pos, /dimensions)
-
-    im = objarr(sz[1])
-
-
-    ; maybe stop here and return the graphic object,
-    ; to be used for plots or images.
-
-
-    for i = 0, n_elements(im)-1 do begin
-    ;for i = 3, 20, 4 do begin
-        im[i] = image2( $
+    i = 0
+    w = window2( dimensions=[8.5,9.0] )
+    rows = 5
+    cols = 3
+    im = objarr(cols,rows)
+    for y = 0, rows-1 do begin
+    for x = 0, cols-1 do begin
+        im[x,y] = image2( $
             map[*,*,i], $
+            layout=[cols,rows,i+1], $
+            margin=[0.1, 0.1, 1.50, 0.75]*dpi, $
             /current, $
-            ;layout=[cols, rows, i+1], $
-            ;margin=0.01, $
             /device, $
-            position=pos[*,i], $
-;            max_value=max(map), $
+            min_value=0.0, $
+            max_value=max(data), $
             rgb_table=39, $
-            xshowtext=0, $
-            yshowtext=0 $
-        )
-        t = text2(  $
-            0.070, 0.85, $
-            time[i], $
-            ;/device, $
-            /relative, $
-            target=im[i], $
-            color='white' $
-        )
+            title=tc[i]+'   (' + strtrim(nc[i],1) + ')', $
+            axis_style=0 )
+        im[x,y].position =  $
+            im[x,y].position + [x*xoff, y*yoff, x*xoff, y*yoff]
+        t = text2( 0.07, 0.85, time[i], $
+            /device, /relative, target=im[x,y], color='white')
+
+            tc[i]+'   (' + strtrim(nc[i],1) + ')', $
+        i = i + 1
     endfor
-
-
-    ;Should put this in a different subroutine, so can play with it
-    ;without re-creating entire graphic every time!
-    ; Problem - need position... in device coordinates, not relative,
-    ; which is always returned from graphic.position for some reason.
-    ; Units are bouncing around way too much.
-    ;   Pixels? inches? relative?  How to keep this consistent?
-    dpi = 96
-    gap = 0.05
-    cx1 = max(pos[2,*]) + gap*dpi
-    cy1 = min(pos[1,*])
-    cx2 = cx1 + 0.25*dpi
-    cy2 = max(pos[3,*])
-    c = colorbar2( $
-        target=im[-1], $
-        /device, $
-        position=[cx1,cy1,cx2,cy2], $
-        tickformat='(I0)', $
-        title = "power^0.5"$
-    )
+    endfor
 end
 
+goto, start
+start:
+
+
+xoff = -0.05
+yoff = 0.00
+
+;; Original indices (n_elem(z) = sz[2] of power maps
+z = [0:680:5]
+;; Center time ( +/- 25.6 minutes )
+tc = A[0].time[z+32]
 
 
 
-cols = 4
-;rows = fix(sz[2]/cols)
-rows = 5
-width = 2.0
-;height = width * sz[1]/sz[0]
-height = width * (330./500.)
-gap = 0.05
-dpi = 96
-pos = get_position( $
-    cols=cols, $
-    rows=rows, $
-    margin=[gap, gap, 1.5, gap], $
-    width=width,  $
-    ratio=(330./500), $
-    ;height=height, $
-    dpi = 76, $
-    xgap=gap, ygap=gap )
+;; START (so to speak)
+;; Definitely need to keep track of time that goes with power maps.
+;data = (A[0].map2)^0.5
+;ind = [24:38] ; Before
+;ind = [39:53] ; During
+;ind = [54:68] ; After
+ind = [33:77:3]
+tc = tc[ind]
+nc = z[ind] + 32
 
-; Image power maps
-z = [0:199:10]
-time = aia1600.time[z]
+;; Data to show - pretty major thing that changes every time...
+data = A[0].map2[*,*,ind]^0.5
 
 
-
-;image_powermaps, A[0].map^0.5, 'powermaps_AIA1600_zoomed', time
-;mysave, 'powermaps_AIA1600_zoomed'
-;image_powermaps, A[1].map^0.5, 'powermaps_AIA1700_zoomed', time
-;mysave, 'powermaps_AIA1700_zoomed'
+; Should this also be in a different subroutine?
+;    rows and cols may be necessary for this to work.
+cx1 = (im[-1,-1].position)[2] + 0.01
+cy1 = (im[-1,-1].position)[1]
+cx2 = cx1 + 0.03
+cy2 = (im[-1,0].position)[3]
+c = colorbar2( position=[cx1,cy1,cx2,cy2], $
+    tickformat='(I0)', $
+    major=11, $
+    range=[0,mx], $
+    title='3-minute power^0.5' )
 
 map = A[0].map[*,*,z]
 image_powermaps, map^0.5, 'powermaps_AIA1600', time, pos
-
 map = A[1].map[*,*,z]
 image_powermaps, map^0.5, 'powermaps_AIA1700', time, pos
+
+;locs = where( data ge 0.3*max(data) )
+;print, n_elements(locs)
+;tempind = array_indices( data, locs )
+;tempdata = data[*,*,3]
+;tempdata[tempind] 
+;im = image( tempdata, layout=[1,1,1], margin=0.0, rgb_table=5, $
+;max_value=0.003*max(data))
+
 
 
 end

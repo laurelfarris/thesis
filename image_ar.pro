@@ -2,6 +2,46 @@
 ; Last modified:   05 April 2018 03:34:33
 
 
+;pro image_powermaps
+;
+;    ; Image an array of power maps
+;    wx = 1500
+;    wy = 1000
+;    w = window(dimensions=[wx,wy])
+;    @graphics
+;    sz = size(map, /dimensions)
+;    im = objarr(sz[2])
+;    data = map^0.3
+;    t = time[locs]
+;    for i = 0, sz[2]-1 do begin
+;        im[i] = image( $
+;            (map[*,*,i])^0.3, $
+;            current=1, $
+;            max_value=max(data), $
+;            title=t[i] + ' - ' + t[i+1], $
+;            xtitle='X (pixels)', $
+;            ytitle='Y (pixels)', $
+;            rgb_table=39, $
+;            _EXTRA=image_props $
+;        )
+;    endfor
+;
+;    ;pos = im[i].position
+;    c = colorbar( $
+;        target=im[0], $
+;        orientation=1 , $
+;        ;major=4, $
+;        tickformat='(I0)', $
+;        ;position=[ pos[2]+0.005, pos[1], pos[2]+0.025, pos[3] ], $ 
+;        position=[0.93,0.1,0.95,0.9], $
+;        title="power", $
+;        _EXTRA=cbar_props $
+;    )
+;
+;    txt = text( 0.05, 0.9, '('+alph[i]+')', /relative, target=im[i], color='white')
+;
+;end
+
 pro image_ar, S
 
     ; Show image with subset outlined by a box.
@@ -78,55 +118,44 @@ pro image_ar, S
 end
 
 
-;pro image_powermaps
-;
-;    ; Image an array of power maps
-;    wx = 1500
-;    wy = 1000
-;    w = window(dimensions=[wx,wy])
-;    @graphics
-;    sz = size(map, /dimensions)
-;    im = objarr(sz[2])
-;    data = map^0.3
-;    t = time[locs]
-;    for i = 0, sz[2]-1 do begin
-;        im[i] = image( $
-;            (map[*,*,i])^0.3, $
-;            current=1, $
-;            max_value=max(data), $
-;            title=t[i] + ' - ' + t[i+1], $
-;            xtitle='X (pixels)', $
-;            ytitle='Y (pixels)', $
-;            rgb_table=39, $
-;            _EXTRA=image_props $
-;        )
-;    endfor
-;
-;    ;pos = im[i].position
-;    c = colorbar( $
-;        target=im[0], $
-;        orientation=1 , $
-;        ;major=4, $
-;        tickformat='(I0)', $
-;        ;position=[ pos[2]+0.005, pos[1], pos[2]+0.025, pos[3] ], $ 
-;        position=[0.93,0.1,0.95,0.9], $
-;        title="power", $
-;        _EXTRA=cbar_props $
-;    )
-;
-;    txt = text( 0.05, 0.9, '('+alph[i]+')', /relative, target=im[i], color='white')
-;
-;end
 
+pro image_color, A
 
+    ; 2018 April 19
+    ; updated April 23
 
+    common defaults
+    t_array = [ ' 00:00:42.57 UT', ' 00:00:32.21 UT' ]
 
+    wx = 8.5/2
+    wy = wx * (330./500.) * 2
 
-image_ar, S
+    im = objarr(2)
+    w = window( dimensions=[wx,wy]*dpi )
 
+    for i = 0, 1 do begin
 
-; Image dimensions could probably be determined based on layout
-;  (or at least the width could).
+        data = A[i].data[*,*,0]
+        im[i] = image2( $
+            data^0.5, $
+            /device, $
+            /current, $
+            layout=[1,2,i+1], $
+            margin=[0.50, 0.75, 0.2, 0.75]*dpi, $
+            rgb_table=A[i].ct, $
+            title=A[i].name + ' 2011-February-15 ' + t_array[i], $
+            xtitle='X (pixels)', $
+            ytitle='Y (pixels)', $
+            name=A[i].name $
+        )
+        ; Draw rectangle around (temporary) area of interest.
+        rec = polygon2( 40, 90, 139, 189, target=im[i])
+    endfor
+    return
+    w.save, '~/color_images.pdf', width=wx, height=wy, page_size=[wx,wy]
+end
+
+image_color, A
 
 
 end

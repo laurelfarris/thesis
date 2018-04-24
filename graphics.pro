@@ -24,10 +24,58 @@
 ;    sym_thick  : 2.0, $
 ;    sym_filled : 1 }
 
+pro define_block
+    common defaults, fontsize, dpi
+    fontsize = 10
+    dpi = 96
+    return
+end
+
+pro save2, name, _EXTRA=e
+
+    path = '/home/users/laurel07/'
+    filename = name + '.pdf'
+
+    fls = file_search( path + filename )
+
+    ;; Add option to either overwrite, or append file that already
+    ;; exists with, e.g. '_old' or mark in some other way, e.g.:
+    ; while fls ne "" ; i = i + 1 ; filename = basename + '_' + strtrim(i,1)
+    ; keep appending _1, _2, etc. until no other file matches
+    ; Set these equal to same values used when determining position?
+    ; That only applies to individual panels, not entire figure.
+
+    ; show time of creation on figure somewhere.
+
+    w = getwindows(/current)
+    dims = w.dimensions/96
+    width = dims[0]
+    height = dims[1]
+
+    ; may not need wx and wy at all!
+
+    if fls eq '' then begin
+        fwin.save, path + filename, $
+            page_size=[width,height], $
+            width=width, height=height, _EXTRA=e
+    endif else print, "File ", filename, " already exists."
+    return
+end
+
+
+function window2, _EXTRA=e
+    common defaults
+    w = window( $
+        dimensions=[8.5, 11.0]*dpi, $
+        location=[500,0], $
+        _EXTRA=e $
+    )
+    return, w
+end
 
 function image2, data, _EXTRA=e
 
-    fontsize = 10
+    common defaults
 
     ;sz = size(data, /dimensions)
     ;if n_elements(sz) eq 2 then $
@@ -36,7 +84,7 @@ function image2, data, _EXTRA=e
 
     im = image( $
         data, $
-        font_size = 10, $
+        font_size = fontsize, $
         ytickfont_size = fontsize, $
         xtickfont_size = fontsize, $
         axis_style = 2, $
@@ -56,9 +104,9 @@ end
 
 function plot2, xinput, yinput, _EXTRA=e
 
+    common defaults
     if yinput eq !NULL then begin
     ;if not arg_present(y) then begin
-        print, "no y argument"
         y = xinput
         x = indgen( n_elements(y) )
     endif else begin
@@ -66,7 +114,6 @@ function plot2, xinput, yinput, _EXTRA=e
         x = xinput
     endelse
 
-    fontsize=10
     p = plot( $
         x, y, $
         font_size = fontsize, $
@@ -75,8 +122,6 @@ function plot2, xinput, yinput, _EXTRA=e
         axis_style = 2, $
         xtickdir = 0, $
         ytickdir = 0, $
-;        xticklen = 0.02, $
-;        yticklen = 0.02, $
         xsubticklen = 0.5, $
         ysubticklen = 0.5, $
         xminor = 5, $
@@ -89,6 +134,7 @@ end
 
 
 function text2, x, y, str=str, i, _EXTRA=e
+    common defaults
 
     ; If one graphic is selected, it's returned in array 'graphics'.
     ; Need a way to select ALL graphics (without clicking)
@@ -97,7 +143,6 @@ function text2, x, y, str=str, i, _EXTRA=e
     alph = string( bindgen(1,26)+(byte('a'))[0] )
     alph2 = '(' + alph + ')'
     if not keyword_set(str) then str = alph2[i]
-    fontsize=10
     t = text( $
         x, y, $
         str, $
@@ -126,7 +171,7 @@ function text2, x, y, str=str, i, _EXTRA=e
 end
 
 function legend2, _EXTRA=e
-    fontsize=9
+    common defaults
     leg = legend( $
         font_size = fontsize, $
         linestyle = 6, $
@@ -136,7 +181,7 @@ function legend2, _EXTRA=e
 end
 
 function colorbar2, _EXTRA=e
-    fontsize = 10
+    common defaults
     c = colorbar( $
         ;target = graphic, $
         orientation = 1, $ ; 0 --> horizontal

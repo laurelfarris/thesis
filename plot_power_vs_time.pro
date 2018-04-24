@@ -5,6 +5,8 @@
 pro plot_power_vs_time, z, map
 
     ;; map = 3D array of maps (x,y,t)
+    ; This plots total power of each map, rather than calculating
+    ; FT of total flux... is there a difference?
 
     win = window( dimensions=[1200, 800] )
 
