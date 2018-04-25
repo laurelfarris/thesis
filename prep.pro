@@ -177,7 +177,10 @@ end
 goto, start
 start:;-----------------------------------------------------------------------------
 
-resolve_routine, 'graphics'
+;resolve_routine, 'graphics'
+;/compile_full_file --> this doesn't mean put the file's name... just means
+; that IDL will compile every subroutine in the file where it finds the one
+; entered here as an argument (usually it stops once that one is found).
 define_block
 common defaults
 
