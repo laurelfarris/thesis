@@ -8,5 +8,4 @@ pro read_my_fits, channel, index=index, data=data
     fls = (file_search(path + files))
     if arg_present(data) then nodata=0 else nodata=1
     READ_SDO, fls, index, data, nodata=nodata
-    
 end

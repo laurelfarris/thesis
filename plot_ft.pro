@@ -3,9 +3,6 @@
 
 pro plot_ft, xdata, A, i, pos
 
-
-    ;; intermediate place to use _EXTRA ??
-
     p = objarr(2)
     p[0] = plot2( xdata, A[0].power[*,i], $
         /current, $
@@ -17,31 +14,28 @@ pro plot_ft, xdata, A, i, pos
         sym_filled=1, $
         ylog=1, $
         color=A[0].color, $
-        name=A[0].name $
-    )
+        name=A[0].name )
+
     p[1] = plot2( xdata, A[1].power[*,i], $
         /overplot, $
         ylog=1, $
         symbol='circle', $
         sym_filled=1, $
         color=A[1].color, $
-        name=A[1].name $
-    )
+        name=A[1].name )
 
     ax = p[0].axes
-
     ax[2].title = 'period (seconds)'
     values = [120, 180, 200]
     ax[2].tickvalues = (1./values)*1000.
     ax[2].tickname = strtrim( values, 1 )
-    ;ax[2].tickname = strtrim( round(1./(ax[0].tickvalues/1000.)), 1 )
     ax[2].showtext = 1
 
+    ; Vertical lines at periods of interest
     v = 1000./values
     yr = p[0].yrange
-    for i = 0, 2 do begin
+    for i = 0, 2 do $
         vert = plot( [v[i],v[i]], [yr[0],yr[1]], /overplot, linestyle='--')
-    endfor
 
     ; Text label
     w = getwindows(/current)

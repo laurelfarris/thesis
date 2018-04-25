@@ -15,11 +15,6 @@
 ;-
 
 
-
-
-
-
-
 function crop_data, cube
     ;; Last modified:   22 February 2018 10:35:36
 
@@ -64,7 +59,7 @@ pro LINEAR_INTERP, array, jd=jd, cadence=cadence
 ; Each index[i-1] and index[i] are averaged, with new image
 ;  inserted between them
 
-; Output: Array with N more elements in the z direction, 
+; Output: Array with N more elements in the z direction,
 ;   where N is equal to the
 ;   number of elements in the indices array
 
@@ -132,12 +127,10 @@ end
 
 function PREP, channel, index=index
 
-
-    ; Reading fits files takes a while... probably shouldn't repeat
-    ; this step every time one of the others messes up.
-    ; Maybe hold off combining variables into a structure until
-    ; confirmed that everything looks right. 
-
+    ; As I learned the hard way, even if a kw is set to a variable name,
+    ; it's not actually set if the variable is undefined. So this works :)
+    ; Actually, may need to double check the differences in how functions
+    ; and procedures behave for this and arg_present.
     if not keyword_set(index) then $
         read_my_fits, channel, index=index;, data=data
 
@@ -150,12 +143,12 @@ function PREP, channel, index=index
     flux_norm = flux - min(flux)
     flux_norm = flux_norm / max(flux_norm)
 
-    ;restore, '../aia' + channel + 'map.sav'
+    restore, '../aia' + channel + 'map.sav'
 
     ; Could set power_spec and power_map to same 2D indices as data,
     ; but no way to determine what the third dimension should be,
     ; unless I know exactly what I'm going to be plotting, and want
-    ; a convenient way to 
+    ; a convenient way to
 
     sz = size(cube, /dimensions)
 
@@ -170,7 +163,7 @@ function PREP, channel, index=index
         time : strarr(sz[2]), $
         flux : flux, $
         flux_norm : flux_norm, $
-;        map : map, $
+        map : map, $
         ct : ct, $
         color : '' $
     }
@@ -182,25 +175,28 @@ function PREP, channel, index=index
 end
 
 goto, start
-
-; Be sure to change cadence for HMI! (or other data)
-start:
+start:;-----------------------------------------------------------------------------
 
 resolve_routine, 'graphics'
 define_block
 common defaults
 
-;read_my_fits, '1600', index=aia1600index;, data=data
+read_my_fits, '1600', index=aia1600index;, data=data
 aia1600 = PREP( '1600', index=aia1600index )
 aia1600.color = 'dark orange'
 
-;read_my_fits, '1700', index=aia1700index;, data=data
+read_my_fits, '1700', index=aia1700index;, data=data
 aia1700 = PREP( '1700', index=aia1700index )
 aia1700.color = 'dark cyan'
 
-
-;; Structure of structures, or array of structures? What to do?
 ;S = {  aia1600 : aia1600, aia1700 : aia1700  }
 A = [ aia1600, aia1700 ]
+
+; Structure of structures, or array of structures? What to do?
+; With an array, can do things like A.t_obs to get just the observation time
+; for every substructure (can't do this with struc).
+; However, all substructures in array would have to have the same tags,
+; with the same data type and same size, which would make it impossible
+; to combine AIA and HMI.
 
 end

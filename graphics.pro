@@ -215,6 +215,19 @@ function polygon2, x1, y1, x2, y2, _EXTRA=e
         color='white', $
         _EXTRA=e )
     return, rec
-
 end
 
+
+pro xstepper2, cube, scale=scale, _EXTRA=e
+    ; Last modified:   21 March 2018 19:14:32
+
+    sz = float(size( cube, /dimensions ))
+
+    if not keyword_set(scale) then scale = 1
+
+    y = 800 * float(scale)
+    x = y * (sz[0]/sz[1])
+
+    xstepper, cube, xsize=x, ysize=y, _EXTRA=e
+
+end

@@ -1,10 +1,10 @@
 
-; Last modified:   19 April 2018
+; Last modified:   20 April 2018
 ; Calculates power map
 ; Input:  data = 3D data cube for which to calculate power maps
 ;            z = array of START indices
 ;           dz = length over which to calculate FT (# images)
-;      cadence = cadence of data (seconds); = 24 by default
+;      cadence = cadence of data (seconds)
 
 
 function power_maps, $
@@ -13,12 +13,10 @@ function power_maps, $
     dz=dz, $
     cadence=cadence
 
-    if not keyword_set(cadence) then cadence = 24
-
     f1 = 0.004
     f2 = 0.006
     frequency = reform( (fourier2( indgen(dz), cadence ))[0,*] )
-    ind = where( frequency ge f1 AND frequency le f2 ) 
+    ind = where( frequency ge f1 AND frequency le f2 )
 
     sz = size( data, /dimensions )
     n = n_elements(z)
@@ -31,7 +29,7 @@ function power_maps, $
     ;  last value of i was "out of range" or whatever.
     ; Add some test codes here!
 
-    ; this will produce error if z is out of range.
+    ; this should produce error if z is out of range.
     for i = 0, n-1 do test[i] = data[ 0, 0, z[i]:z[i]+dz-1 ]
 
     for i = 0, n-1 do begin
@@ -67,6 +65,7 @@ goto, start
 ; # images (length of time) over which to calculate each FT.
 dz = 64
 
+;; Copy lines to notebook, and delete:
 ; starting indices/time for each FT (length = # resulting maps)
 ;z_end = (where( aia1600.time eq '01:20' ))[0]
 ;z = [0:z_end]
@@ -76,8 +75,8 @@ dz = 64
 z = [0:680:5]
 stop
 
-aia1600map = power_maps( A[0].data, z=z, dz=dz )
-aia1700map = power_maps( A[1].data, z=z, dz=dz )
+aia1600map = power_maps( A[0].data, z=z, dz=dz, cadence=A[0].cadence)
+aia1700map = power_maps( A[1].data, z=z, dz=dz, cadence=A[1].cadence )
 
 start:;--------------------------------------------------------------------
 aia1600 = create_struct( aia1600, 'map2', aia1600map )

@@ -1,5 +1,4 @@
-;; Last modified:   06 April 2018 23:54:41
-; Last modified:   05 April 2018 03:34:33
+;; Last modified:   06 April 2018
 
 
 ;pro image_powermaps
@@ -32,7 +31,7 @@
 ;        orientation=1 , $
 ;        ;major=4, $
 ;        tickformat='(I0)', $
-;        ;position=[ pos[2]+0.005, pos[1], pos[2]+0.025, pos[3] ], $ 
+;        ;position=[ pos[2]+0.005, pos[1], pos[2]+0.025, pos[3] ], $
 ;        position=[0.93,0.1,0.95,0.9], $
 ;        title="power", $
 ;        _EXTRA=cbar_props $
@@ -83,7 +82,7 @@ pro image_ar, S
     return
 
         ; position in relative values
-        ;pos = im[i].position 
+        ;pos = im[i].position
 
         ; Label opposite axis in units of arcseconds
 ;        ax = im[i].axes
@@ -121,8 +120,7 @@ end
 
 pro image_color, A
 
-    ; 2018 April 19
-    ; updated April 23
+    ; 2018 April 19 (updated April 23)
 
     common defaults
     t_array = [ ' 00:00:42.57 UT', ' 00:00:32.21 UT' ]
