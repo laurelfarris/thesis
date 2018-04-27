@@ -143,7 +143,7 @@ function PREP, channel, index=index
     flux_norm = flux - min(flux)
     flux_norm = flux_norm / max(flux_norm)
 
-    restore, '../aia' + channel + 'map.sav'
+    restore, 'aia' + channel + 'map.sav'
 
     ; Could set power_spec and power_map to same 2D indices as data,
     ; but no way to determine what the third dimension should be,
@@ -181,7 +181,7 @@ start:;-------------------------------------------------------------------------
 ;/compile_full_file --> this doesn't mean put the file's name... just means
 ; that IDL will compile every subroutine in the file where it finds the one
 ; entered here as an argument (usually it stops once that one is found).
-define_block
+graphics
 common defaults
 
 read_my_fits, '1600', index=aia1600index;, data=data

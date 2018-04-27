@@ -10,10 +10,10 @@ pro image_powermaps, map, title, cbar=cbar, _EXTRA=e
     yoff = 0.0
 
     i = 0
-    rows = 5
     cols = 3
+    rows = 5
     im = objarr(cols,rows)
-    w = window2( dimensions=[8.5,9.0] )
+    w = window2( dimensions=[8.5,9.0]*dpi )
     for y = 0, rows-1 do begin
     for x = 0, cols-1 do begin
         im[x,y] = image2( $
@@ -60,7 +60,7 @@ start:
 z = [0:680:5]
 ; Every 5th element in array of observation times (to go with power maps)
 ; Add 32 to get center time rather than start time ( +/- 25.6 minutes )
-time = A[0].time[z+32]
+tc = A[0].time[z+32]
 ; Use structures to keep stuff like this matched up correctly?
 
 ;ind = [24:38] ; Before
@@ -77,18 +77,23 @@ nc = z[ind] + 32
 ;; Is this from when I was trying to use 'name' to retrieve window?
 ;image_powermaps, map^0.5, 'powermaps_AIA1600', tc, nc
 
+; Probably don't need loop here.
 title=[]
 for i = 0, 14 do $
     title=[ title, tc[i]+'   (' + strtrim(nc[i],1) + ')' ]
 
+;temp1600 = A[0].map
+;temp1700 = A[1].map
+;stop
 
-for i = 0, 1 do begin
-    map = A[i].map[*,*,z]
+for i = 1, 1 do begin
+    map = (A[i].map[*,*,ind])^0.5
     image_powermaps, $
-        map^0.5, $
+        map, $
         title, $
-        min_value=0.0, $
-        max_value=max(data), rgb_table=39
+        ;min_value=0.0, $
+        ;max_value=max(map), $
+        rgb_table=39
 endfor
 
 

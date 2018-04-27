@@ -24,17 +24,19 @@
 ;    sym_thick  : 2.0, $
 ;    sym_filled : 1 }
 
-pro define_block
+; .run graphics just so I can declare the defaults common block
+pro graphics
     common defaults, fontsize, dpi
     fontsize = 10
     dpi = 96
     return
 end
 
-pro save2, name, _EXTRA=e
+pro save2, filename, _EXTRA=e
 
+    common defaults
     path = '/home/users/laurel07/'
-    filename = name + '.pdf'
+    ;filename = name + '.pdf'
 
     fls = file_search( path + filename )
 
@@ -48,14 +50,14 @@ pro save2, name, _EXTRA=e
     ; show time of creation on figure somewhere.
 
     w = getwindows(/current)
-    dims = w.dimensions/96
+    dims = w.dimensions/dpi
     width = dims[0]
     height = dims[1]
 
     ; may not need wx and wy at all!
 
     if fls eq '' then begin
-        fwin.save, path + filename, $
+        w.save, path + filename, $
             page_size=[width,height], $
             width=width, height=height, _EXTRA=e
     endif else print, "File ", filename, " already exists."
@@ -105,14 +107,19 @@ end
 function plot2, xinput, yinput, _EXTRA=e
 
     common defaults
-    if yinput eq !NULL then begin
-    ;if not arg_present(y) then begin
-        y = xinput
-        x = indgen( n_elements(y) )
-    endif else begin
-        y = yinput
+    ; REQUIRING xinput for now, because fuck this.
+;    if yinput eq !NULL then begin
+;    ;if not arg_present(y) then begin
+;        y = xinput
+;        x = indgen( n_elements(y) )
+;    endif else begin
+;        y = yinput
+;        x = xinput
+;    endelse
+
+
         x = xinput
-    endelse
+        y = yinput
 
     p = plot( $
         x, y, $
