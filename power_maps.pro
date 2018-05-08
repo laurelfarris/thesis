@@ -25,26 +25,26 @@ function power_maps, $
 
     start_time = systime(/seconds)
     ; Could use foreach i, z... but need i increasing by 1 for map.
+    ; Add some test codes here, or some kind of error handling.
     ; This takes way too long just to lose everything because the
     ;  last value of i was "out of range" or whatever.
-    ; Add some test codes here!
 
-    ; this should produce error if z is out of range.
+    ; TEST: this should produce error if z is out of range.
     for i = 0, n-1 do test[i] = data[ 0, 0, z[i]:z[i]+dz-1 ]
 
     for i = 0, n-1 do begin
         for y = 0, sz[1]-1 do begin
-        for x = 0, sz[0]-1 do begin
+            for x = 0, sz[0]-1 do begin
 
-            ; subtract 1 from dz so that total # images is eqal to dz
-            flux = data[ x, y, z[i]:z[i]+dz-1 ]
-            sat = [where( flux ge 15000. )]
-            if sat[0] eq -1 then begin
-                power = reform( (fourier2( flux, cadence ))[1,*] )
-                map[x,y,i] = total( power[ind] )
-                ;map[x,y,i] = mean( power[ind] )
-            endif
-        endfor
+                ; subtract 1 from dz so that total # images is eqal to dz
+                flux = data[ x, y, z[i]:z[i]+dz-1 ]
+                sat = [where( flux ge 15000. )]
+                if sat[0] eq -1 then begin
+                    power = reform( (fourier2( flux, cadence ))[1,*] )
+                    map[x,y,i] = total( power[ind] )
+                    ;map[x,y,i] = mean( power[ind] )
+                endif
+            endfor
         endfor
     endfor
 
