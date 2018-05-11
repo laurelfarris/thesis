@@ -5,6 +5,7 @@
 ;            z = array of START indices
 ;           dz = length over which to calculate FT (# images)
 ;      cadence = cadence of data (seconds)
+; NOTES:     Added /NORM keyword to fourier2.
 
 
 function power_maps, $
@@ -15,7 +16,7 @@ function power_maps, $
 
     f1 = 0.004
     f2 = 0.006
-    frequency = reform( (fourier2( indgen(dz), cadence ))[0,*] )
+    frequency = reform( (fourier2( indgen(dz), cadence, /NORM ))[0,*] )
     ind = where( frequency ge f1 AND frequency le f2 )
 
     sz = size( data, /dimensions )
@@ -40,7 +41,7 @@ function power_maps, $
                 flux = data[ x, y, z[i]:z[i]+dz-1 ]
                 sat = [where( flux ge 15000. )]
                 if sat[0] eq -1 then begin
-                    power = reform( (fourier2( flux, cadence ))[1,*] )
+                    power = reform( (fourier2( flux, cadence, /NORM ))[1,*] )
                     map[x,y,i] = total( power[ind] )
                     ;map[x,y,i] = mean( power[ind] )
                 endif
@@ -72,8 +73,15 @@ dz = 64
 ;z = [190,254,318]
 
 ; 19 April 2018 - every 64th time step through entire time series.
+;
+; When developing code, can do, e.g. every fifth timestep, but for
+; saving powermaps, do EVERY timestep to avoid confusion.
+; Start code before leaving.
 z = [0:680:5]
 stop
+
+; Setting up thing to run HMI power map.
+hmimap = power_maps( hmi_data, z=z, dz=dz, cadence=45 )
 
 aia1600map = power_maps( A[0].data, z=z, dz=dz, cadence=A[0].cadence)
 aia1700map = power_maps( A[1].data, z=z, dz=dz, cadence=A[1].cadence )
