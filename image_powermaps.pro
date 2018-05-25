@@ -46,55 +46,13 @@ pro image_powermaps, map, title, cbar=cbar, _EXTRA=e
 
 end
 
+pro image_powermaps_2, map, title, cbar=cbar, _EXTRA=e
+end
+
 goto, start
 start:
 
-;------------------------------------------------------------------------------------
-; This is all a bunch of hacky shit to get the correct starting time for each
-; starting z-value. Problems because z was set to every 5th value, and time is
-; still only incrementing by 1.
-;There's got to be a more elegant, streamlined way to do this.
-; Also, this stuff shouldn't be in a graphics routine...
-;; Original indices (n_elem(z) = sz[2] of power maps
 
-z = [0:680:5]
-; Every 5th element in array of observation times (to go with power maps)
-; Add 32 to get center time rather than start time ( +/- 25.6 minutes )
-tc = A[0].time[z+32]
-; Use structures to keep stuff like this matched up correctly?
-
-;ind = [24:38] ; Before
-;ind = [39:53] ; During
-;ind = [54:68] ; After
-ind = [33:77:3]
-tc = tc[ind]
-nc = z[ind] + 32
-;------------------------------------------------------------------------------------
-
-;; Data to show - pretty major thing that changes every time...
-;data = A[0].map2[*,*,ind]^0.5
-
-;; Is this from when I was trying to use 'name' to retrieve window?
-;image_powermaps, map^0.5, 'powermaps_AIA1600', tc, nc
-
-; Probably don't need loop here.
-title=[]
-for i = 0, 14 do $
-    title=[ title, tc[i]+'   (' + strtrim(nc[i],1) + ')' ]
-
-;temp1600 = A[0].map
-;temp1700 = A[1].map
-;stop
-
-for i = 1, 1 do begin
-    map = (A[i].map[*,*,ind])^0.5
-    image_powermaps, $
-        map, $
-        title, $
-        ;min_value=0.0, $
-        ;max_value=max(map), $
-        rgb_table=39
-endfor
 
 
 end

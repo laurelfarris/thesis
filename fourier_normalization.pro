@@ -4,23 +4,25 @@
 ; Layout of code to check for correct normalization.
 
 
-flux = hmi[0,0,*] ; or something...
-result = fourier2( flux, 45, /NORM )
+flux = A[0].flux
+result = fourier2( flux, 24, NORM=0 )
 power = reform( result[1,*] )
 
 
-a = n_elements( flux )
-b = n_elements( power )
-; a should = b/2... I think.
-print, a
-print, b
+; These should be equal... I think.
+print, n_elements( flux )/2
+print, n_elements( power )
+
+; 11 May --- They are!
 
 
-; By Parseval's theorem, these should be the same?
-; At least if the normalization kw is set... I think.
-; Because this is supposed to be a check on normalization.
-total_power = total( power )
-var = ( moment(flux) )[1]
+; Check on normalization:
+; by Parseval's theorem, these should be the same because of
+; conservation of energy.
+print, total( power )
+print, ( moment(flux) )[1]
+
+; Only getting equal values if /norm kw is NOT set.
 
 
 

@@ -1,147 +1,144 @@
-; Last modified:   26 April 2018
+;; Last modified:   23 May 2018 16:19:13
 
 
 
-pro plt, A, ind=ind, lightcurve=lightcurve, power=power
 
-    ;; ind = indices of ydata to plot.
+function PLOT3, xdata, ydata, _EXTRA=e
 
-    common defaults
-    dpi = 96
-    p = objarr(2)
+    ; Plot lightcurve and power as function of time.
+    ; ONE panel. Call this from another routine for multi-panel.
 
-
-    ; separate subroutine for stuff like this
-    values = [74, 149, 224, 299, 374, 449, 524, 599, 674]
-
-    ; Put time in nice format for labeling plot
-    time = strmid(A[0].time, 0, 5)
-
-    if keyword_set(lightcurve) then begin
-        ; A.flux is a 749x2 array... includes both channels!
-        ydata = A.flux
-        y1600 = ydata[*,0]
-        y1600 = y1600 - min(y1600)
-        y1600 = y1600/max(y1600)
-        y1700 = ydata[*,1]
-        y1700 = y1700 - min(y1700)
-        y1700 = y1700/max(y1700)
-        ydata = [ [y1600], [y1700] ]
-        ytitle = 'Flux (DN s$^{-1}$)'
-    endif
-    if keyword_set(power) then begin
-        ydata = A.power
-        ytitle='3-minute power'
-    endif
-    sz = size( ydata, /dimensions )
-    xdata = indgen(sz[0])
-    if keyword_set(ind) then begin
-        xdata = xdata[ind]
-        ydata = ydata[ind,*]
+    win = getwindows()
+    if ( win[i] eq !NULL ) then begin
+        wx = 8.5; / 2.0
+        wy = 3.0; * 2.0
+        w = window( dimensions=[wx,wy]*dpi, location=[600,0] )
     endif
 
-    for i = 0, 1 do begin
-        p[i] = plot2( $
-            xdata, ydata[*,i], $
-            /current, /overplot, /device,  $
-            position=[0.90,0.4,8.3,2.6]*dpi, $
-            ;xtickvalues=values, $
-            stairstep=0, $
-            xshowtext=0, $
-            xticklen=0.02, $
-            yticklen=0.02, $
-            xtitle='Middle time (2011-February-15)', $
-            ytitle=ytitle, $
-            name=A[i].name, $
-            color=A[i].color $
-        )
-    endfor
-    leg = legend2( target=[p[0],p[1]], position=[0.85,0.7], /relative )
-    return
 
-    ax = p[0].axes
-    ax[2].title = 'image #'
-    ax[2].showtext=1
-    ;ax[0].tickname=time[values]
-    ax[0].tickname=time[ax[0].tickvalues]
+    plt = plot2( $
+        xdata, ydata, /current, /device, $
+        layout=[1,1,1], $
+        margin=0.1, $
+        xtickinterval=100, $
+        xrange=[i1,i2], $
+        xticklen=0.05, $
+        yticklen=0.015, $
+        xtitle='Start time (UT) on 2011-February-15', $
+        ytickvalues=[2:10:2]/10., $
+        ytickformat='(F0.1)', $
+        stairstep=1, $
+        ytitle='Counts (DN)', $
+        _EXTRA=e)
 
-    x = [227:347]
-    y = fltarr(n_elements(x))
-    y[ 0] = (p[0].yrange)[0]
-    y[-1] = (p[0].yrange)[0]
-    y[1:-2] = (p[0].yrange)[1]
-    ;new = plot( x, y, /overplot, ystyle=1, $
-    ;    linestyle=6, fill_background=1, fill_transparency=90 )
+    ; only label axes on sides so figure looks nice
+    ax = plt.axes
+    ax[2].title = 'index'
 
+    leg = legend2( $
+        target=[ p[0], p[1] ], $
+        ;target=p, $
+        position=[0.9,0.85] )
 
-    ; These are hardcoded times... don't work with only a portion of lc.
-    i1 = ( where( time eq '01:44' ) )[ 0]
-    i2 = ( where( time eq '01:56' ) )[ 0]
-    i3 = ( where( time eq '02:06' ) )[-1]
-    ind = [i1,i2,i3]
-    yr = p[0].yrange
-    foreach i, ind do $
-        v = plot( [i,i], p[0].yrange, $
-            /overplot, linestyle='-.', ystyle=1)
+    return, plt
 end
 
-goto, start
-start:;--------------------------------------------------------------------
-
-; Need correct times/indices for lc to line up with power.
-; This should not be this complicated...
-
-;z = [0:680:5]
-z = [0:748-dz]
-dz = 64
-xdata = z+(dz/2)
-
-ind = [0:200] 
-
-wx = 8.5
-wy = 3.0
-
-w = window( dimensions=[wx,wy]*dpi, name='lightcurve_2' )
-plt, A, ind=ind, /lightcurve
-save2, 'lightcurve_3.pdf'
-
-w = window( dimensions=[wx,wy]*dpi, name='power_time_2' )
-plt, A, ind=[0:40], /power
-save2, 'power_time_3.pdf'
+; Things that change:
+;   xdata (sometime)
+;   ydata
+;   t_start, t_end (go with ydata, and xdata would also change)
+;   ytitle
+;   layout (position within layout)
+;   tickinterval
+;   showtext
+;   window size (span one or two columns)
 
 
+; create window, graphic array(s)
+p = objarr(3)
+
+; Margin values for axes that are not on top of other axes.
+; These are all you should have to change to adjust margins.
+left = 0.75
+bottom = 1.25
+right = 0.10
+top = 1.25
+margin = [ left, bottom, right, top ] * dpi
+
+; Entire time series
+t_start = '00:00'
+t_end   = '04:59'
+
+; C-class flare
+t_start = '00:30'
+t_end   = '01:00'
+
+; String to label plot with date_obs from header.
+date_obs = strmid( A[0].time, 0, 5 )
+i1 = (where( date_obs eq t_start ))[ 0]
+i2 = (where( date_obs eq t_end   ))[-1]
+
+if k eq 0 then ax[2].showtext = 1
+if k eq n_elements(p)-1 then ax[0].showtext = 1
+
+for i = 0, n_elements(p)-1 do begin
+    p[i] = PLOT3( $
+        xdata, ydata, $
+        layout=[1,3,i+1], $
+        margin=margin, $
+        xtickname = date_obs[i1:i2], $
+        ;xtickname = date_obs[ ax[0].tickvalues ], $
+        color=A[i].color, $
+        name=A[i].name $
+        )
+endfor
+
+; Flare start, peak, & end times, marked with vertical lines.
+; (only for full time series though...)
+f1 = (where( date_obs eq '01:44'))[0]
+f2 = (where( date_obs eq '01:56'))[0]
+f3 = (where( date_obs eq '02:06'))[0]
+f = [f1, f2, f3]
+for j = 0, 2 do begin
+    v = plot( [f[j],f[j]], graphic.yrange, /overplot, $
+        ystyle=1, linestyle='-.', thick=1.5 )
+endfor
+
+; Shaded area over main flare +/- dz
+yr = plt.yrange
+v = plot( $
+    [ f[0]-32, f[0]-32, f[-1]+32-1, f[-1]+32-1 ], $
+    [ yr[0], yr[1], yr[1], yr[0] ], $
+    ;graphic.yrange, $
+    /overplot, $
+    ystyle=1, $
+    ;color='light gray', $
+    linestyle=6, $
+    fill_background=1, $
+    fill_transparency=70, $
+    fill_color='light gray' )
 
 
-stop
+; Plot power at x +/- dz to show time covered by each value.
+if k ge 1 then begin
+    ;yy1 = [ ydata[*,i], fltarr(dz) ]
+    n = n_elements(ydata[*,i])
+    yy1 = shift( ydata[*,i], -32 )
+    yy1 = yy1[0:n-32]
+    yy2 = shift( ydata[*,i],  32 )
+    yy2 = yy2[32:*]
+    q = plot2( xdata[0:n-32], yy1, /overplot, stairstep=1, color='light gray', $
+        ;fill_background=1, fill_level=yy1, $
+        name='t-dz' )
+    q = plot2( xdata[32:*], yy2, /overplot, stairstep=1, color='light gray', $
+        ;fill_background=1, fill_level=yy2, $
+        name='t+dz' )
+endif
 
-
-
-; This needs to be logged somwhere, and removed from here.
-dz = 64
-z = [0:748-dz]
-frequency = reform( (fourier2( indgen(dz), 24 ))[0,*] )
-ind = where( frequency ge 0.0048 AND frequency le 0.0060 )
-frequency = frequency[ind]
-period = 1./frequency
-
-; Initialize power array
-power = fltarr(n_elements(z))
-
-; Calculate power starting at each frequency
-flux = A[0].flux
-aia1600 = create_struct( aia1600, 'power', power )
-flux = A[1].flux
-; This is pretty quick, so no need to save variables.
-foreach i, z do begin
-    result = fourier2( flux[i:i+dz-1], 24. ) 
-    power[i] = TOTAL( (reform( result[1,*] )) [ind])
-endforeach
-aia1700 = create_struct( aia1700, 'power', power )
-
-stop
-
-w1.save, '~/lightcurve_2.pdf', border=0, page_size=[wx,wy], width=wx, height=wy
-w2.save, '~/power_time_2.pdf', border=0, page_size=[wx,wy], width=wx, height=wy
+; Save figure
+;save2, 'power_time_4.pdf'
+;write_png, 'power_time_4.png', tvrd(/true)
+w.save, '~/power_time_5.png', width=wx*dpi
 
 
 end

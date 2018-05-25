@@ -5,7 +5,8 @@
 ;            z = array of START indices
 ;           dz = length over which to calculate FT (# images)
 ;      cadence = cadence of data (seconds)
-; NOTES:     Added /NORM keyword to fourier2.
+; NOTES:     (May 11 2018) Added /NORM keyword to fourier2.
+;            (May 13 2018) switched from TOTAL to MEAN power.
 
 
 function power_maps, $
@@ -14,7 +15,7 @@ function power_maps, $
     dz=dz, $
     cadence=cadence
 
-    f1 = 0.004
+    f1 = 0.005
     f2 = 0.006
     frequency = reform( (fourier2( indgen(dz), cadence, /NORM ))[0,*] )
     ind = where( frequency ge f1 AND frequency le f2 )
@@ -33,19 +34,23 @@ function power_maps, $
     ; TEST: this should produce error if z is out of range.
     for i = 0, n-1 do test[i] = data[ 0, 0, z[i]:z[i]+dz-1 ]
 
+    ; Array to keep track of how many pixels saturate at each z value.
+    sat_arr = fltarr( sz[2] )
+
+
     for i = 0, n-1 do begin
         for y = 0, sz[1]-1 do begin
-            for x = 0, sz[0]-1 do begin
+        for x = 0, sz[0]-1 do begin
 
-                ; subtract 1 from dz so that total # images is eqal to dz
-                flux = data[ x, y, z[i]:z[i]+dz-1 ]
-                sat = [where( flux ge 15000. )]
-                if sat[0] eq -1 then begin
-                    power = reform( (fourier2( flux, cadence, /NORM ))[1,*] )
-                    map[x,y,i] = total( power[ind] )
-                    ;map[x,y,i] = mean( power[ind] )
-                endif
-            endfor
+            ; subtract 1 from dz so that total # images is eqal to dz
+            flux = data[ x, y, z[i]:z[i]+dz-1 ]
+            sat = [where( flux ge 15000. )]
+            if sat[0] eq -1 then begin
+                power = reform( (fourier2( flux, cadence, /NORM ))[1,*] )
+                ;map[x,y,i] = total( power[ind] )
+                map[x,y,i] = mean( power[ind] )
+            endif
+        endfor
         endfor
     endfor
 
@@ -77,20 +82,28 @@ dz = 64
 ; When developing code, can do, e.g. every fifth timestep, but for
 ; saving powermaps, do EVERY timestep to avoid confusion.
 ; Start code before leaving.
-z = [0:680:5]
 stop
 
-; Setting up thing to run HMI power map.
-hmimap = power_maps( hmi_data, z=z, dz=dz, cadence=45 )
+;z = [0:680:5]
 
+
+; Setting up thing to run HMI power map.
+;hmimap = power_maps( hmi_data, z=z, dz=dz, cadence=45 )
+
+z = [0:684]
 aia1600map = power_maps( A[0].data, z=z, dz=dz, cadence=A[0].cadence)
 aia1700map = power_maps( A[1].data, z=z, dz=dz, cadence=A[1].cadence )
+stop
+
+save, aia1600map, filename='../aia1600map2.sav'
+save, aia1700map, filename='../aia1700map2.sav'
+stop
 
 start:;--------------------------------------------------------------------
-aia1600 = create_struct( aia1600, 'map2', aia1600map )
-aia1700 = create_struct( aia1700, 'map2', aia1700map )
+aia1600 = create_struct( aia1600, 'map', aia1600map )
+aia1700 = create_struct( aia1700, 'map', aia1700map )
 
-A = [aia1600,aia1700]
+A = [aia1600, aia1700]
 
 
 end

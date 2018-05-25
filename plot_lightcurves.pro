@@ -1,13 +1,11 @@
-;; Last modified:   12 April 2018 14:54:40
+;; Last modified:   11 May 2018 11:08:32
 
-function plot_smooth, x,y
-    ; Smoothed lightcurves
 
-    y = smooth( y, 8 )
-    sm = plot2( x,y, /overplot, linestyle='--', thick=1.0, $
-        name='boxcar smoothed')
-    return, sm
-end
+
+
+
+
+
 
 function plot_background, x,y
     ; Pre-flare background
@@ -18,67 +16,86 @@ function plot_background, x,y
     return, bg
 end
 
-;----------------------------------------------------------------------------------
-pro plot_lightcurves, A, ind=ind
+pro plot_lightcurves, A, time=time
+    ; time = 2-element array of start and end times, in the form
+    ; [ 'hh:mm', 'hh:mm' ]
 
-    pos = get_position2(layout=[1,1])
+    common defaults
 
-    ; Lightcurves
-    ;  y title is the only difference between this and plotting
-    ;  power vs. time...
-    graphic = plot2( x, y, /nodata, $
-        position = pos[*,i], $
-        /current, $
-        /device, $
-        xtickinterval=75, $
-        xtitle = 'Start time (2011 February 15 00:00:00)', $
-        ytitle = 'Intensity (normalized)' )
+
+    ; Still using time from AIA 1600, for consistency.
+    date_obs = strmid( A[0].time, 0, 5 )
 
     p = objarr(n_elements(A))
-    for i = 0, n_elements(A)-1 do begin
+    for i = 0, n_elements(p)-1 do begin
 
-        y = A[i].flux_norm
-        x = indgen(n_elements(y))
-        if keyword_set( ind ) then begin
-            y = y[ind[0]:ind[1]]
-            x = x[ind[0]:ind[1]]
+        ; indices of values to be plotted.
+        ; This should accounted for before passing into code that
+        ; does the actual plotting...
+        if keyword_set( time ) then begin
+            i1 = ( where( date_obs eq time[0] ))[ 0]
+            i2 = ( where( date_obs eq time[1] ))[-1]
+        endif else begin
+            i1 = 0
+            i2 = -1
+        endelse
+
+
+        ;y = A[i].flux[i1:i2]
+        y = A[i].flux_norm[i1:i2]
+        ;x = indgen(n_elements(y))
+        x = [i1:i2]
+
+        if i eq 0 then begin
+            graphic = plot2( $
+                x, y, /nodata, $
+                /current, $
+                /device, $
+                layout=[1,2,1], $
+                margin=[1.00, 0.75, 0.10, 0.75]*dpi, $
+                xtickinterval=12, $
+                ;xtickinterval=75, $
+                xticklen=0.05, $
+                yticklen=0.015, $
+                xtitle = 't_obs (UT) on 2011 February 15', $
+                ytitle = 'counts (DN)' )
         endif
 
-        ; Lightcurves
-        ;  y array is the only difference between this and plotting
-        ;  power vs. time...
-        y = A[i].flux_norm
         p[i] = plot2( $
             x, y, /overplot, $
-            stairstep=1, $
+            stairstep=0, $
             color=A[i].color, $
             name=A[i].name )
-
-        sm = plot_smooth( x,y )
-        bg = plot_background( x,y )
-
     endfor
 
     ax = graphic.axes
-    ax[0].tickname = A[0].time[ ax[0].tickvalues ]
+    ; tickvalues on ax[0] are the indices for the correct time array
+    ax[0].tickname = date_obs[ ax[0].tickvalues ]
     ax[2].minor = 5
-    ax[2].title = 'Image number'
+    ax[2].title = 'index'
     ax[2].showtext = 1
 
-    leg = legend2( target=[ p[0], p[1], sm, bg ], $
-        position=pos[2:3] + [0.0, -15.0] )
-
+    leg = legend2( target=[ p[0], p[1] ] , $
+        ;/relative, $
+        ;position=[(graphic.xrange)[1],(graphic.yrange)[1]] )
+        position=[0.9,0.7] $
+        )
 
 end
-;----------------------------------------------------------------------------------
 
-i1 = ( where( A[0].time eq '01:30' )[ 0]
-i2 = ( where( A[0].time eq '02:30' )[-1]
+wx = 8.5
+wy = 3.0 * 2
+w = window( dimensions=[wx,wy]*dpi );, name='lightcurve' )
 
-plot_lightcurves, A, ind=[i1,i2]
+plot_lightcurves, A, time=['00:30','01:00']
 
-v = plot( [i1,i1], graphic.yrange, /overplot, linestyle='-.', thick=1.5 )
-v = plot( [i2,i2], graphic.yrange, /overplot, linestyle='-.', thick=1.5 )
+
+;save2, 'lightcurve_4.pdf' 
+
+;plot_lightcurves, A, ind=[i1,i2]
+
+;v = plot( [i1,i1], graphic.yrange, /overplot, linestyle='-.', thick=1.5 )
+;v = plot( [i2,i2], graphic.yrange, /overplot, linestyle='-.', thick=1.5 )
 
 
 end

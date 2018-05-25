@@ -96,6 +96,19 @@ aia_cadence = 24.0
 
 
 ;---------------------------------------------------------------------------------------------
+;; Power maps
+
+; ../aia*map.sav
+; VAR = map  -->  500 x 330 x 137
+;     NORM=0, TOTAL(power), z_start increments by 5
+
+
+; ../aia*map2.sav
+; VAR = map2  -->  500 x 330 x 685
+;      /NORM,  MEAN(power),  z_start increments by 1
+
+
+;---------------------------------------------------------------------------------------------
 ;; Interpolate to get missing data. Use coords to manually generate the
 ;;   missing observation times.
 
