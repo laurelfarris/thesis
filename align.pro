@@ -71,38 +71,7 @@ end
 
 
 
-pro PLOT_SHIFTS, shifts, _EXTRA=e
-    ; Color axes on each side, and shift/scale differently?
-
-    sz = size( shifts, /dimensions)
-    xdata = indgen(sz[1])
-    names = ['horizontal shifts', 'vertical shifts' ]
-    @colors
-    p = objarr(2)
-    w = window( dimensions=[1600, 500] )
-    graphic = plot2( $
-        xdata, shifts[0,*], /nodata, /current, $
-        ;xmajor=15, $
-        xtitle='image #', $
-        ytitle='shifts', $
-        _EXTRA=e $
-        )
-    for i = 0, sz[0]-1 do begin
-        p[i] = plot2( $
-            xdata, shifts[i,*], $
-            /overplot, $
-            symbol='circle', $
-            sym_filled=1, $
-            sym_size=0.5, $
-            color=colors[i], $
-            name=names[i] $
-            )
-    endfor
-    leg=legend( target=[p] )
-end
-
-
-PRO align_cube4, quiet, cube, ref, shifts=shifts
+PRO ALIGN_CUBE4, quiet, cube, ref, shifts=shifts
 
     ; align using shifts determined by different region
     ; (probably not the best way to do this...)
@@ -148,13 +117,19 @@ pro APPLY_SHIFTS, cube, shifts
 
     sz = size(cube, /dimensions)
     for i = 0, sz[2]-1 do begin
-        cube[*,*,i] = SHIFT_SUB( cube[*,*,i], shifts[0,i], shifts[1,i] )
+        ;cube[*,*,i] = SHIFT_SUB( cube[*,*,i], shifts[0,i], shifts[1,i] )
+        cube[*,*,i] = SHIFT_SUB( cube[*,*,i], shifts[0], shifts[1] )
     endfor
 end
 
 
 pro ALIGN_DATA, cube, ref, allshifts
+    ; aligns data to reference image on a loop,
+    ; using standard deviation of shifts as a breaking point
+    ; (when it no longer decreases).
 
+
+    ; save shifts calculated for every iteration.
     sz = size(cube, /dimensions)
     allshifts = fltarr( 2, sz[2] )
 
@@ -173,6 +148,7 @@ pro ALIGN_DATA, cube, ref, allshifts
 end
 
 pro PLOT_SHIFTS, shifts, _EXTRA=e
+    ; Color axes on each side, and shift/scale differently?
 
     sz = size( shifts, /dimensions)
     cols = 1
@@ -206,7 +182,9 @@ pro PLOT_SHIFTS, shifts, _EXTRA=e
 end
 
 
-function ALIGN_IN_PIECES, cube, shifts=shifts, temp=temp
+pro ALIGN_IN_PIECES, cube, shifts=shifts, temp=temp
+
+    ; returns 3D shifts array and aligned cube
 
         ;xstepper, cube<3933
         sz = size(cube, /dimensions)
@@ -221,26 +199,28 @@ function ALIGN_IN_PIECES, cube, shifts=shifts, temp=temp
             ref = cube[*,*,sz[2]/2]
             ALIGN_DATA, cube, ref, shifts
         endelse
-    return, aligned_cube
 end
-
 
 goto, start
 
+;channel = '1600'
+channel = '1700'
 ; Read raw data from fits files and
 ; crop for alignment (pad with 100x66 pixels on all sides)
-READ_MY_FITS, index, data, /hmi
-READ_MY_FITS, index, data, channel='1600', /aia
-xr = 500/2
-yr = 330/2
-xr = xr + 100
-yr = yr + 66
-x0 = 2420
-y0 = 1665
-data = data[ x0-xr:x0+xr-1, y0-yr:y0+yr-1, *]
-; The above code should probably be in a different routine.
+;READ_MY_FITS, index, data, /hmi
+READ_MY_FITS, index, data, channel=channel, /aia
+data = crop_data( data, dimensions=[700,462], center=[2420,1665] )
+sz = size(data, /dimensions)
+im = image2( data[*,*,sz[2]/2] )
+stop
 
 start:;--------------------------------------------------------------------
+
+timestr = index.date_obs + 'Z'
+jd = get_jd(timestr)
+
+stop
+
 
 ; Indices where cube is to be split in separate alignments
 z = [ $
@@ -253,41 +233,92 @@ z = [ $
     [ 696, 748 ] $
     ]
 
-aligned_cube = fltarr( size(data, /dimensions) )
 
-for i = 0, (size(z, /dimensions))[1] do begin
+aligned_cube = fltarr(sz)
 
+
+for i = 2, (size(z, /dimensions))[1]-1 do begin
+
+    ;cube = data[ 0:10, 0:10, z[0,i]:z[1,i] ]
     cube = data[ *, *, z[0,i]:z[1,i] ]
 
-    if ( i eq 1 OR i eq 3 OR i eq 5 ) then begin
+    ;if ( i eq 1 OR i eq 3 OR i eq 5 ) then begin
+    if ( i mod 2) then begin
         ; Portions of cube to use for determining shifts.
         ; Non-flaring parts of AR; determined by eye (hardcoded).
         if i eq 1 then temp = cube[ 475: * ,*,* ]
         if i eq 3 then temp = cube[ 225:400,*,* ]
         if i eq 5 then temp = cube[ 275: * ,*,* ]
 
-        aligned_cube[*,*,z[0,i]:z[1,i]] = $
-            ALIGN_IN_PIECES(cube, shifts=shifts, temp=temp)
+        print, i, size(temp, /dimensions)
+        ALIGN_IN_PIECES, cube, shifts=shifts, temp=temp
     endif else begin
-        aligned_cube[*,*,z[0,i]:z[1,i]] = $
-            ALIGN_IN_PIECES(cube, shifts=shifts)
+        print, i, sz
+        ALIGN_IN_PIECES, cube, shifts=shifts
     endelse
 
-    plot_shifts, shifts
+    aligned_cube[*,*,z[0,i]:z[1,i]] = cube
 
+    ;plot_shifts, shifts
 endfor
+stop
+
+
+
+;; Align each section
+
+ind = [0,2,3,4,5,6]
+ref = aligned_cube[*,*,393]
+
+temp_ref = ref[475:*,*]
+sztemp = size(temp_ref, /dimensions)
+;temp = fltarr( sztemp[0], sztemp[1], 7 )
+;temp[*,*,1] = temp_ref
+
+temp = []
+
+foreach i, ind do begin
+
+    temp = aligned_cube[475:*,*,z[0,i]]
+    temp = reform(temp, 225,462,1)
+    ;temp[*,*,i] = aligned_cube[475:*,*,z[0,i]]
+
+    cube2 = aligned_cube[*,*,z[0,i]:z[1,i]]
+
+    for j = 0, 9 do begin
+
+        align_cube3, temp, temp_ref, shifts=shifts
+        apply_shifts, cube2, shifts
+
+    endfor
+    aligned_cube[*,*,z[0,i]:z[1,i]] = cube2
+endforeach
+
+
+
+
+
+
+cube = data[ *, *, 0:sz[2]/2 ]
+ref  = data[ *, *,   sz[2]/4 ]
+temp = cube[ 475:*, *, * ]
+temp_ref = ref[ 475:*, * ]
 
 stop
 
+ALIGN_CUBE3, temp, temp_ref, shifts=shifts
+APPLY_SHIFTS, cube, shifts
+
+
 ; scale aligned cube for nicer viewing.
-sz = size(aligned_cube, /dimensions)
 maxvalues = []
 minvalues = []
-for j = 0, sz[2]-1 do begin
-    maxvalues = [maxvalues, max(aligned_cube[*,*,j])] 
-    minvalues = [minvalues, min(aligned_cube[*,*,j])] 
+for j = 0, 375-1 do begin
+    maxvalues = [maxvalues, max(cube[*,*,j])] 
+    minvalues = [minvalues, min(cube[*,*,j])]
 endfor
-xstepper, aligned_cube<min(maxvalues)>max(minvalues)
+xstepper, cube<min(maxvalues)>max(minvalues)
+
 
 
 ;save, cube, filename='aia1600aligned.sav'

@@ -61,6 +61,25 @@ function power_maps, $
 
 end
 
+
+
+pro restore_maps, struc, channel
+
+    ; Return variables 'map' and 'map2' (map2 - /NORM)
+    ;if n_elements(A.[i].map) eq 0 then restore...
+    restore, '../aia' + channel + 'map.sav'
+    restore, '../aia' + channel + 'map2.sav'
+
+    ; Power at each timestep, from total(maps).
+    ; Still needs to be corrected for saturated pixels.
+    power2 = total( total( map2, 1 ), 1 );, fltarr(dz)  
+
+    struc = create_struct( struc, 'power', power, 'power2', power2 )
+
+
+end
+
+
 goto, start
 
 

@@ -27,30 +27,100 @@ function get_full_disk_data
 end
 
 
-function image_ar, data, _EXTRA=e
+function image_ar, data, layout=layout, _EXTRA=e
 
     common defaults
-    sz = size(data, /dimensions)
-    w = window2()
+    dpi = 96
 
-    im = image2( $
-        data, $
-        /current, /device, $
-        layout=[1,1,1], $
-        margin=1.25*dpi, $
-        ;margin=[0.75, 0.5, 0.5, 0.5]*dpi, $
-        ;xmajor=5, $
-        ;ymajor=5, $
-        ;xtickvalues = [380:4096-380:833], $
-        ;ytickvalues = [380:4096-380:833], $
-        xtitle = "X (pixels)", $
-        ytitle = "Y (pixels)", $
-        ;xtitle='X (arcseconds)', $
-        ;ytitle='Y (arcseconds)', $
-        _EXTRA=e $
-    )
+    cdelt = 0.6
+    crpix = 2048.5
+
+    x0 = 2420 - 35
+    y0 = 1665
+    ;data2 = data[ x0-(xl/2):x0+(xl/2)-1, y0-(yl/2):y0+(yl/2)-1, * ]
+
+    if not keyword_set(layout) then layout=[1,1]
+
+    cols = layout[0]
+    rows = layout[1]
+
+    im = objarr(cols*rows)
+
+    wx = 8.5
+    wy = wx / 1.8
+    w = window( dimensions=[wx,wy]*dpi )
+
+    kk = 0
+    for jj = 0, rows-1 do begin
+        for ii = 0, cols-1 do begin
+
+            temp = data[*,*,ii]
+            sz = size(temp, /dimensions)
+            X = ( indgen(sz[0])-crpix ) * cdelt
+            Y = ( indgen(sz[1])-crpix ) * cdelt
+
+            if jj eq 1 then begin
+                temp = crop_data( temp, center=[x0,y0] )
+                X = X[ x0-(500/2):x0+(500/2)-1 ]
+                Y = Y[ y0-(330/2):y0+(330/2)-1 ]
+            endif
+
+;            w = 2.0
+;            h = w * (sz[1]/sz[0])
+;            x1 = 1.25
+;            y1 = 0.5
+;            x2 = x1 + w
+;            y2 = y1 + w * (sz[1]/sz[0])
+;            pos = [x1,y1,x2,y2]
+
+            im[kk] = image2( $
+                temp, X, Y, $
+                /current, /device, $
+                layout=[cols,rows,kk+1], $
+                margin=[2.25, 0.05, 0.05, 0.5]*dpi, $
+                xtitle='X (arcseconds)', $
+                ytitle='Y (arcseconds)', $
+                _EXTRA=e $
+            )
+
+            xs = -0.06 * ii
+            ys =  0.07 * jj
+
+            pos = im[kk].position
+            im[kk].position = pos + [xs,ys,xs,ys]
+
+            ax = im[kk].axes
+            ax[0].showtext = jj
+            if ii eq 0 then ax[1].showtext = 1 else ax[1].showtext=0
+
+            kk = kk + 1
+
+        endfor
+    endfor
+
     return, im
 
+end
+
+
+
+pro image_hmi, data
+
+    dpi = 96
+    common defaults
+    sz = float(size(data, /dimensions))
+    wx = 8.5/2
+    wy = wx * (sz[1]/sz[0])
+    w = window( dimensions=[wx,wy]*dpi )
+    im = image2( $
+        data, $
+        /current, $
+        title='HMI B$_{LOS}$ 2011-February-15 00:00:27.30', $
+        xtitle='X (arcseconds)', $
+        ytitle='Y (arcseconds)' $
+        )
+     im.xtickname = strtrim([50:350:50],1)
+     im.ytickname = strtrim([-340:-140:50],1)
 end
 
 

@@ -1,51 +1,76 @@
 ; Last modified:   09 April 2018
 
 
-pro plot_ft, xdata, A, i, pos
+function plot_ft, xdata, power, _EXTRA=e
 
-    p = objarr(2)
-    p[0] = plot2( xdata, A[0].power[*,i], $
+    common defaults
+    w = window( dimensions=[8.5,3]*dpi*1.2 )
+
+    p = plot2(  $
+        xdata, $
+        power, $
         /current, $
-        position=pos[*,i], $
-        xtitle='frequency (mHz)', ytitle="Power", $
-        xtickvalues=[2:max(xdata):4], $
-        xtickformat = '(F0.1)', $
-        symbol='circle', $
-        sym_filled=1, $
-        ylog=1, $
-        color=A[0].color, $
-        name=A[0].name )
+        ;xtitle='frequency (mHz)', $
+        xtitle='period (s)', $
+        ytitle="Power", $
+        ;xtickformat = '(F0.1)', $
+        ;symbol='circle', $
+        ;sym_filled=1, $
+        ;sym_size=0.5, $
+        xrange=[50,400], $
+        xlog=1, $
+        _EXTRA=e )
 
-    p[1] = plot2( xdata, A[1].power[*,i], $
-        /overplot, $
-        ylog=1, $
-        symbol='circle', $
-        sym_filled=1, $
-        color=A[1].color, $
-        name=A[1].name )
-
-    ax = p[0].axes
-    ax[2].title = 'period (seconds)'
-    values = [120, 180, 200]
-    ax[2].tickvalues = (1./values)*1000.
-    ax[2].tickname = strtrim( values, 1 )
-    ax[2].showtext = 1
+    ax = p.axes
+    ;ax[0].tickvalues = [2:max(xdata):4]
+    ;ax[0].tickvalues = [10,100,1000]
 
     ; Vertical lines at periods of interest
-    v = 1000./values
-    yr = p[0].yrange
-    for i = 0, 2 do $
-        vert = plot( [v[i],v[i]], [yr[0],yr[1]], /overplot, linestyle='--')
+    v = [120, 180, 200]
+    for i = 0, n_elements(v)-1 do $
+        vert = plot( $
+            [v[i],v[i]], $
+            p.yrange, $
+            /overplot, $
+            ystyle=1, $
+            linestyle='--')
+    return, p
 
-    ; Text label
-    w = getwindows(/current)
-    d = w.dimensions
-    tpos = p[0].position
-    offset = 20.
-    tx = (tpos[2] * d[0]) - offset
-    ty = (tpos[3] * d[1]) - offset
-    t = text2( tx, ty, A[0].time[i] + ' - ' + A[0].time[i+dz], /device, $
-        alignment=1, vertical_alignment=1 $
-    )
+    ax = p[0].axes
+    v = 1000./values
+    ;ax[2].title = 'period (seconds)'
+    ax[2].title = 'frequency (mHz)'
+    ax[2].tickvalues = (1000./values)
+    ax[2].tickname = strtrim( reverse(values), 1 )
+    ax[2].showtext = 1
+end
+
+
+pro calc_ft
+
+    time = strmid(aia1600.time,0,5)
+    i1 = (where( time eq '01:30' ))[0]
+    i2 = (where( time eq '02:30' ))[0]
+
+    flux = aia1600.flux[i1:i2]
+
+    f_min = 1./400
+    f_max = 1./50
+
+    result = fourier2( flux, 24, /norm )
+    frequency = reform(result[0,*])
+    power = reform(result[1,*])
+
+    ind = where(frequency ge f_min AND frequency le f_max)
+    frequency = frequency[ind]
+    power = power[ind]
+    period = 1./frequency
+
+    ;p = plot_ft( 1000.*frequency, power )
+end
+
+resolve_routine, 'plot_ft', /is_function
+p = plot_ft( period, power )
+
 
 end

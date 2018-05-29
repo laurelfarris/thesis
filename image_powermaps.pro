@@ -2,26 +2,47 @@
 ; Last modified: 25 April 2018
 
 
-pro image_powermaps, map, title, cbar=cbar, _EXTRA=e
+function image_powermaps, map, cbar=cbar, layout=layout, _EXTRA=e
+
 
     common defaults
 
-    xoff = -0.05
+    ;xoff = -0.05
+    xoff = 0.0
     yoff = 0.0
 
+    if keyword_set(layout) then begin
+        cols = layout[0]
+        rows = layout[1]
+    endif else begin
+        cols = 3
+        rows = 5
+    endelse
+
+
+    sz = size(map, /dimensions)
+    ext = fltarr( 2, sz[2] )
+    for i = 0, sz[2]-1 do $
+        ext[*,i] = [ min(map[*,*,i]), max(map[*,*,i]) ]
+
+    min_value = max( ext[0,*] )
+    max_value = min( ext[1,*] )
+
     i = 0
-    cols = 3
-    rows = 5
     im = objarr(cols,rows)
-    w = window2( dimensions=[8.5,9.0]*dpi )
+    wx = 8.5
+    wy = wx * (float(rows)/cols)
+    w = window( dimensions=[wx,wy]*dpi )
     for y = 0, rows-1 do begin
     for x = 0, cols-1 do begin
         im[x,y] = image2( $
             map[*,*,i], $
             layout=[cols,rows,i+1], $
-            margin=[0.1, 0.1, 1.50, 0.75]*dpi, $
+            ;margin=[0.1, 0.1, 1.50, 0.75]*dpi, $
+            margin=0.5*dpi, $
+            ;min_value=min_value, $
+            ;max_value=max_value, $
             /current, /device, $
-            title=title[i], $
             axis_style=0, $
             _EXTRA=e )
         im[x,y].position = $
@@ -43,16 +64,6 @@ pro image_powermaps, map, title, cbar=cbar, _EXTRA=e
             title='3-minute power^0.5' )
             ;range=[0,mx], $  mx = ??
     endif
-
-end
-
-pro image_powermaps_2, map, title, cbar=cbar, _EXTRA=e
-end
-
-goto, start
-start:
-
-
-
+    return, im
 
 end

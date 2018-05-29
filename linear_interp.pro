@@ -15,7 +15,7 @@
 ;-
 
 
-pro LINEAR_INTERP, array, time, jd=jd, cadence=cadence
+pro LINEAR_INTERP, array, timestampstring, cadence, time=time
 
 ; Linear interpolation at coordinates specified by caller.
 ;  Get indices of missing data by subtracting each observation
@@ -36,16 +36,17 @@ pro LINEAR_INTERP, array, time, jd=jd, cadence=cadence
 ;  Is there a way to read in the input data type at beginning
 ;  of subroutine, then convert back to that at the end?
 
+    ; Use time to get julian date
+    jd = get_jd( timestampstring )
+
+    ; convert from fraction of a day to seconds
     dt = jd - shift(jd,1)
     dt = dt * 24 * 3600
-    dt = round(dt)
-    ; Is this necessary? Doesn't ROUND convert to INT?
-    ; Yes it is --> apparently ROUND alone returns LONG, not INT,
-    ; which is why FIX is used below for the data array.
-    ; Seriously, comment your shit better.
-    dt = fix(dt)
 
-    ;; There is a gap between i-1 and i.
+    ; use fix to convert data type from LONG to INT
+    dt = fix(round(dt))
+
+    ; Print where there's a gap in the data (between i-1 and i)
     interp_coords = ( where(dt ne cadence) )
 
     if n_elements(interp_coords) gt 1 then begin
@@ -65,20 +66,16 @@ pro LINEAR_INTERP, array, time, jd=jd, cadence=cadence
                 [[array[*,*,i:*]]] ]
 
             ; Could actually use MEAN here...
-            missing_time = ( jd[i-1] + jd[i] ) / 2.
-            jd = [ jd[0:i-1], missing_time, jd[i:-1] ]
+            missing_jd = ( jd[i-1] + jd[i] ) / 2.
+            jd = [ jd[0:i-1], missing_jd, jd[i:-1] ]
 
         endforeach
+
         ; Convert from float back to integers by rounding.
         array = fix(round(array))
 
-        ; Use the following in the future, but not worth risking errors right now.
-        ;typ = typename(array)
-        ;if ( typ ne 'INT') then array = round(array)
 
-
-        ;---------
-        ; Use new jd to update timestamp string (see 2018-05-13 notes).
+        ;; Use new jd to update timestamp string (see 2018-05-13 notes).
 
         caldat, jd, month, day, year, hour, minute, second
 

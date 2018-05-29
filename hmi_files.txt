@@ -1,0 +1,15 @@
+
+
+
+
+hmi.ic_45s.2011.02.15_00_01_30_TAI.continuum.fits
+hmi.ic_45s.2011.02.15_05_00_45_TAI.continuum.fits
+hmi.m_45s.2011.02.15_00_01_30_TAI.magnetogram.fits
+hmi.m_45s.2011.02.15_05_00_45_TAI.magnetogram.fits
+hmi.m_720s.2011.02.15_00_12_00_TAI.magnetogram.fits
+hmi.m_720s.2011.02.15_05_00_00_TAI.magnetogram.fits
+hmi.v_45s.2011.02.15_00_01_30_TAI.Dopplergram.fits
+hmi.v_45s.2011.02.15_05_00_45_TAI.Dopplergram.fits
+x9x73110215t000000_map-err_dim-180_source-SDO-HMI_type-m-720s.fits.gz
+x9x93110215t000000_map-err_qsd-ract_dim-180_source-SDO-HMI_type-b-720s-helio.fits.gz
+x9x93110215t000000_map-err_qsd-rand_dim-180_source-SDO-HMI_type-b-720s-helio.fits.gz
