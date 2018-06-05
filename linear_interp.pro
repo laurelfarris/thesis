@@ -65,56 +65,21 @@ pro LINEAR_INTERP, array, jd, cadence, time;=time
         descending = (interp_coords[reverse(sort(interp_coords))]);[0:-2]
 
         foreach i, descending do begin
-
             missing_image = ( array[*,*,i-1] + array[*,*,i] ) / 2.
             array = [ $
                 [[array[*,*,0:i-1]]], $
                 [[missing_image]],    $
                 [[array[*,*,i:*]]] ]
-
             ; Could actually use MEAN here...
             missing_jd = ( jd[i-1] + jd[i] ) / 2.
             jd = [ jd[0:i-1], missing_jd, jd[i:-1] ]
-
         endforeach
 
         ; Convert from float back to integers by rounding.
         array = fix(round(array))
 
-
-        ;; Use new jd to update timestamp string (see 2018-05-13 notes).
-
-        caldat, jd, month, day, year, hour, minute, second
-
-        hour_string = strtrim(hour,1)
-        minute_string = strtrim(minute,1)
-        second_string = strtrim( fix(second),1)
-
-        ; TEST that arrays are of equal length.
-        NH = n_elements(hour)
-        NM = n_elements(minute)
-        NS = n_elements(second)
-        if (NM ne NH) OR (NS ne NH) OR (NM ne NS) then $
-            print, "Arrays are not of equal length!" $
-            else N=NH
-
-        ; create string array of the two digits that comprise the
-        ;   nearest 100th of each value in second array.
-        dec = strtrim( fix((second - fix(second))*100), 1)
-
-        ; Append '0' to values with only one digit
-        for i = 0, N-1 do begin
-            if strlen(hour_string[i]) eq 1 then $
-                hour_string[i] = '0' + hour_string[i]
-            if strlen(minute_string[i]) eq 1 then $
-                minute_string[i] = '0' + minute_string[i]
-            if strlen(second_string[i]) eq 1 then $
-                second_string[i] = '0' + second_string[i]
-            second_string[i] = second_string[i] + '.' + dec[i]
-        endfor
-
-        time = hour_string + ':' + minute_string + ':' + second_string
-        help, time
+        ; Update time array
+        time = UPDATE_TIME( jd )
 
     endif else print, "Nothing to interpolate."
 end

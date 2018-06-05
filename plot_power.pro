@@ -1,37 +1,39 @@
-;; Last modified:   01 June 2018
+; Last modified:   05 June 2018
 
 ; Always give input in frequencies (Hz), e.g. vert = 1./[180,300]
-pro compare_power
-    ; Compare power for total flux vs. total power over power map
-    ; test using corner of AIA 1700 (non-flaring)
 
+pro compare_power_spectra
+    ; power from total flux vs. power summed over power map
+    ; test using corner of AIA 1700 (non-flaring)
+    ; Plotting P(\nu)
     crop = 10
     testdata = A[1].data[ 0:crop-1, 0:crop-1, * ]
     testz = [0:600]
 
-    ; power based on total flux
+    ; power from total flux
     testflux = total( total( testdata,1 ), 1 )
     testpower1 = []
 
     foreach z, testz, i do begin
-        result = fourier2( testflux[z:z+dz-1], 24, /NORM ) 
+        result = fourier2( testflux[z:z+dz-1], 24, /NORM )
         power = reform( result[1,*] )
         testpower1 = [ testpower1, MEAN( power[ind] ) ]
     endforeach
 
-    ; power based on total of power map
+    ; power from sum of power map
     testmap = power_maps( testdata, z=testz, dz=64, cadence=24 )
-
-    ; should this be mean instead of total? Map is already showing
-    ;  mean(power)... may just have to ask about this.
     testpower2 = total( total( testmap,1 ), 1 )
 
     testx = indgen(601)
     p = plot2( testx, testpower1, color='blue' )
     p = plot2( testx, testpower2, /overplot, color='red' )
 end
-pro compare_power_2
-    ;; May 15, 2018
+
+
+pro compare_power_time
+    ; May 15, 2018
+    ; /NORM vs. no norm
+    ; Plotting P(t)
 
     ; This gives power 749 elements, but will only have values for 749 - 64.
     ; The rest will = 0.0
@@ -54,7 +56,7 @@ pro compare_power_2
 
     ; Calculate possible frequencies for dz.
     frequency = (reform( fourier2( $
-        indgen(dz), A[0].cadence, NORM=NORM )))[0,*] 
+        indgen(dz), A[0].cadence, NORM=NORM )))[0,*]
     ind = where( frequency ge f_min AND frequency le f_max )
 
     ; Calculate power for time series between each value of z and z+dz
@@ -66,9 +68,9 @@ pro compare_power_2
     power_total = fltarr( 4, n_elements(A[0].flux) )
     z_start = [0 : n_elements(power_total)-dz]
 
+    ; Should have subroutine that does this...
     for j = 0, 3 do begin
         foreach z, z_start, i do begin
-
             input = struc.ydata[*,j]
             result = fourier2( input[z:z+dz-1], NORM=struc.norm[i], 24 )
             frequency = reform(result[0,*])
@@ -77,18 +79,16 @@ pro compare_power_2
             ind = where( frequency ge 0.005 AND frequency le 0.006 )
             power = reform( result[1,*] )
             power_total[j,i] = MEAN( power[ind] )
-
         endforeach
     endfor
-
     p = objarr(4)
-    for i = 0, 3 do begin
+    for i = 0, 3 do $
         p[i] = plot2( struc.xdata, power_total[i,*], title=struc.title[i])
-    endfor
 end
+
+
 pro total_power_two_ways
     ;; Last modified:   15 May 2018 20:36:15
-
     ; snippets of code from when I was testing plots of total
     ; power from total flux vs. total(powermaps),
     ; and plotting in same window as lightcurve.
@@ -143,41 +143,6 @@ pro total_power_two_ways
     endfor ;***
 end
 
-function plot_ft, frequency, power, $
-    period=period, $
-    _EXTRA=e
-
-    common defaults
-
-    w = window(dimensions=[8.5,3.0]*dpi)
-
-    p = plot2(  $
-        frequency, $
-        power, $
-        /current, $
-        xtitle = 'frequency (Hz)', $
-        ytitle='Power', $
-        ;color='dark cyan', $
-        ;xtickformat = '(F0.1)', $
-        ;symbol='circle', $
-        ;sym_filled=1, $
-        ;sym_size=0.5, $
-        ;xrange=[50,400], $
-        ;xlog=1, $
-        _EXTRA=e )
-
-    ;if keyword_set(period) then begin
-    ;    ax = p.axes
-    ;    ;values = ax[0].tickvalues
-    ;    ax[2].tickvalues = 1./period
-    ;    ;ax[2].tickname = strtrim( fix(1./values), 1 )
-    ;    ax[2].tickname = strtrim( reverse(period[sort(period)]), 1 )
-    ;    ax[2].title = 'period (s)'
-    ;    ax[2].showtext = 1
-    ;endif
-end
-
-
 function plot_vertical_lines
 
     ; Vertical lines at periods of interest
@@ -194,55 +159,76 @@ function plot_vertical_lines
     return, p
 end
 
+function plot_ft, frequency, power, $
+    period=period, $
+    _EXTRA=e
 
-pro MAIN
+    common defaults
+
+    w = window(dimensions=[8.5,3.0]*dpi)
+
+    p = plot2(  $
+        frequency, $
+        power, $
+        /current, $
+        xtitle = 'frequency (Hz)', $
+        ytitle='Power', $
+        _EXTRA=e )
+
+    ;if keyword_set(period) then begin
+    ;    ax = p.axes
+    ;    ;values = ax[0].tickvalues
+    ;    ax[2].tickvalues = 1./period
+    ;    ;ax[2].tickname = strtrim( fix(1./values), 1 )
+    ;    ax[2].tickname = strtrim( reverse(period[sort(period)]), 1 )
+    ;    ax[2].title = 'period (s)'
+    ;    ax[2].showtext = 1
+    ;endif
+end
+
+pro CALC_FT, flux, cadence, frequency, power, df=df, _EXTRA=e
+; band could be range of frequencies to show on x-axis for power spectrum,
+; or narrow bandwidth to average over, centered at freq. of interest.
+
     ;; Calculate FT here, as called by most of these subroutines.
-    result = fourier2( flux, 24, /norm )
+    result = fourier2( flux, 24, norm=1 )
     frequency = reform(result[0,*])
     power = reform(result[1,*])
 
+    if n_elements(df) ne 0 then begin
+        ind = where(frequency ge df[0] AND frequency le df[1])
+        frequency = frequency[ind]
+        power = power[ind]
+    endif
 end
 
-pro calc_ft, flux, period, power
-
-    ind = where(frequency ge f_min AND frequency le f_max)
-    frequency = frequency[ind]
-    power = power[ind]
-    period = 1./frequency
-end
-
-function POWER_VS_TIME, flux, z_start, dz, df, cadence, _EXTRA=e
-
-; Calculate power as function of time for integrated flux.
-
-; Input:    flux
-;           cadence
+function POWER_VS_TIME, flux, cadence, df, dz, z_start=z_start, _EXTRA=e
+; Input:    flux, cadence
 ;           dz = sample length for fourier2.pro (data units)
-;           frequency bandwidth:
-;             f_min = minimum frequency
-;             f_max = maximum frequency
-; Output:   Returns power as function of time
+;           frequency bandwidth: band=[fmin,fmax]
+; Output:   Returns power as function of time for integrated flux.
 ; To do:    Add test codes
-
 
     n = n_elements(flux)
 
+    if n_elements(z) eq 0 then z = indgen(n-dz)
+
     ; Calculate possible frequencies for dz.
     frequency = reform( (fourier2( indgen(dz), cadence ))[0,*] )
-    bandpass = where( frequency ge fmin AND frequency le fmax )
+    bandpass = where( frequency ge df[0] AND frequency le df[1] )
 
     ; Power at each timestep, from integrated flux
-    power = fltarr(n)
+    power_time = fltarr(n)
 
     ; Calculate power for time series between each value of z and z+dz
-    ;foreach z, z_start, i do begin
-    for i = 0, n-1-dz do begin
-        result = fourier2( flux[z:z+dz-1], cadence, NORM=1, _EXTRA=e ) 
+    ;for i = 0, n-1-dz do begin
+    foreach z, z_start do begin
+        result = fourier2( flux[z:z+dz-1], cadence, NORM=1, _EXTRA=e )
+        power = reform(result[1,*])
         ; MEAN power over frequency bandpass
-        power[i] = MEAN( (reform(result[1,*]))[ind] )
-    endfor
-    ;endforeach
-    return, power
+        power_time[i] = MEAN( power[bandpass] )
+    endforeach
+    return, power_time
 end
 
 goto, start
@@ -272,33 +258,13 @@ FT = {$
  ; period width not constant as frequency resolution,
  ; but this is based on specific central period, so others don't matter.
 
-; Time
-t = strmid(A[0].time,0,5)
-i1 = (where( t eq '01:30' ))[0]
-i2 = (where( t eq '02:30' ))[0]
-flux = A[0].flux[i1:i2]
-
-
-start:;------------------------------------------------------------------------------
-
-
-;aia1600 = create_struct( aia1600, 'cadence', 24. )
-;aia1700 = create_struct( aia1700, 'cadence', 24. )
-;A = [ aia1600, aia1700 ]
-
 dz = 64
-f_min = 0.005
-f_max = 0.006
-
-power = []
-
-for i = 0, 1 do begin
-    flux = A[i].flux
-    z_start = [0 : n_elements(flux)-dz]
-    power = [ [power], [TOTAL_POWER(flux,z_start,dz,[f_min,f_max],A[i].cadence) ] ] 
-endfor
+df = [0.005,0.006]
+flux = A[i].flux
+power = POWER_VS_TIME( flux, cadence, df, dz )
 help, power
-stop
+
+; plot power vs. time
 
 ;aia1600 = create_struct( aia1600, 'power', power )
 ;aia1700 = create_struct( aia1700, 'power', power )

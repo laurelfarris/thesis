@@ -2,6 +2,8 @@
 
 function PLOT_TOTAL_POWER, xdata, ydata, _EXTRA=e
 
+    ; This is old - don't need anymore.
+
     ; Plot lightcurve and power as function of time.
     ; ONE panel. Call this from another routine for multi-panel.
 
@@ -32,11 +34,7 @@ function PLOT_TOTAL_POWER, xdata, ydata, _EXTRA=e
     ax = plt.axes
     ax[2].title = 'index'
 
-    leg = legend2( $
-        target=[ p[0], p[1] ], $
-        ;target=p, $
-        position=[0.9,0.85] )
-
+    leg = legend2( target=[ p[0], p[1] ], position=[0.9,0.85] )
     return, plt
 end
 
@@ -120,10 +118,9 @@ if k ge 1 then begin
         name='t+dz' )
 endif
 
-; Save figure
+; Save figure (had to use different methods because of shaded part).
 ;save2, 'power_time_4.pdf'
 ;write_png, 'power_time_4.png', tvrd(/true)
 w.save, '~/power_time_5.png', width=wx*dpi
-
 
 end
