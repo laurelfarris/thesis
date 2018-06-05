@@ -1,9 +1,6 @@
 ;; Last modified:   23 May 2018 16:19:13
 
-
-
-
-function PLOT3, xdata, ydata, _EXTRA=e
+function PLOT_TOTAL_POWER, xdata, ydata, _EXTRA=e
 
     ; Plot lightcurve and power as function of time.
     ; ONE panel. Call this from another routine for multi-panel.
@@ -43,18 +40,6 @@ function PLOT3, xdata, ydata, _EXTRA=e
     return, plt
 end
 
-; Things that change:
-;   xdata (sometime)
-;   ydata
-;   t_start, t_end (go with ydata, and xdata would also change)
-;   ytitle
-;   layout (position within layout)
-;   tickinterval
-;   showtext
-;   window size (span one or two columns)
-
-
-; create window, graphic array(s)
 p = objarr(3)
 
 ; Margin values for axes that are not on top of other axes.

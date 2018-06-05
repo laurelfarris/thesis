@@ -15,7 +15,7 @@
 ;-
 
 
-pro LINEAR_INTERP, array, timestampstring, cadence, time=time
+pro LINEAR_INTERP, array, jd, cadence, time;=time
 
 ; Linear interpolation at coordinates specified by caller.
 ;  Get indices of missing data by subtracting each observation
@@ -37,25 +37,32 @@ pro LINEAR_INTERP, array, timestampstring, cadence, time=time
 ;  of subroutine, then convert back to that at the end?
 
     ; Use time to get julian date
-    jd = get_jd( timestampstring )
+    ;jd = get_jd( timestampstring )
 
     ; convert from fraction of a day to seconds
     dt = jd - shift(jd,1)
     dt = dt * 24 * 3600
 
-    ; use fix to convert data type from LONG to INT
+    ; Exclude first element because of wrapping from SHIFT.
+    dt = dt[1:*]
+
+    ; use FIX to convert data type from LONG to INT
     dt = fix(round(dt))
 
     ; Print where there's a gap in the data (between i-1 and i)
-    interp_coords = ( where(dt ne cadence) )
+    interp_coords = where(dt ne cadence)
 
-    if n_elements(interp_coords) gt 1 then begin
+    if interp_coords[0] ne -1 then begin
 
-        print, "Interpolating..."
+        N = n_elements(interp_coords)
+        print, "Interpolating ", strtrim(N,1), $
+            " images between z = ", strtrim(interp_coords,1), $
+            "and z = ", strtrim(interp_coords+1,1)
+        ;print, "Interpolating ", N, " images at z = ", interp_coords
 
         ; Create interpolated images and put them in the data cube in
         ; DESCENDING order to preserve the indices of the missing data.
-        descending = (interp_coords[reverse(sort(interp_coords))])[0:-2]
+        descending = (interp_coords[reverse(sort(interp_coords))]);[0:-2]
 
         foreach i, descending do begin
 
@@ -107,6 +114,7 @@ pro LINEAR_INTERP, array, timestampstring, cadence, time=time
         endfor
 
         time = hour_string + ':' + minute_string + ':' + second_string
+        help, time
 
     endif else print, "Nothing to interpolate."
 end

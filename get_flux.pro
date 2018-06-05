@@ -19,3 +19,22 @@ function get_flux, cube
     return, flux
 
 end
+
+
+
+
+flux = total( total(aia1600.data,1), 1 )
+exptime = aia1600index.exptime
+aia1600.flux = flux/exptime
+
+
+
+
+flux = total( total(aia1700.data,1), 1 )
+exptime = aia1700index.exptime
+avg = fltarr(4) + mean( exptime )
+exptime = [exptime, avg]
+
+aia1700.flux = flux/exptime
+
+end

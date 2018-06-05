@@ -40,8 +40,6 @@ function image_powermaps, map, cbar=cbar, layout=layout, _EXTRA=e
             layout=[cols,rows,i+1], $
             ;margin=[0.1, 0.1, 1.50, 0.75]*dpi, $
             margin=0.5*dpi, $
-            ;min_value=min_value, $
-            ;max_value=max_value, $
             /current, /device, $
             axis_style=0, $
             _EXTRA=e )
@@ -52,6 +50,7 @@ function image_powermaps, map, cbar=cbar, layout=layout, _EXTRA=e
     endfor
 
     if keyword_set(cbar) then begin
+        ; cx1 = ( im[cols-1,0].position)[0] + 0.1
         im_lower = im[cols-1,rows-1]
         im_upper = im[cols-1,0]
         cx1 = (im_lower.position)[2] + 0.01

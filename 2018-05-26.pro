@@ -143,7 +143,6 @@ p = plot2(x,y)
 
 stop
 
-START:;--------------------------------------------------------------------
 
 time = strmid(aia1600.time,0,5)
 i1 = (where( time eq '01:30' ))[0]
@@ -178,12 +177,36 @@ period = 1./frequency
 
 ;p = plot_ft( 1000.*frequency, power )
 
-resolve_routine, 'plot_ft', /is_function
 p = plot_ft( period, power )
 
 stop
 
 sdbwave, flux
+
+
+resolve_routine, 'plot_ft', /is_function
+;flux = hmi.data[100,115,0:75]
+flux = hmi.data[50,50,0:75]
+
+for i = 0, 0 do begin
+    result = fourier2( flux, 45, norm=i )
+    frequency = result[0,*]
+    power = result[1,*]
+    p = plot_FT(frequency, power, vert=1./[180,300])
+endfor
+
+
+stop
+
+
+
+
+map = power_maps(hmi.data[*,*,0:19], cadence=45, norm=0)
+
+im = image( map, $
+    layout=[1,1,1],$
+    margin=0.05, $
+    rgb_table=20 )
 
 
 end

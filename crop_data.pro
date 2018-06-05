@@ -15,11 +15,12 @@
 ;-
 
 
-function crop_data, cube, $
+;pro crop_data, data, X, Y, $
+function crop_data, data, $
     dimensions=dimensions, $
     center=center
 
-    sz = size( cube, /dimensions )
+    sz = size( data, /dimensions )
 
 
     ; Crop relative to center of input cube by default
@@ -50,6 +51,11 @@ function crop_data, cube, $
     x2 = x1 + x_length -1
     y2 = y1 + y_length -1
 
-    return, cube[ x1:x2, y1:y2, * ]
+    cube = data[ x1:x2, y1:y2, * ]
+    ;sz = size( cube, /dimensions )
+    ;X = indgen(sz[0]) + x1
+    ;Y = indgen(sz[1]) + y1
+
+    return, cube
 
 end

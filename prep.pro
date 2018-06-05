@@ -1,91 +1,73 @@
-;; Last modified:   24 May 2018 22:47:40
 
+;; Last modified:   31 May 2018
 
-;+
-;
-; CREATED       04 April 2018
-;
-; ROUTINE:      Prep.pro
-;
-; PURPOSE:
-;
-; USEAGE:
-;
-; AUTHOR:       Laurel Farris
-;
-;-
+function PREP, inst, channel, index, cadence, _EXTRA=e
+    ; Read header from prepped fits
 
+    ; Be sure to change this if switching data type!
+    ; Don't want to use Dopplergram index for continuum data...
+    ; Maybe make more like AIA, where caller specifies inst/channel.
+    ; Parts of these should be combined anyway.
+    ;if n_elements(index) eq 0 then begin
+        ;print, "no index in input args."
+        read_my_fits, inst, channel, index, data, nodata=1
+    ;    endif
 
-pro split_cube
+    ; Restore aligned data. Returns variable "cube", with dimensions 500x330x398
+    restore, '../' + inst + '_' + channel + '.sav'
 
-    ; put these lines in procedure to get them out of the way
-    aia1600before = aligned_cube[100:599,66:395,0:260]
-    aia1600during = aligned_cube[100:599,66:395,261:349]
-    aia1600after  = aligned_cube[100:599,66:395,350:748]
+    ;; Interpolate to get missing data and corresponding timestamp.
+    time = strmid(index.date_obs,11,11)
+    jd = get_jd( index.date_obs + 'Z' )
+    LINEAR_INTERP, cube, jd, cadence, time
 
-    aia1600 = create_struct( aia1600, 'before', aia1600before )
-    aia1600 = create_struct( aia1600, 'during', aia1600during )
-    aia1600 = create_struct( aia1600, 'after', aia1600after )
+    cube = crop_data(cube)
+
+    sz = size( cube, /dimensions )
+    flux = fltarr( sz[2] )
+
+    struc = { $
+        jd : jd, $
+        time : time, $
+        cadence : cadence, $
+        data : cube, $
+        flux : flux $
+        }
+    if n_elements(e) ne 0 then struc = create_struct(struc, e)
+    return, struc
+
 end
 
+goto, start
 
-resolve_routine, 'read_my_fits', /compile_full_file
-resolve_routine, 'image_ar', /is_function
+resolve_routine, 'read_my_fits'
+
+hmi = prep('hmi', 'cont', hmiContindex, 45., name='HMI cont')
+;hmi = prep('hmi', 'mag', index, name='HMI B$_{LOS}$', cadence=45.)
+;hmi = prep('hmi', 'dop', index, name='HMI Dopplergram', cadence=45.)
 
 
-;READ_AIA, aia1600index, aia1600data, '1600'
-;READ_AIA, aia1700index, aia1700data, '1700'
-;READ_HMI, index, data
+; AIA colors
+aia_lct, r, g, b, wave=1600, /load
+ct1600 = [ [r], [g], [b] ]
+aia_lct, r, g, b, wave=1700, /load
+ct1700 = [ [r], [g], [b] ]
 
-;aia1600 = PREP_AIA(aia1600index, aia1600data, '1600', color='dark orange')
-;aia1700 = PREP_AIA(aia1700index, aia1700data, '1700', color='dark cyan')
-;hmi = PREP_HMI( index, data )
-
-;hmi = create_struct( hmi, 'ct', 0 )
-;S = {  aia1600 : aia1600, aia1700 : aia1700, hmi : hmi  }
+aia1600 = PREP('aia', '1600', aia1600index, 24., name='AIA 1600$\AA$', $
+    color='dark orange', ct=ct1600)
+help, aia1600index
+;aia1700 = PREP('aia', '1700', aia1700index, 24., name='AIA 1700$\AA$', $
+;    color='dark cyan', ct=ct1700)
+stop
 ;A = [ aia1600, aia1700 ]
 
-; Align HMI data
-;cube = data_rotated
-;ref = cube[*,*,sz[2]/2]
-;align_cube3, cube, ref
+restore, '../aia1600aligned_2.sav'
+cube = crop_data( aligned_cube ) ; assuming AR is in center already
+aia1600=create_struct(aia1600,'before',aligned_cube[100:599,66:395,0:260])
+aia1600=create_struct(aia1600,'during',aligned_cube[100:599,66:395,261:349])
+aia1600=create_struct(aia1600,'after',aligned_cube[100:599,66:395,350:748])
 
-
-
-temp = [ $
-    [[ (S.(0).data - min(S.(0).data))  ]], $
-    [[ (S.(1).data - min(S.(1).data))  ]], $
-    [[S.(2).data>(-300)<300]] $
-    ]
-
-sz = size( temp, /dimensions )
-X = (indgen(sz[0])-aia1600index.crpix1) * aia1600index.cdelt1
-Y = (indgen(sz[1])-aia1600index.crpix2) * aia1600index.cdelt2
-
-x0 = 2420 + 35
-y0 = 1665
-xl = 500
-yl = 330
-temp2 = temp[ x0-(xl/2):x0+(xl/2)-1, y0-(yl/2):y0+(yl/2)-1, * ]
-sz2 = size( temp2, /dimensions )
-X2 = (indgen(sz2[0])-aia1600index.crpix1) * aia1600index.cdelt1
-Y2 = (indgen(sz2[1])-aia1600index.crpix2) * aia1600index.cdelt2
-
-
-;dat = { $
-
-
-im = image_AR( temp, layout=[3,2] )
-;im = image_AR( temp2, X2, Y2, layout=[3,2] )
-
-;if i le 1 then im[i].rgb_table = S.(i).ct
-im[0].rgb_table = S.(0).ct
-im[3].rgb_table = S.(0).ct
-im[1].rgb_table = S.(1).ct
-im[4].rgb_table = S.(1).ct
-
-
-
-
+start:
+S = { aia1600:aia1600, aia1700:aia1700, hmi:hmi }
 
 end
