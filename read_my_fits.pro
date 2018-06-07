@@ -23,6 +23,7 @@ pro read_my_fits, instr, channel, index, data, $
     'aia': begin
         if keyword_set(prepped) then begin
             path = '/solarstorm/laurel07/Data/AIA_prepped/'
+            ;path = '/home/users/laurel07/Data/AIA_prepped/'
             files = 'AIA20110215_*_'  +  channel  +  '*.fits'
         endif else begin
             path = '/solarstorm/laurel07/Data/AIA/'

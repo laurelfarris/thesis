@@ -169,6 +169,7 @@ pro ALIGN_IN_PIECES, cube, shifts=shifts, temp=temp
 end
 
 goto, start
+start:;------------------------------------------------------------------------------
 
 aia_lct, wave=1600, /load
 read_my_fits, 'aia', '1600', index, data, /prepped
@@ -191,7 +192,6 @@ xstepper, data, xsize=500, ysize=330
 stop
 
 
-start:;------------------------------------------------------------------------------
 ; Indices where cube is to be split in separate alignments
 z = [ $
     [ 0, 260 ], $
@@ -267,10 +267,11 @@ foreach i, ind do begin
 endforeach
 
 xstepper, aligned_cube_2, xsize=500, ysize=330
+stop
 
 cube = aligned_cube_2
 
-save, cube, filename='aia1600aligned.sav'
+;save, cube, filename='aia1600aligned.sav'
 ;save, cube, filename='aia1700aligned.sav'
 
 end

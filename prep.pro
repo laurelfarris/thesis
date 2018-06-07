@@ -15,7 +15,8 @@ function PREP, inst, channel, cadence, _EXTRA=e
 
     ; Restore aligned data.
     ; Returns variable "cube", with dimensions 500x330x398 (for hmi I assume...)
-    restore, '../' + inst + '_' + channel + '.sav'
+    ;restore, '../' + inst + '_' + channel + '.sav'
+    restore, '../Data/' + inst + '_' + channel + '.sav'
 
     ;; Interpolate to get missing data and corresponding timestamp.
     time = strmid(index.date_obs,11,11)
@@ -40,41 +41,58 @@ end
 
 function aia_prep, channel
 
+    ; Have PREP call this one, instead of the other way around.
+    ; This should be able to be called by itself.
+
+    inst = 'aia'
+
     ; AIA colors
     aia_lct, r, g, b, wave=fix(channel), /load
     ct = [ [r], [g], [b] ]
 
-    ;aia_lct, r, g, b, wave=1600, /load
-    ;ct1600 = [ [r], [g], [b] ]
-    ;aia_lct, r, g, b, wave=1700, /load
-    ;ct1700 = [ [r], [g], [b] ]
+    if channel eq '1600' then color='dark orange'
+    if channel eq '1700' then color='dark cyan'
 
-    struc = PREP('aia', channel, 24., name='AIA'+channel+'$\AA$', ct=ct)
-    ;case channel of
-    ;'1600': aia1600 = PREP('aia', '1600', aia1600index, 24., name='AIA 1600$\AA$', $
-    ;    color='dark orange', ct=ct1600)
-    ;'1700': aia1700 = PREP('aia', '1700', aia1700index, 24., name='AIA 1700$\AA$', $
-    ;    color='dark cyan', ct=ct1700)
+    ;struc = PREP('aia', channel, 24., name='AIA'+channel+'$\AA$', color=color, ct=ct)
+
+    restore, '../Data/' + inst + '_' + channel + '.sav'
+    ;restore, '../Data/' + inst + '_' + channel + '_' + 'map2.sav'
+    cube = crop_data(cube)
+    sz = size( cube, /dimensions )
+
+    struc = { $
+        data : cube, $
+        flux : fltarr(sz[2]), $
+        cadence : 24., $
+        name : 'AIA' + channel + '$\AA$', $
+        color : color, $
+        ct : ct }
 
     ;restore, '../aia1600aligned_2.sav'
     ;cube = crop_data( aligned_cube ) ; assuming AR is in center already
     ;aia1600=create_struct(aia1600,'before',aligned_cube[100:599,66:395,0:260])
     ;aia1600=create_struct(aia1600,'during',aligned_cube[100:599,66:395,261:349])
     ;aia1600=create_struct(aia1600,'after',aligned_cube[100:599,66:395,350:748])
-
     return, struc
 end
 
-resolve_routine, 'read_my_fits'
 
-aia1600 = aia_prep('1600')
+; May need to rewrite this to separate everything that can be done
+; without header information (like when I have access to .sav files,
+; but not the fits files, where index is always extracted.
+
+;resolve_routine, 'read_my_fits'
+
+
+;aia1600 = aia_prep('1600')
 aia1700 = aia_prep('1700')
+stop
 
 ;hmi = prep('hmi', 'cont', hmiContindex, 45., name='HMI cont')
 ;hmi = prep('hmi', 'mag', index, name='HMI B$_{LOS}$', cadence=45.)
 ;hmi = prep('hmi', 'dop', index, name='HMI Dopplergram', cadence=45.)
 
-
-S = { aia1600:aia1600, aia1700:aia1700, hmi:hmi }
+A = [ aia1600, aia1700 ]
+;S = { aia1600:aia1600, aia1700:aia1700, hmi:hmi }
 
 end
