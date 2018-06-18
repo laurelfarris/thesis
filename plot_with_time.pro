@@ -24,7 +24,7 @@ pro overplot_things, _extra=e
 end
 
 
-function plot_with_time, x, y, _EXTRA=e
+function PLOT_WITH_TIME, x, y, _EXTRA=e
 
     ; should have no problem running this, even if spontaneously reading
     ; random data from a few fits files and want to plot it.

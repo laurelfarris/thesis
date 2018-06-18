@@ -70,9 +70,9 @@ function aia_prep, channel
 
     ;restore, '../aia1600aligned_2.sav'
     ;cube = crop_data( aligned_cube ) ; assuming AR is in center already
-    ;aia1600=create_struct(aia1600,'before',aligned_cube[100:599,66:395,0:260])
+    ;aia1600=create_struct(aia1600,'before',aligned_cube[100:599,66:395,  0:260])
     ;aia1600=create_struct(aia1600,'during',aligned_cube[100:599,66:395,261:349])
-    ;aia1600=create_struct(aia1600,'after',aligned_cube[100:599,66:395,350:748])
+    ;aia1600=create_struct(aia1600,'after', aligned_cube[100:599,66:395,350:748])
     return, struc
 end
 

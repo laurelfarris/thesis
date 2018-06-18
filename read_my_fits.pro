@@ -12,7 +12,7 @@
 
 
 
-pro read_my_fits, instr, channel, index, data, $
+pro READ_MY_FITS, instr, channel, index, data, $
     ind=ind, nodata=nodata, prepped=prepped
 
     ; Assuming all files are properly prepped and aligned...

@@ -1,6 +1,6 @@
 ; Last modified:   04 June 2018
 
-;; Read data into array/structures in prep.pro
+; Read data into array/structures in prep.pro before running this
 
 common defaults
 p = objarr(n_elements(A))
@@ -16,7 +16,7 @@ time = ['00:30', '01:00']
 for i = 0, n_elements(p)-1 do begin
     xdata = A[i].jd
     xdata = A[i].flux
-    p[i] = plot_with_time( $
+    p[i] = PLOT_WITH_TIME( $
         xdata, ydata-min(ydata), $
         layout=[1,3,i+1], $
         overplot=i<1, $

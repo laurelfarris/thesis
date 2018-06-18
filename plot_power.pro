@@ -202,31 +202,43 @@ pro CALC_FT, flux, cadence, frequency, power, df=df, _EXTRA=e
     endif
 end
 
-function POWER_VS_TIME, flux, cadence, df, dz, z_start=z_start, _EXTRA=e
-; Input:    flux, cadence
-;           dz = sample length for fourier2.pro (data units)
-;           frequency bandwidth: band=[fmin,fmax]
-; Output:   Returns power as function of time for integrated flux.
-; To do:    Add test codes
+function POWER_VS_TIME, flux, cadence, frequency_bandwidth, $
+    dz=dz, z_start=z_start, norm=norm
 
-    n = n_elements(flux)
+    ; Input:        flux, cadence, frequency_bandwidth = [fmin,fmax]
+    ; Keywords:     dz = sample length for fourier2.pro (data units)
+    ; Output:       Returns 1D array of power as function of time.
+    ; To do:        Add test codes
+    ;               Preserve date_obs that goes with each z_start
+    ;               maybe return a structure with both, or something
 
-    if n_elements(z) eq 0 then z = indgen(n-dz)
+
+    ; This first bit is exactly like power_maps.pro....
+    sz = n_elements(flux)
+
+    ; z_end? No idea why I would set z to this...
+    ;if n_elements(z) eq 0 then z = indgen(n-dz)
+
+    if n_elements(z_start) eq 0 then z_start = [0]
+    if n_elements(dz) eq 0 then dz = sz
 
     ; Calculate possible frequencies for dz.
-    frequency = reform( (fourier2( indgen(dz), cadence ))[0,*] )
-    bandpass = where( frequency ge df[0] AND frequency le df[1] )
+    result = fourier2( indgen(dz), cadence )
+    frequency = reform( result[0,*] )
+    fmin = frequency_bandwidth[0]
+    fmax = frequency_bandwidth[1]
+    bandpass = where( frequency ge fmin AND frequency le fmax )
 
-    ; Power at each timestep, from integrated flux
-    power_time = fltarr(n)
+    ; initialize power array
+    power_time = fltarr(sz)
 
     ; Calculate power for time series between each value of z and z+dz
-    ;for i = 0, n-1-dz do begin
-    foreach z, z_start do begin
-        result = fourier2( flux[z:z+dz-1], cadence, NORM=1, _EXTRA=e )
-        power = reform(result[1,*])
-        ; MEAN power over frequency bandpass
+    foreach z, z_start, i do begin
+
+        result = fourier2( flux[z:z+dz-1], cadence, norm=norm )
+        power = reform( result[1,*] )
         power_time[i] = MEAN( power[bandpass] )
+
     endforeach
     return, power_time
 end

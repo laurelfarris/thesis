@@ -960,4 +960,55 @@ APPLY_SHIFTS, cube, shifts
 ; Check that data looks okay... no jumps anywhere.
 xstepper, cube, xsize=500, ysize=330
 
+;--------------------------------------------------------------------------------------
+
+; Latest old alignment - added 14 June 2018
+
+
+
+z = [ $
+    [ 0, 260 ], $
+    [ 261, 349], $
+    [ 350, 450 ], $
+    [ 451, 499 ], $
+    [ 500, 669 ], $
+    [ 670, 695 ], $
+    [ 696, sz[2]-1 ] ]
+
+z = [ $
+    [ 0, 254 ], $
+    [ 255, 349], $
+    [ 350, 445 ], $
+    [ 446, 499 ], $
+    [ 500, 664 ], $
+    [ 665, 709 ], $
+    [ 710, sz[2]-1 ] ]
+
+ind = indgen((size(z, /dimensions))[1])
+
+foreach i, ind do begin
+
+    cube = data[ *, *, z[0,i]:z[1,i] ]
+
+    if (i mod 2) then begin
+        ; Portions of cube to use for determining shifts.
+        ; Non-flaring parts of AR; determined by eye (hardcoded).
+
+        if i eq 1 then temp = cube[ 500: * ,*,* ]
+        if i eq 3 then temp = cube[ 250:425,*,* ]
+        if i eq 5 then temp = cube[ 300: * ,*,* ]
+
+        print, 'i=', strtrim(i,1), '    temp:', size(temp, /dimensions)
+        ALIGN_IN_PIECES, cube, shifts=shifts, temp=temp
+    endif else begin
+        print, 'i=', strtrim(i,1), '    cube:', size(cube, /dimensions)
+        ALIGN_IN_PIECES, cube, shifts=shifts
+    endelse
+
+    PLOT_SHIFTS, shifts, _EXTRA=e
+    ;xstepper, cube>max(mindata)<min(maxdata), xsize=500, ysize=330
+
+    aligned_cube[*,*,z[0,i]:z[1,i]] = cube
+endforeach
+
 end

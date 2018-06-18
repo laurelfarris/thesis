@@ -16,8 +16,56 @@
 
 
 
-function INTERP_SHIFTS, shifts, cad
+function PLOT_SHIFTS, shifts, xdata=xdata, _EXTRA=e
+    ; Color axes on each side, and shift/scale differently?
 
+    common defaults
+    sz = size( shifts, /dimensions)
+    cols = 1
+    if n_elements(sz) eq 3 then rows = sz[2] else rows = 1
+    if n_elements(xdata) eq 0 then xdata = indgen(sz[1])
+    names = ['horizontal shifts', 'vertical shifts' ]
+    @colors
+    p = objarr(2)
+
+    margin=[1.0, 0.5, 2.0, 0.5]*dpi
+    wx = 11.0
+    wy = 5.0
+    w = window( dimensions=[wx,wy]*dpi, location=[500,0] )
+    xticklen = 0.02
+    yticklen = xticklen * (wy-margin[1]-margin[3])/(wx-margin[0]-margin[2])
+
+    for i = 0, sz[0]-1 do begin
+        p[i] = plot2( $
+            xdata, shifts[i,*], $
+            /current, $
+            overplot=i<1, $
+            /device, $
+            layout=[cols,rows,i+1], $
+            margin=margin, $
+            xticklen=xticklen, $
+            yticklen=yticklen, $
+            xtitle='image #', $
+            ytitle='shifts', $
+            symbol='circle', $
+            sym_filled=1, $
+            sym_size=0.5, $
+            color=colors[i], $
+            name=names[i], $
+            _EXTRA=e $
+            )
+    endfor
+    leg=legend2( $
+        target=[p], $
+        /device, $
+        position=([wx,wy-0.5])*dpi, $
+        auto_text_color=1 $
+        )
+    return, p
+end
+
+
+function INTERP_SHIFTS, shifts, cad
 
     ; 22 May 2018
     ; Main level:
@@ -61,45 +109,33 @@ function INTERP_SHIFTS, shifts, cad
 end
 
 
+pro ALIGN_DATA, cube, ref, allshifts
+    ; aligns data to reference image on a loop,
+    ; using standard deviation of shifts as a breaking point
+    ; (when it no longer decreases).
 
-pro PLOT_SHIFTS, shifts, _EXTRA=e
-    ; Color axes on each side, and shift/scale differently?
+    ; save shifts calculated for every iteration.
+    sz = size(cube, /dimensions)
+    ;allshifts = fltarr( 2, sz[2] )
+    allshifts = []
 
-    sz = size( shifts, /dimensions)
-    cols = 1
-    rows = sz[2]
-    xdata = indgen(sz[1])
-    names = ['horizontal shifts', 'vertical shifts' ]
-    @colors
-    p = objarr(2)
-    w = window( dimensions=[1600, 500] )
-    for j = 0, sz[2]-1 do begin
-        graphic = plot2( $
-            xdata, shifts[0,*,j], /nodata, /current, $
-            layout=[cols,rows,j], $
-            xtitle='image #', $
-            ytitle='shifts', $
-            _EXTRA=e $
-            )
-        for i = 0, sz[0]-1 do begin
-            p[i] = plot2( $
-                xdata, shifts[i,*,j], $
-                /overplot, $
-                symbol='circle', $
-                sym_filled=1, $
-                sym_size=0.5, $
-                color=colors[i], $
-                name=names[i] $
-                )
-        endfor
-    endfor
-    leg=legend( target=[p] )
+    sdv = []
+    print, "Start:  ", systime()
+    start_time = systime(/seconds)
+    repeat begin
+        ALIGN_CUBE3, cube, ref, shifts=shifts
+        allshifts = [ [[allshifts]], [[shifts]] ]
+        sdv = [ sdv, stddev( shifts[0,*] ) ]
+        k = n_elements(sdv)
+        print, sdv[k-1]
+        if k eq 10 then break
+    endrep until ( k ge 2 && sdv[k-1] gt sdv[k-2] )
+    print, "End:  ", systime()
+    print, format='(F0.2, " minutes")', (systime(/seconds)-start_time)/60.
 end
 
 
-
 pro CALCULATE_SHIFTS, cube, ref, shifts
-
     ; Calculate shifts WITHOUT actually shifting data cube
     ; input: cube, ref
     ; output: shifts
@@ -115,7 +151,6 @@ end
 
 
 pro APPLY_SHIFTS, cube, shifts
-
     ; Apply shifts (2xN) to cube
     ; input: shifts
     ; output: cube
@@ -126,30 +161,7 @@ pro APPLY_SHIFTS, cube, shifts
 end
 
 
-pro ALIGN_DATA, cube, ref, allshifts
-    ; aligns data to reference image on a loop,
-    ; using standard deviation of shifts as a breaking point
-    ; (when it no longer decreases).
-
-    ; save shifts calculated for every iteration.
-    sz = size(cube, /dimensions)
-    allshifts = fltarr( 2, sz[2] )
-
-    sdv = []
-    print, "Start:  ", systime()
-    start_time = systime(/seconds)
-    repeat begin
-        ALIGN_CUBE3, cube, ref, shifts=shifts
-        allshifts = [ [[allshifts]], [[shifts]] ]
-        sdv = [ sdv, stddev( shifts[0,*] ) ]
-        k = n_elements(sdv)
-        print, sdv[k-1]
-    endrep until ( k ge 2 && sdv[k-1] gt sdv[k-2] )
-    print, "End:  ", systime()
-    print, format='(F0.2, " minutes")', (systime(/seconds)-start_time)/60.
-end
-
-pro ALIGN_IN_PIECES, cube, shifts=shifts, temp=temp
+pro ALIGN_IN_PIECES_1, cube, shifts=shifts, temp=temp
     ; If set, uses temp to determine shifts, then applies them to temp and cube.
     ; If not, just uses cube itself.
     ; Sets ref as center image in both cases.
@@ -168,110 +180,244 @@ pro ALIGN_IN_PIECES, cube, shifts=shifts, temp=temp
         endelse
 end
 
+pro ALIGN_IN_PIECES_2, cube, shifts, temp=temp
+
+    sz = size(cube, /dimensions)
+
+    if n_elements(temp) ne 0 then begin
+        ref = temp[*,*,sz[2]/2]
+        ALIGN_CUBE3, temp, ref, shifts
+        for i = 0, (size(shifts, /dimensions))[2]-1 do $
+            APPLY_SHIFTS, cube, shifts[*,*,i]
+    endif else begin
+        ref = cube[*,*,sz[2]/2]
+        ALIGN_CUBE3, cube, ref, shifts
+    endelse
+
+    PLOT_SHIFTS, shifts, _EXTRA=e
+    question = 'Repeat alignment?'
+    read, repeatalign, question
+end
+
+
+pro ALIGN_IN_PIECES, cube, cube2, shifts=shifts
+
+    sz = size(cube, /dimensions)
+    ref = cube[*,*,sz[2]/2]
+
+    ;repeat begin
+        ALIGN_CUBE3, cube, ref, shifts=shifts
+
+        if n_elements(cube2) ne 0 then begin
+
+            ; TEST:
+            if sz[2] ne (size(shifts, /dimensions))[1] then begin
+                print, '3rd dimension of input cubes do not match.'
+                return
+
+            endif else for i = 0, sz[2]-1 do $
+                cube2[*,*,i] = SHIFT_SUB( cube2[*,*,i], shifts[0,i], shifts[1,i] )
+        endif
+
+        ; Don't redo alignment just because PLOT_SHIFTS had an error!!!
+        ; Kind of needs to be in the same routine, so need to find a command
+        ; that will let me restart right here, or skip plotting and continue
+        ; with another iteration, as long as it re-compiles plot_shifts and
+        ; runs the correct version on the next iteration
+        ; (which supposedly IDL will do... but it doesn't seem to behave this way).
+        ;
+        ; Should just return shifts and aligned data after EACH iteration
+        ; (like what align_cube3 does already...)
+end
+
 goto, start
-start:;------------------------------------------------------------------------------
 
-aia_lct, wave=1600, /load
-read_my_fits, 'aia', '1600', index, data, /prepped
-sz = size( data, /dimensions )
+channel = '1600'
+channel = '1700'
 
-x0 = 2410
-y0 = 1660
-xl = 750
-yl = 500
-
-; make sure center coords are correct
-im = image2( crop_data(data[*,*,sz[2]/2], center=[x0,y0]))
-stop
-
-data = crop_data( data, center=[x0,y0], dimensions=[xl,yl] )
+restore, 'aia' + channel + 'data.sav'
 sz = size( data, /dimensions )
 aligned_cube = fltarr(sz)
-;ref = data[*,*,sz[2]/2]  ;; don't think this is needed.
-xstepper, data, xsize=500, ysize=330
 stop
 
+xstepper2, data, channel=channel
+stop
+;; Step 1: Align subsets separately
 
-; Indices where cube is to be split in separate alignments
-z = [ $
-    [ 0, 260 ], $
-    [ 261, 349], $
-    [ 350, 450 ], $
-    [ 451, 499 ], $
-    [ 500, 669 ], $
-    [ 670, 695 ], $
-    [ 696, sz[2]-1 ] $
-    ]
 
-ind = [ 6 ]
-ind = indgen(7)
-foreach i, ind do begin
+z = [ 0, 255, 350, 446, 500, 665, 710, sz[2] ]
 
-    cube = data[ *, *, z[0,i]:z[1,i] ]
-    ;cube = aligned_cube[ *, *, z[0,i]:z[1,i] ]
-    ;xstepper, crop_data(cube), xsize=500, ysize=330
+; No flares
+;foreach i, [0,2,4,6] do begin
 
-    print, i
-    if (i mod 2) then begin
-        ; Portions of cube to use for determining shifts.
-        ; Non-flaring parts of AR; determined by eye (hardcoded).
-        if i eq 1 then temp = cube[ 475: * ,*,* ]
-        if i eq 3 then temp = cube[ 225:400,*,* ]
-        if i eq 5 then temp = cube[ 275: * ,*,* ]
+; Pain in my ass:
+; Portions of cube to use for determining shifts.
+; Non-flaring parts of AR; determined by eye (hardcoded).
+; At least these subsets are smaller, so routine runs faster.
+foreach i, [1,3,5] do begin
 
-        print, 'temp: ', size(temp, /dimensions)
-        ALIGN_IN_PIECES, cube, shifts=shifts, temp=temp
-    endif else begin
-        print, 'cube: ', size(cube, /dimensions)
-        ALIGN_IN_PIECES, cube, shifts=shifts
-    endelse
-    ;xstepper, crop_data(cube), xsize=500, ysize=330
+;foreach i, [3] do begin
+; NOTE: Had to re-do i=3 because pressed 'y' instead of enter.
+; But I think I wrote this in a way that it won't be a problem :)
 
-    aligned_cube[*,*,z[0,i]:z[1,i]] = cube
+;foreach i, [6] do begin
+; NOTE: Had to redo i=6 because last image wasn't included.
 
-    ;plot_shifts, shifts
+    dw
+    allshifts = []
+    repeatalign = ''
+    cube = data[ *, *, z[i]: z[i+1]-1 ]
+
+    if (i eq 1) then temp = cube[ 500: * ,*,* ]
+    if (i eq 3) then temp = cube[ 250:425,*,* ]
+    if (i eq 5) then temp = cube[ 300: * ,*,* ]
+
+    print, 'i = ', strtrim(i,1)
+    j = 1
+    repeat begin
+        print, 'aligning ', strtrim( (size(cube,/dimensions))[2], 1 ), ' images.'
+        ;ALIGN_IN_PIECES, cube, shifts=shifts
+        ALIGN_IN_PIECES, temp, cube, shifts=shifts
+        allshifts = [ $
+            [ allshifts ], $
+            [ max(abs(shifts[0,*])), max(abs(shifts[1,*])) ] ]
+        print, allshifts;, format='(F12.8)'
+
+        p = PLOT_SHIFTS( $
+            shifts, $
+            xdata=[z[i]:z[i+1]-1], $
+            title='AIA ' + channel + '$\AA$ alignment run # ' + $
+                strtrim(j,1) )
+        j = j + 1
+        stop
+
+        prompt = 'Press enter to repeat alignment: '
+        read, repeatalign, prompt=prompt
+    endrep until repeatalign ne '' AND repeatalign ne 'y'
+    aligned_cube[ *, *, z[i]: z[i+1]-1 ] = cube
 endforeach
-
-xstepper, aligned_cube, string(indgen(745)), xsize=500, ysize=330
+xstepper, aligned_cube, xsize=500, ysize=500*(float(sz[1])/sz[0])
 stop
 
-;; Align each section
+save, aligned_cube, filename='aia' + channel + 'aligned.sav'
+stop
 
-ref = aligned_cube[*,*,451]
-im = image2( ref )
+;; ------------------------------------------------------------------------
+;; Step 2: Align subsets with each other (to 3, middle of 7 total)
+;;   Much faster than step 1.
+;; This could probably just
+;; loop until absolute value of x OR y shift is less than 0.001
+
+channel = '1600'
+;channel = '1700'
+restore, 'aia' + channel + 'aligned.sav'
+
+aia_lct, wave=fix(channel), /load
+xstepper, aligned_cube, xsize=750/2, ysize=500/2
+stop
+
+sz = size( aligned_cube, /dimensions )
 aligned_cube_2 = aligned_cube
-
+ref = aligned_cube[*,*,446]
 
 ind = [0,1,2,4,5,6]
 foreach i, ind do begin
 
-    cube = aligned_cube[*,*,z[0,i]:z[1,i]]
-    sdv = []
+    print, i
+    cube = aligned_cube[ *,*,z[i]:z[i+1]-1 ]
+    allshifts = []
+    repeatalign = ''
+
     repeat begin
 
+        ; Determine shifts (offset) between first image in each subset
+        ; and the reference image (in the middle subset).
         offset = ALIGNOFFSET(cube[*,*,0], ref)
         shifts = -offset
-        sdv = [ sdv, shifts[0] ]
+
+        ; Apply shifts to every image in subset i
         for j = 0, (size(cube, /dimensions))[2]-1 do $
             cube[*,*,j] = SHIFT_SUB( cube[*,*,j], shifts[0], shifts[1] )
 
-        k = n_elements(sdv)
-        print, sdv[k-1]
+        allshifts = [ [allshifts], [shifts] ]
+        print, allshifts
 
-    ; since only using one value for shifts, doesn't make sense to calculate
-    ; standard deviation, so letting this run until the x shift is higher than
-    ; the previous iteration.
-    endrep until ( k ge 2 && sdv[k-1] gt sdv[k-2] )
+        prompt = 'Press enter to repeat alignment: '
+        read, repeatalign, prompt=prompt
 
-    aligned_cube_2[*,*,z[0,i]:z[1,i]] = cube
+    endrep until repeatalign ne '' AND repeatalign ne 'y'
+
+    aligned_cube_2[*,*,z[i]: z[i+1]-1 ] = cube
 endforeach
-
-xstepper, aligned_cube_2, xsize=500, ysize=330
 stop
 
-cube = aligned_cube_2
 
-;save, cube, filename='aia1600aligned.sav'
-;save, cube, filename='aia1700aligned.sav'
+;; xstepper on cube around discontinuities
+for i = 1, 6 do begin
+    dat = aligned_cube_2[ *,*, z[i]-5: z[i]+5-1 ]
+    xstepper, dat>106<3845, xsize=750, ysize=500
+endfor
+stop
+
+; Save data with same dimensions as used to align,
+;    then crop to 500x330 for each session.
+; Center coords aren't always consistent, and 
+;    don't want to lose all this work!
+
+cube = aligned_cube_2
+save, cube, filename='aia' + channel + 'aligned.sav'
+stop
+
+
+; Test that cube is the variable name and that it was saved.
+;cube = !NULL
+channel = ['1600','1700']
+for i = 0, 0 do begin
+    aia_lct, wave=fix(channel[i]), /load
+    restore, 'aia' + channel[i] + 'aligned.sav'
+    im = image2(cube[*,*,-1])
+endfor
+
+start:;------------------------------------------------------------------------------
+xstepper, cube[*,*,700:*], xsize=500, ysize=330
+stop
+
+xstepper, aligned_cube, xsize=500, ysize=330
+stop
+
+
+
+;; Hacky way to get last image in 1600 data cube so I can finally
+;; move on!!!!!!!!!
+
+
+
+channel = '1600'
+
+; data (last image only)
+restore, 'aia' + channel + 'data.sav'
+data = data[*,*,-1]
+
+; cube
+;restore, 'aia' + channel + 'aligned.sav'
+
+; same index used for ref in step 2, but of course want to use aligned
+;     cube, and align the last data image to that.
+ref = cube[*,*,446]
+
+
+offset = ALIGNOFFSET(data, ref)
+shifts = -offset
+
+; Apply shifts to data
+
+data = SHIFT_SUB( data, shifts[0], shifts[1] )
+print, shifts
+
+stop
+
+
+cube[*,*,-1] = data
+save, cube, filename='aia' + channel + 'aligned.sav'
 
 end
