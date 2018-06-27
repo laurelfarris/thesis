@@ -1,10 +1,47 @@
+; NOTE: doing things in reverse order so I can just use stop command,
+; rather than GOTO plus stop.
+
+
+; 19 June 2018
+
+pro blah, flux, cadence, freq, power, phase, amp
+
+    common defaults
+    wx = 8.5
+    wy = 5.0
+    w = window( dimensions=[wx,wy]*dpi )
+
+    p = plot2( flux, /current, layout=[2,1,1], xtitle='time', ytitle='flux')
+
+    result = fourier2(flux, 24)
+    freq = reform(result[0,*])
+    power = reform(result[1,*])
+    phase = reform(result[2,*])
+    amp = reform(result[3,*])
+
+    p = plot2( freq, power, /current, layout=[2,1,1], xtitle='frequency', ytitle='power' )
+
+end
+
+N = 100
+x = findgen(N) * (4*!PI/N)
+y0 = sin(x)
+y1 = y1 * 10 ; Should have HIGHER power than y0 (norm=0)
+y2 = y1 + 10 ; Should have SAME power as y0 (norm=0)
+
+; if norm=1, then power would be the same in all cases?
+; What affects power BESIDES variation?
+; I guess setting norm=1 would help reveal this...
+
+get_fit, y0, 24
+get_fit, y1, 24
+
+stop
+
 
 ; 14 June 2018
 
 ; Main code: align.pro
-
-; NOTE: doing things in reverse order so I can just use stop command,
-; rather than GOTO plus stop.
 
 
 
