@@ -102,7 +102,12 @@ pro image_ar, S
             endif
 
             x1 = 0.75 + i*(w+0.1)
-            y1 = 0.40 + j*(h-0.2)
+
+            ; Lowering y position a little to make room for correct axis labels
+            ; on full disk.
+            ;y1 = 0.40 + j*(h-0.2)
+            y1 = 0.30 + j*(h-0.2)
+
             position=[x1,y1,x1+w,y1+h]
 
             im[i,j] = image2( $
@@ -116,9 +121,13 @@ pro image_ar, S
                 _EXTRA=S.(i).extra )
 
             ax = im[i,j].axes
+
+            ; Show x-labels for full disk and AR, since they don't match.
+            ax[0].showtext = 1
+
             if i eq 0 then ax[1].showtext = 1
             if j eq 0 then begin
-                ax[0].showtext = 1
+                ;ax[0].showtext = 1
                 im[i,j].title = ''
             endif
         endfor

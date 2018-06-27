@@ -17,6 +17,23 @@
 ; Reading in data and creating maps first, without messing with
 ;  structures or dictionaries (yet). Do need to interpolate though!
 
+pro restore_maps, struc, channel
+
+    ; Return variables 'map' and 'map2' (map2 - /NORM)
+    ;if n_elements(A.[i].map) eq 0 then restore...
+    restore, '../aia' + channel + 'map.sav'
+    restore, '../aia' + channel + 'map2.sav'
+
+    ; Power at each timestep, from total(maps).
+    ; Still needs to be corrected for saturated pixels.
+    power2 = total( total( map2, 1 ), 1 );, fltarr(dz)  
+
+    struc = create_struct( struc, 'power', power, 'power2', power2 )
+
+
+end
+
+
 function POWER_MAPS, $
     data, $
     cadence, $
@@ -76,86 +93,61 @@ function POWER_MAPS, $
 end
 
 
-pro restore_maps, struc, channel
+pro AIA_POWER_MAPS, cube, channel
 
-    ; Return variables 'map' and 'map2' (map2 - /NORM)
-    ;if n_elements(A.[i].map) eq 0 then restore...
-    restore, '../aia' + channel + 'map.sav'
-    restore, '../aia' + channel + 'map2.sav'
 
-    ; Power at each timestep, from total(maps).
-    ; Still needs to be corrected for saturated pixels.
-    power2 = total( total( map2, 1 ), 1 );, fltarr(dz)  
+    print, 'Running power maps for AIA ' + channel
+    fmin = 0.0048
+    fmax = 0.0060
+    dz = 64
 
-    struc = create_struct( struc, 'power', power, 'power2', power2 )
+    cube = crop_data(cube)
+    sz = size( cube, /dimensions )
 
+    ; z-dimension of map has to be at least dz LESS than z-dimension of data
+    map = fltarr( sz[0], sz[1], sz[2]-dz )
+    help, map
+
+    step = 50
+    for i = 0, sz[2]-dz-1, step do begin
+
+        ; Keep track of progress (and make sure code hasn't stalled)
+        print, 'z start = ', strtrim(i,1)
+
+        z = [i:i+step-1]
+        map[*,*,z] = power_maps( $
+            cube, 24, [fmin,fmax], z=z, dz=dz, norm=0 )
+        save, map, filename='aia' + channel + 'map.sav'
+    endfor
 
 end
 
+; 2018-06-26
+; Restoring aligned data takes too long to run every time I run aia_power_maps
+; to correct minor errors. So pulled these lines back into main level.
+; Should be combined with interpolation routines somwhere (since interpolation
+; needs to be done before maps, but is never saved into .sav files).
 
 goto, start
 
-channel = '1600'
-;channel = '1700'
+;channel = '1600'
+channel = '1700'
+cadence = 24
+;restore, '../aia' + channel + 'aligned.sav'
 
-aia_lct, r,g,b, wave=fix(channel), /load
-ct = [[r],[g],[b]]
-;ct = get_aia_lct(channel)... or something
-
-read_my_fits, 'aia', channel, index, data, nodata=1, /prepped
-starttime = strmid( index.date_obs, 11, 5 )
-exptime = index[0].exptime
-restore, 'aia' + channel + 'aligned.sav'
-cube = crop_data(cube)
+; Interpolate to get missing data and corresponding timestamp.
+; (pulled lines from prep.pro, but this should be separated).
+read_my_fits, 'aia', channel, index, data, nodata=1, prepped=1
+time = strmid(index.date_obs,11,11)
+jd = get_jd( index.date_obs + 'Z' )
+LINEAR_INTERP, cube, jd, cadence, time
 stop
 
-; scaled image
-result = aia_intscale(cube[*,*,0], wave=fix(channel), exptime=exptime)
-im = image2( result )
-stop
+start:
+AIA_POWER_MAPS, cube, channel
 
-
-;f1 = 0.005
-;f2 = 0.006
-fmin = 0.0048
-fmax = 0.0060
-
-; # images (length of time) over which to calculate each FT.
-dz = 64
-
-; start indices
-sz = size( cube, /dimensions )
-
-; Run test first (no z arg should default to first value only).
-start:;--------------------------------------------------------------------
-
-; last element of z has to be at least dz LESS than z-dim of data.
-z = [ 0:sz[2]-dz-1 ]
-
-map0 = power_maps( cube, [fmin,fmax], z=z, dz=dz, cadence=24, norm=0 )
-stop
-map1 = power_maps( cube, [fmin,fmax], z=z, dz=dz, cadence=24, norm=1 )
-stop
-
-;map0 = power_maps( cube, 24, [fmin,fmax], z=z, dz=dz, norm=0 )
-;map1 = power_maps( cube, 24, [fmin,fmax], z=z, dz=dz, norm=1 )
-
-
-im = image2(map, rgb_table=ct, max_value=1e5)
-stop
-
-;aia1600map = power_maps( A[0].data, z=z, dz=dz, cadence=A[0].cadence)
-;aia1700map = power_maps( A[1].data, z=z, dz=dz, cadence=A[1].cadence )
-;map = power_maps( S.(0).before, z=z, dz=dz, bandwidth=bandwidth, cadence=24,norm=1)
-
-save, aia1600map, filename='../aia1600map2.sav'
-save, aia1700map, filename='../aia1700map2.sav'
-stop
-
-aia1600 = create_struct( aia1600, 'map', aia1600map )
-aia1700 = create_struct( aia1700, 'map', aia1700map )
-
-A = [aia1600, aia1700]
-
+;aia1600 = create_struct( aia1600, 'map', aia1600map )
+;aia1700 = create_struct( aia1700, 'map', aia1700map )
+;A = [aia1600, aia1700]
 
 end
