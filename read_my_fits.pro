@@ -17,6 +17,13 @@ pro READ_MY_FITS, instr, channel, index, data, $
 
     ; Assuming all files are properly prepped and aligned...
 
+    ;print, channel
+    ;print, typename(channel)
+
+    if not ( typename(channel) eq 'STRING' ) then begin
+        ;print, 'Illegal typename for channel.'
+        channel = strtrim(channel,1)
+    endif
 
     case instr of
 

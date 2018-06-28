@@ -53,7 +53,6 @@ function POWER_MAPS, $
     frequency = reform( (fourier2( indgen(dz), cadence, NORM=NORM ))[0,*] )
     ind = where( frequency ge f1 AND frequency le f2 )
 
-
     n = n_elements(z)
     map = fltarr( sz[0], sz[1], n )
 
@@ -94,7 +93,11 @@ end
 
 
 pro AIA_POWER_MAPS, cube, channel
-
+    ; This was at main level, but may be better to create many subroutines
+    ; for specific situations, which then call the more general ones
+    ; (which in this case is in the same file).
+    ; Currently written to generate NEW map AND write to file
+    ; (so make sure you're not overwriting a file that took hours to create...)
 
     print, 'Running power maps for AIA ' + channel
     fmin = 0.0048
@@ -109,7 +112,11 @@ pro AIA_POWER_MAPS, cube, channel
     help, map
 
     step = 50
-    for i = 0, sz[2]-dz-1, step do begin
+
+    ;for i = 0, sz[2]-dz-1, step do begin
+
+    ; Finish AIA 1700 (2018-06-27)
+    for i = 650, sz[2]-dz-1, step do begin
 
         ; Keep track of progress (and make sure code hasn't stalled)
         print, 'z start = ', strtrim(i,1)
@@ -117,6 +124,8 @@ pro AIA_POWER_MAPS, cube, channel
         z = [i:i+step-1]
         map[*,*,z] = power_maps( $
             cube, 24, [fmin,fmax], z=z, dz=dz, norm=0 )
+        ; subroutine hiccup: don't want to save segment of map for cases when
+        ; not running code for entire map all at once...
         save, map, filename='aia' + channel + 'map.sav'
     endfor
 
@@ -130,24 +139,88 @@ end
 
 goto, start
 
+; 27 June 2018 - finishing map for AIA 1700 (indices z = 650:684)
+; (after .reset_session), at ML.
+; Copied code from AIA_POWER_MAPS and commented/modified as needed.
+; Work is needed for subroutine... see comments below.
+
+cadence = 24
+
 ;channel = '1600'
 channel = '1700'
-cadence = 24
-;restore, '../aia' + channel + 'aligned.sav'
+restore, '../aia' + channel + 'aligned.sav'
+cube = crop_data(cube)
+sz = size( cube, /dimensions )
 
 ; Interpolate to get missing data and corresponding timestamp.
 ; (pulled lines from prep.pro, but this should be separated).
-read_my_fits, 'aia', channel, index, data, nodata=1, prepped=1
-time = strmid(index.date_obs,11,11)
+READ_MY_FITS, 'aia', channel, index, data, nodata=1, prepped=1
+time = strmid( index.date_obs,  11, 11 )
 jd = get_jd( index.date_obs + 'Z' )
 LINEAR_INTERP, cube, jd, cadence, time
-stop
+sz = size( cube, /dimensions )
 
-start:
-AIA_POWER_MAPS, cube, channel
+fmin = 0.0048
+fmax = 0.0060
+dz = 64
+stop
 
 ;aia1600 = create_struct( aia1600, 'map', aia1600map )
 ;aia1700 = create_struct( aia1700, 'map', aia1700map )
 ;A = [aia1600, aia1700]
+
+;AIA_POWER_MAPS, cube, channel
+
+; z-dimension of map has to be at least dz LESS than z-dimension of data
+;map = fltarr( sz[0], sz[1], sz[2]-dz )
+restore, '../aia' + channel + 'map.sav'
+; already have map (restored from aia1700map.sav), don't want to overwrite it!
+stop
+; step is for saving map every 50-th timestep... don't need it here.
+;step = 50
+
+;for i = 0, sz[2]-dz-1, step do begin
+
+    ; Keep track of progress (and make sure code hasn't stalled)
+    ;print, 'z start = ', strtrim(i,1)
+
+    ;z = [i:i+step-1]
+    z = [ 650:sz[2]-dz-1]
+    print, z
+    stop
+
+    map[*,*,z] = power_maps( $
+        cube, 24, [fmin,fmax], z=z, dz=dz, norm=0 )
+
+    ; subroutine hiccup: don't want to save segment of map for cases when
+    ; not running code for entire map all at once...
+
+; Appears that AIA 1700 map has been successfully completed.
+; ... but still don't want to risk overwriting first map, hence:
+save, map, filename='aia' + channel + 'map_final.sav'
+;endfor
+
+
+; another .reset_session
+
+restore, 'aia1700map_final.sav'
+map_final = map[*,*,0:649]
+restore, '../aia1700map.sav'
+map = map[*,*,0:649]
+
+print, where( map_final ne map)
+
+; output = -1, so we should be good!
+
+restore, 'aia1700map_final.sav'
+help, map
+print, map[200,200,0]
+
+channel = '1700'
+save, map, filename='aia' + channel + 'map.sav'
+
+restore, 'aia1700map.sav'
+start:
+print, map[200,200,-1]
 
 end

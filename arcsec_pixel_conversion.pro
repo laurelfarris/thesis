@@ -1,4 +1,4 @@
-;; Last modified:   17 May 2018 19:11:45
+;; Last modified:   27 June 2018
 
 
 ; Input:    ONE index (coords for each image will be slightly different)
@@ -7,13 +7,14 @@
 ; Output:   X, Y = arcsecond locations for x/y axes
 
 
+
+
 pro pixels_to_arcseconds, center_pix, dimensions, index, X, Y
-    ; Save coords in arcsec, relative to disk center
+    ; returns ARRAYS of coords relative to disk center (not single x,y pair).
 
-
+    ; individual variable names for x and y center coords
     x_center = center_pix[0]
     y_center = center_pix[1]
-
 
     ; coords of lower left corner
     ;  (pixels, relative to lower left corner of full disk)
@@ -36,9 +37,7 @@ pro pixels_to_arcseconds, center_pix, dimensions, index, X, Y
 end
 
 
-
 pro arcseconds_to_pixels
-
 
     ;; Pretty sure this was a hacky way to figure out which
     ;;  pixels to show so I could save hmi image to file
@@ -64,5 +63,40 @@ pro arcseconds_to_pixels
 
     save2, 'hmi_image_2.pdf'
 
+
+end
+
+
+pro arcsec_pixel_conversion, x, y, index
+    ; Give x and y in pixels relative to lower left corner at 0,0.
+    ; Get back x and y in arcseconds relative to disk center.
+    ; Mess with output format LATER! This is NOT high priority!
+    ; Also improve or get rid of other two subroutines in this file.
+
+    print, 'coordinates relative to lower left corner (pixels):  (', $
+        strtrim(x,1), ', ', $
+        strtrim(y,1), ')'
+
+    x = x - index.crpix1
+    y = y - index.crpix2
+
+    print, 'coordinates relative to disk center (pixels):        (', $
+        strtrim(x,1), ', ', $
+        strtrim(y,1), ')'
+
+    x = x * index.cdelt1
+    y = y * index.cdelt2
+
+    print, 'coordinates relative to disk center (arcseconds):    (', $
+        strtrim(x,1), ', ', $
+        strtrim(y,1), ')'
+
+end
+
+; center of AR11158
+x0 = 2400
+y0 = 1650
+
+arcsec_pixel_conversion, x0-(500./2), y0-(330./2), index
 
 end
