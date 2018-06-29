@@ -1,4 +1,4 @@
-;; Last modified:   18 May 2018 02:55:42
+; Last modified:   27 June 2018
 
 ; Saturation (from 15 May 2018 notes)
 pro one_D
@@ -32,7 +32,7 @@ pro mask_3D, A
         print, n_elements(where(A[i].map2 eq 0))
 
         sz = size(A[i].data, /dimensions)
-        threshold = 10000 
+        threshold = 10000
         mask_cube = fltarr(sz) + 1.0
         mask_cube[ where( A[i].data ge threshold ) ] = 0.0
 
@@ -72,6 +72,10 @@ function MASK_MAP, cube
     endforeach
 end
 
-print, max(cube)
+; 27 June 2018
+; Currently, all I need to do here is use output from MASK_MAP to convert
+;  TOTAL(map) to total per pixel,
+; assuming that saturation threshold for newest set of maps is satisfactory.
+; Shouldn't have to do anything for the 2D maps.
 
 end
