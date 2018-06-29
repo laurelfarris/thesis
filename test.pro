@@ -2,6 +2,9 @@
 ; rather than GOTO plus stop.
 
 
+; 29 June 2018
+; comparing flux - mean(flux) for raw data and normalized data (between 0 and 1)
+
 ; 19 June 2018
 
 pro blah, flux, cadence, freq, power, phase, amp

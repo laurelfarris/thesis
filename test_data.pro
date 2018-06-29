@@ -13,14 +13,15 @@ goto, start
     ;/legal, $ ; page size (default=letter)
 ;    filename=filename
 
-restore, 'test_data.sav'
+common defaults
+
+restore, '../test_data.sav'
 help, lc1
 help, time
 
 start:
 
 ;plot, time, lc1
-common defaults
 w = 8.5
 h = 4.0
 win = window( dimensions=[w,h]*dpi, buffer=1 )
