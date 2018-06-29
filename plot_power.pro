@@ -2,32 +2,6 @@
 
 ; Always give input in frequencies (Hz), e.g. vert = 1./[180,300]
 
-pro compare_power_spectra
-    ; power from total flux vs. power summed over power map
-    ; test using corner of AIA 1700 (non-flaring)
-    ; Plotting P(\nu)
-    crop = 10
-    testdata = A[1].data[ 0:crop-1, 0:crop-1, * ]
-    testz = [0:600]
-
-    ; power from total flux
-    testflux = total( total( testdata,1 ), 1 )
-    testpower1 = []
-
-    foreach z, testz, i do begin
-        result = fourier2( testflux[z:z+dz-1], 24, /NORM )
-        power = reform( result[1,*] )
-        testpower1 = [ testpower1, MEAN( power[ind] ) ]
-    endforeach
-
-    ; power from sum of power map
-    testmap = power_maps( testdata, z=testz, dz=64, cadence=24 )
-    testpower2 = total( total( testmap,1 ), 1 )
-
-    testx = indgen(601)
-    p = plot2( testx, testpower1, color='blue' )
-    p = plot2( testx, testpower2, /overplot, color='red' )
-end
 
 
 pro compare_power_time
@@ -143,21 +117,6 @@ pro total_power_two_ways
     endfor ;***
 end
 
-function plot_vertical_lines
-
-    ; Vertical lines at periods of interest
-    v = objarr(n_elements(period))
-    for i = 0, n_elements(v)-1 do $
-        v[i] = plot_vline( $
-            1./period[i], $
-            p.yrange, $
-            color='grey' $
-            ;name=strtrim( fix(1./vert[i]),1) + ' sec' $
-            )
-    ;leg = legend2(target = v, position = [0.9,0.8])
-    leg = legend2( target=p,  position = [0.9,0.8])
-    return, p
-end
 
 function plot_ft, frequency, power, $
     period=period, $
@@ -184,22 +143,6 @@ function plot_ft, frequency, power, $
     ;    ax[2].title = 'period (s)'
     ;    ax[2].showtext = 1
     ;endif
-end
-
-pro CALC_FT, flux, cadence, frequency, power, df=df, _EXTRA=e
-; band could be range of frequencies to show on x-axis for power spectrum,
-; or narrow bandwidth to average over, centered at freq. of interest.
-
-    ;; Calculate FT here, as called by most of these subroutines.
-    result = fourier2( flux, 24, norm=1 )
-    frequency = reform(result[0,*])
-    power = reform(result[1,*])
-
-    if n_elements(df) ne 0 then begin
-        ind = where(frequency ge df[0] AND frequency le df[1])
-        frequency = frequency[ind]
-        power = power[ind]
-    endif
 end
 
 function POWER_VS_TIME, flux, cadence, frequency_bandwidth, $

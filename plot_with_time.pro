@@ -1,20 +1,10 @@
-; Last modified:   04 June 2018
+; Last modified:   29 June 2018
 
-function plot_smooth, x,y
-    ; Smoothed lightcurves
-    y = smooth( y, 8 )
-    sm = plot2( x,y, /overplot, linestyle='--', thick=1.0, $
-        name='boxcar smoothed')
-    return, sm
-end
+; should have no problem running this, even if spontaneously reading
+; random data from a few fits files and want to plot it.
+; No loops here! Call this routine INSIDE loops!
 
-function plot_background, x,y
-    ; Pre-flare background
-    y = mean( y[0:200] )
-    bg = plot2( x,y, /overplot, linestyle=':', thick=1.0, $
-        name='pre-flare background')
-    return, bg
-end
+; Also see aia_prep documentation on plotting light curves!
 
 
 pro overplot_things, _extra=e
@@ -23,14 +13,24 @@ pro overplot_things, _extra=e
     v = plot_vline( i2, graphic.yrange )
 end
 
+function plot_vertical_lines
+
+    ; Vertical lines at periods of interest
+    v = objarr(n_elements(period))
+    for i = 0, n_elements(v)-1 do $
+        v[i] = plot_vline( $
+            1./period[i], $
+            p.yrange, $
+            color='grey' $
+            ;name=strtrim( fix(1./vert[i]),1) + ' sec' $
+            )
+    ;leg = legend2(target = v, position = [0.9,0.8])
+    leg = legend2( target=p,  position = [0.9,0.8])
+    return, p
+end
+
 
 function PLOT_WITH_TIME, x, y, _EXTRA=e
-
-    ; should have no problem running this, even if spontaneously reading
-    ; random data from a few fits files and want to plot it.
-    ; No loops here! Call this routine INSIDE loops!
-
-    ; Also see aia_prep documentation on plotting light curves!
 
     common defaults
     win = getwindows()
