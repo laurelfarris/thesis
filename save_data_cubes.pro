@@ -10,7 +10,7 @@ pro SAVE_DATA_CUBES, channel
     ;  they haven't been aligned yet.
 
 
-    read_my_fits, 'aia', channel, index, data, /prepped, nodata=0
+    READ_MY_FITS, index, data, inst='aia', channel=channel, nodata=0;, /prepped
 
     x0 = 2410
     y0 = 1660

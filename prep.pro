@@ -10,7 +10,8 @@ function PREP, inst, channel, cadence, _EXTRA=e
     ; Parts of these should be combined anyway.
     ;if n_elements(index) eq 0 then begin
         ;print, "no index in input args."
-        read_my_fits, inst, channel, index, data, nodata=1
+        READ_MY_FITS, index, data, inst=inst, channel=channel, nodata=1, $
+            prepped=0 ; 28 June 2018 - changed prepped to = 1 by default
     ;    endif
 
     ; Restore aligned data.

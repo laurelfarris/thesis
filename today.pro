@@ -64,7 +64,7 @@ stop
 ; roughly center of map around peak flare time:
 print, map[225:275, 110:160, 270]
 
-
+;----------------------------------------------------------------------------------
 ; Figure out z-index at which calculation of AIA 1700 power map stopped,
 ;   and finish it. Will have to interpolate data cube again.
 ; Last night: error at test in power_maps.pro,
@@ -76,7 +76,6 @@ channel = '1700'
 
 restore, '../aia' + channel + 'map.sav'
 
-;START:
 print, channel
 
 sz = size(map, /dimensions)
@@ -85,21 +84,32 @@ for i = 0, sz[2]-1 do $
     map_total[i] = total(map[*,*,i])
 
 unfinished_ind = where(map_total eq 0.0)
-print, unfinished_ind
+START:
+print, unfinished_ind[0]
 stop
 print, unfinished_ind - shift(unfinished_ind, 1)
 
 ; run power_maps for AIA 1700 from i = 650 --> 684 (-1)
 ; see ML code in power_maps.pro for code and comments.
+;   28 June 2018 - maybe... rewrote a lot of this to make a general routine.
+
+; Appears that AIA 1700 map has been successfully completed.
+; but don't want to risk overwriting first map, hence:
+;save, map, filename='aia' + channel + 'map_final.sav'
 
 
+;----------------------------------------------------------------------------------
 ; Now checking on saturation values before and after aia_prep
 
-read_my_fits, 'aia', 1600, aia1600index, nodata=1, prepped=1
-read_my_fits, 'aia', 1700, aia1700index, nodata=1, prepped=1
+; 28 June 2018 - changed prepped kw to 1 by default
+;read_my_fits, 'aia', 1600, aia1600index, nodata=1, prepped=1
+;read_my_fits, 'aia', 1700, aia1700index, nodata=1, prepped=1
+read_my_fits, aia1600index, data, inst='aia', channel=1600, nodata=1;, prepped=1
+read_my_fits, aia1700index, data, inst='aia', channel=1700, nodata=1;, prepped=1
 
 for i = 0, 1 do begin
-    read_my_fits, 'aia', 1600, index, ind=[275], nodata=1, prepped=i
+    READ_MY_FITS, index, data, inst='aia', channel=1600, $
+        ind=[275], nodata=1, prepped=i
     ;print, index.datamin
     ;print, index.datamax
     ;print, index.datamax - index.datamin
@@ -109,7 +119,9 @@ endfor
 
 
 ;read_my_fits, 'aia', 1600, aia1600index_old, nodata=1, prepped=0
-read_my_fits, 'aia', 1700, aia1700index_old, nodata=1, prepped=0
+;read_my_fits, 'aia', 1700, aia1700index_old, nodata=1, prepped=0
+read_my_fits, aia1600index_old, data, inst='aia', channel=1600, nodata=1, prepped=0
+read_my_fits, aia1700index_old, data, inst='aia', channel=1700, nodata=1, prepped=0
 
 ;aia1600sat = aia1600index.nsatpix
 aia1700sat = aia1700index.nsatpix
@@ -155,7 +167,7 @@ a6sat_old = where( cube ge 15000 )
 
 print, n_elements(where( a6sat ne a6sat_old ))
 
-START:
+;START:
 
 print, max(cube[*,*,90])
 print, max(a6[*,*,90])

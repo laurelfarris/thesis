@@ -18,7 +18,10 @@ function get_image_data
 
     ; Start from scratch - Read new data (only what you want to image).
 
-    read_my_fits, 'hmi', 'mag', index, data, ind=[0]
+    ;read_my_fits, 'hmi', 'mag', index, data, ind=[0]
+    read_my_fits, index, data, inst='hmi', channel='mag', ind=[0], $
+        prepped=0 ; 28 June 2018 - added this because prepped kw wasn't
+        ; already here, and I just changed it to be 1 by default.
     sz = size( data, /dimensions )
     X = (indgen(sz[0]) - index.crpix1) * index.cdelt1
     Y = (indgen(sz[1]) - index.crpix2) * index.cdelt2
@@ -31,7 +34,8 @@ function get_image_data
             title : 'HMI B$_{LOS}$ ' + time } $
         }
 
-    read_my_fits, 'aia', '1600', index, data, ind=[0];, /prepped
+    ;read_my_fits, 'aia', '1600', index, data, ind=[0];, /prepped
+    read_my_fits, index, data, inst='aia', channel='1600', ind=[0];, /prepped
     sz = size( data, /dimensions )
     X = (indgen(sz[0]) - index.crpix1) * index.cdelt1
     Y = (indgen(sz[1]) - index.crpix2) * index.cdelt2
@@ -46,7 +50,9 @@ function get_image_data
             title : 'AIA 1600$\AA$ ' + time, $
             rgb_table : [[r],[g],[b]] } }
 
-    read_my_fits, 'aia', '1700', index, data, ind=[0];, /prepped
+
+    ;read_my_fits, 'aia', '1700', index, data, ind=[0];, /prepped
+    read_my_fits, index, data, inst='aia', channel='1700', ind=[0];, /prepped
     sz = size( data, /dimensions )
     X = (indgen(sz[0]) - index.crpix1) * index.cdelt1
     Y = (indgen(sz[1]) - index.crpix2) * index.cdelt2

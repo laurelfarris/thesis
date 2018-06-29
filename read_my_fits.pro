@@ -12,23 +12,31 @@
 
 
 
-pro READ_MY_FITS, instr, channel, index, data, $
-    ind=ind, nodata=nodata, prepped=prepped
+pro READ_MY_FITS, index, data, $
+    instr=instr, $
+    channel=channel, $
+    ind=ind, $
+    nodata=nodata, $
+    prepped=prepped
 
     ; Assuming all files are properly prepped and aligned...
 
-    ;print, channel
-    ;print, typename(channel)
-
+    ; Convert channel to string if not already.
     if not ( typename(channel) eq 'STRING' ) then begin
         ;print, 'Illegal typename for channel.'
         channel = strtrim(channel,1)
-    endif
+        endif
+
+    ; 28 June 2017
+    ; Want prepped=1 by default, now that I've aligned all prepped data.
+    ; Write this in a better way... LATER.
+    if not keyword_set(prepped) then prepped = 1
 
     case instr of
 
     'aia': begin
-        if keyword_set(prepped) then begin
+        ;if keyword_set(prepped) then begin
+        if (prepped eq 1) then begin
             path = '/solarstorm/laurel07/Data/AIA_prepped/'
             ;path = '/home/users/laurel07/Data/AIA_prepped/'
             files = 'AIA20110215_*_'  +  channel  +  '*.fits'
