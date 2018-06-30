@@ -22,7 +22,7 @@ function CALC_POWER_TIME, flux, cadence, $
     if n_elements(dz) eq 0 then dz = N
 
     ; initialize power array
-    power_time = fltarr(sz)
+    power_time = fltarr(N-dz)
 
     ; Calculate power for time series between each value of z and z+dz
     foreach z, z_start, i do begin
