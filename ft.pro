@@ -1,33 +1,26 @@
 
+; Last modified:   29 June 2018
 
-; input: flux, cadence
-; output: frequency, power
-; kws: fmin and/or fmax if want only a certain range of frequencies returned
+; Structure of user-input values. Mostly just examples.
+; Use short variable/tag names to just feed individual values into routines,
+; E.G. plot, ft.flux, xrange=ft.xrange...
+FT = {$
+    flux: A[0].flux, $
+    norm: 1, $
+    cadence: 24, $
+    fcenter: 1./180, $
+    fwidth: 1./(170) - 1./(190), $
+    fmin: 0.004, $
+    fmax: 0.006, $
+    ;fmin: 1./50, $
+    ;fmax: 1./400, $
+    z_start: [0:200:5], $
+    dz: 64, $
+    time: ['01:30','02:30'], $
+    periods: [120, 180, 200, 300] $
+}
+; NOTE: regarding fwidth,
+ ; period width not constant as frequency resolution,
+ ; but this is based on specific central period, so others don't matter.
 
-
-; band could be range of frequencies to show on x-axis for power spectrum,
-; or narrow bandwidth to average over, centered at freq. of interest.
-; --> Different routine for the latter.
-
-
-
-pro CALC_FT, flux, cadence, $
-    frequency, power, $
-    fmin=fmin, fmax=fmax, $
-    norm=norm;, $
-   ; _EXTRA=e
-
-    result = fourier2( flux, cadence, norm=norm )
-    frequency = reform(result[0,*])
-    power = reform(result[1,*])
-
-    if not keyword_set(fmin) then fmin = frequency[ 0]
-    if not keyword_set(fmax) then fmax = frequency[-1]
-
-    ind = where(frequency ge fmin AND frequency le fmax)
-
-    frequency = frequency[ind]
-    power = power[ind]
-
-    return
 end

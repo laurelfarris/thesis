@@ -19,8 +19,6 @@ restore, '../test_data.sav'
 help, lc1
 help, time
 
-start:
-
 ;plot, time, lc1
 w = 8.5
 h = 4.0
@@ -31,5 +29,16 @@ p = plot2( time, lc1, layout=[1,1,1], color='red', current=1 )
 p.save, '~/Dropbox/test_data.pdf', $
     page_size=[w,h], width=w, height=h
 
+
+;; Calculate FT of fake data
+start:
+
+cadence = time[1] - time[0]
+
+struc = CALC_FT( lc1, cadence )
+
+p = plot_spectrum( struc.frequency, struc.power )
+
+;; Plot power spectrum
 
 end
