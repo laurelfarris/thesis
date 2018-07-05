@@ -78,4 +78,14 @@ end
 ; assuming that saturation threshold for newest set of maps is satisfactory.
 ; Shouldn't have to do anything for the 2D maps.
 
+
+; 04 July 2018
+; May 15, 16, 17 notes (IDL) on saturation (cool images!)
+; Two purposes for saturation map/mask
+; 1. multiply by power maps created with different threshold (possibly not needed).
+; 2. divide total power by # pixels so power vs. time plot shows comparable values.
+; Would also have two masks, one for each image (data) and
+; one for product of dz images (map).
+; = 1 where NOT saturated and = 0 where saturation happens.
+
 end
