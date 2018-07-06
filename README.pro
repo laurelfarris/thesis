@@ -15,7 +15,7 @@
 ;
 ; AUTHOR:       Laurel Farris
 ;
-; TO DO:        read_my_fits.pro needs some work
+; TO DO:        Update this file
 ;
 ;-
 
@@ -114,34 +114,24 @@ aia_cadence = 24.0
 
 LINEAR_INTERP, array=a7data, jd=a7jd, cadence=24 
 
-
 ;---------------------------------------------------------------------------------------------
 ;; Get flux to make lightcurves
 hmi_flux      = total( total(hmi,1), 1 )
 aia_1600_flux = total( total(a6, 1), 1 )
 aia_1700_flux = total( total(a7, 1), 1 )
 
-
 ;---------------------------------------------------------------------------------------------
 ;; Get indices to separate data in Before, During, and After
-
 
 ; Flare start/end times from Milligan et al. 2017
 flare_start = '01:30'
 flare_end   = '02:30'
 
-
-
-
 get_bda_indices, hmi_index, ht1, ht2
 get_bda_indices, aia_1600_index, a6t1, a6t2
 get_bda_indices, aia_1700_index, a7t1, a7t2
 
-
-
 ;---------------------------------------------------------------------------------------------
 ;.run plot_fft
-
-
 
 end

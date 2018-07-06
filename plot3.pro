@@ -71,31 +71,14 @@ foreach f, flare do begin
         fill_color='light gray' )
 endforeach
 
-
-
 leg = legend2( target=[ p[0], p[1] ],  position=[0.8,0.7] )
 stop
 
 ; Save figure (had to use different methods because of shaded part).
 ;save2, 'power_time_4.pdf'
 ;write_png, 'power_time_4.png', tvrd(/true)
-w.save, '~/power_time_5.png', width=wx*dpi
+;w.save, '~/power_time_5.png', width=wx*dpi
 
-;---------------------------------------------------------
-; Didn't end up doing this...
 ; Plot power at x +/- dz to show time covered by each value.
-if k ge 1 then begin
-    ;yy1 = [ ydata[*,i], fltarr(dz) ]
-    n = n_elements(ydata[*,i])
-    yy1 = shift( ydata[*,i], -32 )
-    yy1 = yy1[0:n-32]
-    yy2 = shift( ydata[*,i],  32 )
-    yy2 = yy2[32:*]
-    q = plot2( xdata[0:n-32], yy1, /overplot, stairstep=1, color='light gray', $
-        ;fill_background=1, fill_level=yy1, $
-        name='t-dz' )
-    q = plot2( xdata[32:*], yy2, /overplot, stairstep=1, color='light gray', $
-        ;fill_background=1, fill_level=yy2, $
-        name='t+dz' )
-endif
+;  (see notes from 2018-05-13)
 end

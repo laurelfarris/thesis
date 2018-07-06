@@ -29,14 +29,12 @@ pro READ_MY_FITS, index, data, $
 
     ; 28 June 2017
     ; Want prepped=1 by default, now that I've aligned all prepped data.
-    ; Write this in a better way... LATER.
-    if not keyword_set(prepped) then prepped = 1
+    ;if not keyword_set(prepped) then prepped = 1
 
     case instr of
 
     'aia': begin
-        ;if keyword_set(prepped) then begin
-        if (prepped eq 1) then begin
+        if keyword_set(prepped) then begin
             path = '/solarstorm/laurel07/Data/AIA_prepped/'
             ;path = '/home/users/laurel07/Data/AIA_prepped/'
             files = 'AIA20110215_*_'  +  channel  +  '*.fits'

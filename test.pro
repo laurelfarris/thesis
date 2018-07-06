@@ -1,6 +1,3 @@
-; NOTE: doing things in reverse order so I can just use stop command,
-; rather than GOTO plus stop.
-
 
 ; 29 June 2018
 ; comparing flux - mean(flux) for raw data and normalized data (between 0 and 1)
@@ -63,16 +60,9 @@ help, result
 
 if result eq '' then print, "This works!"
 if result ne '' then print, "Not an empty string!"
-
-;; Cool
-
-
 stop
 
-
-
-
-
+;; Cool
 
 ;; Test that save will overwrite file if already exists
 ;test = 2
@@ -86,4 +76,23 @@ stop
 ; Affirmative!
 
 
+
+; 06 July 2018
+; IDL dictionaries
+
+result = dictionary( 'name', 'AIA 1600$\AA$', 'cadence', 24 )
+
+print, result['name']
+print, result.name
+
+;print, result.Count()
+;result.IsFoldCase()
+;result.Keys()
+;print, result.HasKey('namee')
+
+;result.Remove, 'cadence'
+;print, result.Remove( 'cadence' )
+;print, result.Remove( 'name' )
+
+end
 end

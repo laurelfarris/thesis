@@ -5,7 +5,7 @@
 ;Output:    1D array, each element = total over dimensions 1 and 2.
 
 
-function get_flux, cube
+function GET_FLUX, cube, norm=norm, exptime=exptime
 
     flux = total( total(cube,1), 1 )
 
@@ -15,26 +15,23 @@ function get_flux, cube
         flux = flux_norm
     endif
 
-
     return, flux
 
 end
 
-
-
-
-flux = total( total(aia1600.data,1), 1 )
 exptime = aia1600index.exptime
-aia1600.flux = flux/exptime
-
-
-
-
-flux = total( total(aia1700.data,1), 1 )
 exptime = aia1700index.exptime
+
+aia1600.flux = flux/exptime
+aia1700.flux = flux/exptime
+
+
+
+; ??
 avg = fltarr(4) + mean( exptime )
 exptime = [exptime, avg]
 
-aia1700.flux = flux/exptime
+
+
 
 end
