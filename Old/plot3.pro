@@ -15,7 +15,9 @@ time = ['00:30', '01:00']
 ; or one each for lightcurves, power, power_norm, etc.?
 for i = 0, n_elements(p)-1 do begin
     xdata = A[i].jd
-    xdata = A[i].flux
+    xdata = A[i].flux ; 07 July 2018 - This should probably be ydata...
+       ; it's been too long since I worked on this code to remember if this
+       ; caused major confusion or if I just typo-ed something at the end...
     p[i] = PLOT_WITH_TIME( $
         xdata, ydata-min(ydata), $
         layout=[1,3,i+1], $
