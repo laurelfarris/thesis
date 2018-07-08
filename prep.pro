@@ -3,7 +3,8 @@
 ; without header information (like when I have access to .sav files,
 ; but not the fits files, where index is always extracted.
 
-pro PRE_PREP, index, cube, channel
+
+function PREP, index, cube, cadence=cadence, inst=inst, channel=channel;, interp=interp
 
     ; read headers
     if n_elements(index) eq 0 then begin
@@ -11,27 +12,20 @@ pro PRE_PREP, index, cube, channel
         READ_MY_FITS, index, inst='aia', channel=channel, nodata=1
     endif
 
-    ; restore data
+
+    ; Restore data, interpolate to get missing data and corresponding timestamp,
+    ; then crop data to 500x330 pixels
     restore, '../aia' + channel + 'aligned.sav'
-end
+    time = strmid(index.date_obs,11,11)
+    jd = GET_JD( index.date_obs + 'Z' )
+    LINEAR_INTERP, cube, jd, cadence, time
+    cube = crop_data(cube)
 
-function PREP, index, data, cadence=cadence, channel=channel, interp=interp
-
-    ; Interpolate to get missing data and corresponding timestamp,
-    ;  then crop data to 500x330 pixels
-
-    if keyword_set(interp) then begin
-        time = strmid(index.date_obs,11,11)
-        jd = GET_JD( index.date_obs + 'Z' )
-        LINEAR_INTERP, data, jd, cadence, time
-        data = crop_data(data)
-    endif
-
-    data = fix( round( data ) )
-    sz = size( data, /dimensions )
+    cube = fix( round( cube ) )
+    sz = size( cube, /dimensions )
 
     ;flux = fltarr( sz[2] )
-    flux = total( total( data, 1), 1 )
+    flux = total( total( cube, 1), 1 )
     exptime = index[0].exptime
 
     name = 'AIA ' + channel + '$\AA$'
@@ -40,7 +34,7 @@ function PREP, index, data, cadence=cadence, channel=channel, interp=interp
     ct = [ [r], [g], [b] ]
 
     struc = { $
-        data: data, $
+        data: cube, $
         jd: jd, $
         time: time, $
         flux: flux, $
@@ -53,7 +47,7 @@ function PREP, index, data, cadence=cadence, channel=channel, interp=interp
     return, struc
 
     dic = dictionary( $
-        'data', data, $
+        'data', cube, $
         'jd', jd, $
         'time', time, $
         'cadence', cadence )
@@ -62,11 +56,8 @@ end
 
 ; need to re-read data, but not headers... commented in subroutine for now.
 
-PRE_PREP, aia1600index, aia1600data, '1600'
-aia1600 = PREP( aia1600index, aia1600data, cadence=24., channel='1600', /interp )
-
-PRE_PREP, aia1700index, aia1700data, '1700'
-aia1700 = PREP( aia1700index, aia1700data, cadence=24., channel='1700', /interp )
+aia1600 = PREP( aia1600index, aia1600data, cadence=24., inst='aia', channel='1600' )
+aia1700 = PREP( aia1700index, aia1700data, cadence=24., inst='aia', channel='1700' )
 
 ; colors (for plotting)
 aia1600.color = 'dark orange'
