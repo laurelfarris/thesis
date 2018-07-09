@@ -47,29 +47,47 @@ pro mask_3D, A
     endfor
 end
 
-
 function SATURATION_MASK, data, threshold
+    ; return array (mask) with same dimensions as data, with values
+    ; set to 1.0 where data is UNsaturated, and 0.0 where data is saturated.
 
     sz = size( data, /dimensions )
     mask = fltarr(sz)
     mask[where( data lt threshold )] = 1.0
     mask[where( data ge threshold )] = 0.0
     return, mask
+end
+
+function MASK_MAP, mask, dz=dz
+
+    ; This takes a while to run...
+
+    ; cube = data cube with saturated pixels
+    ;threshold = 15000
+    ;mask = SATURATION_MASK( cube, threshold )
+    sz = size(mask, /dimensions)
+    mask_map = fltarr( sz[0], sz[1], sz[2]-dz )
+    sz_new = size(mask_map, /dimensions)
+    for i = 0, sz_new[2]-1 do begin
+        mask_map[*,*,i] = product( mask[*,*,i:i+dz-1], 3 )
+    endfor
+    return, mask_map
 
 end
 
+function total_power_map, data, channel, threshold
 
-function MASK_MAP, cube
+    mask = SATURATION_MASK( data, threshold )
+    mask_map = MASK_MAP( mask, dz=64 )
+    ;if i eq 0 then aia1600map = map * mask_map
+    ;if i eq 1 then aia1700map = map * mask_map
+    num_unsaturated_pixels = total(total(mask_map,1),1)
 
-    threshold = 10000
-    mask = SATURATION_MASK( cube, threshold )
-    sz = size(mask, /dimensions)
+    stop
+    restore, '../aia' + channels[i] + 'map.sav'
 
-    dz = 64
-    mask_map = fltarr(sz[0],sz[1],sz[2]-dz-1)
-    foreach z,[0:sz[2]-dz-1] do begin
-        mask_map[*,*,z] = product( mask, 3 )
-    endforeach
+    return, power
+
 end
 
 ; 27 June 2018
@@ -87,5 +105,3 @@ end
 ; Would also have two masks, one for each image (data) and
 ; one for product of dz images (map).
 ; = 1 where NOT saturated and = 0 where saturation happens.
-
-end

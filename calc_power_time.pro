@@ -2,24 +2,28 @@
 
 
 function CALC_POWER_TIME, flux, cadence, $
-    fmin=fmin, fmax=fmax, $
-    dz=dz, z_start=z_start, norm=norm
+    dz=dz, $
+    fmin=fmin, $
+    fmax=fmax, $
+    ;z_start=z_start, $
+    norm=norm
 
     ; Input:        flux, cadence
     ; Keywords:     dz (sample length for fourier2.pro in data units)
     ;               fmin, fmax (frequency_bandwidth)
     ; Output:       Returns 1D array of power as function of time.
     ; To do:        Add test codes
-    ;               Preserve date_obs that goes with each z_start
-    ;               maybe return a structure with both, or something
 
 
     ; This first bit is exactly like power_maps.pro....
     N = n_elements(flux)
 
-    ;if n_elements(z) eq 0 then z = indgen(n-dz)
-    if n_elements(z_start) eq 0 then z_start = [0]
-    if n_elements(dz) eq 0 then dz = N
+    ;if n_elements(z_start) eq 0 then z_start = indgen(N-dz)
+    z_start = indgen(N-dz)
+
+    ; Default frequency bandpass = 1 mHz (centered at 3-minute period)
+    ;if not keyword_set(fmin) then fmin = 0.005
+    ;if not keyword_set(fmax) then fmax = 0.006
 
     ; initialize power array
     power_time = fltarr(N-dz)
@@ -32,4 +36,17 @@ function CALC_POWER_TIME, flux, cadence, $
 
     endforeach
     return, power_time
+end
+
+function wrapper, flux, cadence, _EXTRA=e
+
+    x = CALC_POWER_TIME( flux, cadence, $
+        dz = 64, $
+        fmin = 0.005, $
+        fmax = 0.006, $
+        norm = 0, $
+        _EXTRA = e)
+
+    return, x
+
 end

@@ -23,6 +23,9 @@ pro blah, flux, cadence, freq, power, phase, amp
 
 end
 
+print, 'blah'
+stop
+
 N = 100
 x = findgen(N) * (4*!PI/N)
 y0 = sin(x)
@@ -94,5 +97,4 @@ print, result.name
 ;print, result.Remove( 'cadence' )
 ;print, result.Remove( 'name' )
 
-end
 end
