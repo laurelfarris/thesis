@@ -27,6 +27,7 @@ function PREP, index, cube, cadence=cadence, inst=inst, channel=channel;, interp
     ;flux = fltarr( sz[2] )
     flux = total( total( cube, 1), 1 )
     exptime = index[0].exptime
+    flux = flux/exptime
 
     name = 'AIA ' + channel + '$\AA$'
 

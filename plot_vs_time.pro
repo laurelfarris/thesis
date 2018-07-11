@@ -1,4 +1,4 @@
-; Last modified:   29 June 2018
+; Last modified:   11 July 2018
 
 ; should have no problem running this, even if spontaneously reading
 ; random data from a few fits files and want to plot it.
@@ -6,15 +6,7 @@
 
 ; Also see aia_prep documentation on plotting light curves.
 
-; ---
-; Entire time series
-;time = ['00:00', '04:59']
-; C-class flare
-;time = ['00:30', '01:00']
-;ind = [ (where(date_obs eq time[0]))[0] : (where(date_obs eq time[1]))[0] : 75 ]
-; ---
-
-pro plot_vs_time, xdata, ydata, _EXTRA=e
+pro PLOT_VS_TIME, xdata, ydata, overplot=overplot, _EXTRA=e
 
     common defaults
 
@@ -24,6 +16,17 @@ pro plot_vs_time, xdata, ydata, _EXTRA=e
     right = 1.00
     top = 0.75
     margin = [ left, bottom, right, top ]
+
+
+    dw
+    wx = 8.5
+    wy = 3.0; * 2
+    win = window( dimensions=[wx,wy]*dpi, buffer=1 );,location=[600,0] )
+    p = objarr(n_elements(A))
+end
+
+
+function PLOTT, xdata, ydata, overplot=overplot, _EXTRA=e
 
     ; Indices for tick labels
     ;   30 minutes --> step = 75
@@ -36,37 +39,35 @@ pro plot_vs_time, xdata, ydata, _EXTRA=e
     ;ind = [i1:i2:75]
     ind = [0:n_elements(xdata):75]
     xtickvalues = A[0].jd[ind]
-    xtickname = time[ind]
 
-    dw
-    wx = 8.5
-    wy = 3.0; * 2
-    win = window( dimensions=[wx,wy]*dpi, buffer=1 );,location=[600,0] )
-    p = objarr(n_elements(A))
+    ; Use caldat to get times - ensures correct time for each jd
+    ;xtickname = time[ind]
+    xtickname = []
+    foreach jd, xtickvalues, i do begin
+        caldat, xtickvalues, month, day, year, hour, minute, second
+        hour = strtrim(hour,1)
+        minute = strtrim(minute,1)
+        xtickname = [ xtickname, hour + ':' + minute ]
+    endforeach
 
-    for i = 0, n_elements(p)-1 do begin
-            ;overplot=i<1
-            ;  this should work... maybe can't use with /current?
-        p[i] = plot2( $
-            xdata, $
-            A[i].flux, $
-            /device, overplot=i<1, /current,  $ ;current = something similar to i<1 for multi-panel figures
-            layout = [1,1,1], $
-            margin = margin*dpi, $
-            xticklen = 0.05, $
-            yticklen = 0.015, $
-            xminor = 5, $
-            yminor = 4, $
-            xtitle='Start time (UT) on 2011-February-15', $
-            ;xtitle = 'Start Time (15-Feb-2011 00:00:31.71)', $
-            ; automatically set to t_start somehow?
-            xtickvalues = xtickvalues, $
-            xtickname = xtickname, $
-            stairstep = 1, $
-            color = A[i].color, $
-            name = A[i].name, $
-            _EXTRA = e )
-    endfor
+    p = plot2( $
+        xdata, ydata, $
+        /device, $
+        overplot=overplot, $
+        /current, $
+        layout = [1,1,1], $
+        margin = margin*dpi, $
+        xticklen = 0.05, $
+        yticklen = 0.015, $
+        xminor = 5, $
+        yminor = 4, $
+        xtitle='Start time (UT) on 2011-February-15', $
+        ;xtitle = 'Start Time (15-Feb-2011 00:00:31.71)', $
+        ; automatically set to t_start somehow?
+        xtickvalues = xtickvalues, $
+        xtickname = xtickname, $
+        stairstep = 1, $
+        _EXTRA = e )
 
     ax = p[1].axes
     ax[2].showtext=1
