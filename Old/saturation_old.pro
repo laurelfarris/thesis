@@ -5,6 +5,8 @@ pro one_D
     ; 26 June 2018
     ; I think this creates an array showing the total number of pixels
     ; that are saturated in each image throughout time series.
+    ; 12 June 2018
+    ; Current codes do this much more efficiently :)
     z = [0:684]
     n = n_elements(z)
     sat_arr = fltarr(n)
@@ -45,49 +47,6 @@ pro mask_3D, A
         A[i].map2 = A[i].map2 * mask_map
         print, n_elements(where(A[i].map2 eq 0))
     endfor
-end
-
-function SATURATION_MASK, data, threshold
-    ; return array (mask) with same dimensions as data, with values
-    ; set to 1.0 where data is UNsaturated, and 0.0 where data is saturated.
-
-    sz = size( data, /dimensions )
-    mask = fltarr(sz)
-    mask[where( data lt threshold )] = 1.0
-    mask[where( data ge threshold )] = 0.0
-    return, mask
-end
-
-function MASK_MAP, mask, dz=dz
-
-    ; This takes a while to run...
-
-    ; cube = data cube with saturated pixels
-    ;threshold = 15000
-    ;mask = SATURATION_MASK( cube, threshold )
-    sz = size(mask, /dimensions)
-    mask_map = fltarr( sz[0], sz[1], sz[2]-dz )
-    sz_new = size(mask_map, /dimensions)
-    for i = 0, sz_new[2]-1 do begin
-        mask_map[*,*,i] = product( mask[*,*,i:i+dz-1], 3 )
-    endfor
-    return, mask_map
-
-end
-
-function total_power_map, data, channel, threshold
-
-    mask = SATURATION_MASK( data, threshold )
-    mask_map = MASK_MAP( mask, dz=64 )
-    ;if i eq 0 then aia1600map = map * mask_map
-    ;if i eq 1 then aia1700map = map * mask_map
-    num_unsaturated_pixels = total(total(mask_map,1),1)
-
-    stop
-    restore, '../aia' + channels[i] + 'map.sav'
-
-    return, power
-
 end
 
 ; 27 June 2018

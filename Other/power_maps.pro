@@ -1,5 +1,6 @@
 
-; Last modified:   15 June 2018
+; Last modified:   12 July 2018 (changed threshold from hard-coded variable
+;     to optional keyword
 ; Calculates power map
 ; Input:  data = 3D data cube for which to calculate power maps
 ;            z = array of START indices
@@ -37,6 +38,7 @@ function POWER_MAPS, $
     data, $
     cadence, $
     bandwidth, $
+    threshold=threshold, $
     z=z, $
     dz=dz, $
     norm=norm
@@ -67,7 +69,7 @@ function POWER_MAPS, $
 
     ; Array to keep track of how many pixels saturate at each z value.
     sat_arr = fltarr( sz[2] )
-    threshold = 10000
+    if not keyword_set(threshold) then threshold = 10000
 
     for i = 0, n-1 do begin
         for y = 0, sz[1]-1 do begin

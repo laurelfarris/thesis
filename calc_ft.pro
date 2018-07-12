@@ -1,5 +1,7 @@
 
 
+; TO-DO: issue with freq[1] - freq[0] = resolution if freq only has one value
+
 ; input: flux, cadence
 ; output: frequency, power
 ; kws: fmin and/or fmax if want only a certain range of frequencies returned

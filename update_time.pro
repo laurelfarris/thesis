@@ -16,7 +16,7 @@
 
 
 function UPDATE_TIME, jd
-    ; Use new jd to update timestamp string (see 2018-05-13 notes).
+    ; Input jd and return string in form hh:mm:ss.dd
 
     caldat, jd, month, day, year, hour, minute, second
 

@@ -1,5 +1,25 @@
+; 12 July 2018
+
+goto, start
+
+restore, '../aia1600map.sav'
+sz = size(map, /dimensions)
+n_zeros = intarr(sz[2])
+stop
+for i = 0, sz[2]-1 do begin
+    n_zeros[i] = n_elements( where( map[*,*,i] eq 0.0 ) )
+endfor
+; nevermind... power is 0.0 in some map pixels where data did not saturate
 
 
+start:
+power = get_power(A[0].flux, cadence=24, channel='1600', data=A[0].data)
+print, max(power)
+stop
+power = get_power_from_maps( A[0].data, '1600', threshold=10000, dz=64 )
+
+
+stop
 
 ; 07 July 2018
 

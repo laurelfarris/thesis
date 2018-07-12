@@ -58,6 +58,8 @@
 ;     start = index of starting image
 ;     subscripts = subscripts
 
+; ft.pro - user's structure with all useful values
+
 
 ; Filenames of current data (examples)
 ;  aia.lev1.131A_2012-06-01T01_00_09.62Z.image_lev1.fits

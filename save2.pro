@@ -23,13 +23,13 @@ pro SAVE2, filename, add_timestamp=add_timestamp, _EXTRA=e
     ; keep appending _1, _2, etc. until no other file matches
 
     ; Add timestamp to figure
-    if keyword_set(add_timestamp) then $
-        creation_time = text2( $
-            0.95,  0.1, $
-            systime(), $
-            baseline=[0.0,1.0,0.0], updir=[-1.0,0.0,0.0], $
-            color='grey', $
-            font_size=8 )
+    ;if keyword_set(add_timestamp) then $
+        ;creation_time = text2( $
+            ;0.95,  0.1, $
+            ;systime(), $
+            ;baseline=[0.0,1.0,0.0], updir=[-1.0,0.0,0.0], $
+            ;color='grey', $
+            ;font_size=8 )
 
     w = getwindows(/current)
     dims = w.dimensions/dpi
