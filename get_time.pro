@@ -15,7 +15,7 @@
 ;-
 
 
-function UPDATE_TIME, jd
+function GET_TIME, jd
     ; Input jd and return string in form hh:mm:ss.dd
 
     caldat, jd, month, day, year, hour, minute, second

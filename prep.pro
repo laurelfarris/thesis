@@ -10,9 +10,9 @@ function POWER_IN_STRUC, struc
         struc.flux, cadence=struc.cadence, channel=struc.channel, data=struc.data)
     struc = create_struct( struc, 'power_flux', power_flux )
 
-    power_maps = GET_POWER_FROM_MAPS( $
-        struc.data, struc.channel, threshold=10000, dz=64)
-    struc = create_struct( struc, 'power_maps', power_maps )
+;    power_maps = GET_POWER_FROM_MAPS( $
+;        struc.data, struc.channel, threshold=10000, dz=64)
+;    struc = create_struct( struc, 'power_maps', power_maps )
 
     return, struc
 end
@@ -77,21 +77,28 @@ end
 
 ; need to re-read data, but not headers... commented in subroutine for now.
 
-;aia1600 = PREP( aia1600index, aia1600data, cadence=24., inst='aia', channel='1600' )
-;aia1700 = PREP( aia1700index, aia1700data, cadence=24., inst='aia', channel='1700' )
+aia1600 = PREP( aia1600index, aia1600data, cadence=24., inst='aia', channel='1600' )
+aia1700 = PREP( aia1700index, aia1700data, cadence=24., inst='aia', channel='1700' )
 
 ; colors (for plotting)
-;aia1600.color = 'dark orange'
-;aia1700.color = 'dark cyan'
+aia1600.color = 'dark orange'
+aia1700.color = 'dark cyan'
 
 A = [ aia1600, aia1700 ]
 ;aia = dictionary( 'aia1600', aia1600, 'aia1700', aia1700 )
+
+
+;; Need to explicitly compile 'get_power.pro', or will get 'syntax error'
+;;  pointing at keywords (IDL doesn't know what the hell is going on).
 
     for i = 0, n_elements(A)-1 do begin
         A[i].power_flux = GET_POWER( $
             A[i].flux, cadence=A[i].cadence, channel=A[i].channel, data=A[i].data)
         A[i].power_maps = GET_POWER_FROM_MAPS( $
-            A[i].data, A[i].channel, threshold=10000, dz=64)
+            A[i].data, $
+            A[i].channel, $
+            dz = 64, $
+            threshold=10000 )
     endfor
 
 end

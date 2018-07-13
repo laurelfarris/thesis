@@ -22,10 +22,11 @@ pro pretty_plots
     ; Time labels in specific increments, e.g. 30 minutes:
     ; only show axis labels on outermost axes
         ; showtext=0|1
+    print, 'placeholder'
 end
 
 
-pro PLOT_LIGHTCURVES, x, y, $
+function PLOT_LIGHTCURVES, x, y, $
     layout=layout, $
     current=current, $
     _EXTRA=e
@@ -70,13 +71,11 @@ pro PLOT_LIGHTCURVES, x, y, $
                 position=position, $
                 xticklen=0.05, yticklen=0.015, xminor=5, yminor=4, $
                 stairstep = 1, $
-                ;xtitle = 'Start Time (15-Feb-2011 00:00:31.71)', $
-                ; automatically set to t_start somehow?
-                xtitle = 'Start time (UT) on 2011-February-15', $
                 _EXTRA=e
                 )
         endfor
     endfor
+    return, graphic
 end
 
 common defaults
@@ -91,15 +90,20 @@ t2 = (where(time eq t_end  ))[-1]
 ;xtickinterval = 30./(60*A[0].cadence)
 
 
-    ; What's my problem with creating graphic separately again?
-    ; could easily remove lines themselves after overplotting, then
-    ; re-draw them without re-creating the entire figure...
+; What's my problem with creating graphic separately again?
+; could easily remove lines themselves after overplotting, then
+; re-draw them without re-creating the entire figure...
 graphic = PLOT_LIGHTCURVES( [t1:t2], [t1:t2], $
     layout = [1,3,1], $
+                ;xtitle = 'Start Time (15-Feb-2011 00:00:31.71)', $
+                ; automatically set to t_start somehow?
+                xtitle = 'Start time (UT) on 2011-February-15', $
     ytitle = 'counts (DN s$^{-1}$)' )
 ; rename to plot_position, setup_graphics, or something similar
 
 lc = objarr(n_elements(A))
+stop
+
 for i = 0, n_elements(lc)-1 do begin
 
     ; X/Y data to plot
@@ -112,9 +116,13 @@ for i = 0, n_elements(lc)-1 do begin
         )
 endfor
 
-leg = legend2( target=[p], sample_width=0.3, position=[0.8,0.7] )
+leg = legend2( target=[lc], position=[0.8,0.7] )
 
+file = 'lc_power.pdf'
+resolve_routine, 'save2'
+save2, file;, /add_timestamp
 
+stop
     ; Flare start, peak, & end times (only for full time series...)
     flare = ['01:44', '01:56', '02:06']
     name = ['start', 'peak', 'end' ]
@@ -141,9 +149,6 @@ ax1 = axis('x', location=50, major=2, axis_range=[0,64], target=p[1])
 
 leg = legend2( target=[p], position=[0.8,0.9] )
 
-file = 'lc_power.pdf'
-resolve_routine, 'save2'
-save2, file;, /add_timestamp
 
     ; Plot power at x +/- dz to show time covered by each value.
     ;  (see notes from 2018-05-13)
