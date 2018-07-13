@@ -1,3 +1,20 @@
+; 13 July 2018
+
+; Does graphic really need to have actual data?
+; When overplotting data that lies outside of current axis range,
+; does plot expand to include all of the new plot?
+x = indgen(10)
+y = x^2
+graphic = plot2( x, y, /nodata, /buffer )
+x = indgen(20)
+y = x^2
+p = plot2( x, y, /overplot )
+save2, 'test_overplot.pdf'
+
+stop
+
+
+
 ; 12 July 2018
 
 goto, start
@@ -34,14 +51,14 @@ w = window( /buffer )
 p = plot2( x, y, /current, /nodata )
 ;p.hide = 1
 
-v = plot2( [5,5], p.yrange, /overplot, ystyle=1, thick=3 ) 
+v = plot2( [5,5], p.yrange, /overplot, ystyle=1, thick=3 )
 p = plot2( x, y, /overplot, ystyle=1, color='red', thick=3)
 
 ;p.hide = 0
 
 save2, 'test.pdf'
 
-; Works if first create graphic with /nodata, 
+; Works if first create graphic with /nodata,
 ;   then plot in order from background to foreground.
 
 

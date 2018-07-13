@@ -79,7 +79,7 @@ pro LINEAR_INTERP, array, jd, cadence, time;=time
         array = fix(round(array))
 
         ; Update time array
-        time = UPDATE_TIME( jd )
+        time = GET_TIME( jd )
 
     endif else print, "Nothing to interpolate."
 end
