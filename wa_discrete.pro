@@ -1,14 +1,14 @@
 ;; Last modified:   20 April 2018 04:23:39
 
+; Wavelet Analysis (WA) - discrete
 
-
-function wmaps, $
+function WA_DISCRETE, $
     data, $
+    cadence=cadence, $
     z=z, $
     dz=dz, $
-    cadence=cadence
-
-    if not keyword_set(cadence) then cadence = 24
+    fmin=fmin, $
+    fmax=fmax
 
     frequency = reform( (fourier2( indgen(dz), cadence ))[0,*] )
 
