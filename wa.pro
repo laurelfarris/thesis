@@ -24,17 +24,12 @@ pro CALC_WA, flux, $
     n = n_elements(z)
     m = n_elements(frequency)
     wmap = fltarr(n,m)
-    ;step = 2
     step = 1
-    ;wmap = fltarr(step*n,step*m)
 
     for i = 0, n-1, step do begin
-
         result = fourier2( flux[ z[i] : z[i]+dz-1 ], cadence, norm=norm )
         power = (reform( result[1,*] ))[ind]
         wmap[i,*] = power
-        ;wmap[i:i+step-1,*] = rebin(power,m*step,step)
-
     endfor
 end
 
@@ -76,6 +71,8 @@ pro IMAGE_WA, wmap;, X=X, Y=Y
         xtitle='Start time (2011-February-15)', $
         ytitle='Frequency (mHz)')
     v = plot( im.xrange, [5.6,5.6], /overplot, linestyle=2 )
+    v = plot( im.xrange, [fmin,fmin], /overplot, linestyle=4 )
+    v = plot( im.xrange, [fmax,fmax], /overplot, linestyle=4 )
     c = colorbar2( /device, position=[x2+0.1,y1,x2+0.3,y2]*dpi, title='Log Power')
 end
 
@@ -92,10 +89,10 @@ fmin = 0.001
 fmax = 0.009
 
 CALC_WA, flux, frequency, wmap, cadence=24, z=z_start, dz=dz, fmin=fmin, fmax=fmax, norm=0
-wmap = fix(round(alog10(wmap)))
+;wmap = fix(round(alog10(wmap)))
 sz = size( wmap, /dimensions )
-D1 = sz[0] * 10
-D2 = sz[1] * 10
+D1 = sz[0] * 100
+D2 = sz[1] * 100
 
 IMAGE_WA, congrid(wmap, D1, D2);, X=z_start, Y=frequency*1000
 
