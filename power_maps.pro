@@ -22,15 +22,8 @@
 ; Probably don't need this anymore:
 pro restore_maps, struc, channel
     ; Return variables 'map' and 'map2' (map2 - /NORM)
-    ;if n_elements(A.[i].map) eq 0 then restore...
     restore, '../aia' + channel + 'map.sav'
     restore, '../aia' + channel + 'map2.sav'
-
-    ; Power at each timestep, from total(maps).
-    ; Still needs to be corrected for saturated pixels.
-    power2 = total( total( map2, 1 ), 1 );, fltarr(dz)  
-
-    struc = create_struct( struc, 'power', power, 'power2', power2 )
 end
 
 
@@ -136,6 +129,42 @@ pro AIA_MAPS, cube, channel, file, start=start, norm=norm
         save, map, filename=file
         endfor
 end
+
+function MAKE_FEW_MAPS, data, time
+
+    ; 18 July 2018
+    ; Power maps with dz = 1 hour
+    time = strmid(time, 0, 5)
+    z = [ '00:30', '01:30', '02:30', '03:30']
+    z = [ '00:30', '01:30' ]
+    print, (where(time eq z[1]))[0] - (where(time eq z[0]))[0]
+    ; --> 150
+
+    dz = 150
+    result = fourier2( indgen(dz), 24 )
+    frequency = reform( result[0,*] )
+    fmin = 0.005
+    fmax = 0.006
+    ind = where( frequency ge fmin AND frequency le fmax )
+    ;print, 1000*frequency[ind], format='(F0.2)'
+    ;print, 1./(frequency[ind]), format='(F0.2)'
+
+    sz = size(data, /dimensions)
+    N = n_elements(z)
+    map = fltarr( sz[0], sz[1], N-1 )
+
+    for i = 0, N-2 do begin
+        i1 = (where( time eq z[i] ))[0]
+        i2 = (where( time eq z[i+1] ))[0] - 1
+        map[*,*,i] = power_maps( $
+            data[*,*,i1:i2], 24, [fmin,fmax], threshold=10000 )
+    endfor
+    return, map
+end
+
+ii = 0
+map6 = MAKE_FEW_MAPS( A[ii].data, A[ii].time )
+stop
 
 
 ; 2018-06-26

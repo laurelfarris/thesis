@@ -3,6 +3,8 @@
 ; Description:      subroutines with custom default configurations
 
 function colorbar2, _EXTRA=e
+
+; add bit to pull target position and use it to calculate colorbar position
     common defaults
     c = colorbar( $
         ;target = graphic, $

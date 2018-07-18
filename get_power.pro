@@ -71,27 +71,43 @@ end
 
 
 function GET_POWER, $
-    flux, $
+    data=data, $
+    flux=flux, $
     cadence=cadence, $
     channel=channel, $
-    data=data, $
     threshold=threshold, $
+    dz=dz, $
+    type=type, $
     _EXTRA=e
 
-    ; Power from total flux (doesn't take long at all)
-    ; Default frequency bandpass = 1 mHz (centered at 3-minute period)
-    power = GET_POWER_FROM_FLUX( $
-        flux, cadence, $
-        dz = 64, $
-        fmin = 0.005, $
-        fmax = 0.006, $
-        norm = 0, $
-        _EXTRA = e)
+    ; Flux ----------------------
+    if type eq 'flux' then begin
 
-    if keyword_set(data) then begin
-        sz = size(data,/dimensions)
-        n_pixels = sz[0] * sz[1]
-        power = power / n_pixels
+        ; Power from total flux (doesn't take long at all)
+        ; Default frequency bandpass = 1 mHz (centered at 3-minute period)
+        power = GET_POWER_FROM_FLUX( $
+            flux, cadence, $
+            dz = 64, $
+            fmin = 0.005, $
+            fmax = 0.006, $
+            norm = 0, $
+            _EXTRA = e)
+
+        ; Calculate power per pixel
+        if keyword_set(data) then begin
+            sz = size(data,/dimensions)
+            n_pixels = sz[0] * sz[1]
+            power = power / n_pixels
+        endif
+    endif
+
+    ; Maps ----------------------
+    if type eq 'maps' then begin
+        power = GET_POWER_FROM_MAPS( $
+            data, $
+            channel, $
+            dz=dz, $
+            threshold=threshold)
     endif
 
     return, power

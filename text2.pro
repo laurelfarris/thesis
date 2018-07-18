@@ -3,7 +3,7 @@
 ; Description:      subroutines with custom default configurations
 
 ;function text2, x, y, i, str=str, _EXTRA=e
-function text2, x, y, str, _EXTRA=e
+function text2, x, y, str=str, i=i, _EXTRA=e
 
     common defaults
 

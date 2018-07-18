@@ -1,3 +1,34 @@
+; 16 July 2018
+
+;dat = fltarr(sz[0],sz[1],6)
+;dat[*,*,0] = map[*,*,150]
+N = 8
+dat = fltarr( sz[0], sz[1], N )
+temp = map[*,*,162]
+max_value = 600
+
+aia_lct, r, g, b, wave=fix(channel)
+dat[*,*,0] = temp
+dat[*,*,1] = temp^0.1
+dat[*,*,2] = temp^0.5
+dat[*,*,3] = temp<max_value
+dat[*,*,4] = alog10(temp)
+dat[*,*,5] = aia_intscale( temp, wave=fix(channel), exptime=A[ii].exptime )
+dat[*,*,6] = aia_intscale( temp, wave=fix(channel), exptime=0.5*A[ii].exptime )
+dat[*,*,7] = aia_intscale( temp, wave=fix(channel), exptime=2.0*A[ii].exptime )
+dat_title = [ $
+    'power', $
+    'power^0.1', $
+	'power^0.5 (sqrt)', $
+	'99% pixels LE <value>', $
+	'log power', $
+	'aia_intscale (exptime)', $
+	'aia_intscale (0.5*exptime)', $
+	'aia_intscale (2.0*exptime)' $
+    ]
+
+
+
 ; 13 July 2018
 
 ; Does graphic really need to have actual data?
