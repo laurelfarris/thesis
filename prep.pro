@@ -108,7 +108,7 @@ A = [ aia1600, aia1700 ]
             threshold=10000 )
     endfor
 
-;stop
+stop
 
 restore, '../aia1600map.sav'
 aia1600 = create_struct( aia1600, 'map', map )

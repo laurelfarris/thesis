@@ -1,6 +1,9 @@
 
 
 ; TO-DO: issue with freq[1] - freq[0] = resolution if freq only has one value
+;  20 July 2018 - moved line to calculate resolution BEFORE cropping frequency,
+;    since spacing should be the same over the entire array (if not, something
+;    was not calculated correctly).
 
 ; input: flux, cadence
 ; output: frequency, power
@@ -11,15 +14,18 @@
 ; quantity of interest I could think of.
 
 
-function CALC_FT, flux, cadence, $
-    ;frequency, power, $
-    fmin=fmin, fmax=fmax, $
-    norm=norm;, $
-    ;_EXTRA=e
+function CALC_FT, $
+    flux, $
+    cadence, $
+    fmin=fmin, $
+    fmax=fmax, $
+    norm=norm   ;, _EXTRA=e
 
     result = fourier2( flux, cadence, norm=norm )
     frequency = reform(result[0,*])
     power = reform(result[1,*])
+    ;print, 'frequency resolution = ', strtrim(1000*resolution,1), ' mHz'
+    resolution = frequency[1] - frequency[0]
 
     if not keyword_set(fmin) then fmin = frequency[ 0]
     if not keyword_set(fmax) then fmax = frequency[-1]
@@ -31,9 +37,6 @@ function CALC_FT, flux, cadence, $
     ;print, 'frequencies (mHz):'
     ;print, frequency*1000, format='(F0.2)'
 
-    ; frequency resolution
-    resolution = frequency[1] - frequency[0]
-    ;print, 'frequency resolution = ', strtrim(1000*resolution,1), ' mHz'
 
     struc = { $
         frequency : frequency, $

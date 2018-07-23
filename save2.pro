@@ -4,18 +4,20 @@
 
 ; _EXTRA is for keywords in call to IDL's text function.
 
-pro SAVE2, filename, add_timestamp=add_timestamp, _EXTRA=e
+pro SAVE2, filename, confirm_replace=confirm_replace, add_timestamp=add_timestamp, _EXTRA=e
 
 
     common defaults
     path = '/home/users/laurel07/'
 
     fls = file_search( path + filename )
-    if fls ne '' then begin
-        b = ''
-        prompt = 'File ' + filename + ' already exists. Overwrite? [y/n] '
-        read, b, prompt=prompt
-        if b ne 'y' then return
+    if keyword_set(confirm_replace) then begin
+        if fls ne '' then begin
+            b = ''
+            prompt = 'File ' + filename + ' already exists. Overwrite? [y/n] '
+            read, b, prompt=prompt
+            if b ne 'y' then return
+        endif
     endif
 
     ; Add option to append successive numbers to file that already exists.
