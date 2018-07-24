@@ -66,6 +66,7 @@ function PLOT_LIGHTCURVES, $
         [ vx[0], vx[0], vx[-1], vx[-1] ], $
         [ yrange[0], yrange[1], yrange[1], yrange[0] ], $
         /overplot, ystyle=1, linestyle=6, $
+        fill_transparency=50, $
         fill_background=1, $
         fill_color='light gray' )
     for jj = 1, n_elements(vx)-2 do $
@@ -80,20 +81,23 @@ function PLOT_LIGHTCURVES, $
     return, p
 end
 
-dw
+;dw
 wx = 8.5
 wy = 7.0
-win = window(dimensions=[wx,wy]*dpi,/buffer)
+win = WINDOW(dimensions=[wx,wy]*dpi, buffer=0)
 
 ;; Time (x-axis)
 time = strmid( get_time(A[0].jd), 0, 5 )
 ;x = [ [ A[0].jd[t1:t2] ], [ A[1].jd[t1:t2] ] ]
 dz = 64
 
+N = 500.*330.
+
+
 ;; Lightcurve data (2D array: 749x2)
+
 ytitle = 'counts (DN s$^{-1}$)'
-ydata = [ [ A[0].flux ], [ A[1].flux ] ]
-;ydata = alog10(ydata)
+ydata = [ [ A[0].flux/N ], [ A[1].flux/N ] ]
 xdata = [0:n_elements(ydata[*,0])]
 
 p1 = PLOT_LIGHTCURVES( time, xdata, ydata, layout=[1,3,3], $
@@ -102,12 +106,15 @@ ax = p1[0].axes
 ax[2].showtext = 1
 ax[2].title = 'index'
 
+
 ;; Power data (2D array: 749x2)
+
 ytitle = '3-minute power'
 ydata = [ [ A[0].power_flux ], [ A[1].power_flux ] ]
 xdata = [ (dz/2) : 749-(dz/2)-1 ]
 
 p2 = PLOT_LIGHTCURVES( time, xdata, ydata, layout=[1,3,2], $
+    ;ylog=1, $
     color=A.color, name=A.name, ytitle=ytitle )
 
 ydata = [ [ A[0].power_maps ], [ A[1].power_maps ] ]

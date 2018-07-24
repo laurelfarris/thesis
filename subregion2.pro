@@ -127,11 +127,12 @@ end
 
 wx = 8.5
 wy = 6.0
-rows = 2
-cols = 1
 ;win.erase
 dw
 win = window( dimensions=[wx,wy]*dpi, buffer=1 )
+
+rows = 2
+cols = 1
 
 ii = 0
 

@@ -33,7 +33,7 @@ function GET_POWER_FROM_MAPS, $
     for i = 0, sz[2]-1 do $
         mask_map[*,*,i] = product( mask[*,*,i:i+dz-1], 3 )
 
-    num_unsaturated_pixels = total(total(mask_map,1),1)
+    num_unsaturated_pixels = float(total(total(mask_map,1),1))
 
     restore, '../aia' + channel + 'map.sav'
     power = total( total( map, 1), 1 )

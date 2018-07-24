@@ -39,7 +39,7 @@ pro IMAGE_ARRAY, data, layout=layout
     wy = (height*rows) + (ygap*(rows-1)) + (bottom + top)
 
     dw
-    win = window( dimensions=[wx,wy]*dpi, /buffer )
+    win = window( dimensions=[wx,wy]*dpi, buffer=0 )
     im = objarr(cols,rows)
 
     ii = 0

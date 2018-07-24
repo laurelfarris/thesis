@@ -27,6 +27,16 @@ function GET_POWER_FROM_FLUX, $
     z_start = indgen(N-dz)
     power = fltarr(N-dz)  ; initialize power array
 
+    ; Calculate power per pixel
+    ;   23 July 2018
+    ;   - moved this to divide flux by n_pixels before calculating FT
+    if keyword_set(data) then begin
+        sz = size(data,/dimensions)
+        n_pixels = float(sz[0]) * sz[1]
+        flux = flux / n_pixels
+        ;power = power / n_pixels
+    endif
+
     ; Calculate power for time series between each value of z and z+dz
     foreach z, z_start, i do begin
         struc = CALC_FT( flux[z:z+dz-1], cadence, fmin=fmin, fmax=fmax, norm=norm )
@@ -35,12 +45,15 @@ function GET_POWER_FROM_FLUX, $
 
     ; Default frequency bandpass = 1 mHz (centered at 3-minute period)
 
-    ; Calculate power per pixel
-    if keyword_set(data) then begin
-        sz = size(data,/dimensions)
-        n_pixels = sz[0] * sz[1]
-        power = power / n_pixels
-    endif
-
     return, power
+end
+
+power_test = get_power_from_flux( $
+    flux=A[0].flux/(330.*500), cadence=24, dz=64, $
+    fmin=0.005, fmax=0.006, norm=0 ) 
+
+p1 = plot2( A[0].power_flux, name='FT(flux)/N', ylog=1)
+p2 = plot2( power_test, /overplot, name='FT(flux/N)', color='red', ylog=1 )
+
+
 end

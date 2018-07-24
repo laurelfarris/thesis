@@ -1,3 +1,103 @@
+; 23 July 2018
+
+goto, start
+
+START:;---------------------------------------------------------------------------------
+
+;; HMI contours, etc. (see hmi.pro, or whatever I may end up
+;;  renaming it to...)
+
+stop
+
+
+
+
+;; subregions - LC and FT in same window
+test = indgen(500) + 2150
+print, test[0]
+print, test[-1]
+
+
+; Tired of errors when taking power of negative or zero values.
+map = map > 0.1
+map = map < 10000.0
+
+aia_lct, wave=1600, /load
+
+im = image2(map[*,*,153], layout=[1,1,1], rgb_table=ct )
+
+ct = aia_colors(wave=1600)
+xc = 382
+yc = 192
+r = 50
+
+temp = map[ xc-r : xc+r-1, yc-r : yc+r-1, * ]
+xstepper, temp^0.5
+
+im = image2(temp[*,*,425], layout=[1,1,1], rgb_table=ct )
+
+; restored map with no adjustments to min/max to data itself,
+; just what's actually being imaged.
+im = image2( (map[*,*,425])^0.1, layout=[1,1,1], rgb_table=ct )
+
+
+
+xc = 382
+yc = 192
+r = 25
+im = image( map[ xc-r : xc+r-1, yc-r : yc+r-1, 425 ], layout=[1,1,1], rgb_table=ct)
+
+subset = A[0].data[ xc-r : xc+r-1, yc-r : yc+r-1, * ]
+flux = total( total( subset, 1), 1 )
+
+xdata = indgen(n_elements(flux))
+xtickname = strmid( A[0].time, 0, 5 )
+
+ydata = flux / A[0].exptime
+
+
+cols = 1
+rows = 3
+
+
+
+;win = getwindows('Subset FT')
+if win eq !NULL then begin
+    print, 'creating new window' 
+    win = window( dimensions=[8.5,11.0]*dpi, location=[600,0], $
+        name='Subset FT')
+endif else win.erase
+
+
+win = window( dimensions=[8.5,11.0]*dpi, location=[600,0] )
+
+win = getwindows(/current)
+win.erase
+
+p = plot2( xdata, ydata, /current, /device, $
+    layout=[cols,rows,1], margin=1.0*dpi, $
+    xshowtext=1, $
+    xtitle = 'index', ytitle = 'counts (DN s$^{-1}$)' )
+ax = p.axes
+ax[0].tickname = xtickname[ ax[0].tickvalues ]
+ax[0].title = 'time (UT)'
+
+struc = CALC_FT( ydata, 24 );, fmin=0.005, fmax=0.006 )
+
+resolve_routine, 'plot_power_spectrum', /either
+p = PLOT_POWER_SPECTRUM( $
+    struc.frequency, struc.power, $
+    fmin=0.000, $
+    fmax=0.009, $
+    /current, $
+    /device, $
+    layout=[cols,rows,2], margin=1.0*dpi )
+
+stop
+
+
+
+
 ; 16 July 2018
 
 ;dat = fltarr(sz[0],sz[1],6)
@@ -48,7 +148,6 @@ stop
 
 ; 12 July 2018
 
-goto, start
 
 restore, '../aia1600map.sav'
 sz = size(map, /dimensions)
@@ -60,7 +159,6 @@ endfor
 ; nevermind... power is 0.0 in some map pixels where data did not saturate
 
 
-start:
 power = get_power(A[0].flux, cadence=24, channel='1600', data=A[0].data)
 print, max(power)
 stop

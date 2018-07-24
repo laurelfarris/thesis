@@ -1,12 +1,12 @@
 
 
-; May need to split this into one function that calculates
-; frequency and power, and another that does the actual plotting.
-; Also, if overplotting, wait to overplot vertical lines until
-; very end, otherwise don't get full yrange.
+; if overplotting multiple data sets in the same set of axes,
+; don't plot vertical lines until after, otherwise don't get full yrange,
+; and dashed lines can plot on top of each other and looks like
+; a solid line.
 
 function PLOT_POWER_SPECTRUM, $
-    flux, cadence, $
+    frequency, power, $
     fmin=fmin, $
     fmax=fmax, $
     norm=norm, $
@@ -19,9 +19,9 @@ function PLOT_POWER_SPECTRUM, $
     ;win = window( dimensions=[wx,wy]*dpi, /buffer )
 
 
-    result = fourier2(flux, cadence, norm=norm)
-    frequency = reform(result[0,*])
-    power = reform(result[1,*])
+    ;result = fourier2(flux, cadence, norm=norm)
+    ;frequency = reform(result[0,*])
+    ;power = reform(result[1,*])
 
     if not keyword_set(fmin) then fmin = min(frequency)
     if not keyword_set(fmax) then fmax = max(frequency)
@@ -30,38 +30,45 @@ function PLOT_POWER_SPECTRUM, $
     frequency = frequency[ind]
     power = power[ind]
 
-    xdata = 1000.*frequency
-    ydata = power
-
     p = plot2( $
-        xdata, $
-        ydata, $
+        frequency, $
+        power, $
         xmajor = 7, $
-        xtickformat = '(F0.2)', $
-        name = 'max power = ' + strtrim(max(power),1), $
-        xtitle='frequency (mHz)', $
+        ;name = 'max power = ' + strtrim(max(power),1), $
+        xtitle='frequency (Hz)', $
         ytitle='power', $
         _EXTRA=e )
 
+    ; convert from Hz to mHz
     ax = p.axes
 
-    ;ax[0].tickname = strtrim( 1000.*ax[0].tickvalues )
+    period_interest = [ 120, 180, 200 ]
+    f = 1./period_interest
 
-    period = 1000./ax[0].tickvalues
+    v = PLOT_VERTICAL_LINES( f, p.yrange, $
+        names = strtrim(period_interest,1) + ' sec' )
+
+    leg = LEGEND2( $
+        target=[v], $
+        /data, $
+        position = 0.95*[ (p.xrange)[1], (p.yrange)[1] ] $
+        )
+
+    xtickvalues = ax[0].tickvalues
+    n = n_elements(xtickvalues)
+
+    period = 1./ax[0].tickvalues
     ax[2].tickname = strtrim( round(period), 1 )
     ax[2].title = 'period (seconds)'
     ax[2].showtext = 1
 
-
-    fmin = 1./400 ; 2.5 mHz
-    fmax = 1./50 ;  20 mHz
-
-    f3 = 1000./180
-    f6 = 1000./(2.*180)
-
-    v = plot( [f3,f3], p.yrange, /overplot, linestyle=2 )
-    v = plot( [f6,f6], p.yrange, /overplot, linestyle=2 )
+    ax[0].coord_transform=[0,1000.]
+    ax[0].title='frequency (mHz)'
+    ax[0].tickformat='(F0.2)'
 
     return, p
 
+    ;fmin = 1./400 ; 2.5 mHz
+    ;fmax = 1./50 ;  20 mHz
+    ;f = [ 1000./180, 1000./(2.*180) ]
 end

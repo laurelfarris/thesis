@@ -43,6 +43,16 @@ function PREP, index, cube, cadence=cadence, inst=inst, channel=channel
 
     sz = size( cube, /dimensions )
 
+
+    ; X/Y coordinates of AR, converted from pixels to arcseconds
+    x1 = 2150
+    y1 = 1485
+    X = ( (indgen(sz[0]) + x1) - index.crpix1 ) * index.cdelt1
+    Y = ( (indgen(sz[1]) + y1) - index.crpix2 ) * index.cdelt2
+    ; NOTE: Hard coded coords of lower left corner;
+    ;   can't automatically generate these values unless I somehow
+    ;    save them when aligning or prepping the data.
+
     ;flux = fltarr( sz[2] )
     flux = total( total( cube, 1), 1 )
     exptime = index[0].exptime
@@ -55,6 +65,8 @@ function PREP, index, cube, cadence=cadence, inst=inst, channel=channel
 
     struc = { $
         data: cube, $
+        X: X, $
+        Y: Y, $
         jd: jd, $
         time: time, $
         flux: flux, $
@@ -79,19 +91,21 @@ end
 goto, start
 
 ; need to re-read data, but not headers... commented in subroutine for now.
-start:
 
 aia1600 = PREP( aia1600index, aia1600data, cadence=24., inst='aia', channel='1600' )
-aia1700 = PREP( aia1700index, aia1700data, cadence=24., inst='aia', channel='1700' )
+;aia1700 = PREP( aia1700index, aia1700data, cadence=24., inst='aia', channel='1700' )
 
 ; colors (for plotting)
 aia1600.color = 'dark orange'
-aia1700.color = 'dark cyan'
+;aia1700.color = 'dark cyan'
 
 ;aia = dictionary( 'aia1600', aia1600, 'aia1700', aia1700 )
 
-A = [ aia1600, aia1700 ]
-    for i = 0, n_elements(A)-1 do begin
+i = 0
+;A = [ aia1600, aia1700 ]
+A = [ aia1600 ]
+resolve_routine, 'get_power_from_flux', /either
+    ;for i = 0, n_elements(A)-1 do begin
         A[i].power_flux = GET_POWER_FROM_FLUX( $
             flux=A[i].flux, $
             cadence=A[i].cadence, $
@@ -100,22 +114,31 @@ A = [ aia1600, aia1700 ]
             fmax=0.006, $
             norm=0, $
             data=A[i].data )
+    ;endfor
 
+resolve_routine, 'get_power_from_maps', /either
+    ;for i = 0, n_elements(A)-1 do begin
         A[i].power_maps = GET_POWER_FROM_MAPS( $
             data=A[i].data, $
             channel=A[i].channel, $
             dz = 64, $
             threshold=10000 )
-    endfor
+    ;endfor
 
 stop
 
-restore, '../aia1600map.sav'
-aia1600 = create_struct( aia1600, 'map', map )
-restore, '../aia1700map.sav'
-aia1700 = create_struct( aia1700, 'map', map )
-delvar, map
+start:
 
-A = [ aia1600, aia1700 ]
+restore, '../aia1600map.sav'
+stop
+;aia1600 = create_struct( aia1600, 'map', map )
+
+;restore, '../aia1700map.sav'
+;aia1700 = create_struct( aia1700, 'map', map )
+
+A = [ aia1600 ]
+;A = [ aia1600, aia1700 ]
+
+;delvar, map
 
 end
