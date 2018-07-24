@@ -2,8 +2,15 @@
 ; Programmer:       Laurel Farris
 ; Description:      subroutines with custom default configurations
 
-function legend2, _EXTRA=e
+function legend2, target=target, _EXTRA=e
+
     common defaults
+
+    ;target.GetData, image, X, Y
+    ;x = X[-5]
+    ;y = Y[-5]
+    ;position=[x,y]
+
     leg = legend( $
         font_size = fontsize, $
         linestyle = 6, $

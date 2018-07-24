@@ -2,8 +2,11 @@
 ; Programmer:       Laurel Farris
 ; Description:      subroutines with custom default configurations
 
+; Input:            target (object array)
+
 ;function text2, x, y, i, str=str, _EXTRA=e
 ;function text2, x, y, str=str, i=i, _EXTRA=e
+
 function text2, str, target=target, _EXTRA=e
 
     common defaults
@@ -11,28 +14,32 @@ function text2, str, target=target, _EXTRA=e
     ; string array of letters: (a), (b), ..., (z)
     alph = '(' + string( bindgen(1,26)+(byte('a'))[0] ) + ')'
 
-    ;tx = 0.9 * (target.position)[2]
-    ;ty = 0.9 * (target.position)[3]
-    
-    target.GetData, image, X, Y
-    tx = X[-5]
-    ty = Y[-5]
+    N = n_elements(target)
+    if not arg_present(str) then str = alph[0:N-1]
+    t = objarr(N)
 
-    ;if not keyword_set(str) then str = alph[i]
+    for i = 0, N-1 do begin
 
-    t = text( $
-        tx, ty, $
-        str, $
-        /data, $
-        ;/normal, $  ; x,y relative to entire window (default)
-        ;/relative, $ ; x,y relative to target
-        ;/device, $  ; x,y in pixels
-        alignment=1.0, $
-        vertical_alignment=1.0, $
-        font_style = 'Bold', $
-        font_size=fontsize-1, $
-        _EXTRA=e )
+        tx = 0.9 * ((target[i]).position)[2]
+        ty = 0.9 * ((target[i]).position)[3]
+
+        ;target.GetData, image, X, Y
+        ;tx = X[-5]
+        ;ty = Y[-5]
+
+        t[i] = TEXT( $
+            tx, ty, $
+            str[i], $
+            ;/data, $
+            ;/normal, $
+            /relative, $
+            ;/device, $
+            alignment='Right', $
+            vertical_alignment='Top', $
+            font_style = 'Bold', $
+            font_size=fontsize-1, $
+            _EXTRA=e )
+    endfor
 
     return, t
-
 end
