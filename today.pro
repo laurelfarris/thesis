@@ -1,3 +1,9 @@
+; 25 July 2018
+
+; Standard deviation of each channel:
+
+; What exactly is the period at returned frequencies??
+
 ; 24 July 2018
 
 goto, start
@@ -142,7 +148,7 @@ rows = 3
 
 ;win = getwindows('Subset FT')
 if win eq !NULL then begin
-    print, 'creating new window' 
+    print, 'creating new window'
     win = window( dimensions=[8.5,11.0]*dpi, location=[600,0], $
         name='Subset FT')
 endif else win.erase

@@ -35,20 +35,22 @@ pro CALC_WA, flux, $
     endfor
 end
 
-
 goto, start
 start:
-
-wx = 7.5
-wy = 9.0
-;dw
-win = window( dimensions=[wx,wy]*dpi, buffer=0 )
-;win = getwindows()
-;win.erase
 
 resolve_routine, 'plot_horizontal_lines', /either
 resolve_routine, 'plot_flare_lines', /either
 resolve_routine, 'plot_vertical_lines', /either
+
+wx = 7.5
+wy = 9.0
+win = GetWindows(/current)
+if n_elements(win) eq 0 then begin
+    win = window( dimensions=[wx,wy]*dpi, buffer=0 )
+endif else begin
+;win.erase ; if errors here - win may need to be an object, not an array.
+endelse
+
 
 dz = 64  ; length of time segment (#images) over which to calculate FT
 fcenter = 1./180
@@ -111,7 +113,7 @@ for ii = 0, 1 do begin
         yminor=0, $
         ytitle='Frequency (mHz)', $
         title=A[ii].name )
-    
+
     cx1 = (im[ii].position)[2] + 0.01
     cy1 = (im[ii].position)[1]
     cx2 = cx1 + 0.02

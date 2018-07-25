@@ -1,5 +1,8 @@
 ; 24 July 2018
 
+
+; Reference figure:  make vertical lines thinner.
+
 goto, start
 
 print, min(A[0].flux)/1e7
@@ -15,15 +18,16 @@ wx = 11.0
 wy = 8.5
 
 START:;---------------------------------------------------------------------------------
-;win = GetWindows(/current)
-;if n_elements(win) eq 0 then begin
+windows = GetWindows(/current)
+if n_elements(windows) eq 0 then begin
     win = window( dimensions=[wx,wy]*dpi, location=[300,0] )
-;endif; else 
-
-win.erase
+endif else begin
+    win = windows[0]
+    win.erase
+endelse
 
 time = strmid(A[0].time,0,5)
-margin=[1.0, 3.0, 1.0, 3.0]
+margin=[1.0, 3.0, 1.0, 3.0]*dpi
 aa = [ min(A[0].flux), min(A[1].flux) ]
 slope = 1.0
 bb = [ slope, slope ]
@@ -36,7 +40,7 @@ for i = 0, n_elements(p)-1 do begin
         /current, $
         /device, $
         overplot=i<1, $
-        margin=margin*dpi, $
+        margin=margin, $
         xtickinterval=75, $
         ymajor=7, $
         xticklen=0.025, $
