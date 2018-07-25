@@ -89,23 +89,28 @@ function PREP, index, cube, cadence=cadence, inst=inst, channel=channel
 end
 
 goto, start
+start:
+
+
+; A = replicate( struc, 2 )
+; ... potentially useful?
 
 ; need to re-read data, but not headers... commented in subroutine for now.
 
 aia1600 = PREP( aia1600index, aia1600data, cadence=24., inst='aia', channel='1600' )
-;aia1700 = PREP( aia1700index, aia1700data, cadence=24., inst='aia', channel='1700' )
+aia1700 = PREP( aia1700index, aia1700data, cadence=24., inst='aia', channel='1700' )
 
 ; colors (for plotting)
 aia1600.color = 'dark orange'
-;aia1700.color = 'dark cyan'
+aia1700.color = 'dark cyan'
 
 ;aia = dictionary( 'aia1600', aia1600, 'aia1700', aia1700 )
 
 i = 0
-;A = [ aia1600, aia1700 ]
-A = [ aia1600 ]
+A = [ aia1600, aia1700 ]
+;A = [ aia1600 ]
 resolve_routine, 'get_power_from_flux', /either
-    ;for i = 0, n_elements(A)-1 do begin
+    for i = 0, n_elements(A)-1 do begin
         A[i].power_flux = GET_POWER_FROM_FLUX( $
             flux=A[i].flux, $
             cadence=A[i].cadence, $
@@ -114,29 +119,27 @@ resolve_routine, 'get_power_from_flux', /either
             fmax=0.006, $
             norm=0, $
             data=A[i].data )
-    ;endfor
+    endfor
 
 resolve_routine, 'get_power_from_maps', /either
-    ;for i = 0, n_elements(A)-1 do begin
+    for i = 0, n_elements(A)-1 do begin
         A[i].power_maps = GET_POWER_FROM_MAPS( $
             data=A[i].data, $
             channel=A[i].channel, $
             dz = 64, $
             threshold=10000 )
-    ;endfor
+    endfor
+
+
 
 stop
-
-start:
-
 restore, '../aia1600map.sav'
-stop
 ;aia1600 = create_struct( aia1600, 'map', map )
 
 ;restore, '../aia1700map.sav'
 ;aia1700 = create_struct( aia1700, 'map', map )
 
-A = [ aia1600 ]
+;A = [ aia1600 ]
 ;A = [ aia1600, aia1700 ]
 
 ;delvar, map

@@ -35,49 +35,24 @@ pro CALC_WA, flux, $
     endfor
 end
 
-function IMAGE_WA, wmap, $
-    X=X, Y=Y, $
-    _EXTRA=e
 
-    ;; To Do:
-    ;; use congrid here and create correct tick labels,
-    ;;  option to create colorbar, lines marking freq of interest,
-    ;;  aspect_ratio = 0.
-    ;; Create window OUTSIDE this routine.
+goto, start
+start:
 
-    common defaults
-    sz = size( wmap, /dimensions )
+wx = 7.5
+wy = 9.0
+;dw
+win = window( dimensions=[wx,wy]*dpi, buffer=0 )
+;win = getwindows()
+;win.erase
 
-    position=POS(layout=[0,0], width=6.0)
-
-    im = image2( $
-        wmap, $
-        X, Y, $
-        /current, $
-        /device, $
-        position=position, $
-        rgb_table=34, $
-        aspect_ratio=0, $
-        _EXTRA=e )
-
-    pos = im.position
-    cx1 = pos[2] + 0.01
-    cy1 = pos[1]
-    cx2 = cx1 + 0.02
-    cy2 = pos[3]
-    c = colorbar2( $
-        target=im, $
-        ;/device, $
-        position=[cx1,cy1,cx2,cy2], title='Log Power' )
-    return, im
-end
-
-wx = 8.5
-wy = 8.0
+resolve_routine, 'plot_horizontal_lines', /either
+resolve_routine, 'plot_flare_lines', /either
+resolve_routine, 'plot_vertical_lines', /either
 
 dz = 64  ; length of time segment (#images) over which to calculate FT
-flower = 0.005
 fcenter = 1./180
+flower = 0.005
 fupper = 0.006
 
 ; 24 July 2018
@@ -91,19 +66,20 @@ N = n_elements(A[0].flux) - dz
 ; starting indices/time for each FT (length = # resulting maps)
 z_start = [ 0 : N-1 : dz ]
 
-aia_wa_maps[*,*,ii] = fltarr(500,330,N)
+aia_wa_maps = []
 for ii = 0, 1 do begin
     CALC_WA, A[ii].flux, $
-        frequency_out, wmap_out, $
+        frequency, wmap_out, $
         cadence=A[ii].cadence, z=z_start, dz=dz, fmin=fmin, fmax=fmax, norm=0
-    aia_wa_maps[*,*,ii] = wmap_out
+    aia_wa_maps = [ [[aia_wa_maps]], [[wmap_out]] ]
 endfor
 min_value = min(aia_wa_maps)
 max_value = max(aia_wa_maps)
 
-dw
-win = window( dimensions=[wx,wy]*dpi, buffer=0 )
+im = objarr(2)
 for ii = 0, 1 do begin
+
+    time = strmid(A[ii].time,0,5)
 
     wmap = aia_wa_maps[*,*,ii]
     sz = size( wmap, /dimensions )
@@ -114,55 +90,86 @@ for ii = 0, 1 do begin
     X = (findgen(D1)/100)*dz
 
     inc = (max(frequency) - min(frequency)) / (D2-1)
-    Y = [ min(frequency) : max(frequency) : inc ]
-    Y = Y * 1000
 
-    im = IMAGE_WA( wmap2, $
-        X=X, Y=Y, $
-        min_value=min_value, $
-        max_value=max_value, $
-        ytickvalues=1000.*frequency_out, $  ; maybe not all frequencies
-        ;ymajor=7, $
-        ytickformat='(F0.2)', $
-        title=A[ii].name, $
-        ;xtitle='Start time (2011-February-15)', $
+    Y = 1000. * [ min(frequency) : max(frequency) : inc ]
+    n_freq = n_elements(frequency)
+    ytickvalues = 1000.*(frequency[0:n_freq-1:4])
+
+    position = POS( layout=[0,ii], width=5.5, ygap=0.75)
+
+    im[ii] = image2( $
+        wmap2, X, Y, $
+        /current, /device, $
+        position=position*dpi, $
+        aspect_ratio=0, $
+        min_value=alog10(min_value), $
+        max_value=alog10(max_value), $
+        rgb_table=34, $
         xtitle='image #', $
-        ytitle='Frequency (mHz)' )
+        ytickvalues=ytickvalues, $
+        ytickformat='(F0.1)', $
+        yminor=0, $
+        ytitle='Frequency (mHz)', $
+        title=A[ii].name )
+    
+    cx1 = (im[ii].position)[2] + 0.01
+    cy1 = (im[ii].position)[1]
+    cx2 = cx1 + 0.02
+    cy2 = (im[ii].position)[3]
+    c = colorbar2( $
+        position=[cx1,cy1,cx2,cy2], $
+        target=im[ii], $
+        tickinterval=1, $
+        tickformat='(I0)', $
+        minor=1, $
+        title='Log Power' )
 
     ; 24 July 2018 - changing x-axis to show time
-    xtickname = strmid(A[ii].time,0,5)
-    ax = im.axes
-    xtickvalues = ax[0].tickvalues
-    ax[0].tickname = xtickname[xtickvalues]
+    ax = im[ii].axes
+    xtickvalues = fix(round(ax[0].tickvalues))
+    ax[0].tickname = time[xtickvalues]
     ax[0].title = 'Start time (UT) on 2011-February-15'
 
     f1 = flower * 1000
     f2 = fcenter * 1000
     f3 = fupper * 1000
 
-    resolve_routine, 'plot_lines', /either, /compile_full_file
+    lines = objarr(6)
+
     h = PLOT_HORIZONTAL_LINES( $
-        im.xrange, [f1,f2,f3], $
-        names=[ '$\nu_{lower}$', '$\nu_{center}$', '$\nu_{upper}$' ] )
+        im[ii].xrange, [f1,f2,f3], $
+        color = 'red', $
+        linestyle=[':','--',':'], $
+        names=[  $
+            '$\nu_{lower} $ = 5.0 mHz', $
+            '$\nu_{center}$ = 5.6 mHz', $
+            '$\nu_{upper} $ = 6.0 mHz' ] )
 
-    v = PLOT_FLARE_TIMES( A[ii].time, im.yrange )
-
-    ;v = objarr(3)
-    ;v[0] = plot( im.xrange, [f1,f1], /overplot, linestyle=':',  name='$\nu_{lower}$'  )
-    ;v[1] = plot( im.xrange, [f2,f2], /overplot, linestyle='--', name='$\nu_{center}$' )
-    ;v[2] = plot( im.xrange, [f3,f3], /overplot, linestyle=':',  name='$\nu_{upper}$'  )
-
+    v = PLOT_FLARE_LINES( time, im[ii].yrange )
     ;save2, 'wa' + A[ii].channel + '.pdf'
 endfor
 
-; May need to shorten window (wy) until this all fits nicely.
-leg = legend2( $
-    target=[v,h], $
-    /device, $
-    horizontal_alignment = 'Right', $  ; pretty sure this is the default...
-    vertical_alignment = 'Bottom', $ ; default = top?
-    position=[wx,0]*dpi )
 
-save2, 'wa_plots.pdf'
+;(im[-1]).position
+xl = 1.0
+yl = 0.5
+
+leg1 = legend2( /device, $
+    target=h, $
+    position = [xl,yl]*dpi, $
+    horizontal_alignment = 'Left', $
+    vertical_alignment = 'Bottom' )
+
+leg2 = legend2( /device, $
+    target=v, $
+    position = [xl+3.,yl]*dpi, $
+    horizontal_alignment = 'Left', $
+    vertical_alignment = 'Bottom' )
+
+    print, 1000*frequency, format='(F0.2)'
+    print, ytickvalues
+;file = 'wa_plots.pdf'
+file = 'wa_plots_2.pdf'
+save2, file
 
 end

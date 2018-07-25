@@ -12,6 +12,7 @@ function legend2, target=target, _EXTRA=e
     ;position=[x,y]
 
     leg = legend( $
+        target=target, $
         font_size = fontsize, $
         linestyle = 6, $
         shadow = 0, $

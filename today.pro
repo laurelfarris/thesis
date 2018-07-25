@@ -1,16 +1,95 @@
-; 23 July 2018
+; 24 July 2018
 
 goto, start
 
-START:;---------------------------------------------------------------------------------
+; To Do:   Overplot a grid!
+win.erase
 
-;; HMI contours, etc. (see hmi.pro, or whatever I may end up
-;;  renaming it to...)
+print, min(A[0].flux)/1e7
+print, max(A[0].flux)/1e7
+
+print, min(A[1].flux)/1e7
+print, max(A[1].flux)/1e7
+
+
+dw
+
+wx = 11.0
+wy = 8.5
+win = window( dimensions=[wx,wy]*dpi, location=[300,0] )
+
+START:;---------------------------------------------------------------------------------
+win.erase
+
+margin=[1.0, 3.0, 1.0, 3.0]
+
+aa = [ min(A[0].flux), min(A[1].flux) ]
+bb = [ 1., 1. ]
+for i = 0, 1 do begin
+    flux = A[i].flux - aa[i]
+    p = plot2(  $
+        [0:748], flux, $
+        /current, $
+        /device, $
+        xtickinterval=75, $
+        ymajor=7, $
+        xticklen=0.02, $
+        yticklen=0.05, $
+        color=A[i].color, $
+        xtitle='index', $
+        overplot=i<1, $
+        margin=margin*dpi, $
+        stairstep=1 )
+endfor
+
+width = (p.position)[2] - (p.position)[0]
+height = (p.position)[3] - (p.position)[1]
+
+time = strmid(A[0].time,0,5)
+ax = p.axes
+
+ax[2].tickname = time[ax[0].tickvalues]
+ax[2].title = 'index.date_obs'
+ax[2].showtext = 1
+
+ax[1].coord_transform = [aa[0],bb[0]]
+ax[1].title='1600$\AA$ (DN s$^{-1}$)'
+
+
+ax[3].coord_transform = [aa[1],bb[1]]
+ax[3].title='1700$\AA$ (DN s$^{-1}$)'
+ax[3].showtext = 1
+
+
+
 
 stop
 
 
 
+dz = 64
+N = 749
+
+pow = indgen(N-dz+1) + 1
+arr = intarr(N,N)
+
+for i = 0, n_elements(pow)-1 do $
+    arr[ i : i+dz-1, i] = replicate( pow[i], dz, 1 )
+
+i = 680
+;print, strtrim(arr[i:i+9,i:i+9],2)
+;print, arr[i:i+9,i:i+9];, format='(I4)'
+
+arr = arr[ $
+    (dz-1) : (N-dz-1), $
+         0 : (N-dz+1)     ]
+
+
+stop
+
+; 23 July 2018
+;; HMI contours, etc. (see hmi.pro, or whatever I may end up
+;;  renaming it to...)
 
 ;; subregions - LC and FT in same window
 test = indgen(500) + 2150

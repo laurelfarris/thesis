@@ -34,14 +34,6 @@ function PLOT_LIGHTCURVES, $
     y2 = y1 + height
     position = [x1,y1,x2,y2]*dpi
 
-    ; Overplot vertical lines (may not need this anymore - see plot_lines.pro)
-    flare = ['01:44', '01:56', '02:06']
-    ;name = ['start', 'peak', 'end' ]
-    i1 = (where( time eq flare[0 ] ))[0]
-    i2 = (where( time eq flare[1 ] ))[0]
-    i3 = (where( time eq flare[2 ] ))[0]
-    vx = [ i1-32, i1, i2, i3, i3+32-1 ]
-
     ;; Axis ranges
     xrange = [0,748]
     pad = 0.05*( max(ydata) - min(ydata) )
@@ -69,22 +61,29 @@ function PLOT_LIGHTCURVES, $
     endfor
 
     ; Shaded region
+    flare = ['01:44', '01:56', '02:06']
+    ;name = ['start', 'peak', 'end' ]
+    i1 = (where( time eq flare[0 ] ))[0]
+    i2 = (where( time eq flare[1 ] ))[0]
+    i3 = (where( time eq flare[2 ] ))[0]
+    ;vx = [ i1-32, i1, i2, i3, i3+32-1 ]
+    vx = [ i1, i2, i3 ]
     v = plot( $
-        ;[ vx[0], vx[0], vx[-1], vx[-1] ], $
-    ;vx = [ i1-32, i1, i2, i3, i3+32-1 ] --> vx = [i1,i2,i3]
         [ vx[0]-32, vx[0]-32, vx[-1]+32-1, vx[-1]+32-1 ], $
         [ yrange[0], yrange[1], yrange[1], yrange[0] ], $
         /overplot, ystyle=1, linestyle=6, $
         fill_transparency=50, $
         fill_background=1, $
         fill_color='light gray' )
-    v.Order, /SEND_TO_BACK
-    ;for jj = 1, n_elements(vx)-2 do v = plot( [vx[jj],vx[jj]], yrange, overplot=1, ystyle=1, linestyle=3 )
 
-    ; Could also replace this with 'plot_flare_times'
-    resolve_routine, 'plot_lines', /either, /compile_full_file
-    v = PLOT_VERTICAL_LINES( [ vx[1], vx[2], vx[3] ], yrange )
-    v.Order, /SEND_TO_BACK
+    for i = 0, n_elements(v)-1 do $
+        v[i].Order, /SEND_TO_BACK
+
+    resolve_routine, 'plot_flare_lines', /either
+    ;v = PLOT_FLARE_LINES( [ vx[1], vx[2], vx[3] ], yrange )
+    v = PLOT_FLARE_LINES( time, yrange )
+    for i = 0, n_elements(v)-1 do $
+        v[i].Order, /SEND_TO_BACK
     return, p
 end
 

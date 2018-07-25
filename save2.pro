@@ -31,9 +31,10 @@ pro SAVE2, filename, confirm_replace=confirm_replace, add_timestamp=add_timestam
 
     ; Add timestamp to figure
     if keyword_set(add_timestamp) then $
-        creation_time = text2( $
+        creation_time = text( $
             0.95,  0.1, $
-            str=systime(), $
+            systime(), $
+            /relative, $
             baseline=[0.0,1.0,0.0], updir=[-1.0,0.0,0.0], $
             color='grey', $
             font_size=8 )
