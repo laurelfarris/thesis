@@ -48,6 +48,23 @@ function GET_POWER_FROM_FLUX, $
     return, power
 end
 
+; Save power arrays to variable ---------------------------------------------------------------------------------
+    for i = 0, n_elements(A)-1 do begin
+        ;A[i].power_flux = GET_POWER_FROM_FLUX( $
+power_flux = GET_POWER_FROM_FLUX( $
+            flux=A[i].flux, $
+            cadence=A[i].cadence, $
+            dz=64, $
+            fmin=0.005, $
+            fmax=0.006, $
+            norm=0, $
+            data=A[i].data )
+    endfor
+
+stop;---------------------------------------------------------------------------------
+
+
+
 power_test = get_power_from_flux( $
     flux=A[0].flux/(330.*500), cadence=24, dz=64, $
     fmin=0.005, fmax=0.006, norm=0 ) 

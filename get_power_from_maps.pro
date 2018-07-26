@@ -41,3 +41,16 @@ function GET_POWER_FROM_MAPS, $
 
     return, power_per_pixel
 end
+
+
+; From prep.pro - restoring these from .sav files instead
+for i = 0, n_elements(A)-1 do begin
+    A[i].power_maps = GET_POWER_FROM_MAPS( $
+        data=A[i].data, $
+        channel=A[i].channel, $
+        dz = 64, $
+        threshold=10000 )
+endfor
+
+
+end

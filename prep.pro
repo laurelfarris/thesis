@@ -60,8 +60,8 @@ function PREP, index, cube, cadence=cadence, inst=inst, channel=channel
 
     name = 'AIA ' + channel + '$\AA$'
 
-    ;aia_lct, r, g, b, wave=fix(channel);, /load
-    ;ct = [ [r], [g], [b] ]
+    aia_lct, r, g, b, wave=fix(channel);, /load
+    ct = [ [r], [g], [b] ]
 
     struc = { $
         data: cube, $
@@ -72,11 +72,12 @@ function PREP, index, cube, cadence=cadence, inst=inst, channel=channel
         flux: flux, $
         exptime: exptime, $
         color: '', $
-        ;ct: ct, $
+        ct: ct, $
         cadence: cadence, $
         channel: channel, $
         power_flux: fltarr(685), $
         power_maps: fltarr(685), $
+        map: fltarr(sz[0],sz[1],685), $
         name: name $
     }
     return, struc
@@ -86,11 +87,11 @@ function PREP, index, cube, cadence=cadence, inst=inst, channel=channel
         'jd', jd, $
         'time', time, $
         'cadence', cadence )
+;aia = dictionary( 'aia1600', aia1600, 'aia1700', aia1700 )
 end
 
 goto, start
 start:
-
 
 ; A = replicate( struc, 2 )
 ; ... potentially useful?
@@ -99,49 +100,38 @@ start:
 
 aia1600 = PREP( aia1600index, aia1600data, cadence=24., inst='aia', channel='1600' )
 aia1700 = PREP( aia1700index, aia1700data, cadence=24., inst='aia', channel='1700' )
-
-; colors (for plotting)
-aia1600.color = 'dark orange'
-aia1700.color = 'dark cyan'
-
-;aia = dictionary( 'aia1600', aia1600, 'aia1700', aia1700 )
-
-i = 0
 A = [ aia1600, aia1700 ]
-;A = [ aia1600 ]
+
+A[0].color = 'dark orange'
+A[1].color = 'dark cyan'
+
 resolve_routine, 'get_power_from_flux', /either
-    for i = 0, n_elements(A)-1 do begin
-        A[i].power_flux = GET_POWER_FROM_FLUX( $
-            flux=A[i].flux, $
-            cadence=A[i].cadence, $
-            dz=64, $
-            fmin=0.005, $
-            fmax=0.006, $
-            norm=0, $
-            data=A[i].data )
-    endfor
+for i = 0, n_elements(A)-1 do begin
+    A[i].power_flux = GET_POWER_FROM_FLUX( $
+        flux=A[i].flux, $
+        cadence=A[i].cadence, $
+        dz=64, $
+        fmin=0.005, $
+        fmax=0.006, $
+        norm=0, $
+        data=A[i].data )
+endfor
 
-resolve_routine, 'get_power_from_maps', /either
-    for i = 0, n_elements(A)-1 do begin
-        A[i].power_maps = GET_POWER_FROM_MAPS( $
-            data=A[i].data, $
-            channel=A[i].channel, $
-            dz = 64, $
-            threshold=10000 )
-    endfor
-
-
+restore, '../power_from_maps.sav'
+A[0].power_maps = aia1600power_from_maps
+A[1].power_maps = aia1700power_from_maps
 
 stop
+
 restore, '../aia1600map.sav'
 ;aia1600 = create_struct( aia1600, 'map', map )
-
-;restore, '../aia1700map.sav'
+A[0].map = map
+restore, '../aia1700map.sav'
 ;aia1700 = create_struct( aia1700, 'map', map )
+A[1].map = map
+delvar, map
 
-;A = [ aia1600 ]
-;A = [ aia1600, aia1700 ]
+A = [ aia1600, aia1700 ]
 
-;delvar, map
 
 end

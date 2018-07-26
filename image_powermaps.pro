@@ -11,9 +11,9 @@ function IMAGE_POWERMAPS, map, title=title, layout=layout, _EXTRA=e
 
     cols = layout[0]
     rows = layout[1]
-    wx = 8.5
-    wy = wx * (float(rows)/cols) * (float(sz[1])/sz[0])
-    win = window( dimensions=[wx,wy]*dpi, /buffer )
+    ;wx = 8.5
+    ;wy = wx * (float(rows)/cols) * (float(sz[1])/sz[0])
+    ;win = window( dimensions=[wx,wy]*dpi, /buffer )
     width = 2.0
     height = width * float(sz[1])/sz[0]
 
@@ -30,9 +30,7 @@ function IMAGE_POWERMAPS, map, title=title, layout=layout, _EXTRA=e
             yshowtext=0, $
             title=title[i], $
             _EXTRA=e )
-        color='black'
-        ;color='white'
-        t = text2(0.9, 0.9, target=im[x,y], relative=1, i=i, color=color)
+        ;t = text2(0.9, 0.9, target=im[x,y], relative=1, i=i, color='black')
         i = i + 1
     endfor
     endfor

@@ -90,7 +90,7 @@ end
 ;dw
 wx = 8.5
 wy = 7.0
-win = WINDOW(dimensions=[wx,wy]*dpi, buffer=0)
+win = WINDOW(dimensions=[wx,wy]*dpi, buffer=1)
 
 ;; Time (x-axis)
 time = strmid( get_time(A[0].jd), 0, 5 )
@@ -112,35 +112,35 @@ ax = (p[0])[0].axes
 ax[2].showtext = 1
 ax[2].title = 'index'
 
-
 ;; Power data (2D array: 749x2)
 
 ytitle = '3-minute power'
-ydata = [ [ A[0].power_flux ], [ A[1].power_flux ] ]
+;ydata = [ [ A[0].power_flux ], [ A[1].power_flux ] ]
+ydata = A.power_flux
 xdata = [ (dz/2) : 749-(dz/2)-1 ]
 
 p[1] = PLOT_LIGHTCURVES( time, xdata, ydata, layout=[1,3,2], $
     color=A.color, name=A.name, ytitle=ytitle )
 
-ydata = [ [ A[0].power_maps ], [ A[1].power_maps ] ]
+;ydata = [ [ A[0].power_maps ], [ A[1].power_maps ] ]
+ydata = A.power_maps
 
 p[2] = PLOT_LIGHTCURVES( time, xdata, ydata, layout=[1,3,1], $
     color=A.color, name=A.name, ytitle=ytitle )
 
-leg = legend2( target=[p[0]], position=[0.85,0.7], /relative )
-ax = (p[2])[0].axes
-ax[0].tickname = time[fix(ax[0].tickvalues)]
-ax[0].showtext = 1
+;leg = legend2( target=p, position=[0.85,0.7], /relative )
+;ax = (p[2])[0].axes
+;ax[0].tickname = time[fix(ax[0].tickvalues)]
+;ax[0].showtext = 1
 
-; Pass targets in the form of arrays (whatever method did that...)
+;win.Select, /ALL
+;target = win.GetSelect()
+;t = TEXT2( target=target )
 
-win.Select, /ALL
-target = win.GetSelect()
-t = TEXT2( target=target )
 
-file = 'lc_power.pdf'
+file = 'lc_power_2.pdf'
 resolve_routine, 'save2'
-save2, file;, /add_timestamp
+save2, file, /add_timestamp
 
 ;; Small axis to show range covered by each FT
 ;ax1 = axis('x', location=50, major=2, axis_range=[0,64], target=p[1])
