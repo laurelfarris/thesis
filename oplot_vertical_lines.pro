@@ -1,6 +1,6 @@
 
 
-function PLOT_VERTICAL_LINES, x, yrange, names=names, $
+function OPLOT_VERTICAL_LINES, x, yrange, names=names, $
     linestyle=linestyle, $
     _EXTRA=e
 

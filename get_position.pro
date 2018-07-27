@@ -1,3 +1,6 @@
+; Last modified:    26 July 2018
+
+
 
 function GET_POSITION, $
     layout=layout, $
@@ -5,12 +8,18 @@ function GET_POSITION, $
     width=width, height=height, $
     xgap=xgap, ygap=ygap, $
     wx=wx, wy=wy, $
-    i=i, j=j
 
     common defaults
 
-    i = layout[0]
-    j = layout[1]
+    cols = layout[0]
+    rows = layout[1]
+    location = layout[2]
+
+    image_array = indgen(cols,rows) + 1
+    coords = array_indices(where( image_array eq loc ))
+
+    i = coords[0]
+    j = coords[1]
 
     x1 = left + i*(width + xgap)
     x2 = x1 + width
@@ -28,7 +37,6 @@ end
 
 function POS, layout=layout, _EXTRA = e
 
-    ; layout of CURRENT figure, not total rows/cols
     ; IDEA: send window to buffer, then change dimensions AFTER creating graphics
     ; Defaults for single panel... I guess.
 

@@ -36,7 +36,7 @@ function text2, str, target=target, _EXTRA=e
             ;/device, $
             alignment='Right', $
             vertical_alignment='Top', $
-            font_style = 'Bold', $
+            ;font_style = 'Bold', $
             font_size=fontsize-1, $
             _EXTRA=e )
     endfor

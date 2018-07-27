@@ -95,6 +95,7 @@ win = WINDOW(dimensions=[wx,wy]*dpi, buffer=1)
 ;; Time (x-axis)
 time = strmid( get_time(A[0].jd), 0, 5 )
 ;x = [ [ A[0].jd[t1:t2] ], [ A[1].jd[t1:t2] ] ]
+; --> x = A.jd[t1:t2,*]
 dz = 64
 N = 500.*330.
 
