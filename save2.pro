@@ -7,10 +7,12 @@
 pro SAVE2, filename, confirm_replace=confirm_replace, add_timestamp=add_timestamp, _EXTRA=e
 
     ; Confirm saving to file
-    confirm = ''
-    prompt = 'Save file? [y/n] '
-    read, confirm, prompt=prompt
-    if confirm ne 'y' then return
+    if keyword_set(confirm_replace) then begin
+        confirm = ''
+        prompt = 'Save file? [y/n] '
+        read, confirm, prompt=prompt
+        if confirm ne 'y' then return
+    endif
 
     common defaults
     path = '/home/users/laurel07/'

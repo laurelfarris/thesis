@@ -2,12 +2,12 @@
 
 
 
-function GET_POSITION, $
+function WRAP_GET_POSITION, $
     layout=layout, $
     left=left, right=right, top=top, bottom=bottom, $
     width=width, height=height, $
     xgap=xgap, ygap=ygap, $
-    wx=wx, wy=wy, $
+    wx=wx, wy=wy
 
     common defaults
 
@@ -16,10 +16,12 @@ function GET_POSITION, $
     location = layout[2]
 
     image_array = indgen(cols,rows) + 1
-    coords = array_indices(where( image_array eq loc ))
+    coords = array_indices(image_array, where( image_array eq location ))
 
     i = coords[0]
     j = coords[1]
+
+    if not keyword_set(height) then height = width
 
     x1 = left + i*(width + xgap)
     x2 = x1 + width
@@ -35,22 +37,26 @@ function GET_POSITION, $
     return, position
 end
 
-function POS, layout=layout, _EXTRA = e
-
-    ; IDEA: send window to buffer, then change dimensions AFTER creating graphics
-    ; Defaults for single panel... I guess.
+function GET_POSITION, layout=layout, _EXTRA = e
 
     common defaults
     dim = (GetWindows(/current)).dimensions / dpi
+    
+    wx = float(dim[0])
+    wy = float(dim[1])
 
-    position = GET_POSITION( $
+    cols = layout[0]
+    rows = layout[1]
+
+    ; Default width - divide width of page by # columns (plus some extra space)
+    width = wx / (cols+1)
+
+    position = WRAP_GET_POSITION( $
         layout = layout, $
-        wx = dim[0], $
-        wy = dim[1], $
-        ;wx = 8.5, $
-        ;wy = 11.0, $
-        width = 6.0, $
-        height = 3.0, $
+        wx = wx, $
+        wy = wy, $
+        width = width, $
+        ;height = height, $
         left = 0.75, $
         bottom = 0.50, $
         right = 1.75, $

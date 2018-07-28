@@ -1,3 +1,28 @@
+; 27 July 2018
+
+temp = aia_map[*,*,*,1]
+N = n_elements(temp)
+
+;frac = 0.03 --> 1600
+frac = 0.04 ;--> 1700
+locs = where( temp le frac*max(temp) )
+
+print, n_elements(locs)/float(N), format='(F0.4)'
+
+stop
+;function testfunc, arg
+    ;arg = arg * 10
+    ;return, arg * 10
+;end
+
+x = 2
+print, x
+print, testfunc(x)
+print, x
+
+stop
+
+
 ; 25 July 2018
 
 ; Standard deviation of each channel:

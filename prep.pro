@@ -121,17 +121,12 @@ restore, '../power_from_maps.sav'
 A[0].power_maps = aia1600power_from_maps
 A[1].power_maps = aia1700power_from_maps
 
-stop
-
 restore, '../aia1600map.sav'
-;aia1600 = create_struct( aia1600, 'map', map )
 A[0].map = map
 restore, '../aia1700map.sav'
-;aia1700 = create_struct( aia1700, 'map', map )
 A[1].map = map
-delvar, map
 
-A = [ aia1600, aia1700 ]
+map = 0
 
-
+;A = [ aia1600, aia1700 ]
 end
