@@ -16,7 +16,7 @@
 
 
 ;pro crop_data, data, X, Y, $
-function crop_data, data, $
+function CROP_DATA, data, $
     dimensions=dimensions, $
     center=center
 

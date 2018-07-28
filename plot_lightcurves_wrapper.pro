@@ -103,12 +103,28 @@ pow2.Select, /ADD
 
 
 graphic = win.GetSelect()
-txt = TEXT2( target=target )
+txt = TEXT2( target=graphic )
 
-resolve_routine, 'plot_flare_lines', /either
-v = OPLOT_flare_lines( time, graphic=graphic, /shaded )
-for i = 0, n_elements(v)-1 do $
-    v[i].Order, /SEND_TO_BACK
+
+for i = 0, n_elements(graphic)-1 do begin
+    yrange=graphic[0].yrange
+
+    ;; This only works for full time series. Can't use to plot subsets of LCs...
+    resolve_routine, 'plot_flare_lines', /either
+    ; p.yrange? multi-d array? Is yrange the same for p[0] and p[1]?
+    v = OPLOT_FLARE_LINES( time, yrange=graphic[0].yrange, /shaded, /SEND_TO_BACK )
+
+    z_start = [0,50,150,200,280,370,430,525,645]
+    foreach z, z_start, i do begin
+       v = plot( $
+           [ z, z, z+80, z+80 ], $
+           [ yrange[0], yrange[1], yrange[1], yrange[0] ], $
+           /overplot, $
+           fill_background=1, $
+           fill_transparency=50, $
+           fill_color='light blue' )
+    endforeach
+endfor
 
 
 ;leg = legend2( target=p, position=[0.85,0.7], /relative )

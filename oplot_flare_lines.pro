@@ -1,6 +1,10 @@
 
 
-function OPLOT_FLARE_LINES, time, graphic=graphic, shaded=shaded
+function OPLOT_FLARE_LINES, time, $
+    ;target=target, $
+    shaded=shaded, $
+    yrange=yrange, $
+    send_to_back=send_to_back
 
 
     ;; Add way to get X data from current graphic;
@@ -11,8 +15,6 @@ function OPLOT_FLARE_LINES, time, graphic=graphic, shaded=shaded
     linestyle = [4,5,4]
 
 
-    ; Need to make sure time is in form 'hh:mm', not 'hh:mm:ss.dd'...
-    ; If it already is, does strmid change anything?
     new_time = strmid( time, 0, 5 )
 
     N = n_elements(flare_times)
@@ -26,24 +28,27 @@ function OPLOT_FLARE_LINES, time, graphic=graphic, shaded=shaded
     ;result = win.GetSelect()
 
 
-    for ii = 0, n_elements(graphic)-1 do begin
+    ;for ii = 0, n_elements(target)-1 do begin
         for jj = 0, n_elements(vx)-1 do begin
             v = plot( $
                 [ vx[jj], vx[jj] ], $
-                overplot = graphic[ii], $
-                yrange = (graphic[ii]).yrange, $
+                yrange, $
+                ;(graphic[ii]).yrange, $
+                ;overplot = graphic[ii], $
+                /overplot, $
                 ystyle = 1, $
                 linestyle = linestyle[jj], $
                 name = names[jj], $
                 _EXTRA=e )
+            if keyword_set(send_to_back) then v.Order, /SEND_TO_BACK
         endfor
-    endfor
+    ;endfor
 
     if keyword_set(shaded) then begin
 
-        for ii = 0, n_elements(graphic)-1 do begin
+        ;for ii = 0, n_elements(graphic)-1 do begin
 
-            yrange = (graphic[ii]).yrange
+            ;yrange = (graphic[ii]).yrange
 
             v_shaded = plot ( $
                 [ vx[0]-32, vx[0]-32, vx[-1]+32-1, vx[-1]+32-1 ], $
@@ -53,7 +58,7 @@ function OPLOT_FLARE_LINES, time, graphic=graphic, shaded=shaded
                 fill_background=1, $
                 fill_color='light gray' )
             v_shaded.Order, /SEND_TO_BACK
-        endfor
+        ;endfor
     endif
 
 
