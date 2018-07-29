@@ -1,10 +1,9 @@
 
 
-pro subregion3, data
+;pro subregion3, data
+;end
 
 
-
-end
 goto, start
 
 center_coords = [ $
@@ -16,12 +15,13 @@ center_coords = [ $
 x0 = reform(center_coords[0,*])
 y0 = reform(center_coords[1,*])
 
+
 ;----------------------------
 start:
 
-r = 25
-xc = 25
+xc = 75
 yc = 75
+r = 25
 
 ii = 1
 

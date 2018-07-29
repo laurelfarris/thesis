@@ -19,7 +19,9 @@ function CALC_FT, $
     cadence, $
     fmin=fmin, $
     fmax=fmax, $
-    norm=norm   ;, _EXTRA=e
+    norm=norm, $
+    time=time, $
+    _EXTRA=e
 
     result = fourier2( flux, cadence, norm=norm )
     frequency = reform(result[0,*])
@@ -46,6 +48,15 @@ function CALC_FT, $
         power : power, $
         mean_power : mean(power) $
         }
+
+    help, struc
+
+    response = ''
+    READ, response, prompt='Plot power spectrum? [y/n] '
+    if response eq 'y' then begin
+
+
+    endif
 
     return, struc
 end

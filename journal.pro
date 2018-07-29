@@ -1,3 +1,8 @@
+; Instead of a different file every day, just use this one.
+; If procedures/functions are needed, just comment the first and last lines.
+
+
+
 ; 27 July 2018
 
 temp = aia_map[*,*,*,1]

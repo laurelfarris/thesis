@@ -7,21 +7,26 @@
 
 function PLOT_POWER_SPECTRUM, $
     frequency, power, $
-    fmin=fmin, $
-    fmax=fmax, $
+    fmin=fmin,  fmax=fmax, $  ; min/max freq on x-axis
+    fcenter=fcenter, $  ; central frequency (interest)
+    bandwidth=bandwidth, $  ; WIDTH centered at fcenter
     norm=norm, $
+    time=time, $
     _EXTRA=e
 
     common defaults
-    ;win = getwindows()
+
     ;wx = 8.5
     ;wy = 3.0
     ;win = window( dimensions=[wx,wy]*dpi, /buffer )
 
-
     ;result = fourier2(flux, cadence, norm=norm)
     ;frequency = reform(result[0,*])
     ;power = reform(result[1,*])
+
+    pz = size(power, /dimensions)
+    N = n_elements(pz)
+    if N eq 1 then pz = reform(pz, N, 1)
 
     if not keyword_set(fmin) then fmin = min(frequency)
     if not keyword_set(fmax) then fmax = max(frequency)
@@ -30,14 +35,19 @@ function PLOT_POWER_SPECTRUM, $
     frequency = frequency[ind]
     power = power[ind]
 
-    p = plot2( $
-        frequency, $
-        power, $
-        xmajor = 7, $
-        ;name = 'max power = ' + strtrim(max(power),1), $
-        xtitle='frequency (Hz)', $
-        ytitle='power', $
-        _EXTRA=e )
+    p = objarr(N)
+    for i = 0, n_elements(p)-1 do begin
+        t = strtrim(time[*,i])
+        p = plot2( $
+            frequency, $
+            power, $
+            ;xmajor = 7, $
+            name = t[0] + '-' + t[-1]
+                ; or could be same time range, but two different instruments....??
+            xtitle='frequency (Hz)', $
+            ytitle='log power', $
+            _EXTRA=e )
+    endfor
 
     ; convert from Hz to mHz
     ax = p.axes
@@ -45,11 +55,8 @@ function PLOT_POWER_SPECTRUM, $
     period_interest = [ 120, 180, 200 ]
     f = 1./period_interest
 
-    v = PLOT_VERTICAL_LINES( f, p.yrange, $
-        names = strtrim(period_interest,1) + ' sec' )
-
     leg = LEGEND2( $
-        target=[v], $
+        target=[p,v], $
         /data, $
         position = 0.95*[ (p.xrange)[1], (p.yrange)[1] ] $
         )

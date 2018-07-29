@@ -62,7 +62,6 @@ IMAGE_ARRAY_2, cube, X, Y, layout=[cols,rows], $
     xtitle = 'X (arcseconds)', $
     ytitle = 'Y (arcseconds)', $
     title = title
-
 stop
 
 for i = 0, N-1 do begin
@@ -76,8 +75,5 @@ for i = 0, N-1 do begin
         xtitle = 'X (arcseconds)', $
         ytitle = 'Y (arcseconds)', $
         title = titles[i] )
-
 endfor
-
-
 end
