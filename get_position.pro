@@ -16,6 +16,7 @@ function WRAP_GET_POSITION, $
     location = layout[2]
 
     image_array = indgen(cols,rows) + 1
+    image_array = reform( image_array, cols, rows )
     coords = array_indices(image_array, where( image_array eq location ))
 
     i = coords[0]
@@ -49,7 +50,7 @@ function GET_POSITION, layout=layout, _EXTRA = e
     rows = layout[1]
 
     ; Default width - divide width of page by # columns (plus some extra space)
-    width = wx / (cols+1)
+    width = wx / (cols)
 
     position = WRAP_GET_POSITION( $
         layout = layout, $
@@ -57,12 +58,12 @@ function GET_POSITION, layout=layout, _EXTRA = e
         wy = wy, $
         width = width, $
         ;height = height, $
-        left = 0.75, $
+        left  = 1.00, $
+        right = 1.00, $
         bottom = 0.50, $
-        right = 1.75, $
-        top = 0.5, $
-        xgap = 0.25, $
-        ygap = 0.25, $
+        top    = 0.50, $
+        xgap = 0.00, $
+        ygap = 0.00, $
         _EXTRA = e )
     return, position
 end

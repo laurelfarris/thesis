@@ -5,6 +5,7 @@ pro subregion3, data
 
 
 end
+goto, start
 
 center_coords = [ $
     [100,100], $
@@ -12,25 +13,54 @@ center_coords = [ $
     [360,210], $
     [450, 50] ]
 
-x0 = center_coords[0,*]
-y0 = center_coords[1,*]
+x0 = reform(center_coords[0,*])
+y0 = reform(center_coords[1,*])
+
+;----------------------------
+start:
+
 r = 25
+xc = 25
+yc = 75
+
+ii = 1
 
 ;; Add option to give cropped z-dimension to crop_data.pro
-data = CROP_DATA( A[0].data, dimensions=[r,r], center = [x0[2],y0[2]] )
+data = CROP_DATA( A[ii].map, dimensions=[r,r], center = [xc,yc] )
 sz = size(data, /dimensions)
-;----------------------------
 
 ;; Image power map first, make sure bp is roughly centered
-win = window(/buffer)
-temp = data[*,*,645]
-im = image2( temp, /current, layout=[1,1,1], margin=0.1 )
+dw
+;win = window( dimensions=[8.5,11.0]*dpi, /buffer)
+win = window( /buffer)
+temp = A[ii].data
+;temp = A[ii].map < 2500
+
+time = strmid(A[ii].time,0,8)
+z_start = [8, 200, 400, 600]
+dz = 64
+
+;result = AIA_INTSCALE(temp,wave=1700,exptime=A[ii].exptime)
+foreach z, z_start, i do begin
+    result = aia_intscale( mean(temp[*,*,z:z+dz-1], dimension=3), $
+        wave=1700, exptime=A[ii].exptime )
+    im = image2( result, $
+        /current, $
+        layout=[2,2,i+1], margin=0.1, rgb_table=A[ii].ct, $
+        title=time[z] + '-' + time[z+dz-1] + ' (' + strtrim(z,1) + $
+            '-' + strtrim(z+dz-1,1) + ')' $
+            )
+endforeach
+save2, 'test_im.pdf', /add_timestamp
+;save2, 'test_map.pdf', /add_timestamp
+stop
 c = contour( $
     temp, $
     /overplot, $
     c_value = mean(temp), $
     color='white', $
     c_thick=2, /c_label_show )
+
 save2, 'bp_map.pdf', /add_timestamp
 stop
 

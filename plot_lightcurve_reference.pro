@@ -22,14 +22,14 @@ endelse
 
 START:;---------------------------------------------------------------------------------
 
-wx = 8.5
-wy = 4.5
+wx = 11.0
+wy = 8.5
 dw
 win = window( dimensions=[wx,wy]*dpi, /buffer )
-position = get_position( layout=[1,1,1], width=6.5, height=2.5  )
 
 time = strmid(A[0].time,0,5)
 margin=[1.0, 3.0, 1.0, 3.0]*dpi
+position = get_position( layout=[1,1,1], width=6.0, height=3.0 )
 aa = [ min(A[0].flux), min(A[1].flux) ]
 slope = 1.0
 bb = [ slope, slope ]
@@ -42,68 +42,72 @@ for i = 0, n_elements(p)-1 do begin
         /current, $
         /device, $
         overplot=i<1, $
-        position=position*dpi, $
+        margin=margin, $
         xtickinterval=75, $
-        xminor=5, $
         ymajor=7, $
         xticklen=0.025, $
         yticklen=0.010, $
         stairstep=1, $
-        xshowtext=1, $
-        yshowtext=1, $
         color=A[i].color, $
         xtitle='index', $
         name=A[i].name )
 endfor
+pos = p[0].position
 
-yr = p[0].yrange
-pad = 0.1 * (yr[1]-yr[0])
-p[0].yrange = [ yr[0] - 0.5*pad, yr[1] + 3.*pad ]
-yr = p[0].yrange
-
-v = OPLOT_FLARE_LINES( time, yrange=p[0].yrange, /send_to_back, color='light gray' )
-
-p[1].GetData, x, y
-
-z_start = [0, 50, 150, 200, 280, 370, 430, 525, 645] 
-dz_scale = objarr(n_elements(z_start))
-foreach zz, z_start, i do begin
-    axis_range=[ zz, zz+16+dz ]
-    modd = i mod 2
-    dz_scale[i] = axis( $
-        'X', $
-        axis_range=axis_range, $
-        location=max( y[ axis_range[0]:axis_range[1] ]) + 2.*pad, $
-        ;location=yr[0]-(2.0-modd)*pad, $
-        major=2, $
-        minor=0, $
-        tickname=['',''], $
-        title=alph[i], $
-        tickdir=1, $
-        textpos=1, $
-        ;tickdir=(i mod 2), $
-        tickfont_size = fontsize ) 
-endforeach
-dz_scale[1].location = dz_scale[1].location + [0.0, 1.5*pad, 0.0]
-dz_scale[4].location = dz_scale[4].location + [0.0, 1.0*pad, 0.0]
-dz_scale[5].location = dz_scale[5].location + [0.0, 2.0*pad, 0.0]
+v = OPLOT_FLARE_LINES( time, yrange=p[0].yrange, /send_to_back )
+;for i = 0, n_elements(v)-1 do v[i].Order, /send_to_back
 
 ax = p[0].axes
 
-ax[0].tickname = time[ax[0].tickvalues]
-ax[0].title = 'Start time (UT) on 2011-February-15'
+;gridstyle=1, $
+;subgridstyle=1, $
 
+; X axes
+
+;ax[0].ticklen=0.001
+;ax[0].tickvalues = (ax[0].tickvalues)[1:*]
+;ax[0].minor=0
+
+ax[2].ticklen=1.0
+ax[2].subticklen=0.01
+ax[2].color='light gray'
+ax[2].text_color='black'
+
+ax[2].tickname = time[ax[0].tickvalues]
+ax[2].title = 'index.date_obs'
+ax[2].minor = 5
+ax[2].showtext = 1
+
+; Y axes
+
+;ax[1].tickvalues = (ax[1].tickvalues)[1:*]
 ax[1].coord_transform = [aa[0],bb[0]]
 ax[1].title='1600$\AA$ (DN s$^{-1}$)'
 
+ax[3].ticklen=1.0
+ax[3].subticklen=0.005
+ax[3].color='light gray'
+ax[3].text_color='black'
+
 ax[3].coord_transform = [aa[1],bb[1]]
 ax[3].title='1700$\AA$ (DN s$^{-1}$)'
+ax[3].showtext = 1
 
+
+result = p[0].ConvertCoord( $
+    pos[2], pos[3], /NORMAL, /TO_DEVICE )
+xx = result[0]/dpi
+yy = result[1]/dpi
+
+;0.86,0.92
 leg = legend2(  $
-    target=[p,v], /device, $
-    position=[ position[2]-0.25, position[3]-0.25 ]*dpi )
+    target=[p], $
+    ;position=([xx,yy]-0.5)*dpi, $
+    position=[0.83,0.78], $
+    ;/device )
+    /normal )
 
-save2, 'lightcurve_only.pdf';, /add_timestamp
+save2, 'lightcurve_only.pdf', /add_timestamp
 stop
 
 ;print, p[0].xticklen, p[0].yticklen

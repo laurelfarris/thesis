@@ -4,16 +4,15 @@ function OPLOT_FLARE_LINES, time, $
     ;target=target, $
     shaded=shaded, $
     yrange=yrange, $
-    send_to_back=send_to_back
-
+    send_to_back=send_to_back, $
+    _EXTRA=e
 
     ;; Add way to get X data from current graphic;
     ;; may not necessarily be in indgen(N) coordinates...
 
     flare_times = [ '01:44', '01:56', '02:06' ]
     names = flare_times + [ ' (start)', ' (peak)', ' (end)' ]
-    linestyle = [4,5,4]
-
+    linestyle = [1,2,3]
 
     new_time = strmid( time, 0, 5 )
 
@@ -28,9 +27,10 @@ function OPLOT_FLARE_LINES, time, $
     ;result = win.GetSelect()
 
 
+    v = objarr(N)
     ;for ii = 0, n_elements(target)-1 do begin
         for jj = 0, n_elements(vx)-1 do begin
-            v = plot( $
+            v[jj] = plot( $
                 [ vx[jj], vx[jj] ], $
                 yrange, $
                 ;(graphic[ii]).yrange, $
@@ -38,9 +38,10 @@ function OPLOT_FLARE_LINES, time, $
                 /overplot, $
                 ystyle = 1, $
                 linestyle = linestyle[jj], $
+                thick = 1, $
                 name = names[jj], $
                 _EXTRA=e )
-            if keyword_set(send_to_back) then v.Order, /SEND_TO_BACK
+            if keyword_set(send_to_back) then v[jj].Order, /SEND_TO_BACK
         endfor
     ;endfor
 
@@ -60,9 +61,5 @@ function OPLOT_FLARE_LINES, time, $
             v_shaded.Order, /SEND_TO_BACK
         ;endfor
     endif
-
-
     return, v
-
-
 end
