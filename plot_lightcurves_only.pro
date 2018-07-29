@@ -22,11 +22,14 @@ endelse
 
 START:;---------------------------------------------------------------------------------
 
+dz = 64
 wx = 8.5
-wy = 4.5
+wy = 3.5
 dw
+width = 6.5
+height=2.5
 win = window( dimensions=[wx,wy]*dpi, /buffer )
-position = get_position( layout=[1,1,1], width=6.5, height=2.5  )
+position = get_position( layout=[1,1,1], width=width, height=height  )
 
 time = strmid(A[0].time,0,5)
 margin=[1.0, 3.0, 1.0, 3.0]*dpi
@@ -58,7 +61,7 @@ endfor
 
 yr = p[0].yrange
 pad = 0.1 * (yr[1]-yr[0])
-p[0].yrange = [ yr[0] - 0.5*pad, yr[1] + 3.*pad ]
+p[0].yrange = [ yr[0] - 0.5*pad, yr[1] + 4.*pad ]
 yr = p[0].yrange
 
 v = OPLOT_FLARE_LINES( time, yrange=p[0].yrange, /send_to_back, color='light gray' )
@@ -101,7 +104,8 @@ ax[3].title='1700$\AA$ (DN s$^{-1}$)'
 
 leg = legend2(  $
     target=[p,v], /device, $
-    position=[ position[2]-0.25, position[3]-0.25 ]*dpi )
+    position=[ position[2]-0.25, position[3]-0.25 ]*dpi, $
+    sample_width=0.2)
 
 save2, 'lightcurve_only.pdf';, /add_timestamp
 stop

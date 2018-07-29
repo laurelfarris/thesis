@@ -79,9 +79,9 @@ function PLOT_LIGHTCURVES, $
     for i = 0, n_elements(v)-1 do $
         v[i].Order, /SEND_TO_BACK
 
-    resolve_routine, 'plot_flare_lines', /either
+    resolve_routine, 'oplot_flare_lines', /either
     ;v = PLOT_FLARE_LINES( [ vx[1], vx[2], vx[3] ], yrange )
-    v = PLOT_FLARE_LINES( time, yrange )
+    v = oPLOT_FLARE_LINES( time, yrange=yrange )
     for i = 0, n_elements(v)-1 do $
         v[i].Order, /SEND_TO_BACK
     return, p
