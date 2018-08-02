@@ -1,6 +1,6 @@
 
 
-function PLOT_HORIZONTAL_LINES, xrange, y, names=names, $
+function OPLOT_HORIZONTAL_LINES, xrange, y, names=names, $
     linestyle=linestyle, $
     _EXTRA=e
 

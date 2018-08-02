@@ -49,14 +49,12 @@ function CALC_FT, $
         mean_power : mean(power) $
         }
 
-    help, struc
+    ;help, struc
+    return, struc
 
     response = ''
     READ, response, prompt='Plot power spectrum? [y/n] '
-    if response eq 'y' then begin
+    ;if response eq 'y' then begin
+    ;endif
 
-
-    endif
-
-    return, struc
 end

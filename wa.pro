@@ -38,17 +38,21 @@ end
 goto, start
 start:
 
-resolve_routine, 'plot_horizontal_lines', /either
-resolve_routine, 'plot_flare_lines', /either
-resolve_routine, 'plot_vertical_lines', /either
+resolve_routine, 'oplot_horizontal_lines', /either
+resolve_routine, 'oplot_flare_lines', /either
+resolve_routine, 'oplot_vertical_lines', /either
 
 wx = 7.5
 wy = 9.0
 win = GetWindows(/current)
-if n_elements(win) eq 0 then begin
-    win = window( dimensions=[wx,wy]*dpi, buffer=0 )
+help, win ;; obj (not array), but still has one element [0],
+          ;; which is why the following if statement doesn't work.
+          ;;if n_elements(win) eq 0 then begin ...
+          ;; Trying to access win[1] will generate error.
+if win eq !NULL then begin
+    win = window( dimensions=[wx,wy]*dpi, buffer=1 )
 endif else begin
-;win.erase ; if errors here - win may need to be an object, not an array.
+    win.erase ; if errors here - win may need to be an object, not an array.
 endelse
 
 
@@ -59,9 +63,10 @@ fupper = 0.006
 
 ; 24 July 2018
 ; increasing fmax to range shown by Milligan et al. 2017 (fmin is fine).
-fmin = 0.001
+;fmin = 0.001
+ fmin = 0.0025
 ;fmax = 0.009
-fmax = 0.020
+ fmax = 0.020
 
 N = n_elements(A[0].flux) - dz
 
@@ -79,6 +84,8 @@ min_value = min(aia_wa_maps)
 max_value = max(aia_wa_maps)
 
 im = objarr(2)
+cols = 1
+rows = 2
 for ii = 0, 1 do begin
 
     time = strmid(A[ii].time,0,5)
@@ -97,7 +104,13 @@ for ii = 0, 1 do begin
     n_freq = n_elements(frequency)
     ytickvalues = 1000.*(frequency[0:n_freq-1:4])
 
-    position = POS( layout=[0,ii], width=5.5, ygap=0.75)
+    left = 0.75
+    right = 1.50
+    width = wx - (left + right)
+    position = GET_POSITION( layout=[cols,rows,ii+1], $
+        left=0.75, $
+        right=1.25, $
+        width=5.0, height=3.0, ygap=0.75)
 
     im[ii] = image2( $
         wmap2, X, Y, $
@@ -114,7 +127,16 @@ for ii = 0, 1 do begin
         ytitle='Frequency (mHz)', $
         title=A[ii].name )
 
-    cx1 = (im[ii].position)[2] + 0.01
+    ;ax = axis('Y', location=max(x), 
+
+    ax = im[ii].axes
+    ax[3].tickname = strmid( (strtrim(1000./ax[1].tickvalues,1)), 0, 5 )
+    ax[3].title = "Period (s)"
+    ax[3].showtext = 1
+
+
+    ;cx1 = (im[ii].position)[2] + 0.01  ;; need to convert to inches
+    cx1 = (im[ii].position)[2] + 0.1
     cy1 = (im[ii].position)[1]
     cx2 = cx1 + 0.02
     cy2 = (im[ii].position)[3]
@@ -138,7 +160,7 @@ for ii = 0, 1 do begin
 
     lines = objarr(6)
 
-    h = PLOT_HORIZONTAL_LINES( $
+    h = OPLOT_HORIZONTAL_LINES( $
         im[ii].xrange, [f1,f2,f3], $
         color = 'red', $
         linestyle=[':','--',':'], $
@@ -147,7 +169,7 @@ for ii = 0, 1 do begin
             '$\nu_{center}$ = 5.6 mHz', $
             '$\nu_{upper} $ = 6.0 mHz' ] )
 
-    v = PLOT_FLARE_LINES( time, im[ii].yrange )
+    v = OPLOT_FLARE_LINES( time, yrange=im[ii].yrange )
     ;save2, 'wa' + A[ii].channel + '.pdf'
 endfor
 
@@ -168,8 +190,8 @@ leg2 = legend2( /device, $
     horizontal_alignment = 'Left', $
     vertical_alignment = 'Bottom' )
 
-    print, 1000*frequency, format='(F0.2)'
-    print, ytickvalues
+    ;print, 1000*frequency, format='(F0.2)'
+    ;print, ytickvalues
 ;file = 'wa_plots.pdf'
 file = 'wa_plots_2.pdf'
 save2, file

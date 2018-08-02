@@ -11,7 +11,7 @@ function OPLOT_FLARE_LINES, time, $
     ;; may not necessarily be in indgen(N) coordinates...
 
     flare_times = [ '01:44', '01:56', '02:06' ]
-    names = flare_times + [ ' (start)', ' (peak)', ' (end)' ]
+    names = flare_times + [ 'UT (start)', 'UT (peak)', 'UT (end)' ]
     linestyle = [1,2,3]
 
     new_time = strmid( time, 0, 5 )

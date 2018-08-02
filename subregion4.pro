@@ -1,37 +1,20 @@
 
-
-;pro subregion3, data
-;end
-
-
 goto, start
 
-center_coords = [ $
-    [100,100], $
-    [250,180], $
-    [360,210], $
-    [450, 50] ]
-
-x0 = reform(center_coords[0,*])
-y0 = reform(center_coords[1,*])
-
-
-;----------------------------
-start:
 ;; Image first power map for 1700
 
 dz = 64 ; just in case
+time = strmid(A[ii].time,0,8)
 
-xc = 100
-yc = 150
-r = 25
+xc = 75
+yc = 115
+r = 100
 
 ii = 1
 
-time = strmid(A[ii].time,0,8)
 dat = CROP_DATA( A[ii].data, dimensions=[r,r], center = [xc,yc] )
 map = CROP_DATA( A[ii].map, dimensions=[r,r], center = [xc,yc] )
-sz = size(data, /dimensions)
+sz = size(dat, /dimensions)
 n_pixels = float(sz[0]) * sz[1]
 
 dw
@@ -42,39 +25,41 @@ win = window( /buffer)
 im_dat = dat[*,*,0]
 im_map = map[*,*,0]
 im = image2( $
-    im_dat, $  ;<2500, $
+    aia_intscale(im_dat, wave=1700, exptime=A[ii].exptime), $  ;<2500, $
     /current, layout=[1,2,1], margin=0.1, rgb_table=A[ii].ct )
+im = image2( $
+    aia_intscale(im_map, wave=1700, exptime=A[ii].exptime), $  ;<2500, $
+    /current, layout=[1,2,2], margin=0.1, rgb_table=A[ii].ct )
+save2, 'bp_map.pdf';, /add_timestamp
 c = contour( $
     im_dat, $
     color='white', c_thick=2, /overplot )
-im = image2( $
-    im_map, $  ;<2500, $
-    /current, layout=[1,2,2], margin=0.1, rgb_table=A[ii].ct )
 c = contour( $
     im_map, $
-    color='white', c_thick=2, /overplot )
+    color='white', c_thick=1, /overplot )
 
-save2, 'bp_map.pdf';, /add_timestamp
 stop
 
 ;; Plot LC for subregion
+start:
+
 dw
-win = window(/buffer)
+win = window( dimensions=[8.5,8.0]*dpi, /buffer)
 ;p = plot2( bp_flux[0,*], /current, name='flux $\ge 1\sigma$'
 
 flux = total(total(dat,1),1)
 flux = flux / n_pixels
 
-lc = plot2( [0:748], flux, /current, $
+lc = plot2( [0:748], flux, /current, layout=[1,3,1], $
     name = 'DN s$^{-1}$', $
     title = 'AIA 1700$\AA$ Localized power enhancement')
 
-power1 = GET_POWER_FROM_FLUX(flux, cadence=24, fmin=0.005, fmax=0.006, data=data )
-p1 = plot2( [32:748-32], power1, /overplot, $
+power1 = GET_POWER_FROM_FLUX(flux=flux, cadence=24, dz=dz, fmin=0.005, fmax=0.006, data=data )
+p1 = plot2( [32:748-32], power1, /current, layout=[1,3,2], $
     name = 'power (total flux)' )
 
 power2 = total(total(map,1),1)
-p2 = plot2( [32:748-32], power2, /overplot, $
+p2 = plot2( [32:748-32], power2, /current, layout=[1,3,3], $
     name = 'power (total maps)' )
 
 save2, 'bp_plots.pdf';, /add_timestamp
