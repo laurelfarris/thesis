@@ -5,6 +5,9 @@
 
 ; Wavelet Analysis (WA) - discrete
 
+
+; To do:      solid vertical lines at 1:30 and 2:30
+
 pro CALC_WA, flux, $
     frequency, wmap, $
     cadence=cadence, $
@@ -127,7 +130,7 @@ for ii = 0, 1 do begin
         ytitle='Frequency (mHz)', $
         title=A[ii].name )
 
-    ;ax = axis('Y', location=max(x), 
+    ;ax = axis('Y', location=max(x),
 
     ax = im[ii].axes
     ax[3].tickname = strmid( (strtrim(1000./ax[1].tickvalues,1)), 0, 5 )
