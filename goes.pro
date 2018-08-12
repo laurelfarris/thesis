@@ -1,7 +1,8 @@
 ; 07 August 2018
-; GOES objects
+; Extracting and plotting GOES data.
 
 goto, start
+start:
 
 
 tstart = '15-Nov-2011 00:00:00'
@@ -12,10 +13,8 @@ tend   = '15-Nov-2011 02:10:00'
 
 sat = 'goes15'
 
-a = ogoes()
+a = OGOES()
 a->set, tstart=tstart, tend=tend;, sat=sat
-
-
 
 
 ;-- extract data and derived quantities into a structure
@@ -25,9 +24,6 @@ help, data, /struct
 a->plot
 
 oplot, data.ydata[*,1]
-
-start:
-stop
 
 
 ; Example from website:
@@ -47,9 +43,5 @@ stop
 ;INTEGRATE_TIMES STRING Array[2]   ; integration time interval
 ;YES_CLEAN INT 1               ; 0/1 means data wasn't / was cleaned
 ;YES_BSUB INT 1                ; 0/1 means background wasn't / was subtracted
-
-
-
-
 
 end

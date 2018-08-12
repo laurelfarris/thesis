@@ -6,7 +6,7 @@
 
 function POWER_IN_STRUC, struc
 
-    
+
     ;power_flux = GET_POWER( $
     ;    struc.flux, cadence=struc.cadence, channel=struc.channel, data=struc.data)
     ;struc = create_struct( struc, 'power_flux', power_flux )
@@ -63,6 +63,19 @@ function PREP, index, cube, cadence=cadence, inst=inst, channel=channel
     aia_lct, r, g, b, wave=fix(channel);, /load
     ct = [ [r], [g], [b] ]
 
+    resolve_routine, 'get_power_from_flux', /either
+    power_flux = GET_POWER_FROM_FLUX( $
+        flux=flux, $
+        cadence=cadence, $
+        dz=64, $
+        fmin=0.005, $
+        fmax=0.006, $
+        norm=0, $
+        data=cube )
+
+    restore, '../aia' + channel + 'map.sav'
+
+    ;; MEMORY - Is this making copies of everything?
     struc = { $
         data: cube, $
         X: X, $
@@ -75,9 +88,10 @@ function PREP, index, cube, cadence=cadence, inst=inst, channel=channel
         ct: ct, $
         cadence: cadence, $
         channel: channel, $
-        power_flux: fltarr(685), $
+        power_flux: power_flux, $
         power_maps: fltarr(685), $
-        map: fltarr(sz[0],sz[1],685), $
+        ;map: fltarr(sz[0],sz[1],685), $
+        map: map, $
         name: name $
     }
     return, struc
@@ -105,28 +119,19 @@ A = [ aia1600, aia1700 ]
 A[0].color = 'dark orange'
 A[1].color = 'dark cyan'
 
-resolve_routine, 'get_power_from_flux', /either
-for i = 0, n_elements(A)-1 do begin
-    A[i].power_flux = GET_POWER_FROM_FLUX( $
-        flux=A[i].flux, $
-        cadence=A[i].cadence, $
-        dz=64, $
-        fmin=0.005, $
-        fmax=0.006, $
-        norm=0, $
-        data=A[i].data )
-endfor
+; colors to match AIA colors (probably not for publications, but may
+;  help me to keep track of which curves go with which data.
+A[0].color = 'dark olive green'
+A[1].color = 'indian red'
 
+; To do: save variables with same name so can call this from subroutine.
 restore, '../power_from_maps.sav'
+;power_from_maps = aia1600power_from_maps
+;save, power_from_maps, filename='aia1600power_from_maps.sav'
+;power_from_maps = aia1700power_from_maps
+;save, power_from_maps, filename='aia1700power_from_maps.sav'
+
 A[0].power_maps = aia1600power_from_maps
 A[1].power_maps = aia1700power_from_maps
 
-restore, '../aia1600map.sav'
-A[0].map = map
-restore, '../aia1700map.sav'
-A[1].map = map
-
-map = 0
-
-;A = [ aia1600, aia1700 ]
 end
