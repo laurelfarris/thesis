@@ -33,13 +33,13 @@ function GET_POWER_FROM_FLUX, $
     if keyword_set(data) then begin
         sz = size(data,/dimensions)
         n_pixels = float(sz[0]) * sz[1]
-        flux = flux / n_pixels
+        new_flux = flux / n_pixels
         ;power = power / n_pixels
     endif
 
     ; Calculate power for time series between each value of z and z+dz
     foreach z, z_start, i do begin
-        struc = CALC_FT( flux[z:z+dz-1], cadence, fmin=fmin, fmax=fmax, norm=norm )
+        struc = CALC_FT( new_flux[z:z+dz-1], cadence, fmin=fmin, fmax=fmax, norm=norm )
         power[i] = struc.mean_power
     endforeach
 

@@ -57,7 +57,7 @@ function GET_POSITION, layout=layout, _EXTRA = e
         wx = wx, $
         wy = wy, $
         width = width, $
-        ;height = height, $
+        height = height, $
         left  = 1.00, $
         right = 1.00, $
         bottom = 0.50, $

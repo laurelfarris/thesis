@@ -121,7 +121,7 @@ A[1].color = 'dark cyan'
 
 ; colors to match AIA colors (probably not for publications, but may
 ;  help me to keep track of which curves go with which data.
-A[0].color = 'dark olive green'
+A[0].color = 'olive drab'
 A[1].color = 'indian red'
 
 ; To do: save variables with same name so can call this from subroutine.
