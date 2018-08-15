@@ -1,6 +1,10 @@
 ; Last updated:     29 July 2018
 
-function  PLOT_LIGHTCURVES_ONLY, ind, data, time, _extra=e
+function PLOT_LIGHTCURVES_ONLY, $
+    ind, $
+    data, $
+	time, $
+	_EXTRA=e
 
     common defaults
 

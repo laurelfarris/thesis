@@ -20,7 +20,6 @@ function CALC_FT, $
     fmin=fmin, $
     fmax=fmax, $
     norm=norm, $
-    time=time, $
     _EXTRA=e
 
     result = fourier2( flux, cadence, norm=norm )

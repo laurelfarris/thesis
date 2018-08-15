@@ -30,14 +30,17 @@ function GET_POWER_FROM_FLUX, $
     ; Calculate power per pixel
     ;   23 July 2018
     ;   - moved this to divide flux by n_pixels before calculating FT
+
+    ; this is sloppy... make it better.
     if keyword_set(data) then begin
         sz = size(data,/dimensions)
         n_pixels = float(sz[0]) * sz[1]
         new_flux = flux / n_pixels
         ;power = power / n_pixels
-    endif
+    endif else new_flux = flux
 
     ; Calculate power for time series between each value of z and z+dz
+    resolve_routine, 'calc_ft', /either
     foreach z, z_start, i do begin
         struc = CALC_FT( new_flux[z:z+dz-1], cadence, fmin=fmin, fmax=fmax, norm=norm )
         power[i] = struc.mean_power

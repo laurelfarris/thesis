@@ -62,7 +62,7 @@ function GOES
     sat = 'goes15'
 
     ; My times
-    tstart = '15-Feb-2011 00:00:00'
+    tstart = '15-Feb-2011 00:00:02'
     tend   = '15-Feb-2011 04:59:59'
 
     ; times covered in Milligan2017 (to start)
@@ -76,17 +76,26 @@ function GOES
     a->SET, tstart=tstart, tend=tend, sat=sat
     ;a->plot, charsize=1.5
 
+    ; Show current parameter values
+    a->help
+
     ;-- extract data and derived quantities into a structure
     data = a->getdata(/struct)
-    ;help, data, /struct
-
+    help, data, /struct
     return, data
+
+    ; -----------
+    print, min(data.ydata[*,0])
+    print, max(data.ydata[*,0])
+
+    print, min(data.ydata[*,1])
+    print, max(data.ydata[*,1])
+
+    plot, data.ydata[*,0];, linestyle=1
+    ;oplot, data.ydata[*,1];, linestyle=2
 
     ; set parameters and plot at the same time:
     ;a->plot, tstart=tstart, tend=tend, sat=sat
-
-    ; Show current parameter values
-    a->help
 
     ; GETDATA args/keywords, all of which are included with /struct:
     ;low = a->getdata( /low )       ; low channel only (1-8 A, or 0.5-4 A?)
@@ -101,16 +110,11 @@ function GOES
     a->plot, xcharsize=1.25, ycharsize=1.25
     TOGGLE
 
-
 end
 
 goto, START
 START:;----------------------------------------------------------------------------------
 
 
-data = GOES()
-
-plot, data.ydata[*,0], linestyle=1, name='Channel 0'
-oplot, data.ydata[*,1], linestyle=2, name='Channel 1'
 
 end

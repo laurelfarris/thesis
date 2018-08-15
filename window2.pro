@@ -1,30 +1,58 @@
 ;; Last modified:   30 May 2018 11:09:03
 
 
-function GET_WINDOW, $
-    wx=wx, wy=wy, location=location, buffer=buffer
+; Even if I don't use this in subroutines, can still be a hepful
+; reference on how to handle and return windows and their properties,
+; examples using NAME and 'names', etc.
 
-    ;win = GetWindows( 'Name of Window', /current, NAMES=window_names )
+; Take lots of notes here! Just remember to refer to it...
+
+
+; To-Do     Add kw option to reverse wx and wy? E.g. landscape...
+
+
+function WINDOW2, dimensions=dimensions, _EXTRA=e
 
     common defaults
 
-    win = GetWindows( /current, NAMES=window_names )
-    print, 'Current window: ', window_names
+    ; Syntax:
+    ;  win = GetWindows( 'Name of Window', /current, NAMES=window_names )
 
-    if win eq !NULL then $
-        win = window( dimensions=[wx,wy]*dpi, location=location, buffer=buffer )
+    win = GetWindows( /current, NAMES=window_names )
+    ;win = GetWindows( NAMES=window_names )
+
+    ;win = GetWindows( name )
+    ; NOTE: window_names will be undefined if window is NULL
+
+
+
+    ;; Create new window
+    if win eq !NULL then begin
+
+        if not keyword_set(dimensions) then begin
+            wx = 8.5
+            wy = 11.0
+            dimensions = [wx,wy]*dpi
+        endif
+
+        win = WINDOW( $
+            dimensions = dimensions, $
+            location=[500,0], $
+            buffer = 0, $
+            name = 'No-Name figure. Sad figure', $
+            title = 'Title', $
+            window_title = 'Window Title', $
+            _EXTRA=e )
+
+        print, 'New window: "', win.name, '"'
+
+    ;; Erase existing window
     endif else begin
+        ;count = n_elements(window_names)
+        print, 'Current window: "' , window_names, '"'
         win.erase
     endelse
 
     return, win
-end
 
-function WINDOW2, _EXTRA=e
-    win = get_window( $
-        wx = 8.5, $
-        wy = 5.5, $
-        buffer = 1 $
-        )
-    return, win
 end

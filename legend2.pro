@@ -6,6 +6,10 @@ function legend2, target=target, _EXTRA=e
 
     common defaults
 
+    ;win = GetWindows(/current)
+    ;win.Select, /all
+    ;target = win.GetSelect()
+
     ;target.GetData, image, X, Y
     ;x = X[-5]
     ;y = Y[-5]

@@ -38,20 +38,26 @@ pro SAVE2, filename, confirm_replace=confirm_replace, add_timestamp=add_timestam
     ; while fls ne "" ; i = i + 1 ; filename = basename + '_' + strtrim(i,1)
     ; keep appending _1, _2, etc. until no other file matches
 
-    ; Add timestamp to figure
-    if keyword_set(add_timestamp) then $
-        creation_time = text( $
-            0.95,  0.1, $
-            systime(), $
-            /relative, $
-            baseline=[0.0,1.0,0.0], updir=[-1.0,0.0,0.0], $
-            color='grey', $
-            font_size=8 )
-
     w = getwindows(/current)
     dims = w.dimensions/dpi
     width = dims[0]
     height = dims[1]
+
+    ; Add timestamp to figure
+    if keyword_set(add_timestamp) then begin
+        ;tx = 0.95
+        ;ty = 0.1
+        tx = width - 0.2
+        ty = height / 2.0
+        creation_time = text( $
+            tx*dpi, ty*dpi, $
+            systime(), $
+            /device, $
+            baseline=[0.0,1.0,0.0], $
+            updir=[-1.0,0.0,0.0], $
+            color='grey', $
+            font_size=8 )
+    endif
 
     w.save, path + filename, $
         page_size=[width,height], $
