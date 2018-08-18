@@ -13,14 +13,13 @@
     ; (plot every relationship you can think of! Also, remember that
     ; 'today.pro' is kind of a log, so comment away, and copy useful code to
     ; different file for cleanup and to remove babble.
-; 
+;
 
 function MAKE_WINDOW, _EXTRA=e
 
     common defaults
 
     wx = 11.0
-    ;wx = 1800.0/dpi
     wy = 8.0
 
     count = n_elements(GetWindows())
@@ -28,13 +27,12 @@ function MAKE_WINDOW, _EXTRA=e
     win = window( $
         dimensions=[wx,wy]*dpi, $
         location=[500,0], $
-        name="Name", $
+        ;name="Name", $
         ;window_title="Window_title", $
         ;title="Test flare data", $
         buffer=0, $
         _EXTRA=e )
 
-    print, win.name
     return, win
 end
 
@@ -59,10 +57,6 @@ function PLOT_TEST_DATA, xdata, ydata, time, _EXTRA=e
     xticklen = ( width^0.3)/100.
     yticklen = (height^0.3)/100.
 
-    ;for i = 0, n_elements(time)-1 do $
-    ;    result = timestamp( day=1, hour=0,  minute=0,  month=1,  second=0, year=2000 )
-
-    filename = "fake_data_3-min_power"
     p = plot2( $
         xdata, ydata, $
         /current, $
@@ -91,7 +85,7 @@ function PLOT_TEST_DATA, xdata, ydata, time, _EXTRA=e
 end
 
 
-pro TEST_DATA, lc1, time, ind=ind
+pro TEST_LC, lc1, time, ind=ind
 
     ; Save file returns variables 'time' and 'lc1'
     if (n_elements(lc1) eq 0) OR (n_elements(time) eq 0) then $
@@ -100,9 +94,6 @@ pro TEST_DATA, lc1, time, ind=ind
 
     if not keyword_set(ind) then ind = [0:N-1]
 
-    filename = "fake_data_lightcurve"
-    dw
-    win = MAKE_WINDOW( name=filename, location=[500,0] )
 
     ; Setting, e.g. time=time[ind] will return cropped string back
     ; to main level and cause all kinds of problems... create new
@@ -119,7 +110,7 @@ pro TEST_DATA, lc1, time, ind=ind
 end
 
 
-pro TEST_DATA_POWER, lc1, time, ind=ind
+pro TEST_POWER, lc1, time, ind=ind
 
     cadence = time[1]-time[0]
     ;dz = [ 64, 100, 200, 500 ]
@@ -146,12 +137,9 @@ pro TEST_DATA_POWER, lc1, time, ind=ind
 
     i1 = ind[0] + dz/2
     i2 = ind[-1] - (dz/2)
-    ;new_ind = [i1:i2]
 
-    filename = "fake_data_3-min_power"
     ydata = normalize(power)
 
-    ;win = MAKE_WINDOW( name=filename, location=[500,450])
     p = PLOT_TEST_DATA( $
         [i1:i2], ydata, time, $
         overplot=1, $
@@ -161,42 +149,37 @@ pro TEST_DATA_POWER, lc1, time, ind=ind
     return
 end
 
-goto, start
+pro TEST_POWER_AVERAGED, lc1, time, power, ind=ind
+
+    arr1 = WA_AVERAGE( lc1, power, dz=64 )
+    N = n_elements(lc1)
+    arr2 = mean(arr, dimension=2)
+    ind2 = [ dz-1 : N-dz ]
+    arr3 = arr2[ind2]
+
+    ydata = normalize(arr3)
+
+    p = PLOT_TEST_DATA( $
+        ind2, ydata, time, $
+        overplot=1, $
+        ;symbol='.', $
+        color='dodger blue', $
+        name='3-minute power, averaged' )
+end
 
 
-; Hard to organize these lines, need to look at LC before knowing what
-; value to give ind, but then need to feed ind back into TEST_DATA,...
-; maybe plot separately
-; Or run TEST_data twice, first without setting ind.
+dw
+win = MAKE_WINDOW( location=[500,0] )
 
 TEST_DATA, lc1, time
 
-START:;--------------------------------------------------------------------
+
+
 ;ind = [200:450]
 TEST_DATA, lc1, time;, ind=ind
 TEST_DATA_POWER, lc1, time;, ind=ind
 
-
-
-arr1 = wa_average( lc1, power, dz=64 )
-N = n_elements(lc1)
-arr2 = mean(arr, dimension=2)
-ind2 = [ dz-1 : N-dz ]
-arr3 = arr2[ind2]
-
-ydata = normalize(arr3)
-
-p = PLOT_TEST_DATA( $
-    ind2, ydata, time, $
-    overplot=1, $
-    ;symbol='.', $
-    color='dodger blue', $
-    name='3-minute power, averaged' )
-
-
-
 leg = legend2( position=[ 0.85,0.80 ], /relative )
-
 
 filename = 'test_data_averaged'
 save2, filename+'.pdf', /add_timestamp

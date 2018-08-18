@@ -24,6 +24,7 @@ function plot2, xinput, yinput, _EXTRA=e
         ytickfont_size = fontsize, $
         xtickfont_size = fontsize, $
         axis_style = 2, $
+        thick = 0, $
         xtickdir = 0, $
         ytickdir = 0, $
         xsubticklen = 0.5, $

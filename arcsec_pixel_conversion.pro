@@ -1,15 +1,22 @@
 ;; Last modified:   27 June 2018
 
 
-; Input:    ONE index (coords for each image will be slightly different)
-;           2-element array with center coords center (pixels)
+; Get X and Y coordinate arrays for a single image
+
+; Input:    index (header struc containing crpix1|2 and cdelt1|2)
+;           center_pix (2-element array with center coords in pixels)
 ;           2-element array with x and y dimensions (pixels)
 ; Output:   X, Y = arcsecond locations for x/y axes
 
 
 
 
-pro pixels_to_arcseconds, center_pix, dimensions, index, X, Y
+pro PIXELS_TO_ARCSECONDS, $
+    center_pix, $
+    dimensions, $
+    index, $
+    X, Y
+
     ; returns ARRAYS of coords relative to disk center (not single x,y pair).
 
     ; individual variable names for x and y center coords
