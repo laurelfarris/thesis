@@ -20,7 +20,7 @@ function legend2, target=target, _EXTRA=e
         font_size = fontsize, $
         linestyle = 6, $
         shadow = 0, $
-        sample_width = 0.10, $
+        sample_width = 0.20, $
         _EXTRA=e )
     return, leg
 end
