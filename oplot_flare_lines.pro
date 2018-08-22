@@ -1,6 +1,7 @@
 
 
-function OPLOT_FLARE_LINES, time, $
+function OPLOT_FLARE_LINES, $
+    time, $
     ;target=target, $
     shaded=shaded, $
     yrange=yrange, $
@@ -26,31 +27,25 @@ function OPLOT_FLARE_LINES, time, $
     ;print, window_names
     ;result = win.GetSelect()
 
-
     v = objarr(N)
-    ;for ii = 0, n_elements(target)-1 do begin
-        for jj = 0, n_elements(vx)-1 do begin
-            v[jj] = plot( $
-                [ vx[jj], vx[jj] ], $
-                yrange, $
-                ;(graphic[ii]).yrange, $
-                ;overplot = graphic[ii], $
-                /overplot, $
-                ystyle = 1, $
-                linestyle = linestyle[jj], $
-                thick = 1, $
-                name = names[jj], $
-                _EXTRA=e )
-            if keyword_set(send_to_back) then v[jj].Order, /SEND_TO_BACK
-        endfor
-    ;endfor
+    for jj = 0, n_elements(vx)-1 do begin
+        v[jj] = plot2( $
+            [ vx[jj], vx[jj] ], $
+            yrange, $
+            /overplot, $
+            ystyle = 1, $
+            linestyle = linestyle[jj], $
+            thick = 1, $
+            name = names[jj], $
+            _EXTRA=e )
+        if keyword_set(send_to_back) then v[jj].Order, /SEND_TO_BACK
+    endfor
 
+
+    ; Shaded region
     if keyword_set(shaded) then begin
-
         ;for ii = 0, n_elements(graphic)-1 do begin
-
             ;yrange = (graphic[ii]).yrange
-
             v_shaded = plot ( $
                 [ vx[0]-32, vx[0]-32, vx[-1]+32-1, vx[-1]+32-1 ], $
                 [ yrange[0], yrange[1], yrange[1], yrange[0] ], $

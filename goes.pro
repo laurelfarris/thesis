@@ -49,7 +49,6 @@
 
 function GOES
 
-
     ;TVLCT, 255, 255, 255, 254
     ;TVLCT, 0, 0, 0, 253
     ;!P.Color = 253
@@ -62,7 +61,7 @@ function GOES
     sat = 'goes15'
 
     ; My times
-    tstart = '15-Feb-2011 00:00:02'
+    tstart = '15-Feb-2011 00:00:03'
     tend   = '15-Feb-2011 04:59:59'
 
     ; times covered in Milligan2017 (to start)
@@ -114,7 +113,5 @@ end
 
 goto, START
 START:;----------------------------------------------------------------------------------
-
-
 
 end

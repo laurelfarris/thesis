@@ -38,7 +38,7 @@ pro SAVE2, filename, confirm_replace=confirm_replace, add_timestamp=add_timestam
     ; while fls ne "" ; i = i + 1 ; filename = basename + '_' + strtrim(i,1)
     ; keep appending _1, _2, etc. until no other file matches
 
-    w = getwindows(/current)
+    w = GetWindows(/current)
     dims = w.dimensions/dpi
     width = dims[0]
     height = dims[1]

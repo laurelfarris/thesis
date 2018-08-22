@@ -15,6 +15,11 @@
     ; different file for cleanup and to remove babble.
 ;
 
+; Setting, e.g. time=time[ind] will return cropped string back
+; to main level and cause all kinds of problems... create new
+; variables if want to do this.
+
+
 function MAKE_WINDOW, _EXTRA=e
 
     common defaults
@@ -22,17 +27,14 @@ function MAKE_WINDOW, _EXTRA=e
     wx = 11.0
     wy = 8.0
 
-    count = n_elements(GetWindows())
-
     win = window( $
-        dimensions=[wx,wy]*dpi, $
-        location=[500,0], $
-        ;name="Name", $
+        Name='Test Data', $
         ;window_title="Window_title", $
         ;title="Test flare data", $
-        buffer=0, $
+        dimensions=[wx,wy]*dpi, $
+        ;location=[500,0], $
+        buffer=1, $
         _EXTRA=e )
-
     return, win
 end
 
@@ -45,9 +47,9 @@ function PLOT_TEST_DATA, xdata, ydata, time, _EXTRA=e
     dims = dims/dpi
 
     left = 0.75
-    bottom = 2.5
+    bottom = 1.5
     right = 0.75
-    top = 2.5
+    top = 1.5
 
     width = dims[0] - (right+left)
     height = dims[1] - (top+bottom); - 4
@@ -64,14 +66,14 @@ function PLOT_TEST_DATA, xdata, ydata, time, _EXTRA=e
         position=position, $
         thick=0, $
         ;xmajor=13, $
-        xminor=3, $
+        xminor=4, $
         yminor=3, $
-        xtickinterval=50, $
+        xtickinterval=10, $
         xtitle='index', $
         xticklen=xticklen, $
         yticklen=yticklen, $
         xshowtext=1, $
-        ;symbol='.', $
+        symbol='.', $
         sym_size=4.0, $
         _EXTRA=e )
 
@@ -84,37 +86,20 @@ function PLOT_TEST_DATA, xdata, ydata, time, _EXTRA=e
     return, p
 end
 
+pro TEST_POWER_AVERAGED, lc1, time, power, arr, ind=ind
 
-pro TEST_LC, lc1, time, ind=ind
-
-    ; Save file returns variables 'time' and 'lc1'
-    if (n_elements(lc1) eq 0) OR (n_elements(time) eq 0) then $
-        restore, '../test_data.sav'
     N = n_elements(lc1)
-
     if not keyword_set(ind) then ind = [0:N-1]
 
-
-    ; Setting, e.g. time=time[ind] will return cropped string back
-    ; to main level and cause all kinds of problems... create new
-    ; variables if want to do this.
-
-    ;xdata = time[ind]
-    xdata = ind
-    ydata = normalize(lc1[ind])
-
-    p = PLOT_TEST_DATA( $
-        xdata, ydata, time, $
-        name = 'flux' )
+    dz = 64
+    arr = WA_AVERAGE( lc1, power, dz=dz )
 
 end
 
 
-pro TEST_POWER, lc1, time, ind=ind
+pro TEST_POWER, lc1, time, power, dz=dz, ind=ind
 
     cadence = time[1]-time[0]
-    ;dz = [ 64, 100, 200, 500 ]
-    dz =  64
     fmin = 0.005
     fmax = 0.006
 
@@ -133,53 +118,72 @@ pro TEST_POWER, lc1, time, ind=ind
         power[i] = struc.mean_power
     endfor
 
-    xrange = [ ind[0], ind[-1] ]
-
-    i1 = ind[0] + dz/2
-    i2 = ind[-1] - (dz/2)
-
-    ydata = normalize(power)
-
-    p = PLOT_TEST_DATA( $
-        [i1:i2], ydata, time, $
-        overplot=1, $
-        ;symbol='.', $
-        color='red', $
-        name='3-minute power' )
     return
 end
 
-pro TEST_POWER_AVERAGED, lc1, time, power, ind=ind
+;win = MAKE_WINDOW()
+win.erase
 
-    arr1 = WA_AVERAGE( lc1, power, dz=64 )
-    N = n_elements(lc1)
-    arr2 = mean(arr, dimension=2)
-    ind2 = [ dz-1 : N-dz ]
-    arr3 = arr2[ind2]
+; Save file returns variables 'time' and 'lc1'
+if (n_elements(lc1) eq 0) OR (n_elements(time) eq 0) then $
+    restore, '../test_data.sav'
+N = n_elements(lc1)
 
-    ydata = normalize(arr3)
+;ind = [150:450]
+ind = [0:N-1]
 
-    p = PLOT_TEST_DATA( $
-        ind2, ydata, time, $
-        overplot=1, $
-        ;symbol='.', $
-        color='dodger blue', $
-        name='3-minute power, averaged' )
-end
+;xdata = time[ind]
+xdata = ind
+ydata = normalize(lc1[ind])
 
 
-dw
-win = MAKE_WINDOW( location=[500,0] )
+;xrange=[190,270]
+xrange=[270,400]
 
-TEST_DATA, lc1, time
+p = objarr(3)
+p[0] = PLOT_TEST_DATA( xdata, ydata, time, xrange=xrange, $
+    name = 'flux' )
+
+;dz = [ 64, 100, 200, 500 ]
+dz = 64
+
+; Calculate 3-minute power
+TEST_POWER, lc1, time, power, dz=dz, ind=ind
+
+i1 = ind[0] + dz/2
+i2 = ind[-1] - (dz/2)
+ydata = normalize(power)
+
+p[1] = PLOT_TEST_DATA( $
+    [i1:i2], ydata, time, $
+    overplot=1, $
+    ;symbol='.', $
+    color='red', $
+    name='3-minute power' )
 
 
+; Average power for each timestep
+TEST_POWER_AVERAGED, lc1, time, power, arr, ind=ind
 
-;ind = [200:450]
-TEST_DATA, lc1, time;, ind=ind
-TEST_DATA_POWER, lc1, time;, ind=ind
+i1 = ind[0] + dz
+i2 = ind[-1] - (dz)
+;ind2 = [ dz-1 : N-dz ]
+ydata = normalize(arr)
 
-leg = legend2( position=[ 0.85,0.80 ], /relative )
+p[2] = PLOT_TEST_DATA( $
+    [i1:i2], ydata, time, $
+    overplot=1, $
+    ;symbol='.', $
+    color='dodger blue', $
+    name='3-minute power, averaged' )
+
+
+;; Legend
+
+lx = 0.40
+;lx = 0.95
+ly = 0.90
+leg = legend2( position=[lx,ly], /relative )
 
 filename = 'test_data_averaged'
 save2, filename+'.pdf', /add_timestamp

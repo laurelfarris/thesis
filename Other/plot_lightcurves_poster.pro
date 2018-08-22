@@ -93,6 +93,7 @@ endcase
 
 v = OPLOT_FLARE_LINES( time, yrange=p[0].yrange, /send_to_back, color='light gray' )
 
+    ;; Make little axis bar showing width of dz
     dz_axis = axis( $
         'X', $
         axis_range=[ dz, dz*2 ], $

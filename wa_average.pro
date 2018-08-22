@@ -31,8 +31,9 @@ function WA_AVERAGE, flux, power, dz=dz
 
 
     new_power = mean( arr, dimension=2 )
+    N = n_elements(new_power)
 
-    ;new_power = new_power[
+    new_power = new_power[ dz-1 : N-dz ]
 
     return, new_power
 
