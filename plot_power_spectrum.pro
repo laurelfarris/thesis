@@ -7,8 +7,8 @@
 
 function PLOT_POWER_SPECTRUM, $
     frequency, power, $
-    fmin=fmin,  fmax=fmax, $  ; min/max freq on x-axis
-    fcenter=fcenter, $  ; central frequency (interest)
+    fmin=fmin, fmax=fmax, $  ; min/max freq on x-axis
+    fcenter=fcenter, $  ; central frequency (freq. of interest)
     bandwidth=bandwidth, $  ; WIDTH centered at fcenter
     norm=norm, $
     time=time, $

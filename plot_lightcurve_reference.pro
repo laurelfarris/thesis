@@ -21,6 +21,12 @@ endelse
 
 START:;---------------------------------------------------------------------------------
 
+
+; colors to match AIA colors (probably not for publications, but may
+;  help me to keep track of which curves go with which data.
+A[0].color = 'olive drab'
+A[1].color = 'indian red'
+
 wx = 11.0
 wy = 8.5
 dw

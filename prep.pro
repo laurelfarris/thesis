@@ -55,13 +55,14 @@ function PREP, index, cube, cadence=cadence, inst=inst, channel=channel
 
     ;flux = fltarr( sz[2] )
     flux = total( total( cube, 1), 1 )
+
+    ;; Correct for exposure time (standard data reduction)
     exptime = index[0].exptime
     flux = flux/exptime
 
-    name = 'AIA ' + channel + '$\AA$'
-
     aia_lct, r, g, b, wave=fix(channel);, /load
     ct = [ [r], [g], [b] ]
+    name = 'AIA ' + channel + '$\AA$'
 
     resolve_routine, 'get_power_from_flux', /either
     power_flux = GET_POWER_FROM_FLUX( $
@@ -118,11 +119,6 @@ A = [ aia1600, aia1700 ]
 
 A[0].color = 'dark orange'
 A[1].color = 'dark cyan'
-
-; colors to match AIA colors (probably not for publications, but may
-;  help me to keep track of which curves go with which data.
-A[0].color = 'olive drab'
-A[1].color = 'indian red'
 
 ; To do: save variables with same name so can call this from subroutine.
 restore, '../power_from_maps.sav'

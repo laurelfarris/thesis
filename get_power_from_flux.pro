@@ -42,7 +42,8 @@ function GET_POWER_FROM_FLUX, $
     ; Calculate power for time series between each value of z and z+dz
     resolve_routine, 'calc_ft', /either
     foreach z, z_start, i do begin
-        struc = CALC_FT( new_flux[z:z+dz-1], cadence, fmin=fmin, fmax=fmax, norm=norm )
+        struc = CALC_FT( $
+            new_flux[z:z+dz-1], cadence, fmin=fmin, fmax=fmax, norm=norm )
         power[i] = struc.mean_power
     endforeach
 
@@ -70,7 +71,7 @@ stop;---------------------------------------------------------------------------
 
 power_test = get_power_from_flux( $
     flux=A[0].flux/(330.*500), cadence=24, dz=64, $
-    fmin=0.005, fmax=0.006, norm=0 ) 
+    fmin=0.005, fmax=0.006, norm=0 )
 
 p1 = plot2( A[0].power_flux, name='FT(flux)/N', ylog=1)
 p2 = plot2( power_test, /overplot, name='FT(flux/N)', color='red', ylog=1 )

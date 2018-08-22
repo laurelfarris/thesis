@@ -3,8 +3,8 @@
 function PLOT_LIGHTCURVES_ONLY, $
     ind, $
     data, $
-	time, $
-	_EXTRA=e
+    time, $
+    _EXTRA=e
 
     common defaults
 

@@ -38,7 +38,6 @@ function CALC_FT, $
     ;print, 'frequencies (mHz):'
     ;print, frequency*1000, format='(F0.2)'
 
-
     struc = { $
         frequency : frequency, $
         bandpass : [fmin,fmax], $

@@ -14,7 +14,7 @@ pro LABEL_TIME, p, time
 
     win = GetWindows(/current)
     ;time = strmid(A[0].time,0,5)
-    ax = plt[0].axes
+    ax = p[0].axes
     ax[0].tickname = time[ax[0].tickvalues]
     ax[0].title = 'Start time (UT) on 2011-February-15'
 
@@ -34,39 +34,22 @@ pro LABEL_TIME, p, time
 
     ; Or use intervals...
     xtickinterval = 75
-end
-function MAKE_WINDOW, _EXTRA=e
-    ; Set up all measurements (margins, window size, etc.)
-    ; Create window and return graphic position
 
-    common defaults
-    wx = 8.5
-    wy = 4.0
-
-    win = GetWindows(/current)
-
-    if win eq !NULL then begin
-        win = window( $
-            Name='LC', $
-            ;window_title = '', $
-            ;title = '', $
-            dimensions=[wx,wy]*dpi, $
-            buffer=1, $
-            font_size=fontsize, $
-            _EXTRA=e )
-        print, 'Created window "', win.name, '"'
-    endif else begin
-        win.erase
-        print, 'Erased window "', win.name, '"'
-    endelse
-    return, win
+    ; there's a separate subroutine for this...
+    ax = lc[0].axes
+    ax[0].title = xtitle[0]
+    ax[2].title = xtitle[1]
+    ax[1].title = ytitle[0]
+    ax[3].title = ytitle[1]
 end
 
-function MAKE_POSITION
+function MAKE_POSITION, win=win
+    ; win kw to see if variable needs to be passed in order to retrieve NAME
 
     common defaults
 
-    win = GetWindows(/current)
+    if not keyword_set(win) then win = GetWindows(/current)
+    print, win.name
 
     ; Dimensions of current window
     wx = ((win.dimensions)[0])/dpi
@@ -86,13 +69,13 @@ function MAKE_POSITION
     return, position*dpi
 end
 
-function MAKE_LEGEND, _EXTRA=e
+function MAKE_LEGEND, win=win, _EXTRA=e
 
     win = GetWindows(/current)
     win.Select, /all
     target = win.GetSelect()
-
-    pos = make_position()
+    ;pos = (target[0].position)/dpi
+    pos = MAKE_POSITION()
     dl = -0.25
     leg = legend2(  $
         /device, $
@@ -102,46 +85,8 @@ function MAKE_LEGEND, _EXTRA=e
 end
 
 
-function PLOT_LC, xdata, ydata, $
-    color=color, name=name, _EXTRA = e
 
-    position = MAKE_POSITION()
-    ; TO-DO: if no window exists, create one using
-    ; margins and graphic height to set window height.
-
-    sz = size( ydata, /dimensions )
-    lc = objarr(sz[1])
-    for i = 0, n_elements(lc)-1 do begin
-        lc[i] = PLOT2( $
-            xdata, ydata[*,i], $
-            /current, $
-            /device, $
-            overplot=i<1, $
-            position=position, $
-            ;xmajor=7, $
-            ;xminor=4, $
-            xtickinterval=75, $
-            ymajor=5, $
-            ;yminor=4, $
-            ;xshowtext=1, $
-            ;yshowtext=1, $
-            xticklen=0.025, $
-            yticklen=0.010, $
-            ;stairstep=1, $
-            color=color[i], $
-            name=name[i], $
-            _EXTRA = e )
-    endfor
-    return, lc
-    ; there's a separate subroutine for this...
-    ax = lc[0].axes
-    ax[0].title = xtitle[0]
-    ax[2].title = xtitle[1]
-    ax[1].title = ytitle[0]
-    ax[3].title = ytitle[1]
-end
-
-function ADJUST_YDATA, p
+function SHIFT_YDATA, p
 
     ; Shift data in Y-direction
     ;for i = 0, n_elements(p)-1 do begin
@@ -182,7 +127,11 @@ end
 
 function OPLOT_GOES, data
     ; AIA channels probably need to be normalized to overplot
-    ;  GOES data
+
+    ; GOES - create struc if haven't already
+    ;    make another struc for this?
+    if n_elements(data) eq 0 then data = GOES()
+
     y = data.ydata[*,0]
     y = y - min(y)
     y = y / max(y)
@@ -196,41 +145,88 @@ function OPLOT_GOES, data
     return, g
 end
 
+function PLOT_WITH_TIME, xdata, ydata, $
+    offset=offset, $
+    time=time, color=color, name=name, _EXTRA = e
 
-; GOES data - make another struc for this?
-;gdata = GOES()
+    sz = size( ydata, /dimensions )
+    if keyword_set(offset) then begin
+        ; could call another subroutine here to keep plotting routine simple.
+        N = sz[0]
+        xdata = [0:N-1] + offset
+    endif else begin
+        offset = 0
+    endelse
 
-win = MAKE_WINDOW()
-ydata = A.flux
-;xdata = A.jd-min(A.jd)
-xdata = indgen( (size(ydata))[1] )
+    position = MAKE_POSITION()
+    ; TO-DO: if no window exists, create one using
+    ; margins and graphic height to set window height.
 
-p = PLOT_LC( xdata, ydata, $
-    yshowtext=1, $
+    lc = objarr(sz[1])
+    for i = 0, n_elements(lc)-1 do begin
+        lc[i] = PLOT2( $
+            xdata, ydata[*,i], $
+            /current, $
+            /device, $
+            overplot=i<1, $
+            position=position, $
+            ;xmajor=7, $
+            ;xminor=4, $
+            xtickinterval=75, $
+            ymajor=5, $
+            ;yminor=4, $
+            ;xshowtext=1, $
+            yshowtext=1, $
+            xticklen=0.025, $
+            yticklen=0.010, $
+            ;stairstep=1, $
+            color=color[i], $
+            name=name[i], $
+            xtitle=xtitle, $
+            _EXTRA = e )
+    endfor
+    lc[0].xtickname = time[lc[0].xtickvalues]
+
+    return, lc
+end
+
+
+; IDL> .run plot_structures
+;       Already ML, so maybe add color, name, etc. to those structures
+S = lightcurve_struc
+;S = power_struc
+;S = average_power_struc
+
+win = WINDOW2( dimensions=[8.5,4.0], buffer=1 )
+
+xtitle = 'Start time (UT) on 15-Feb-2011 00:00'
+;xtitle = 'Start time (UT) on ' + gdata.utbase
+xrange = [0,748]
+
+p = PLOT_WITH_TIME( $
+    S.xdata, $
+    S.ydata, $
+    time = strmid( A[0].time, 0, 5 ), $
+    xtitle=xtitle, $
+    xrange=xrange, $
     color=A.color, $
     name=A.name )
 
-time = strmid( A[0].time, 0, 5 )
-p[0].xtickname = time[p[0].xtickvalues]
-p[0].xtitle = 'Start time (UT) on 15-Feb-2011 00:00'
-;p[0].xtitle = 'Start time (UT) on ' + gdata.utbase
-
 ;; All the different ways to adjust y-values
-;p = ADJUST_YDATA( p )
+;p = SHIFT_YDATA( p )
 p = NORMALIZE_YDATA( p )
 
+; Overplot flare start/peak/end times
 v = OPLOT_FLARE_LINES( $
         A[0].time, $
-        yrange=p[0].yrange, $
+        yrange=p[0].yrange, $  ; NOTE: must be called AFTER adjusting y-values
         /send_to_back, $
         color='light gray' )
 
-; Overplot GOES lightcurves
+; Overplot GOES lightcurves (only if ydata is normalized)
 g = OPLOT_GOES(gdata)
-
-
 
 leg = MAKE_LEGEND()
 
-save2, 'lightcurve_1.pdf';, /add_timestamp
+save2, S.file, /add_timestamp
 end
