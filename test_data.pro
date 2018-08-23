@@ -24,8 +24,8 @@ function MAKE_WINDOW, _EXTRA=e
 
     common defaults
 
-    wx = 11.0
-    wy = 8.0
+    wx = 8.5
+    wy = 4.0
 
     win = window( $
         Name='Test Data', $
@@ -47,17 +47,14 @@ function PLOT_TEST_DATA, xdata, ydata, time, _EXTRA=e
     dims = dims/dpi
 
     left = 0.75
-    bottom = 1.5
+    bottom = 0.75
     right = 0.75
-    top = 1.5
+    top = 0.75
 
     width = dims[0] - (right+left)
     height = dims[1] - (top+bottom); - 4
 
     position = [left, bottom, left+width, bottom+height] * dpi
-
-    xticklen = ( width^0.3)/100.
-    yticklen = (height^0.3)/100.
 
     p = plot2( $
         xdata, ydata, $
@@ -68,10 +65,8 @@ function PLOT_TEST_DATA, xdata, ydata, time, _EXTRA=e
         ;xmajor=13, $
         xminor=4, $
         yminor=3, $
-        xtickinterval=10, $
+        xtickinterval=25, $
         xtitle='index', $
-        xticklen=xticklen, $
-        yticklen=yticklen, $
         xshowtext=1, $
         symbol='.', $
         sym_size=4.0, $
@@ -121,7 +116,10 @@ pro TEST_POWER, lc1, time, power, dz=dz, ind=ind
     return
 end
 
-;win = MAKE_WINDOW()
+win = MAKE_WINDOW()
+wx = (win.dimensions)[0]
+wy = (win.dimensions)[1]
+
 win.erase
 
 ; Save file returns variables 'time' and 'lc1'
@@ -137,14 +135,14 @@ xdata = ind
 ydata = normalize(lc1[ind])
 
 
-;xrange=[190,270]
-xrange=[270,400]
+xrange = [175, 425]
 
 p = objarr(3)
-p[0] = PLOT_TEST_DATA( xdata, ydata, time, xrange=xrange, $
+p[0] = PLOT_TEST_DATA( $
+    xdata, ydata, time, $
+    xrange=xrange, $
     name = 'flux' )
 
-;dz = [ 64, 100, 200, 500 ]
 dz = 64
 
 ; Calculate 3-minute power
@@ -161,7 +159,6 @@ p[1] = PLOT_TEST_DATA( $
     color='red', $
     name='3-minute power' )
 
-
 ; Average power for each timestep
 TEST_POWER_AVERAGED, lc1, time, power, arr, ind=ind
 
@@ -177,13 +174,13 @@ p[2] = PLOT_TEST_DATA( $
     color='dodger blue', $
     name='3-minute power, averaged' )
 
-
 ;; Legend
+p[2].yticklen = p[2].yticklen * (4.0/8.5)
 
-lx = 0.40
-;lx = 0.95
-ly = 0.90
-leg = legend2( position=[lx,ly], /relative )
+pos = (p[2].position * [wx,wy,wx,wy]) / dpi
+lx = pos[2] - 0.20
+ly = pos[3] - 0.20
+leg = legend2( position=[lx,ly]*dpi, /device )
 
 filename = 'test_data_averaged'
 save2, filename+'.pdf', /add_timestamp

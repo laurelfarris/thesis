@@ -23,15 +23,17 @@ function OPLOT_FLARE_LINES, $
     for i = 0, N-1 do $
         vx[i] = (where( new_time eq flare_times[i] ))[0]
 
-    ;win = GetWindows( /current, NAMES=window_names )
+    win = GetWindows( /current, NAMES=window_names )
+    ;win.Select, /all
     ;print, window_names
     ;result = win.GetSelect()
 
     v = objarr(N)
     for jj = 0, n_elements(vx)-1 do begin
-        v[jj] = plot2( $
+        v[jj] = plot( $
             [ vx[jj], vx[jj] ], $
             yrange, $
+            /current, $
             /overplot, $
             ystyle = 1, $
             linestyle = linestyle[jj], $
@@ -40,6 +42,7 @@ function OPLOT_FLARE_LINES, $
             _EXTRA=e )
         if keyword_set(send_to_back) then v[jj].Order, /SEND_TO_BACK
     endfor
+    ;save2, 'test_in_oplot_flare_lines.pdf'
 
 
     ; Shaded region

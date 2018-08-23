@@ -5,7 +5,11 @@
 
 ; To-Do     Add kw option to reverse wx and wy? E.g. landscape...
 
-function WINDOW2, dimensions=dimensions, landscape=landscape, _EXTRA=e
+function WINDOW2, $
+    ;dimensions=dimensions, $
+    wx=wx, wy=wy, $
+    landscape=landscape, $
+    _EXTRA=e
 
     common defaults
 
@@ -19,16 +23,19 @@ function WINDOW2, dimensions=dimensions, landscape=landscape, _EXTRA=e
     ; Create new window
     if win eq !NULL then begin
 
-        if not keyword_set(dimensions) then begin
-            wx = 8.5
-            wy = 11.0
+        if not keyword_set(wx) then wx = 8.5
+        if not keyword_set(wy) then wy = 11.0
+
+        ;if not keyword_set(dimensions) then begin
+        ;    wx = 8.5
+        ;    wy = 11.0
             if keyword_set(landscape) $
-                then dimensions = [wy,wx]*dpi $
-                else dimensions = [wx,wy]*dpi
-        endif
+                then dimensions = [wy,wx] $
+                else dimensions = [wx,wy]
+        ;endif
 
         win = WINDOW( $
-            dimensions = dimensions, $
+            dimensions = dimensions*dpi, $
             ;location=[500,0], $
             buffer = 0, $
             name = 'No-Name figure. Sad figure', $
@@ -44,11 +51,10 @@ function WINDOW2, dimensions=dimensions, landscape=landscape, _EXTRA=e
     ; Erase existing window (do this from calling routine, for now)
     endif else begin
         ;count = n_elements(window_names)
-        print, 'Current window: "' , window_names, '"'
+        ;print, 'Current window: "' , window_names, '"'
         win.erase
     endelse
-
-
+    return, win
 end
 
 

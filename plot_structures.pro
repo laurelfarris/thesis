@@ -31,21 +31,29 @@ lightcurve_struc = PLOT_STRUCTURES( $
     ytitle='DN s$^{-1}$', $
     file='lightcurve_1.pdf' )
 
-; Power
-power_struc = PLOT_STRUCTURES( $
+; Power (flux)
+power_flux_struc = PLOT_STRUCTURES( $
     A.power_flux, $
     offset = (dz/2) - 1, $
     ytitle = '3-minute power', $
     file = 'power_flux.pdf' )
 
-; Average power
-aia1600power = WA_AVERAGE(A[0].flux, A[0].power_maps, dz=dz)
-aia1y00power = WA_AVERAGE(A[1].flux, A[1].power_maps, dz=dz)
+; Power (maps)
+power_maps_struc = PLOT_STRUCTURES( $
+    A.power_maps, $
+    offset = (dz/2) - 1, $
+    ytitle = '3-minute power', $
+    file = 'power_maps.pdf' )
 
-average_power_struc = PLOT_STRUCTURES( $
+; Average power
+dz = 64
+aia1600power = WA_AVERAGE(A[0].flux, A[0].power_maps, dz=dz)
+aia1700power = WA_AVERAGE(A[1].flux, A[1].power_maps, dz=dz)
+
+power_average_struc = PLOT_STRUCTURES( $
     [ [aia1600power], [aia1700power] ], $
     offset = dz-1, $
     ytitle = '3-minute power', $
-    file : 'average_power_flux.pdf' )
+    file = 'average_power_flux.pdf' )
 
 end

@@ -15,11 +15,16 @@ function legend2, target=target, _EXTRA=e
     ;y = Y[-5]
     ;position=[x,y]
 
+    ; Alignment options (first is the default in each case)
+    ; horizontal_alignment = 'Right'|'Center'|'Left'
+    ; vertical_alignment = 'Top'|'Center'|'Bottom'
+
     leg = legend( $
         target=target, $
         font_size = fontsize, $
         linestyle = 6, $
         shadow = 0, $
+        transparency = 100, $
         sample_width = 0.20, $
         _EXTRA=e )
     return, leg
