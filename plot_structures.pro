@@ -54,6 +54,6 @@ power_average_struc = PLOT_STRUCTURES( $
     [ [aia1600power], [aia1700power] ], $
     offset = dz-1, $
     ytitle = '3-minute power', $
-    file = 'average_power_flux.pdf' )
+    file = 'average_power_maps.pdf' )
 
 end
