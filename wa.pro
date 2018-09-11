@@ -8,6 +8,25 @@
 
 ; To do:      solid vertical lines at 1:30 and 2:30
 
+
+pro better
+    ; (11 Sep 2018) Better way to code this perhaps:
+
+    power1 = result[1,*]
+    ; power P = [ p0, p1, ..., p185 ]
+
+    N = n_elements(power1)
+    power2 = fltarr(N)
+
+    for i = 0, N-1 do begin
+        power2[i] = mean( power[ i : i+dz-1 ] )
+    endfor
+    ; plot vs. t = [ (dz/2) : N - (dz/2) ]
+
+end
+
+
+
 pro CALC_WA, flux, $
     frequency, wmap, $
     cadence=cadence, $
