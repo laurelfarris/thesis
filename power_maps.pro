@@ -18,6 +18,11 @@
 ; Reading in data and creating maps first, without messing with
 ;  structures or dictionaries (yet). Do need to interpolate though!
 
+; 23 September 2018
+; Removing part that excludes saturation. Will take longer to compute,
+;  but better to have extra information that can easily be excluded,
+;  in this case, by using masks.
+
 
 ; Probably don't need this anymore:
 pro restore_maps, struc, channel
@@ -47,35 +52,45 @@ function POWER_MAPS, $
     frequency = reform( (fourier2( indgen(dz), cadence, NORM=NORM ))[0,*] )
     ind = where( frequency ge f1 AND frequency le f2 )
 
-    n = n_elements(z)
-    map = fltarr( sz[0], sz[1], n )
+    nn = n_elements(z) - 1
+    map = fltarr( sz[0], sz[1], nn )
 
     start_time = systime(/seconds)
-    ; Could use foreach i, z... but need i increasing by 1 for map.
-    ; Add some test codes here, or some kind of error handling.
-    ; This takes way too long just to lose everything because the
-    ;  last value of i was "out of range" or whatever.
+    ;- Could use foreach i, z... but need i increasing by 1 for map.
+    ;- Add some test codes here, or some kind of error handling.
+    ;- This takes way too long just to lose everything because the
+    ;-  last value of i was "out of range" or whatever.
 
-    ; TEST: this should produce error if z is out of range.
+    ;- TEST: this should produce error if array of starting z-values
+    ;          is out of range.
     test = intarr( sz[2] )
-    for i = 0, n-1 do test[i] = data[ 0, 0, z[i]:z[i]+dz-1 ]
+    for i = 0, nn-1 do test[i] = data[ 0, 0, z[i]:z[i]+dz-1 ]
 
-    ; Array to keep track of how many pixels saturate at each z value.
-    sat_arr = fltarr( sz[2] )
-    if not keyword_set(threshold) then threshold = 10000
 
-    for i = 0, n-1 do begin
+    ;- Array to keep track of how many pixels saturate at each z value.
+    ;sat_arr = fltarr( sz[2] )
+    ;if not keyword_set(threshold) then threshold = 10000
+
+    for i = 0, nn-1 do begin
         for y = 0, sz[1]-1 do begin
         for x = 0, sz[0]-1 do begin
-            ; subtract 1 from dz so that total # images is eqal to dz
+
+            ;- Subtract 1 from dz so that total # images is eqal to dz
             flux = data[ x, y, z[i]:z[i]+dz-1 ]
-            sat = [where( flux ge threshold )]
-            if sat[0] eq -1 then begin
+
+            ;- z-coordinate(s) of saturated pixels in time segment
+            ;sat = [where( flux ge threshold )]
+
+            ;if sat[0] eq -1 then begin
+
                 power = reform( (fourier2( flux, cadence, norm=norm ))[1,*] )
+
                 ;map[x,y,i] = total( power[ind] )
-                ; MEAN is better - accounts for variation due to freq res
                 map[x,y,i] = mean( power[ind] )
-            endif
+                ;- MEAN is better than TOTAL,
+                ;     accounts for variation due to frequency resolution.
+
+            ;endif
         endfor
         endfor
     endfor
@@ -120,7 +135,8 @@ pro AIA_MAPS, cube, channel, file, start=start, norm=norm
 
     for i = start, sz[2]-1, step do begin
 
-        ; Test that z isn't out of range (find better way to do this... later)
+        ; Test that z isn't out of range 
+        ;   (find better way to do this... later)
         if sz[2] - i LT step then z = [i:sz[2]-1] else z = [i:i+step-1]
 
         map[*,*,z] = POWER_MAPS( $

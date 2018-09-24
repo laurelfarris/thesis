@@ -6,12 +6,28 @@
 
 
 
-pro xstepper2, cube, scale=scale, channel=channel, _EXTRA=e
+pro xstepper2, $
+    cube, $
+    scale=scale, $
+    channel=channel, $
+    invert_colors=invert_colors, $
+    _EXTRA=e
 
 
     sz = float(size( cube, /dimensions ))
 
-    if keyword_set(channel) then aia_lct, wave=fix(channel), /load
+    if keyword_set(invert_colors) then $
+        default_colortable = 54 $
+    else $
+        default_colortable = 0
+
+
+    if keyword_set(channel) then $
+        aia_lct, wave=fix(channel), /load $
+    else $
+        loadct, default_colortable
+
+
 
     mindata = []
     maxdata = []
@@ -19,9 +35,9 @@ pro xstepper2, cube, scale=scale, channel=channel, _EXTRA=e
         mindata = [mindata, min(cube[*,*,i])]
         maxdata = [maxdata, max(cube[*,*,i])]
     endfor
-    print, max(mindata)
-    print, min(maxdata)
-    stop
+    ;print, max(mindata)
+    ;print, min(maxdata)
+    ;stop
 
     if not keyword_set(scale) then scale = 1
     

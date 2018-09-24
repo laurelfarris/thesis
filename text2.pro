@@ -14,7 +14,14 @@ function text2, str, target=target, _EXTRA=e
     ; string array of letters: (a), (b), ..., (z)
     alph = '(' + string( bindgen(1,26)+(byte('a'))[0] ) + ')'
 
+
     N = n_elements(target)
+        ; (9/18/2018) This only makes sense if first create array of
+        ;  graphics, then add text in a separate loop... which may
+        ;  have been my intention, but it's been too long since I've
+        ;  edited this code.
+
+
     if not arg_present(str) then str = alph[0:N-1]
     t = objarr(N)
 

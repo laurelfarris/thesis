@@ -4,6 +4,10 @@
 ; but not the fits files, where index is always extracted.
 
 
+
+; nodata does the same thing as in read_sdo
+
+
 function POWER_IN_STRUC, struc
 
 
@@ -24,14 +28,24 @@ function PREP, index, cube, cadence=cadence, inst=inst, channel=channel
     ; Read headers
     if n_elements(index) eq 0 then begin
         resolve_routine, 'read_my_fits'
-        READ_MY_FITS, index, inst='aia', channel=channel, nodata=1
-    endif
+        READ_MY_FITS, index, $
+            instr='aia', $
+            channel=channel, $
+            nodata=1, $
+            prepped=1
+            ; set prep to 1 (23 Sep 2018).
+            ; Why wasn't this already set???
+            ;  kw wasn't present at all!
 
-    ; Restore data,
+    endif
+    print, 'Reading header for level ', $
+        strtrim(index[0].lvl_num,1), ' data.'
+
+    ; Restore data (in variable "cube", with pixel dimensions [750,500,749]),
     ;   interpolate to get missing data and corresponding timestamp,
-    ;   then crop data to 500x330 pixels
+    ;   then crop data to pixel dimensions [500,330,*].
     ; reasons if statement doesn't work here:
-    ;   Also get time and jd here, which are needed for structure
+    ;   Also get time and jd, which are needed for structure
     ;if n_elements(cube) eq 0 then begin
         restore, '../aia' + channel + 'aligned.sav'
         time = strmid(index.date_obs,11,11)
@@ -41,8 +55,12 @@ function PREP, index, cube, cadence=cadence, inst=inst, channel=channel
         cube = fix( round( cube ) )
     ;endif
 
-    sz = size( cube, /dimensions )
+    ;- Correct for exposure time (standard data reduction)
+    exptime = index[0].exptime
+    print, 'Exposure time = ', strtrim(exptime,1), ' seconds.'
+    cube = cube/exptime
 
+    sz = size( cube, /dimensions )
 
     ; X/Y coordinates of AR, converted from pixels to arcseconds
     x1 = 2150
@@ -55,10 +73,6 @@ function PREP, index, cube, cadence=cadence, inst=inst, channel=channel
 
     ;flux = fltarr( sz[2] )
     flux = total( total( cube, 1), 1 )
-
-    ;; Correct for exposure time (standard data reduction)
-    exptime = index[0].exptime
-    flux = flux/exptime
 
     aia_lct, r, g, b, wave=fix(channel);, /load
     ct = [ [r], [g], [b] ]
@@ -92,7 +106,7 @@ function PREP, index, cube, cadence=cadence, inst=inst, channel=channel
         power_flux: power_flux, $
         power_maps: fltarr(685), $
         ;map: fltarr(sz[0],sz[1],685), $
-        map: map, $
+        ;map: map, $
         name: name $
     }
     return, struc
@@ -129,5 +143,10 @@ restore, '../power_from_maps.sav'
 
 A[0].power_maps = aia1600power_from_maps
 A[1].power_maps = aia1700power_from_maps
+
+;- 23 September 2018
+A[0].data = A[0].data > 0
+;  thought aia_prep produced data with no negative numbers, but not
+;   sure why I thought so... 
 
 end

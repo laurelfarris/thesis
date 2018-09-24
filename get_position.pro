@@ -1,5 +1,18 @@
 ; Last modified:    26 July 2018
 
+; optional keywords:
+;   margins (left, bottom, right, top),
+;   xgap, ygap
+;           
+;        
+; 18 September 2018
+; This could probably use some extra subroutines to handle
+;   all the little ways this can be done (e.g. by setting margins,
+;   or width, height, and gaps. Don't need to set every parameter:
+;   page dimensions, margins, gaps, and image dimensions...
+;   one of these can be unknown, and solved for using the others.
+; Didn't modify anything today... just using the code as is.
+
 
 
 function WRAP_GET_POSITION, $
@@ -41,15 +54,16 @@ end
 function GET_POSITION, layout=layout, _EXTRA = e
 
     common defaults
+
+    ; Get dimensions of current window
     dim = (GetWindows(/current)).dimensions / dpi
-    
     wx = float(dim[0])
     wy = float(dim[1])
 
+    ; Calculate a default width (in case kw isn't specified)
+    ;   by dividing width of page by # columns
     cols = layout[0]
     rows = layout[1]
-
-    ; Default width - divide width of page by # columns (plus some extra space)
     width = wx / (cols)
 
     position = WRAP_GET_POSITION( $
@@ -60,10 +74,11 @@ function GET_POSITION, layout=layout, _EXTRA = e
         height = height, $
         left  = 1.00, $
         right = 1.00, $
-        bottom = 0.50, $
-        top    = 0.50, $
+        bottom = 1.00, $
+        top = 1.00, $
         xgap = 0.00, $
         ygap = 0.00, $
         _EXTRA = e )
     return, position
+
 end
