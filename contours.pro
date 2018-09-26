@@ -1,8 +1,19 @@
-; Last modified:   05 June 2018
+; Last modified:   26 September 2018
+
+
+; Also see Old/plot_contours_old.pro, journal.pro, 
+;    subregion3.pro, and subregion4.pro
 
 
 ; What values does HMI B_LOS data have?
 ; Neg. vs. positive polarity...
+
+
+; randomly chosen indices for developing code:
+ind = [50, 300, 500]
+
+aia = A[0].data[*,*,ind]
+
 
 ; fraction of pixel values to include in each contour
 c2 = quiet_avg * 0.6
