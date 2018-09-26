@@ -20,6 +20,10 @@ function CROP_DATA, data, $
     dimensions=dimensions, $
     center=center
 
+    print, 'Syntax: CROP_DATA, data, $'
+    print,     'dimensions=dimensions, $'
+    print,     'center=center' 
+
     sz = size( data, /dimensions )
 
 
