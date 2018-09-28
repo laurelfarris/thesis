@@ -18,11 +18,18 @@ function PLOT_POWER_SPECTRUM, $
     ;bandwidth=bandwidth, $
     ;norm=norm, $
     ;time=time, $
+    syntax_help=syntax_help, $
     _EXTRA=e
 
-    print, "Calling sequence: result = PLOT_POWER_SPECTRUM( $"
-    print, "    frequencyfrequency, power, fmin=fmin, fmax=fmax, fcenter=fcenter, $"
-    print, "    bandwidth=bandwidth, norm=norm, time=time )"
+    if keyword_set(syntax_help) then begin
+        print, ""
+        print, "Calling sequence:"
+        print, "    result = PLOT_POWER_SPECTRUM( $"
+        print, "        frequency, power, fmin=fmin, fmax=fmax, fcenter=fcenter, $"
+        print, "        label_period=label_period, $"
+        print, "        bandwidth=bandwidth, norm=norm, time=time )"
+        return, 0
+    endif
 
     common defaults
 
@@ -64,6 +71,8 @@ function PLOT_POWER_SPECTRUM, $
     ax[0].coord_transform=[0,1000.]
     ax[0].title='frequency (mHz)'
     ax[0].tickformat='(F0.2)'
+
+    save2, 'test.pdf'
 
     return, p
 
