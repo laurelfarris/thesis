@@ -1,6 +1,10 @@
 ; Last modified:    08 August 2018
 
 
+;- Make my own cutoff frequency profile through interior and atmosphere
+;-  of the sun
+
+
 
 pro CUTOFF
 

@@ -105,11 +105,18 @@ for ii = 0, n_elements(times)-2 do begin
 
         t1 = where( A[cc].time eq times[ii] )
         t2 = where( A[cc].time eq times[ii+1] ) - 1
+
+        n_pixels = 330.*500.
         flux = A[cc].flux[t1:t2]
+        flux = (A[cc].flux[t1:t2])/n_pixels
 
         result = fourier2( flux, A[cc].cadence, norm=0 )
         frequency = reform( result[0,*] )
+
         power = reform( result[1,*] )
+        power = (reform( result[1,*] )) / n_pixels
+        print, min(power)
+        print, max(power)
 
         p[cc] = PLOT_POWER_SPECTRUM( $
             frequency, power, $

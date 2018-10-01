@@ -3,6 +3,10 @@
 ; without header information (like when I have access to .sav files,
 ; but not the fits files, where index is always extracted.
 
+;- To do: make a separate routine for reading in maps and power vs. time.
+;         Also need a different name for power vs. time.
+;         --> Google this, may be an actual analysis method with a real name.
+
 
 
 ; nodata does the same thing as in read_sdo
@@ -147,6 +151,6 @@ A[1].power_maps = aia1700power_from_maps
 ;- 23 September 2018
 A[0].data = A[0].data > 0
 ;  thought aia_prep produced data with no negative numbers, but not
-;   sure why I thought so... 
+;   sure why I thought so...
 
 end
