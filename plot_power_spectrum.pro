@@ -33,48 +33,80 @@ function PLOT_POWER_SPECTRUM, $
 
     common defaults
 
+    left = 1.0
+    right = 1.0
+    bottom = 0.5
+    top = 0.5
+
+    wx = 8.5
+    wy = 11.0
+
+    width = wx - (left+right)
+    height = wy - (top+bottom)
+
+    win = window( dimensions=[wx,wy]*dpi, buffer=1 )
+
     if not keyword_set(fmin) then fmin = min(frequency)
     if not keyword_set(fmax) then fmax = max(frequency)
-
     ind = where( frequency ge fmin AND frequency le fmax )
     frequency = frequency[ind]
     power = power[ind]
 
-    ;t = strtrim(time[*,i])
-    p = PLOT2( $
-        frequency, power, $
-        /current, $
-        ;xrange=[fmin,fmax], $
-        ;xmajor = 7, $
-        ;name = t[0] + '-' + t[-1]
-            ; or could be same time range, but two different instruments....??
-        xtitle = 'frequency (Hz)', $
-        ytitle = 'power', $
-        ;ytitle='log power', $
-        _EXTRA=e )
+    for jj = 0, n_tags(struc)-1 do begin
 
-    ax = p.axes
+        position = GET_POSITION( layout=[1,2,jj+1] )
+        print, position
 
-    if keyword_set(label_period) then begin
-        ax[2].showtext = 1
-        ax[2].title = 'period (seconds)'
+        frequency = struc.(jj).frequency
+        sz = (size(frequency,/dimensions))
+        p = objarr(sz[1])
 
-        ;- Kind of going in circles, but want to label ticks using actual values,
-        ;- not manually setting equal to period array, which could lead to errors,
-        ;-  e.g. frequency and period both increasing in the same direction...
-        ax[2].tickvalues = 1./[120, 180, 200]
-        ax[2].tickname = strtrim( round(1./(ax[2].tickvalues)), 1 )
-    endif
+        for ii = 0, n_elements(p)-1 do begin
 
-    ;- convert frequency units: Hz --> mHz
-    ;- SYNTAX: axis = a + b*data
-    ax[0].coord_transform=[0,1000.]
-    ax[0].title='frequency (mHz)'
-    ax[0].tickformat='(F0.2)'
+            ;t = strtrim(time[*,i])
+            p = PLOT2( $
+                frequency[*,ii], $
+                power[*,ii], $
+                /current, $
+                /device, $
+                overplot = ii<1, $
+                position = position*dpi, $
+                ;xmajor = 7, $
+                name = struc.(jj).names[ii], $
+                xtitle = 'frequency (Hz)', $
+                ytitle = 'power', $
+                _EXTRA=e )
+        endfor
 
-    save2, 'test.pdf'
+        if (p.ylog eq 1) then p.ytitle = 'log power'
 
-    return, p
+        ;- Extra stuff to add to individual panel:
+
+        ax = p.axes
+
+        if keyword_set(label_period) then begin
+            ax[2].showtext = 1
+            ax[2].title = 'period (seconds)'
+
+            ;- Kind of going in circles, but want to label ticks using actual values,
+            ;- not manually setting equal to period array, which could lead to errors,
+            ;-  e.g. frequency and period both increasing in the same direction...
+            ax[2].tickvalues = 1./[120, 180, 200]
+            ax[2].tickname = strtrim( round(1./(ax[2].tickvalues)), 1 )
+        endif
+
+        ;- convert frequency units: Hz --> mHz AFTER labeling period.
+        ;- SYNTAX: axis = a + b*data
+        ax[0].coord_transform=[0,1000.]
+        ax[0].title='frequency (mHz)'
+        ax[0].tickformat='(F0.2)'
+
+    endfor
+
+    leg = LEGEND2( $
+        target = p[0], $
+        /data, $
+        position = 0.95*[ (p.xrange)[1], (p.yrange)[1] ] )
 
     ;fmin = 1./400 ; 2.5 mHz
     ;fmax = 1./50 ;  20 mHz
@@ -130,9 +162,7 @@ for ii = 0, n_elements(times)-2 do begin
 
 endfor
 
-leg = LEGEND2( $
-    target = p[0], $
-    /data, $
-    position = 0.95*[ (p.xrange)[1], (p.yrange)[1] ] )
+
+;- Call BDA_structures.pro first, then input structure into plotting routine.
 
 end

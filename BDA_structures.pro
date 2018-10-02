@@ -1,43 +1,78 @@
 
 
-;- 27 September 2018
+;- 01 October 2018
 
 
-function BDA_structures, flux, cadence, time
-;- only input is what cahnged from one inst to the next
+function BDA_structures, flux, cadence, obs_time
+;- only input is what changed from one inst to the next
 
-    fmin = 1./400
-    fmax = 1./50
+    ;--------------------------------------
+    ;- Separate subroutine?
+    start_times = [ '00:30', '01:00', '01:30', '02:00', '02:30', '03:00', '03:30' ]
+    description = [ 'before', 'during', 'after' ]
 
-    boundary_times = [ '00:30', '01:30', '02:30', '03:30' ]
+    start_times = [ '00:30', '01:30', '02:30' ]
+    description = [ 'before', 'during', 'after' ]
+
+    ;  Can set a single dz or dT value? E.g. 30 minutes or 64 frames.
+    ;  Would still need to set start times...
+
+    time = strmid( obs_time, 0, 5 )
+
+    ; Make sure this works, and returns array as expected:
+    z_start = where( time eq start_times )
+
+    dz = z_start[1] - z_start[0]
     n_freqs = 64 ; cheating - already figured this out
+    ;--------------------------------------
 
-    freq = fltarr(n_freqs, 3)
-    power = fltarr(n_freqs, 3)
+    ;frequency = fltarr(n_freqs, 3)
+    ;power = fltarr(n_freqs, 3)
+    frequency = []
+    power = []
+    names = []
 
-    for ii = 0, n_elements(boundary_times)-2 do begin
-        time = strmid( time, 0, 5 )
-        z_start = (where( time eq boundary_times[ii]   ))[1]
-        z_end =   (where( time eq boundary_times[ii+1] ))[0]
-        result = calc_ft( $
+    for ii = 0, n_elements(start_times)-2 do begin
+
+        ;z_start = (where( time eq start_times[ii]   ))[1]
+        ;z_end =   (where( time eq start_times[ii+1] ))[0]
+        z_start = z_start[ii]
+        z_end = z_start + dz - 1
+        result = CALC_FT( $
             flux[z_start:z_end], $
             cadence, $
-            fmin=fmin, fmax=fmax, norm=0 )
-        freq[*,ii] = result.frequency
-        power[*,ii] = result.power
+            ;fmin=fmin, fmax=fmax, $
+            norm=0 )
+
+        frequency = [ [frequency], [result.frequency] ]
+        power = [ [power], [result.power] ]
+        ;frequency[*,ii] = result.frequency
+        ;power[*,ii] = result.power
+
+        ;- Use original observation times, NOT the desired times entered manually
+        ;    into string array. Too easy for errors.
+        names = [ [names], $
+            [ time[z_start] + '-' + time[z_end] + ' (' + description[ii] + ')' ] $
+            ]
     endfor
 
+
     struc = { $
-        freq : { $
-            before : freq[*,0], $
-            during : freq[*,1], $
-            after : freq[*,2] }, $
-        power : { $
-            before : power[*,0], $
-            during : power[*,1], $
-            after : power[*,2] } $
-            }
+        frequency : frequency, $
+        power : power, $
+        names : names }
 
     return, struc
+end
+
+cc = 0
+aia1600 = BDA_structures( A[cc].flux, A[cc].cadence, A[cc].time )
+
+cc = 1
+aia1700 = BDA_structures( A[cc].flux, A[cc].cadence, A[cc].time )
+
+struc = { aia1600:aia1600, aia1700:aia1700 }
+
+
 
 end

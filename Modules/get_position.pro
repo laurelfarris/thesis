@@ -3,8 +3,8 @@
 ; optional keywords:
 ;   margins (left, bottom, right, top),
 ;   xgap, ygap
-;           
-;        
+;
+;
 ; 18 September 2018
 ; This could probably use some extra subroutines to handle
 ;   all the little ways this can be done (e.g. by setting margins,
@@ -21,6 +21,9 @@ function WRAP_GET_POSITION, $
     width=width, height=height, $
     xgap=xgap, ygap=ygap, $
     wx=wx, wy=wy
+
+    ;- Uses dimensions to calculate array with position in the form
+    ;     [x1, y1, x2, y2], in inches
 
     common defaults
 
@@ -51,20 +54,34 @@ function WRAP_GET_POSITION, $
     return, position
 end
 
+
+
 function GET_POSITION, layout=layout, _EXTRA = e
+    ;- Call this with desired dimensions (if any)
 
     common defaults
 
-    ; Get dimensions of current window
+    ;- Get dimensions of current window
     dim = (GetWindows(/current)).dimensions / dpi
     wx = float(dim[0])
     wy = float(dim[1])
 
-    ; Calculate a default width (in case kw isn't specified)
-    ;   by dividing width of page by # columns
     cols = layout[0]
     rows = layout[1]
-    width = wx / (cols)
+
+    n_panels = cols*rows
+
+    ;- Defaults
+    left   = 1.00
+    right  = 1.00
+    bottom = 1.00
+    top    = 1.00
+    xgap   = 0.25
+    ygap   = 0.25
+
+    width = wx - ( $
+        (left + right) + $
+        (n_panels-1) * xgap )
 
     position = WRAP_GET_POSITION( $
         layout = layout, $
@@ -72,12 +89,12 @@ function GET_POSITION, layout=layout, _EXTRA = e
         wy = wy, $
         width = width, $
         height = height, $
-        left  = 1.00, $
-        right = 1.00, $
-        bottom = 1.00, $
-        top = 1.00, $
-        xgap = 0.00, $
-        ygap = 0.00, $
+        left = left, $
+        right = right, $
+        bottom = bottom, $
+        top = top, $
+        xgap = xgap, $
+        ygap = ygap, $
         _EXTRA = e )
     return, position
 
