@@ -133,10 +133,16 @@ start:
 
 aia1600 = PREP( aia1600index, aia1600data, cadence=24., inst='aia', channel='1600' )
 aia1700 = PREP( aia1700index, aia1700data, cadence=24., inst='aia', channel='1700' )
+
+help, aia1600
+help, aia1600data
+
 A = [ aia1600, aia1700 ]
 
 A[0].color = 'dark orange'
 A[1].color = 'dark cyan'
+
+stop
 
 ; To do: save variables with same name so can call this from subroutine.
 restore, '../power_from_maps.sav'

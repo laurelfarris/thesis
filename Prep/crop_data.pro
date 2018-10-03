@@ -12,20 +12,25 @@
 ;
 ; AUTHOR:       Laurel Farris
 ;
+; 03 October 2018 - added optional 'offset' keyword
 ;-
 
 
 ;pro crop_data, data, X, Y, $
 function CROP_DATA, data, $
     dimensions=dimensions, $
-    center=center
+    center=center, $
+    offset=offset, $
+    syntax=syntax
 
-    print, 'Syntax: CROP_DATA, data, $'
-    print,     'dimensions=dimensions, $'
-    print,     'center=center' 
+    if keyword_set(syntax) then begin
+        print, ''
+        print, 'Syntax: CROP_DATA, data, $'
+        print,     'dimensions=dimensions, $'
+        print,     'center=center' 
+    endif
 
     sz = size( data, /dimensions )
-
 
     ; Crop relative to center of input cube by default
     if not keyword_set(center) then begin
@@ -39,6 +44,11 @@ function CROP_DATA, data, $
         x_center = center[0]
         y_center = center[1]
     endelse
+
+    ;- offset center (03 October 2018)
+    if not keyword_set(offset) then offset = [0,0]
+    x_center = x_center + offset[0]
+    y_center = y_center + offset[1]
 
 
     if not keyword_set(dimensions) then begin
