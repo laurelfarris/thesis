@@ -25,6 +25,18 @@ print, 'Type .CONTINUE to close journal.'
 stop
 journal
 
+
+;- Power spectra:
+;-   Don't have to show full range of frequencies from Milligan2017.
+;-
+
+;- Power maps:
+;-   Multiply power maps by mask, which can be created using any threshold.
+;-   Compare same power map using multiple thresholds.
+;-   Show images used to compute maps: running average? standard deviation?
+;-   How should power maps be scaled visually?  @methods
+;-
+
 stop
 
 
