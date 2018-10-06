@@ -35,7 +35,8 @@ end
 function POWER_MAPS, $
     data, $
     cadence, $
-    bandwidth, $
+    fmin=fmin, $
+    fmax=fmax, $
     threshold=threshold, $
     z=z, $
     dz=dz, $
@@ -43,16 +44,14 @@ function POWER_MAPS, $
 
     sz = size( data, /dimensions )
 
-    f1 = bandwidth[0]
-    f2 = bandwidth[1]
-
     if n_elements(z) eq 0 then z=[0]
     if n_elements(dz) eq 0 then dz = sz[2]
 
     frequency = reform( (fourier2( indgen(dz), cadence, NORM=NORM ))[0,*] )
-    ind = where( frequency ge f1 AND frequency le f2 )
+    ind = where( frequency ge fmin AND frequency le fmax )
 
-    nn = n_elements(z) - 1
+
+    nn = n_elements(z); - 1
     map = fltarr( sz[0], sz[1], nn )
 
     start_time = systime(/seconds)

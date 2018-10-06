@@ -72,16 +72,15 @@ function GET_POSITION, layout=layout, _EXTRA = e
     n_panels = cols*rows
 
     ;- Defaults
-    left   = 1.00
-    right  = 1.00
+    left   = 1.00 - 0.25
+    right  = 1.00 + 0.25
     bottom = 1.00
     top    = 1.00
     xgap   = 0.25
     ygap   = 0.25
 
-    width = wx - ( $
-        (left + right) + $
-        (n_panels-1) * xgap )
+    width = (wx - ( left + right + (cols-1)*xgap )) / cols
+    ;height = (wy - ( top + bottom + (cols-1)*xgap )) / cols
 
     position = WRAP_GET_POSITION( $
         layout = layout, $

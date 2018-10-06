@@ -6,42 +6,49 @@
 
 
 
-pro IMAGE_ARRAY, $
-    ;data, X, Y, $
-    dic, $
+function IMAGE_ARRAY, $
+    data, $
+    ;X, Y, $
+    ;dic, $
     cols = cols, $
     rows = rows, $
+    title = title, $
+    colorbar = colorbar, $
     _EXTRA=e
-
 
     common defaults
 
-    print, dic.Keys()
-    data = dic.data
 
-    ;im = objarr(cols,rows)
     im = objarr(cols*rows)
 
     sz = size(data, /dimensions)
-    wx = 8.5
-    wy = 11.0
     ;wy = wx * (float(sz[1])/sz[0]) * (float(rows)/cols)
-    win = window( dimensions=[wx,wy]*dpi, buffer=1 )
+    resolve_routine, 'get_position', /either
+    resolve_routine, 'colorbar2', /either
 
     for ii = 0, n_elements(im)-1 do begin
 
         ; add space to right margin to leave room for colorbar?
-        position = GET_POSITION( layout=layout )
+        position = GET_POSITION( layout=[cols,rows,ii+1], ygap=0.40 )
 
         im[ii] = IMAGE2( $
             data[*,*,ii], $
             X, Y, $
             /current, $
             /device, $
-            position=position, $
+            title = title[ii] + '; AR_2a', $
+            position=position*dpi, $
             _EXTRA = e )
-
     endfor
+    return, im
+
+    ;- Make separate routine to create colorbar, then return to this level.
+    if keyword_set(colorbar) then begin
+        for ii = 0, n_elements(im)-1 do begin
+            ;im[ii].position = im[ii].position
+            ;c = colorbar2( 
+        endfor
+    endif
 end
 
 
