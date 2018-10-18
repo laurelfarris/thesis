@@ -2,7 +2,10 @@
 ; Programmer:       Laurel Farris
 ; Description:      subroutines with custom default configurations
 
-function legend2, target=target, _EXTRA=e
+function LEGEND2, $
+    target=target, $
+    ;position=position, $
+    _EXTRA=e
 
     common defaults
 
@@ -15,12 +18,21 @@ function legend2, target=target, _EXTRA=e
     ;y = Y[-5]
     ;position=[x,y]
 
+    ;- position = coords of upper right corner
+    ;frac = 0.95
+    ;if keyword_set(position) then begin
+    ;    x = position[2] * frac
+    ;    y = position[3] * frac
+    ;endif
+
     ; Alignment options (first is the default in each case)
     ; horizontal_alignment = 'Right'|'Center'|'Left'
     ; vertical_alignment = 'Top'|'Center'|'Bottom'
 
     leg = legend( $
         target=target, $
+        ;position = [x,y], $
+        ;/relative, $
         font_size = fontsize, $
         linestyle = 6, $
         shadow = 0, $

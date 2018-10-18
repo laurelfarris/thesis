@@ -177,7 +177,6 @@ end
 
 goto, start
 
-start:;---------------------------------------------------------------------------------------------
 hmi_mag = PREP_HMI( hmi_mag_index, hmi_mag_data, cadence=45., inst='hmi', channel='mag' )
 ;hmi_cont = PREP_HMI( hmi_cont_index, hmi_cont_data, cadence=45., inst='hmi', channel='cont' )
 stop
@@ -187,6 +186,7 @@ stop
 
 ; need to re-read data, but not headers... commented in subroutine for now.
 
+start:;---------------------------------------------------------------------------------------------
 A = []
 A = [ A, PREP_AIA( aia1600index, aia1600data, cadence=24., inst='aia', channel='1600' ) ]
 A = [ A, PREP_AIA( aia1700index, aia1700data, cadence=24., inst='aia', channel='1700' ) ]
