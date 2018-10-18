@@ -114,7 +114,7 @@ aia_cadence = 24.0
 ;; Interpolate to get missing data. Use coords to manually generate the
 ;;   missing observation times.
 
-LINEAR_INTERP, array=a7data, jd=a7jd, cadence=24 
+LINEAR_INTERP, array=a7data, jd=a7jd, cadence=24
 
 ;---------------------------------------------------------------------------------------------
 ;; Get flux to make lightcurves
@@ -135,5 +135,27 @@ get_bda_indices, aia_1700_index, a7t1, a7t2
 
 ;---------------------------------------------------------------------------------------------
 ;.run plot_fft
+
+
+;---------------------------------------------------------------------------------------------
+
+
+;-
+;- 18 October 2018
+;- Directory "Old" contains old versions of codes that I'll probably
+;-      never need again, but they may be worth looking at in case I
+;-      had some brilliant ideas that I forgot about.
+;-
+
+
+;- To Do:
+;-  * One file for my own colors (used when overplotting), maybe with letters.
+;-  *
+;-  *
+;-  *
+;-  *
+
+
+
 
 end

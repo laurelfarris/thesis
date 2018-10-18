@@ -1,4 +1,9 @@
 ;+
+;
+;  Re-writing Fourier2.pro in a way that makes more sense to me (Laurel)
+; -----
+;
+;
 ; ROUTINE:      Fourier3
 ;
 ; PURPOSE:      To calculate the phase and power spectrum

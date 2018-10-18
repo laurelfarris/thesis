@@ -5,7 +5,7 @@
 ;-
 
 
-pro add_letters_to_image, graphic
+pro add_letters_to_figure, graphic
 
     ; string array of letters: (a), (b), ..., (z)
     alph = '(' + string( bindgen(1,26)+(byte('a'))[0] ) + ')'
