@@ -1,0 +1,42 @@
+
+21 October 2018
+
+Should be generating every single figure I can think of.
+
+This directory is specifically for this purpose,
+without making a mess in my working directory.
+
+Examples of things to try:
+
+    * lightcurves
+        - absolute values
+        - normalized between 0 and 1
+        - mean-subtracted
+
+    * several values of
+        - time segment length (dz/dT)
+        - frequency bandpass (\Delta\nu)
+        - central frequency (\nu_{c})
+
+    * Fourier power spectra
+
+    * start/stop times of time segments (regardless of dz value);
+        - time of flare peak separating two successive time segments
+        - segment containing entire flare, compared to completely before and after
+
+
+    * Power as function of time P(t)
+        - several values of dz, d\nu, central frequency
+
+    * P(t) overplotted with running average lc (over same dz used to calc P(t)).
+
+
+    * Power maps
+        - HMI data
+        - Normalize power by variance of input signal
+        - Normalize power between 0 and 1
+
+    * Subregions
+        - single pixel in umbra, penumbra, and quiet sun
+        - integrated emission over entire umbra, penumbra, and quiet sun
+            (need to define the boundary between them).
