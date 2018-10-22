@@ -72,8 +72,13 @@ function GET_POSITION, layout=layout, _EXTRA = e
     n_panels = cols*rows
 
     ;- Defaults
-    left   = 1.00 - 0.25
-    right  = 1.00 + 0.25
+
+    ;- ??
+    ;left   = 1.00 - 0.25
+    ;right  = 1.00 + 0.25
+
+    left   = 0.50
+    right  = 0.50
     bottom = 1.00
     top    = 1.00
     xgap   = 0.25

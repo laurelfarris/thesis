@@ -23,13 +23,11 @@
 ;  but better to have extra information that can easily be excluded,
 ;  in this case, by using masks.
 
-
-; Probably don't need this anymore:
-pro restore_maps, struc, channel
-    ; Return variables 'map' and 'map2' (map2 - /NORM)
-    restore, '../aia' + channel + 'map.sav'
-    restore, '../aia' + channel + 'map2.sav'
-end
+;- 19 October 2018
+;- Now putting it back... only calculating four maps, which can be done
+;- fast enough to test different threshold values.
+;-   Added if statement to use code that manages saturated pixels
+;-   only if threshold kw is set.
 
 
 function POWER_MAPS, $
@@ -41,6 +39,7 @@ function POWER_MAPS, $
     z=z, $
     dz=dz, $
     norm=norm
+
 
     sz = size( data, /dimensions )
 
@@ -66,33 +65,52 @@ function POWER_MAPS, $
     for i = 0, nn-1 do test[i] = data[ 0, 0, z[i]:z[i]+dz-1 ]
 
 
-    ;- Array to keep track of how many pixels saturate at each z value.
-    ;sat_arr = fltarr( sz[2] )
-    ;if not keyword_set(threshold) then threshold = 10000
+    if keyword_set(threshold) then begin
 
-    for i = 0, nn-1 do begin
-        for y = 0, sz[1]-1 do begin
-        for x = 0, sz[0]-1 do begin
+        ;---- Skip saturated pixels
 
-            ;- Subtract 1 from dz so that total # images is eqal to dz
-            flux = data[ x, y, z[i]:z[i]+dz-1 ]
+        ;- Array to keep track of how many pixels saturate at each z value.
+        sat_arr = fltarr( sz[2] )
 
-            ;- z-coordinate(s) of saturated pixels in time segment
-            ;sat = [where( flux ge threshold )]
+        for i = 0, nn-1 do begin
+            for y = 0, sz[1]-1 do begin
+            for x = 0, sz[0]-1 do begin
 
-            ;if sat[0] eq -1 then begin
+                ;- Subtract 1 from dz so that total # images is eqal to dz
+                flux = data[ x, y, z[i]:z[i]+dz-1 ]
+
+                ;- z-coordinate(s) of saturated pixels in time segment
+                sat = [where( flux ge threshold )]
+
+                if sat[0] eq -1 then begin
+
+                    power = reform( (fourier2( flux, cadence, norm=norm ))[1,*] )
+
+                    ;map[x,y,i] = total( power[ind] )
+                    map[x,y,i] = mean( power[ind] )
+                    ;- MEAN is better than TOTAL,
+                    ;     accounts for variation due to frequency resolution.
+                endif
+            endfor
+            endfor
+        endfor
+    endif else begin
+
+        ;---- Run calculations on all pixels, whether saturated or not.
+
+        for i = 0, nn-1 do begin
+            for y = 0, sz[1]-1 do begin
+            for x = 0, sz[0]-1 do begin
+
+                ;- Subtract 1 from dz so that total # images is eqal to dz
+                flux = data[ x, y, z[i]:z[i]+dz-1 ]
 
                 power = reform( (fourier2( flux, cadence, norm=norm ))[1,*] )
-
-                ;map[x,y,i] = total( power[ind] )
                 map[x,y,i] = mean( power[ind] )
-                ;- MEAN is better than TOTAL,
-                ;     accounts for variation due to frequency resolution.
-
-            ;endif
+            endfor
+            endfor
         endfor
-        endfor
-    endfor
+    endelse
 
     print, format='("Power maps calculated in ~", F0.1, " minutes.")', $
         (systime(/seconds) - start_time)/60

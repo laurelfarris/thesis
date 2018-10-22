@@ -18,11 +18,20 @@ function plot2, xinput, yinput, _EXTRA=e
         x = xinput
     endelse
 
+    ;- font_style = 
+    ;-   0 (normal)
+    ;-   1 (bold)
+    ;-   2 (italic)
+    ;-   3 (bold italic)
+
     p = plot( $
         x, y, $
         font_size = fontsize, $
         ytickfont_size = fontsize, $
         xtickfont_size = fontsize, $
+        ;font_style = fontstyle, $
+        ;ytickfont_style = fontstyle, $
+        ;xtickfont_style = fontstyle, $
         axis_style = 2, $
         ;thick = 0, $
         ;xthick = 0, $

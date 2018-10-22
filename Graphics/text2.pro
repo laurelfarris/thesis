@@ -7,6 +7,15 @@
 ;function text2, x, y, i, str=str, _EXTRA=e
 ;function text2, x, y, str=str, i=i, _EXTRA=e
 
+
+;-
+;- 18 October 2018
+;- file 'add_letters_to_figure.pro' looks like it does basically the same thing,
+;- except no option to use different labels.
+;- Looks much cleaner and easier to use.
+;-  This looks like it could use some love...
+;- 
+
 function text2, str, target=target, _EXTRA=e
 
     common defaults
@@ -41,9 +50,9 @@ function text2, str, target=target, _EXTRA=e
             ;/normal, $
             /relative, $
             ;/device, $
-            alignment='Right', $
-            vertical_alignment='Top', $
-            ;font_style = 'Bold', $
+            alignment=1.0, $  ; 0.0 = left (default); 1.0 --> Right
+            vertical_alignment=1.0, $;'Top', $  ; 1.0
+            ;font_style = 'Bold', $  0,1,2,3 = normal,bold,italic,bold italic
             font_size=fontsize-1, $
             _EXTRA=e )
     endfor

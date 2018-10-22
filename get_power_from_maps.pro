@@ -19,6 +19,11 @@ function GET_POWER_FROM_MAPS, $
     dz=dz, $
     threshold=threshold
 
+
+
+
+    ;-  Calculate saturation mask
+
     if not keyword_set(threshold) then threshold = 10000
 
     ; Create data mask (saturated pixels = 0.0, others = 1.0)
@@ -33,6 +38,10 @@ function GET_POWER_FROM_MAPS, $
     for i = 0, sz[2]-1 do $
         mask_map[*,*,i] = product( mask[*,*,i:i+dz-1], 3 )
 
+
+
+    ;-  Get power from flux
+
     num_unsaturated_pixels = float(total(total(mask_map,1),1))
 
     restore, '../aia' + channel + 'map.sav'
@@ -41,6 +50,8 @@ function GET_POWER_FROM_MAPS, $
 
     return, power_per_pixel
 end
+
+
 
 
 ; From prep.pro - restoring these from .sav files instead

@@ -579,7 +579,6 @@ pro IMAGE_POWERMAPS
         endforeach
     endfor
 
-
     ;frac = [ 0.003, 0.025 ]
     upperlimit = [550,4500]
 
@@ -595,7 +594,6 @@ pro IMAGE_POWERMAPS
         file = 'aia' + channel + 'composite_maps.pdf'
         save2, file
     endfor
-
         ;map = AIA_INTSCALE( A[ii].map, wave=fix(channel), exptime=A[ii].exptime )
         ;sz = size(map, /dimensions)
         ;time = strmid(A[ii].time,0,8)
@@ -603,7 +601,6 @@ pro IMAGE_POWERMAPS
         ;time_range = time + '-' + shift(time, -(dz-1)) + ' (' + strtrim(index,1) + '-' + strtrim(shift(index, -(dz-1)), 1)  + ')'
         ;time_range = time_range[ 0 : sz[2]-1 ]
         ;ind = [ 0 : sz[2]-1 : 40 ]
-
 end
 
 ;-----------------------------------------------------------------------------------

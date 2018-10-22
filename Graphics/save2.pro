@@ -4,7 +4,10 @@
 
 ; _EXTRA is for keywords in call to IDL's text function.
 
-pro SAVE2, filename, confirm_replace=confirm_replace, add_timestamp=add_timestamp, _EXTRA=e
+pro SAVE2, filename, $
+    confirm_replace=confirm_replace, $
+    add_timestamp=add_timestamp, $
+    _EXTRA=e
 
     ; Confirm saving to file
     if keyword_set(confirm_replace) then begin
@@ -15,7 +18,7 @@ pro SAVE2, filename, confirm_replace=confirm_replace, add_timestamp=add_timestam
     endif
 
     common defaults
-    path = '/home/users/laurel07/'
+    path = '/home/users/laurel07/Figures/'
 
     fls = file_search( path + filename )
     if keyword_set(confirm_replace) then begin
@@ -62,5 +65,6 @@ pro SAVE2, filename, confirm_replace=confirm_replace, add_timestamp=add_timestam
     w.save, path + filename, $
         page_size=[width,height], $
         width=width, height=height, _EXTRA=e
+    print, 'Saved file as ', path + filename
     return
 end

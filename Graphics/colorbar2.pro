@@ -4,6 +4,16 @@
 
 function colorbar2, target=target, _EXTRA=e
 
+
+    ;- Test to make sure mandatory kws were set
+    if n_elements(target) eq 0 then begin
+        print, ''
+        print, 'kw "target" is currently mandatory. Set to individual image.'
+        print, 'Returning.'
+        print, ''
+        return, 0
+    endif
+
     ; add bit to pull target position and use it to calculate colorbar position
 
     common defaults
@@ -26,8 +36,8 @@ function colorbar2, target=target, _EXTRA=e
         target = target, $
         orientation = 1, $ ; 0 --> horizontal
         tickformat = '(F0.1)', $
-        /device, $
-        position = [x1,y1,x2,y2]*dpi, $
+        ;/device, $
+        ;position = [x1,y1,x2,y2]*dpi, $
         textpos = 1, $ ; 1 --> right/above colorbar
         font_style = 2, $ ;italic
         font_size = fontsize, $

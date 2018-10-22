@@ -47,6 +47,7 @@ function PREP_HMI, index, cube, cadence=cadence, inst=inst, channel=channel
     help, cube
     time = strmid(index.date_obs,11,11)
     jd = GET_JD( index.date_obs + 'Z' )
+    resolve_routine, 'linear_interp', /either
     LINEAR_INTERP, cube, jd, cadence, time
     cube = crop_data(cube)
     ;cube = fix( round( cube ) )
