@@ -20,6 +20,7 @@
 function CROP_DATA, data, $
     dimensions=dimensions, $
     center=center, $
+    z_ind=z_ind, $
     offset=offset, $
     syntax=syntax
 
@@ -65,7 +66,21 @@ function CROP_DATA, data, $
     x2 = x1 + x_length -1
     y2 = y1 + y_length -1
 
-    cube = data[ x1:x2, y1:y2, * ]
+    if n_elements(sz) eq 2 then $
+        cube = data[ x1:x2, y1:y2 ]
+
+
+    if n_elements(sz) gt 2 then begin
+
+
+        if not keyword_set(z_ind) then z_ind = [0:sz[2]-1]
+
+        if n_elements(sz) eq 3 then $
+            cube = data[ x1:x2, y1:y2, z_ind ]
+        if n_elements(sz) eq 4 then $
+            cube = data[ x1:x2, y1:y2, z_ind, * ]
+    endif
+
     ;sz = size( cube, /dimensions )
     ;X = indgen(sz[0]) + x1
     ;Y = indgen(sz[1]) + y1

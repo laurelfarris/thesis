@@ -65,6 +65,8 @@ pro SAVE2, filename, $
     w.save, path + filename, $
         page_size=[width,height], $
         width=width, height=height, _EXTRA=e
-    print, 'Saved file as ', path + filename
+    print, ''
+    print, 'Saved file as: '
+    print, '  ', path + filename
     return
 end

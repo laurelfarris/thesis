@@ -100,6 +100,7 @@ end
 ;- Copy FT bit with fcenter to some other fourier related subroutine.
 
 goto, start
+start:;-------------------------------------------------------------------------------------------------
 
 fcenter = 1./180
 bandwidth = 0.001
@@ -108,18 +109,20 @@ fmax = fcenter + (bandwidth/2.)
 
 
 ;- 'NM' = Number of Maps
-NM = 8
-dz = 45
-t0 = '01:05'
+NM = 9
+dz = 64
+;t0 = '01:05'
 ;t0 = '01:23'
 ; 01:23 - 02:34 --> z = 207 - 386
 
+t0 = '00:24'
 ;---
 
 time = strmid(A[0].time, 0, 5)
 z0 = (where( time eq t0 ))[0]
 zf = z0 + NM*dz - 1
 z_ind = [z0:zf]
+print, ''
 print, time[z_ind[0]]
 print, time[z_ind[-1]]
 stop
@@ -176,7 +179,6 @@ endfor
 stop ;---
 
 
-start:;-------------------------------------------------------------------------------------------------
 ;-
 ;- 'sat' = cube same size as data equal to 0s and 1s
 sat = fltarr( sz[0], sz[1], NM, 2)

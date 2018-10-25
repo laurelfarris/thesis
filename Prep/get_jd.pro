@@ -29,7 +29,7 @@ function get_jd, timestampstring
         year=year
 
     ; Covert observations times to JD
-    jd = julday(month, day, year, hour, minute, second)
+    jd = JULDAY(month, day, year, hour, minute, second)
 
     return, jd
 end

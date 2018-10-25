@@ -26,26 +26,40 @@ function colorbar2, target=target, _EXTRA=e
     wy = dim[1]
 
     cbar_width = 0.15
+    cbar_gap = 0.05
 
-    pos = target.position * [ wx, wy, wx, wy ]
-    x1 = pos[2] + 0.1
-    y1 = pos[1]
-    x2 = x1 + cbar_width
-    y2 = pos[3]
-    c = colorbar( $
-        target = target, $
-        orientation = 1, $ ; 0 --> horizontal
-        tickformat = '(F0.1)', $
-        ;/device, $
-        ;position = [x1,y1,x2,y2]*dpi, $
-        textpos = 1, $ ; 1 --> right/above colorbar
-        font_style = 2, $ ;italic
-        font_size = fontsize, $
-        border = 1, $
-        ;ticklen = 0.3, $
-        ;subticklen = 0.5, $
-        ;major = 11, $
-        ;minor = 5, $
-        _EXTRA=e )
-    return, c
+    N = n_elements(target)
+    cbar = objarr(N)
+
+    for ii = 0, N-1 do begin
+
+        pos = target[ii].position * [ wx, wy, wx, wy ]
+
+        cx1 = pos[2] + cbar_gap
+        cy1 = pos[1]
+        cx2 = cx1 + cbar_width
+        cy2 = pos[3]
+
+        position=[cx1,cy1,cx2,cy2] * dpi
+
+        cbar[ii] = COLORBAR( $
+            target = target[ii], $
+            orientation = 1, $ ; 0 --> horizontal
+            tickformat = '(F0.1)', $
+            ;tickformat='(I0)', $
+            /device, $
+            position = position, $
+            textpos = 1, $ ; 1 --> right/above colorbar
+            font_style = 2, $ ;italic
+            font_size = fontsize, $
+            border = 1, $
+            ;ticklen = 0.3, $
+            ;subticklen = 0.5, $
+            ;major = 11, $
+            ;minor = 5, $
+            _EXTRA=e )
+
+    endfor
+
+    return, cbar
 end

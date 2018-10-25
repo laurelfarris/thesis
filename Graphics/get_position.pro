@@ -15,6 +15,13 @@
 
 
 
+;- 21 October 2018
+;-   appears that setting right and bottom margins is pointless
+;-   the way my subroutines are currently set up.
+;-   (at least with images, since they have preserved aspect ratio...
+;-    this may not be the case for plots.)
+
+
 function WRAP_GET_POSITION, $
     layout=layout, $
     left=left, right=right, top=top, bottom=bottom, $

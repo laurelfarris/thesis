@@ -18,14 +18,21 @@ Examples of things to try:
         - frequency bandpass (\Delta\nu)
         - central frequency (\nu_{c})
 
-    * Fourier power spectra
+    * Fourier power spectra: P(\nu)
+        - power vs. frequency
+        - alog10(power) vs. frequency
+        - power normalized between 0 and 1
+            (Can't see much of anything if plot power as is,
+            but taking log makes it look like the 3-minute
+            signal doesn't stand out much at all...
+            though maybe it just doesn't)
+
 
     * start/stop times of time segments (regardless of dz value);
         - time of flare peak separating two successive time segments
         - segment containing entire flare, compared to completely before and after
 
-
-    * Power as function of time P(t)
+    * Power as function of time: P(t)
         - several values of dz, d\nu, central frequency
 
     * P(t) overplotted with running average lc (over same dz used to calc P(t)).
@@ -35,6 +42,8 @@ Examples of things to try:
         - HMI data
         - Normalize power by variance of input signal
         - Normalize power between 0 and 1
+        - Compare different channels (same time segment)
+        - Compare different central frequencies (3min, 5min, etc.)
 
     * Subregions
         - single pixel in umbra, penumbra, and quiet sun
