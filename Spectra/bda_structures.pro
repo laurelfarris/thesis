@@ -2,6 +2,9 @@
 
 ;- 01 October 2018
 
+;- Input:   total flux, cadence, obs_time
+;- Output:  structure with data to plot power spectra
+
 
 function BDA_structures, flux, cadence, obs_time
 ;- only input is what changed from one inst to the next

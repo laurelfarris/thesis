@@ -74,6 +74,11 @@ restore, '../aia1700map_2.sav'
 aia1700map = map
 stop
 
+spike = A[0].data[244,120:140,270]
+print, spike
+stop
+
+
 w = window(/buffer)
 im = image2( A[0].data[235:255,80:195,270], /current, layout=[1,1,1], margin=0.1, rgb_table=A[0].ct)
 save2, 'test.pdf'
@@ -107,16 +112,40 @@ max_value = [50, 4500]
 
 for cc = 0, 1 do begin
 
+    dw
+    wx = 8.5
+    wy = 8.0
+    win = window( dimensions=[wx,wy]*dpi, /buffer )
+    im = objarr(cols*rows)
     c = objarr(cols*rows)
+
     time = strmid(A[cc].time, 0, 5)
+
     image_data = dat[*,*,*,cc]>0.001
 
-    im = image3( alog10(image_data), titles=titles )
+    for ii = 0, n_elements(im)-1 do begin
+        position = GET_POSITION( $
+            layout=[cols,rows,ii+1], $
+            wy=wy, $
+            width = 2.1, $
+            height = width*(330./500), $
+            xgap = 0.2, $
+            ygap = 0.2, $
+            left = 0.75, $
+            top = 0.5, $
+            bottom=0.5 )
 
         ti = time[z_start[ii]]
         tf = time[z_start[ii]+(dz-1)]
         title = alph[ii] + ' ' + A[cc].name + ' (' + ti + '-' + tf + ' UT)'
 
+        im[ii] = image2( $
+            image_data[*,*,ii], $
+            ;(image_data[*,*,ii])^0.1, $
+            ;alog10(image_data[*,*,ii]), $
+            /current, $
+            /device, $
+            position=position*dpi, $
             rgb_table = A[cc].ct, $
             xshowtext = 0, $
             yshowtext = 0, $

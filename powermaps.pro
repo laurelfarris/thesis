@@ -30,7 +30,7 @@
 ;-   only if threshold kw is set.
 
 
-function POWER_MAPS, $
+function POWERMAPS, $
     data, $
     cadence, $
     fmin=fmin, $
@@ -152,7 +152,7 @@ pro AIA_MAPS, cube, channel, file, start=start, norm=norm
 
     for i = start, sz[2]-1, step do begin
 
-        ; Test that z isn't out of range 
+        ; Test that z isn't out of range
         ;   (find better way to do this... later)
         if sz[2] - i LT step then z = [i:sz[2]-1] else z = [i:i+step-1]
 
@@ -233,7 +233,7 @@ endif
 ; Copied code from AIA_POWER_MAPS and commented/modified as needed.
 
 ; 28 June 2017 - finishing map (norm=1) for AIA 1600
-; step is for saving map every 50-th timestep... 
+; step is for saving map every 50-th timestep...
 ;    don't need it for last 30 or so images (halted because i was out
 ;    of range, not because I lost ssh connection)
 

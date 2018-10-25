@@ -1,5 +1,9 @@
 ;- 21 October 2018
 
+;- After trying a bunch of different ways to do this, got tired
+;- havnig a ton of commented lines cluttering up code, so
+;- copied them here.
+
 ;- Normalize power between 0.0 and 1.0
 ;aia1600map = map[*,*,0]
 ;aia1600map = aia1600map - min(aia1600map)
