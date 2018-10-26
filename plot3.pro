@@ -11,16 +11,19 @@ function plot3_wrapper, $
     height = height, $
     left = left, $
     right = right, $
+    color = color, $
     top = top, $
     bottom = bottom, $
+    name = name, $
     _EXTRA=e
 
     common defaults
     resolve_routine, 'get_position', /either
 
+
     dw
     win = window( dimensions=[wx,wy]*dpi, /buffer )
-    margin = [left, bottom, right, top]
+    margin = [left, bottom, right, top] * dpi
 
     N = (size( y, /dimensions))[1]
     plt = objarr(N)
@@ -28,13 +31,15 @@ function plot3_wrapper, $
     for ii = 0, N-1 do begin
 
         plt[ii] = plot2( $
-            x[*,ii], $
+            x, $
             y[*,ii], $
             /current, /device, $
             layout=[1,1,1], $
             margin=margin, $
+            color = color[ii], $
             overplot = ii<1, $
             name = name[ii], $
+            linestyle = ii, $
             _EXTRA=e )
     endfor
 
@@ -46,20 +51,25 @@ function plot3,  $
     x, y, $
     _EXTRA=e
 
+    common defaults
+
+    color = ['black', 'blue', 'red', 'green']
+
     N = (size( y, /dimensions))[1]
     name = alph[0:N-1]
 
-    plt = image3_wrapper( $
+    plt = plot3_wrapper( $
         x, y, $
         wx = 8.5, $
-        wy = 11.0, $
+        wy = 3.0, $
         width = 2.0, $
         height = 6.0, $
-        left = 0.75, $
-        right = 0.75, $
-        top = 0.75, $
-        bottom = 0.75, $
+        left = 1.00, $
+        right = 1.00, $
+        top = 1.00, $
+        bottom = 1.00, $
         name = name, $
+        color = color, $
         _EXTRA = e)
     return, plt
 end

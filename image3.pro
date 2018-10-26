@@ -4,6 +4,13 @@
 
 function IMAGE3_wrapper, $
     data, $
+    wx = wx, $
+    wy = wy, $
+    width = width, $
+    left = left, $
+    xgap = xgap, $
+    top = top, $
+    ygap = ygap, $
     rows=rows, $
     cols=cols, $
     title=title, $
@@ -15,16 +22,10 @@ function IMAGE3_wrapper, $
     sz = size(data, /dimensions)
     if n_elements(sz) eq 2 then n = 1 else n = sz[2]
 
-    wx = 8.5
-    wy = 11.0
+    height = width * float(sz[1])/sz[0]
+
     dw
     win = window( dimensions=[wx,wy]*dpi, /buffer )
-
-    width = 2.0
-    left = 0.75
-    top = 0.75
-    xgap = 1.50
-    ygap = 0.75
 
     im = objarr(N)
 
@@ -35,9 +36,7 @@ function IMAGE3_wrapper, $
             height=height, $
             wy=wy, $
             left=left, $
-            right=right, $
             top=top, $
-            bottom=bottom, $
             xgap=xgap, $
             ygap=ygap )
 
@@ -67,6 +66,8 @@ function IMAGE3,  $
     ;    return
     ;endif
 
+    common defaults
+
     sz = size(data, /dimensions)
     if n_elements(sz) eq 2 then N = 1 else N = sz[2]
 
@@ -79,6 +80,11 @@ function IMAGE3,  $
         cols = 1, $
         wx = 8.5, $
         wy = 11.0, $
+        width = 2.0, $
+        left = 0.75, $
+        xgap = 0.5, $
+        top = 0.5, $
+        ygap = 0.5, $
         title = title, $
         _EXTRA = e)
     return, im
@@ -105,7 +111,3 @@ end
 ;- image3 takes 3D data cube and arrays of image kws, then loops through them.
 ;- Not meant to be called just like IDL's image, so
 ;-   use whatever keywords you need.
-
-
-
-end

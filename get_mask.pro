@@ -1,6 +1,3 @@
-
-
-
 ;- 23 October 2018
 
 ;- If data is exptime-corrected, make sure input threshold is as well
@@ -8,7 +5,7 @@
 ;- sure everything looks right before the next one.
 
 
-function MASK, data, threshold, dz, graphic=graphic
+pro GET_MASK, data, mask, threshold, dz, data_avg, graphic=graphic
 
 
     ;- "sat" = saturated data mask
@@ -21,27 +18,18 @@ function MASK, data, threshold, dz, graphic=graphic
 
     ;- "mask" = product of data mask over length dz
     mask = fltarr( sz[0], sz[1], sz[2]-dz+1 )
+    data_avg = fltarr( sz[0], sz[1], sz[2]-dz+1 )
 
     for ii = 0, sz[2]-dz do begin
-
         mask[*,*,ii] = product( sat[*, *, ii:ii+dz-1], 3 )
-
+        data_avg[*,*,ii] = mean( data[*,*,ii:ii+dz-1], dim=3 )
     endfor
 
     if keyword_set(graphic) then begin
-
-
         im = objarr(n_elements(graphic))
         ;for ii = 0, n_elements(graphic) - 1 do begin
         foreach zz, graphic, ii do begin
-
             im[ii] = image2( mask[*,*,zz], /current ) 
-
         endforeach
-
     endif
-
-
-    return, mask
-
 end
