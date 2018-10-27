@@ -45,6 +45,9 @@ function WRAP_GET_POSITION, $
     i = coords[0]
     j = coords[1]
 
+    ;- determine width using wx, margins, and xgap
+    ;width = wx - (right+left) - (float(xgap)*(cols-1))
+
     if not keyword_set(height) then height = width
 
     x1 = left + i*(width + xgap)

@@ -9,7 +9,7 @@
 ; and dashed lines can plot on top of each other and looks like
 ; a solid line.
 
-function PLOT_POWER_SPECTRUM_subroutine, $
+function PLOT_SPECTRA, $
     frequency, power, $
     fmin=fmin, fmax=fmax, $
     label_period=label_period, $

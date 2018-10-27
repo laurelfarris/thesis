@@ -14,6 +14,7 @@ function IMAGE3_wrapper, $
     rows=rows, $
     cols=cols, $
     title=title, $
+    cbar=cbar, $
     _EXTRA=e
 
     common defaults
@@ -78,13 +79,14 @@ function IMAGE3,  $
         data, $
         rows = 1, $
         cols = 1, $
-        wx = 8.5, $
+        wx = 8.0, $
         wy = 11.0, $
-        width = 2.0, $
-        left = 0.75, $
-        xgap = 0.5, $
-        top = 0.5, $
-        ygap = 0.5, $
+        left = 0.20, $
+        right = 0.20, $
+        top = 0.20, $
+        bottom = 0.20, $
+        xgap = 0.2, $
+        ygap = 0.2, $
         title = title, $
         _EXTRA = e)
     return, im

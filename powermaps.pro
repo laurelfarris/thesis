@@ -3,7 +3,7 @@
 ;     to optional keyword
 ; Calculates power map
 ; Input:  data = 3D data cube for which to calculate power maps
-;            z = array of START indices
+;      z_start = array of START indices
 ;           dz = length over which to calculate FT (# images)
 ;      cadence = cadence of data (seconds)
 ; NOTES:     (May 11 2018) Added /NORM keyword to fourier2.
@@ -35,16 +35,23 @@ function POWERMAPS, $
     cadence, $
     fmin=fmin, $
     fmax=fmax, $
+    fcenter=fcenter, $
+    bandwidth=bandwidth, $
     threshold=threshold, $
-    z=z, $
+    z_start=z_start, $
     dz=dz, $
     norm=norm
 
 
     sz = size( data, /dimensions )
 
-    if n_elements(z) eq 0 then z=[0]
+    if n_elements(z_start) eq 0 then z=[0] else z=z_start
     if n_elements(dz) eq 0 then dz = sz[2]
+
+    if keyword_set(fcenter) and keyword_set(bandwidth) then begin
+        fmin = fcenter - bandwidth/2.
+        fmax = fcenter + bandwidth/2.
+    endif
 
     frequency = reform( (fourier2( indgen(dz), cadence, NORM=NORM ))[0,*] )
     ind = where( frequency ge fmin AND frequency le fmax )

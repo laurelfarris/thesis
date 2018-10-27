@@ -1,12 +1,17 @@
 
 21 October 2018
 
-Should be generating every single figure I can think of.
+Generate every single figure you can think of.
+Or at least create a new .pro file set up to do so, even if just a few comments.
+Best place to keep track of coding I want to do, becaue this is where I do the coding!
 
 This directory is specifically for this purpose,
 without making a mess in my working directory.
 
 Examples of things to try:
+
+
+
 
     * lightcurves
         - absolute values

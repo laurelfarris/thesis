@@ -17,7 +17,7 @@ function colorbar2, target=target, _EXTRA=e
     ; add bit to pull target position and use it to calculate colorbar position
 
     common defaults
-    
+
     win = getwindows(/current)
     dim = win.dimensions/dpi ; inches
       ;- This worked!
@@ -31,6 +31,7 @@ function colorbar2, target=target, _EXTRA=e
     N = n_elements(target)
     cbar = objarr(N)
 
+    ;- Add colorbar to every image
     for ii = 0, N-1 do begin
 
         pos = target[ii].position * [ wx, wy, wx, wy ]
@@ -58,6 +59,42 @@ function colorbar2, target=target, _EXTRA=e
             ;major = 11, $
             ;minor = 5, $
             _EXTRA=e )
+
+    endfor
+
+    ;- one big colorbar on the right
+    pos = fltarr(4, N)
+    for ii = 0, N-1 do begin
+        pos[*,ii] = target[ii].position * [ wx, wy, wx, wy ]
+    endfor
+
+    x2 = max(pos[2,*])
+    y1 = min(pos[1,*])
+    y2 = max(pos[3,*])
+
+    cx1 = x2 + cbar_gap
+    cy1 = y1
+    cx2 = cx1 + cbar_width
+    cy2 = y2
+
+    position=[cx1,cy1,cx2,cy2] * dpi
+
+    cbar[ii] = COLORBAR( $
+        target = target[ii], $
+        orientation = 1, $ ; 0 --> horizontal
+        tickformat = '(F0.1)', $
+        ;tickformat='(I0)', $
+        /device, $
+        position = position, $
+        textpos = 1, $ ; 1 --> right/above colorbar
+        font_style = 2, $ ;italic
+        font_size = fontsize, $
+        border = 1, $
+        ;ticklen = 0.3, $
+        ;subticklen = 0.5, $
+        ;major = 11, $
+        ;minor = 5, $
+        _EXTRA=e )
 
     endfor
 
