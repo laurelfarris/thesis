@@ -8,8 +8,7 @@ common defaults
 
 for cc = 0, 1 do begin
 
-;phases = [ 'before', 'during', 'after1', 'after2' ]
-phases = [ 'during', 'after1', 'after2' ]
+phases = [ 'before', 'during', 'after1', 'after2' ]
 color = ['black', 'red', 'blue', 'green']
 name = [ 'AR_1', 'AR_2', 'AR_3', 'background' ]
 add_poly = 1
@@ -81,7 +80,7 @@ foreach phase, phases do begin
         rows=2, cols=3, $
         title=title, $
         rgb_table=A[cc].ct, $
-        width = 2.5, $
+        width = 2.3, $
         left = 0.5, $
         xgap = 0.2, $
         top = 0.25, $
@@ -129,6 +128,8 @@ foreach phase, phases do begin
                 center=[x0[ii],y0[ii]], $
                 dimensions=[r,r] ), 1), 1)
     endfor
+
+    continue
 
     resolve_routine, 'plot3', /either
     plt = plot3( $

@@ -18,8 +18,8 @@ function EXTRACT_SUNSPOT, A, hmi_cont, hmi_mag
     dz = 260
     z = indgen(dz)
 
-    hmi_time = strmid( hmi_cont.time, 0, 5 )
-    z2 = indgen( where( hmi_time eq t_end ) )
+    ;hmi_time = strmid( hmi_cont.time, 0, 5 )
+    ;z2 = indgen( where( hmi_time eq t_end ) )
 
     dimensions=[100,100]
     center=[365,215]
@@ -42,20 +42,21 @@ function EXTRACT_SUNSPOT, A, hmi_cont, hmi_mag
             time : A[1].time[z], $
             cadence : A[1].cadence, $
             ct : A[1].ct, $
-            name : A[1].name }, $
-        hmi_cont : { $
-            data : float(crop_data( hmi_cont.data[*,*,z2], center=center+offset, dimensions=dimensions)), $
-            time : hmi_cont.time[z], $
-            cadence : hmi_cont.cadence, $
-            ct : hmi_cont.ct, $
-            name : hmi_cont.name }, $
-        hmi_mag : { $
-            data : float(crop_data( hmi_mag.data[*,*,z2], center=center+offset, dimensions=dimensions)), $
-            time : hmi_mag.time[z], $
-            cadence : hmi_mag.cadence, $
-            ct : hmi_mag.ct, $
-            name : hmi_mag.name } $
-        }
+            name : A[1].name } }
+            ;name : A[1].name }, $
+;        hmi_cont : { $
+;            data : float(crop_data( hmi_cont.data[*,*,z2], center=center+offset, dimensions=dimensions)), $
+;            time : hmi_cont.time[z], $
+;            cadence : hmi_cont.cadence, $
+;            ct : hmi_cont.ct, $
+;            name : hmi_cont.name }, $
+;        hmi_mag : { $
+;            data : float(crop_data( hmi_mag.data[*,*,z2], center=center+offset, dimensions=dimensions)), $
+;            time : hmi_mag.time[z], $
+;            cadence : hmi_mag.cadence, $
+;            ct : hmi_mag.ct, $
+;            name : hmi_mag.name } $
+;        }
     return, struc
 end
 
@@ -67,17 +68,17 @@ function QUIET_POWER_MAPS, struc
     fcenter = 1./180
     fmin = 0.0051
     fmax = 0.0061
-    aia1600map_3min = power_maps(struc.aia1600.data, 24., fmin=fmin, fmax=fmax, norm=0)
-    aia1700map_3min = power_maps(struc.aia1700.data, 24., fmin=fmin, fmax=fmax, norm=0)
-    hmicontmap_3min = power_maps(struc.hmi_cont.data, 45., fmin=fmin, fmax=fmax, norm=0)
+    aia1600map_3min = powermaps(struc.aia1600.data, 24., fmin=fmin, fmax=fmax, norm=0)
+    aia1700map_3min = powermaps(struc.aia1700.data, 24., fmin=fmin, fmax=fmax, norm=0)
+    hmicontmap_3min = powermaps(struc.hmi_cont.data, 45., fmin=fmin, fmax=fmax, norm=0)
 
     ;- 5 minute period
     fcenter = 1./300
     fmin = 0.0028
     fmax = 0.0038
-    aia1600map_5min = power_maps(struc.aia1600.data, 24., fmin=fmin, fmax=fmax, norm=0)
-    aia1700map_5min = power_maps(struc.aia1700.data, 24., fmin=fmin, fmax=fmax, norm=0)
-    hmicontmap_5min = power_maps(struc.hmi_cont.data, 45., fmin=fmin, fmax=fmax, norm=0)
+    aia1600map_5min = powermaps(struc.aia1600.data, 24., fmin=fmin, fmax=fmax, norm=0)
+    aia1700map_5min = powermaps(struc.aia1700.data, 24., fmin=fmin, fmax=fmax, norm=0)
+    hmicontmap_5min = powermaps(struc.hmi_cont.data, 45., fmin=fmin, fmax=fmax, norm=0)
 
     ;- May want to separate calculation of maps from complicated code that may produce errors,
     ;-   especially if maps take a long time to compute.
@@ -125,17 +126,17 @@ pro MAKE_IMAGES, struc, wave, exptime, contour_data=contour_data, savefile=savef
     win = window( dimensions=[wx,wy]*dpi, /buffer)
     resolve_routine, 'contour2', /either
     resolve_routine, 'image_array', /either
-    im = IMAGE_ARRAY( $
-        data, $
-        cols=cols, rows=rows, $
-        xshowtext=0, yshowtext=0, $
-        min_value = min(data), $
-        max_value = max(data), $
-        rgb_table = struc.ct, $
-        title = [ $
-            ;struc.name + time[0] + ' UT' , $
-            struc.titles[0], $
-            struc.titles[1] ] )
+    ;im = IMAGE_ARRAY( $
+;        data, $
+;        cols=cols, rows=rows, $
+;        xshowtext=0, yshowtext=0, $
+;        min_value = min(data), $
+;        max_value = max(data), $
+;        rgb_table = struc.ct, $
+;        title = [ $
+;            ;struc.name + time[0] + ' UT' , $
+;            struc.titles[0], $
+;            struc.titles[1] ] )
 
      for ii = 0, 1 do begin
 
@@ -182,12 +183,11 @@ pro HMI_IMAGES, hmi_cont, hmi_mag, savefile=savefile
     win = window( dimensions=[wx,wy]*dpi, /buffer)
 
     resolve_routine, 'image_array', /either
-    im = IMAGE_ARRAY( $
-        data, $
-        cols=cols, rows=rows, $
-
-        xshowtext=0, yshowtext=0, $
-        title = title )
+;    im = IMAGE_ARRAY( $
+;        data, $
+;        cols=cols, rows=rows, $
+;        xshowtext=0, yshowtext=0, $
+;        title = title )
 
      for ii = 0, 1 do begin
 
@@ -208,10 +208,79 @@ end
 goto, start
 
 struc = EXTRACT_SUNSPOT( A, hmi_cont, hmi_mag )
-struc = QUIET_POWER_MAPS( struc )
-stop
+;struc = QUIET_POWER_MAPS( struc )
+
 
 start:;---------------------------------------------------------------------------------------
+
+;- umbra    (370, 215)
+;- penumbra (390, 215)
+
+;- coords relative to 100x100 subset.
+xx = [50,70]
+yy = [50,50]
+name = ['umbra', 'penumbra']
+color = ['black', 'blue']
+
+dw
+win = window( dimensions=[6.0,6.0]*dpi, /buffer)
+ind = indgen(250)
+cc = 0
+plt=objarr(3)
+sigplot=objarr(3)
+
+for ii = 0, 1 do begin
+
+    time = strmid( Struc.(cc).time, 0, 5 )
+
+    flux = struc.(cc).data[xx[ii],yy[ii],ind]
+    ;flux = struc.(cc).data[ xx[ii]-5:xx[ii]+5-1, yy[ii]-5:yy[ii]+5-1, ind]
+    ;flux = total(total(flux,1),1)
+
+    ;flux = total(total(struc.(cc).data[*,*,ind],1),1)
+    max_period = (n_elements(flux)*24.)/2.
+    min_freq = 1./max_period
+    
+    ;fake = sin( (ind/250.) *!PI*25) *  0.5*mean(flux)
+    ;if ii eq 1 then flux = flux + fake
+
+    result = fourier2( flux, 24, /display, sig_lvl=sig_lvl)
+    print, sig_lvl
+    frequency = reform(result[0,*])
+    power = reform(result[1,*])
+
+    find = where( frequency ge min_freq )
+    frequency = frequency[find]
+    power = power[find]
+
+
+    plt[ii] = plot2( $
+        ;ind, flux, ylog=0, $
+        frequency, power, ylog=1, $
+        ;xtitle='frame #', ytitle='intensity', $
+        xtitle='frequency (Hz)', ytitle='power', $
+        /current, /device, overplot=1<ii, $
+        layout=[1,1,1], margin=1.0*dpi, $
+        title=struc.(cc).name + ' ' + time[0] + '-' + time[-1], $
+        name = name[ii], color=color[ii] ) 
+    sig = mean(power) + stddev(power)
+    print, sig
+    sigplot[ii] = plot2( plt[ii].xrange, [sig_lvl,sig_lvl], ystyle=1, /overplot, $
+        linestyle='--', color=color[ii], name='1$\sigma$' )
+endfor
+;fake = sin( (ind/250.) *!PI*25) *  0.5*mean(flux)
+
+;plt[2] = plot2( ind, fake, /overplot, color='red', name='fake')
+;plt[2] = plot2( ind, fake+flux, /overplot, color='red', name='fake')
+leg = legend2( target=plt, position=[0.9,0.95])
+;file = 'quiet_lightcurves_2.pdf'
+file = 'quiet_power_spectra_sig.pdf'
+
+save2, file,  /add_timestamp
+
+
+stop
+
 ;contour_data = struc.hmi_cont.data
 contour_data = struc.hmi_mag.data
 MAKE_IMAGES, struc.aia1600, 1600, A[0].exptime, contour_data=contour_data, $

@@ -51,7 +51,7 @@ function plot2, xinput, yinput, _EXTRA=e
         ; x|y style = 2 Pad nice
         ; x|y style = 3 Pad exact
         ;symbol = 'Circle', $
-        sym_size = 1.0, $
+        sym_size = 0.5, $
         sym_filled = 1, $
         _EXTRA = e )
     return, p

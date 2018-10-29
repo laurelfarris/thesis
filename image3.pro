@@ -8,8 +8,10 @@ function IMAGE3_wrapper, $
     wy = wy, $
     width = width, $
     left = left, $
+    right = right, $
     xgap = xgap, $
     top = top, $
+    bottom = bottom, $
     ygap = ygap, $
     rows=rows, $
     cols=cols, $

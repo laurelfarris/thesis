@@ -67,30 +67,27 @@ for ii = 0, 3 do begin
     data[*,*,ii] = crop_data( S.(ii).data, center=center )
 endfor
 
+stop
 
 
-
+start:;----------------------------------------------------------------------------------
 
 ;- HMI B_LOS contours
-;file = 'contour_HMI_mag.pdf'
-;gauss = 700
-;c_data = data[*,*,2] < gauss > (-gauss)
-;c_data = data[*,*,2]
+c_data = data[*,*,2]
 ;c_value = 0.99 * [ min(c_data), max(c_data) ]
 ;c_value = 0
-c_value = [300, 1000 ]
-c_value = [ -reverse(c_value), c_value ]
-c_color = ['red','blue']
+;c_value = [300, 1000 ]
+;c_value = [ -reverse(c_value), c_value ]
+c_value = [-300, 300 ]
+c_color = ['white','black']
 
 
-start:;
 
 ;- HMI continuum contours
-file = 'contour_HMI_cont.pdf'
-c_data = data[*,*,3]
-avg = mean(c_data[350:450,0:150])
-c_value = [ 0.6, 0.9 ] * avg
-c_color = ['white','black']
+;file = 'contour_HMI_cont.pdf'
+;c_data = data[*,*,3]
+;avg = mean(c_data[350:450,0:150])
+;c_value = [ 0.6, 0.9 ] * avg
 
 
 dw
@@ -104,12 +101,20 @@ im = objarr(rows*cols)
 
 for ii = 0, 3 do begin
     im[ii] = image2( $
-        data[*,*,ii], /current, layout=[cols,rows,ii+1], margin=0.1 )
+        data[*,*,ii], $
+        /current, layout=[cols,rows,ii+1], $
+        margin=0.05, $
+        xmajor = 6, $
+        ymajor = 4, $
+        xshowtext = 0, $
+        yshowtext = 0 )
 
 endfor
 im[0].rgb_table = S.(0).extra.rgb_table
 im[1].rgb_table = S.(1).extra.rgb_table
 
+file = 'HMI_BLOS.pdf'
+save2, file
 
 
 rgb_table = 70
@@ -130,6 +135,7 @@ c[ii] = contour( $
     overplot=im[ii] )
 endfor
 
+file = 'HMI_BLOS_contours.pdf'
 save2, file
 ;c.delete
 end

@@ -38,6 +38,7 @@ function LEGEND2, $
         shadow = 0, $
         transparency = 100, $
         sample_width = 0.20, $
+        auto_text_color = 1, $
         _EXTRA=e )
     return, leg
 end
