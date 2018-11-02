@@ -2,7 +2,7 @@
 
     ; subroutine issues: Don't want to pass entire structure (A) into this?
 
-function PLOT_LIGHTCURVES, $
+function PLOT_LIGHTCURVES_OLD, $
     time, $
     xdata, ydata, $
     layout=layout, $

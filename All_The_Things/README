@@ -42,6 +42,8 @@ Examples of things to try:
     * Power as function of time: P(t)
         - several values of dz, d\nu, central frequency
            (from integrated flux... maps take too long to compute)
+        - run FT on normlized lightcurves (both between 0.0 and 1.0), in case 1600 has
+            a non-physical factor causing its 3min power to be scaled up.
 
     * P(t) overplotted with running average lc (over same dz used to calc P(t)).
 

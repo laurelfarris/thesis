@@ -62,7 +62,18 @@ pro SAVE2, filename, $
             font_size=8 )
     endif
 
-    w.save, path + filename, $
+
+    CALDAT, systime(/julian), $
+      month, day, year, hour, minute, second
+
+    year = strtrim(year,1)
+    month = strtrim(month,1)
+    day = strtrim(day,1)
+
+    if strlen(month) eq 1 then month = '0' + month
+    if strlen(day) eq 1 then day = '0' + day
+
+    w.save, path + filename + year + month + day + '.pdf', $
         page_size=[width,height], $
         width=width, height=height, _EXTRA=e
     print, ''
