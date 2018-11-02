@@ -8,6 +8,8 @@ Best place to keep track of coding I want to do, becaue this is where I do the c
 This directory is specifically for this purpose,
 without making a mess in my working directory.
 
+New .pro file and comments describing ideas for figures.
+
 Examples of things to try:
 
 
@@ -39,6 +41,7 @@ Examples of things to try:
 
     * Power as function of time: P(t)
         - several values of dz, d\nu, central frequency
+           (from integrated flux... maps take too long to compute)
 
     * P(t) overplotted with running average lc (over same dz used to calc P(t)).
 
