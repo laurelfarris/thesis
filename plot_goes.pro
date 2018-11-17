@@ -70,26 +70,6 @@ pro PLOT_GOES_SUBROUTINE, A, gdata
     stop
 
 end
-function OPLOT_GOES, data
-    ; AIA channels probably need to be normalized to overplot
-
-    ; GOES - create struc if haven't already
-    ;    make another struc for this?
-    if n_elements(data) eq 0 then data = GOES()
-
-    y = data.ydata[*,0]
-    y = y - min(y)
-    y = y / max(y)
-    x = findgen(n_elements(y))
-    x = (x/max(x)) * 749
-    g = plot2(  $
-        x, y, $
-        /overplot, $
-        linestyle='__', $
-        name='GOES 1-8$\AA$' )
-    return, g
-end
-
 
 
 pro plot_goes

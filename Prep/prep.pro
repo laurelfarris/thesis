@@ -191,8 +191,10 @@ start:;-------------------------------------------------------------------------
 A = []
 A = [ A, PREP_AIA( aia1600index, aia1600data, cadence=24., inst='aia', channel='1600' ) ]
 A = [ A, PREP_AIA( aia1700index, aia1700data, cadence=24., inst='aia', channel='1700' ) ]
-A[0].color = 'dark orange'
-A[1].color = 'dark cyan'
+;A[0].color = 'dark orange'
+;A[1].color = 'dark cyan'
+A[0].color = 'blue'
+A[1].color = 'red'
 
 ;aia1600 = PREP( aia1600index, aia1600data, cadence=24., inst='aia', channel='1600' )
 ;aia1700 = PREP( aia1700index, aia1700data, cadence=24., inst='aia', channel='1700' )

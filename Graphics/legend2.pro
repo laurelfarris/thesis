@@ -13,6 +13,11 @@ function LEGEND2, $
     ;win.Select, /all
     ;target = win.GetSelect()
 
+    ;pos = (target[0].position)/dpi
+    ;lx = pos[2] - 0.10
+    ;ly = pos[3] - 0.10
+    ;position=[lx,ly]*dpi
+
     ;target.GetData, image, X, Y
     ;x = X[-5]
     ;y = Y[-5]
