@@ -18,7 +18,7 @@ function OPLOT_GOES, plt, data
     yy = yy / max(yy)
 
 
-    ;- Set x values to overlay GOES on current LCs so that date/times 
+    ;- Set x values to overlay GOES on current LCs so that date/times
     ;-    line up correctly.
 
     ;- The following only works if LCs were plotted as function of
@@ -50,7 +50,7 @@ function OPLOT_GOES, plt, data
 
     for ii = 0, D-1 do begin
 
-        ;hour = fix(  data.tarray[ii]/3600) 
+        ;hour = fix(  data.tarray[ii]/3600)
         ;min  = fix(((data.tarray[ii]/3600)-hour) * 60 )
         ;sec  = fix( $
         ;    ((((data.tarray[ii]/3600)-hour)*3600)-min) * 60 )
@@ -74,7 +74,8 @@ function OPLOT_GOES, plt, data
     g = plot2(  $
         goes_jd, yy, $
         /overplot, $
-        linestyle='__', $
+        ;linestyle='__', $
+        LINESTYLE = [2, 'F0F0'X], $
         name = data.sat + ' 1-8$\AA$' )
 
     return, g
