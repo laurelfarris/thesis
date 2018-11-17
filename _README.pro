@@ -140,6 +140,11 @@ get_bda_indices, aia_1700_index, a7t1, a7t2
 ;---------------------------------------------------------------------------------------------
 
 
+;- 02 November 2018
+;- plot3.pro, image3.pro are general routines for displaying
+;- multiple panels in one graphic and/or something relatively simple
+;- I can call so I don't have to keep writing the same lines of code
+;- over and over (creating window, setting up margins, etc.)
 ;-
 ;- 18 October 2018
 ;- Directory "Old" contains old versions of codes that I'll probably

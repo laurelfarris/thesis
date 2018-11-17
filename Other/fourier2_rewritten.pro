@@ -4,7 +4,7 @@
 ; -----
 ;
 ;
-; ROUTINE:      Fourier3
+; ROUTINE:      fourier2_rewritten
 ;
 ; PURPOSE:      To calculate the phase and power spectrum
 ;
