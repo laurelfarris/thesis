@@ -74,8 +74,7 @@ function OPLOT_GOES, plt, data
     g = plot2(  $
         goes_jd, yy, $
         /overplot, $
-        ;linestyle='__', $
-        LINESTYLE = [2, 'F0F0'X], $
+        LINESTYLE = [1, 'FCFC'X], $
         name = data.sat + ' 1-8$\AA$' )
 
     return, g

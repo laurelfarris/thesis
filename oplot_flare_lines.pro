@@ -20,7 +20,6 @@ function OPLOT_FLARE_LINES, $
 
     flare_times = [ '01:44', '01:56', '02:06' ]
     name = flare_times + [ ' UT (start)', ' UT (peak)', ' UT (end)' ]
-    linestyle = [1,2,3]
 
     time = strmid( t_obs, 0, 5 )
     N = n_elements(flare_times)
@@ -38,17 +37,25 @@ function OPLOT_FLARE_LINES, $
     yrange = plt[0].yrange
 
     vert = objarr(N)
+
+    linestyle = [ $
+        ;[1, '3333'X], $
+        [1, 'FFAA'X], $
+        [1, '7F92'X], $
+        [1, '7777'X] ]
+
     foreach vx, x_indices, jj do begin
-        vert[jj] = plot( $
+        vert[jj] = plot2( $
             [ xx[vx], xx[vx] ], $
             yrange, $
             /current, $
             overplot=plt[0], $
             ystyle = 1, $
-            linestyle = linestyle[jj], $
-            thick = 1, $
+            ;thick = 0.0, $
+            ;linestyle = linestyle[jj], $
+            LINESTYLE = linestyle[*,jj], $
             name = name[jj], $
-            color = 'gray', $
+            color = 'dark gray', $
             _EXTRA=e )
         if keyword_set(send_to_back) then vert[jj].Order, /SEND_TO_BACK
     endforeach
@@ -57,7 +64,7 @@ function OPLOT_FLARE_LINES, $
     if keyword_set(shaded) then begin
         ;for ii = 0, n_elements(graphic)-1 do begin
             ;yrange = (graphic[ii]).yrange
-            v_shaded = plot ( $
+            v_shaded = plot2( $
                 [ vx[0]-32, vx[0]-32, vx[-1]+32-1, vx[-1]+32-1 ], $
                 [ yrange[0], yrange[1], yrange[1], yrange[0] ], $
                 /overplot, ystyle=1, linestyle=6, $

@@ -30,7 +30,8 @@ function PLOT_LIGHTCURVES, $
     wx = 8.0
     wy = 2.75
     dw
-    win = window( dimensions=2*[wx,wy]*dpi, location=[500,0], buffer=0 )
+    win = window( dimensions=[wx,wy]*dpi, buffer=1 )
+
 
     ; For single panel, pick margins, and use window dimensions to set width/height (the other unknown)
     ;-  NOTE: left/right margins change depending on whether normalizing or not
@@ -62,7 +63,10 @@ function PLOT_LIGHTCURVES, $
             overplot=ii<1, $
             color = color[ii], $
             name = name[ii], $
-            stairstep=0, $
+            stairstep=1, $
+            thick=0.5, $
+            xthick=0.5, $
+            ythick=0.5, $
             xminor=5, $
             xtickinterval=75, $
             ymajor=5, $
@@ -106,26 +110,23 @@ plt = PLOT_LIGHTCURVES( $
 
 LABEL_TIME, plt, time=time, jd=jd
 
-;SHIFT_YDATA, plt
-;file = 'lc'
+SHIFT_YDATA, plt
+file = 'lc'
 
+;NORMALIZE_YDATA, plt
+;file = 'lc_norm'
 
-NORMALIZE_YDATA, plt
-file = 'lc_norm'
+;resolve_routine, 'oplot_goes', /either
+;g = OPLOT_GOES( plt, data )
+;g = OPLOT_GOES( goes_data ) --> next time. Be more specific than 'data'.
+; --> use goes_data.utbase to set xtitle.
 
 resolve_routine, 'oplot_flare_lines', /either
 v = OPLOT_FLARE_LINES( plt, A[0].time, A[0].jd, /send_to_back )
 
-resolve_routine, 'oplot_goes', /either
-g = OPLOT_GOES( plt, data )
-;g = OPLOT_GOES( goes_data ) --> next time. Be more specific than 'data'.
-; --> use goes_data.utbase to set xtitle.
-
-
 resolve_routine, 'legend2', /either
-leg = LEGEND2( target=[plt,v,g], position=[0.95, 0.95], /relative )
+leg = LEGEND2( target=[plt,v], position=[0.95, 0.95], /relative )
 
-stop
 save2, file
 
 end

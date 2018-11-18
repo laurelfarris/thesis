@@ -38,7 +38,7 @@ function LEGEND2, $
         target=target, $
         ;position = [x,y], $
         ;/relative, $
-        font_size = fontsize, $
+        font_size = fontsize-2, $
         linestyle = 6, $
         shadow = 0, $
         transparency = 100, $
