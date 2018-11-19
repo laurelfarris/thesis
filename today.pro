@@ -1,53 +1,79 @@
 
-;- 18 November 2018
+;- 19 November 2018
 
 goto, start
 
 start:;-------------------------------------------------------------------------------------------------
 
-journal, '2018-11-17.pro'
+pro image_maps, imdata
+
+    resolve_routine, 'image3', /either
+    im = image3( $
+        imdata, $
+        xshowtext=0, $
+        yshowtext=0, $
+        rows=2, cols=3, $
+        title=title, $
+        rgb_table=A[cc].ct, $
+        width = 2.3, $
+        left = 0.5, $
+        xgap = 0.2, $
+        top = 0.25, $
+        ygap = 0.25, $
+        wy = 4.0 )
+end
+
+journal, '2018-11-19.pro'
+
+;- Quiescent region power maps
+
+cc = 0
+channel = A[cc].channel
+restore, '../aia' + channel + 'map_2.sav'
+
+;- Center coords (lower right corner)
+x0 = 425
+y0 = 75
+r = 125
+
+;- Crop both continuum image (cont) and power map (map).
+;quiet_cont = crop_data( map, center=[x0,y0], dimensions=[r,r] )
+;quiet_map = crop_data( map, center=[x0,y0], dimensions=[r,r] )
+
+;- Better way: same variable for images and maps... last 63 elements of map will be zeros.
+quiet = fltarr(r, r, 749, 2)
+quiet[0,0,0,0] = crop_data( A[cc].data, center=[x0,y0], dimensions=[r,r] )
+quiet[0,0,0,1] = crop_data( map, center=[x0,y0], dimensions=[r,r] )
+
+;- Don't need mask because this area isn't saturated.
 
 
+wx = 8.0
+wy = 5.0
+win = window( dimensions=[wx,wy]*dpi, /buffer )
+
+cols = 2
+rows = 1
 
 
-xdata = gdata.tarray
-ydata = gdata.ydata
+;for cc = 0, 1 do begin
 
-ytitle = gdata.utbase
+    im = image2( $
+        quiet[*,*,32,0], $
+        layout = [cols,rows,1], $
+        margin = 0.25, $
+        /current, /device, $
+        title = A[cc].name + ' continuum' )
 
-;- try alog10(goesflux)
-
-ylog = 1
-
-y1 = A[0].flux - min(A[0].flux)
-y2 = A[1].flux - min(A[1].flux)
-
-win = window(dimensions=[8.0,6.0]*dpi )
-plt = plot2( indgen(749), y1, /current, color='blue', ylog=ylog )
-plt = plot2( indgen(749), y2, /overplot, color='red', ylog=ylog )
-
-;plt = plot2( xdata, ydata[*,0], /overplot,  ylog=ylog )
-
-
-;- To do:
-;-      HMI prep routine
-;-      Contours
-;-      All 4 data types??
+    im = image2( $
+        quiet[*,*,32,1], $
+        layout = [cols,rows,2], $
+        margin = 0.25, $
+        /current, /device, $
+        title = A[cc].name + ' 3-minute power' )
+;endfor
 
 
-stop
-; What happens if journal is edited directly before closing?
-print, ''
-print, '--> Type .CONTINUE to close journal.'
-print, ''
-stop
-journal
-
-
-;Result = GET_SCREEN_SIZE( [Display_name] [, RESOLUTION=variable] )
-
-;- Power spectra:
-;-   Don't have to show full range of frequencies from Milligan2017.
-;-
+save2, 'quiet_powermaps'
 
 end

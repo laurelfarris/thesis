@@ -1,4 +1,5 @@
-;; Last modified:   16 May 2018 22:14:06
+;; Last modified:   19 November 2018
+;-   Added description of purpose and useage at the top.
 
 ;+
 ;
@@ -6,9 +7,12 @@
 ;
 ; ROUTINE:      Prep.pro
 ;
-; PURPOSE:
+; PURPOSE:      Crop data cube to desired subset
 ;
-; USEAGE:
+; USEAGE:       center = 2D array of center coordinates [x0, y0]
+;               dimensions = 2D array of desired dimensions [width, height]
+;               z_ind = index array of desired z-indices (e.g. [100:250])
+;                   If not set, entire range of input cube will be preserved.
 ;
 ; AUTHOR:       Laurel Farris
 ;
@@ -28,7 +32,7 @@ function CROP_DATA, data, $
         print, ''
         print, 'Syntax: CROP_DATA, data, $'
         print,     'dimensions=dimensions, $'
-        print,     'center=center' 
+        print,     'center=center'
     endif
 
     sz = size( data, /dimensions )

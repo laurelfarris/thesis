@@ -1,3 +1,11 @@
+
+;- 19 November 2018
+;- Really sloppy code I was franctically running to make
+;- images, powermaps, and lightcurves for SDO presentation.
+;- Last edited 28 October at 23:47.
+
+
+
 ;- 25 October 2018
 ;pro get_bda, data, bda, ind, z_start, phase=phase, channel=channel, time=time, exptime=exptime
 goto, start

@@ -12,6 +12,8 @@ save2, 'test.pdf'
 
 stop
 
+;- Adding pre-flare flux to line with large slope as a way of superimposing
+;- a global "flare" trend to test if Fourier power changes at all.
 
 flux1 = A[0].flux[110:259]
 line = (findgen(150)/150) * (max(flux1) - mean(flux1))
