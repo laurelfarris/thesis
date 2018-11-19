@@ -1,33 +1,21 @@
 
-;- 19 November 2018
+;- 19 November 2018 (p. 73)
+
+pro image_maps, imdata, title=title, rgb_table=rgb_table
+
+    ;- Try image3.pro at some point
+
+end
+
+;---- Quiescent region power maps ----;
 
 goto, start
+journal, '2018-11-19.pro'
+;- attach to bottom of today.pro?
 
 start:;-------------------------------------------------------------------------------------------------
 
-pro image_maps, imdata
-
-    resolve_routine, 'image3', /either
-    im = image3( $
-        imdata, $
-        xshowtext=0, $
-        yshowtext=0, $
-        rows=2, cols=3, $
-        title=title, $
-        rgb_table=A[cc].ct, $
-        width = 2.3, $
-        left = 0.5, $
-        xgap = 0.2, $
-        top = 0.25, $
-        ygap = 0.25, $
-        wy = 4.0 )
-end
-
-journal, '2018-11-19.pro'
-
-;- Quiescent region power maps
-
-cc = 0
+cc = 1
 channel = A[cc].channel
 restore, '../aia' + channel + 'map_2.sav'
 
@@ -47,33 +35,64 @@ quiet[0,0,0,1] = crop_data( map, center=[x0,y0], dimensions=[r,r] )
 
 ;- Don't need mask because this area isn't saturated.
 
+dz = 64
 
-wx = 8.0
-wy = 5.0
-win = window( dimensions=[wx,wy]*dpi, /buffer )
+;- BDA (B: between pre-flare event and main flare, D: flare start, A: between two post-flare events)
+z_start = [196, 260, 525]
 
-cols = 2
-rows = 1
-
-
-;for cc = 0, 1 do begin
-
-    im = image2( $
-        quiet[*,*,32,0], $
-        layout = [cols,rows,1], $
-        margin = 0.25, $
-        /current, /device, $
-        title = A[cc].name + ' continuum' )
-
-    im = image2( $
-        quiet[*,*,32,1], $
-        layout = [cols,rows,2], $
-        margin = 0.25, $
-        /current, /device, $
-        title = A[cc].name + ' 3-minute power' )
-;endfor
+time = strmid( A[0].time, 0, 5 )
 
 
-save2, 'quiet_powermaps'
+imdata = [ $
+    [[ mean(quiet[*,*,[z_start[0]:dz-1],0], dim=3) ]], $
+    [[ mean(quiet[*,*,[z_start[1]:dz-1],0], dim=3) ]], $
+    [[ mean(quiet[*,*,[z_start[2]:dz-1],0], dim=3) ]], $
+    [[ quiet[*,*,z_start[0],1] ]], $
+    [[ quiet[*,*,z_start[1],1] ]], $
+    [[ quiet[*,*,z_start[2],1] ]] $
+]
+
+
+
+
+max_value = [ 239, 239, 239, 103, 103, 103 ]
+min_value = [ 50, 50, 50, 0.006, 0.006, 0.006 ]
+
+;for ii = 0, 5 do print, min(imdata[*,*,ii])
+
+    dw
+    wx = 8.0
+    wy = 6.0
+    win = window( dimensions=[wx,wy]*dpi, /buffer )
+
+    cols = 3
+    rows = 2
+
+    title = [ $
+        time[z_start[0]] + '-' + time[z_start[0]+dz-1], $
+        time[z_start[1]] + '-' + time[z_start[0]+dz-1], $
+        time[z_start[2]] + '-' + time[z_start[1]+dz-1], $
+        time[z_start[0]] + '-' + time[z_start[1]+dz-1], $
+        time[z_start[1]] + '-' + time[z_start[2]+dz-1], $
+        time[z_start[2]] + '-' + time[z_start[2]+dz-1] $
+    ]
+
+    for ii = 0, 5 do begin
+
+        im = image2( $
+            imdata[*,*,ii], $
+            layout = [cols,rows,ii+1], $
+            margin = 1.00*dpi, $
+            /current, /device, $
+            min_value = min_value[ii], $
+            max_value = max_value[ii], $
+            xtitle = 'X (pixels)', $
+            ytitle = 'Y (pixels)', $
+            rgb_table = A[cc].ct, $
+            title = title[ii] )
+    endfor
+
+file = 'aia' + A[cc].channel + '_quiet_powermaps'
+save2, file, /add_timestamp
 
 end
