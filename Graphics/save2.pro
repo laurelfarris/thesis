@@ -73,11 +73,13 @@ pro SAVE2, filename, $
     if strlen(month) eq 1 then month = '0' + month
     if strlen(day) eq 1 then day = '0' + day
 
-    w.save, path + filename + year + month + day + '.pdf', $
+    new_filename = path + filename + '_' + year + month + day + '.pdf'
+
+    w.save, new_filename, $
         page_size=[width,height], $
         width=width, height=height, _EXTRA=e
     print, ''
-    print, 'Saved file as: '
-    print, '  ', path + filename
+    print, 'Saved file '
+    print, '  ', new_filename
     return
 end

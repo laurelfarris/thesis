@@ -4,6 +4,7 @@
 
 
 pro NORMALIZE_YDATA, plt
+
     for ii = 0, n_elements(plt)-1 do begin
         plt[ii].GetData, xx, yy
         yy = yy-min(yy)

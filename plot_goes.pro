@@ -1,10 +1,22 @@
-pro PLOT_GOES_SUBROUTINE, A, gdata
+
+;- Last updated:    18 November 2018
+
+
+
+pro PLOT_GOES, A, gdata
+
+    if n_elements(gdata) eq 0 then gdata = GOES()
+    ;- If this routine hits an error further down, gdata might not
+    ;- be returned, and will have to do this every time anyway.
+    ;- Though it seems that it was updated in ML as soon as this ran,
+    ;- even after running into error and doing RETALL, so maybe this is fine.
 
     common defaults
     dw
-    wx = 8.5
+    wx = 8.0
     wy = 4.0
-    win = window( dimensions=[wx,wy]*dpi, buffer=1 )
+    win = window( dimensions=[wx,wy]*dpi, buffer=0 )
+
 
     left = 0.75
     bottom = 0.5
@@ -23,6 +35,8 @@ pro PLOT_GOES_SUBROUTINE, A, gdata
     for i = 0, 1 do begin
         flux = A[i].flux - min(A[i].flux)
         flux = flux / max(flux)
+
+        ;- Xdata = 
         xdata = findgen(n_elements(flux)) * A[i].cadence
 
         p[i] = plot2( $
@@ -65,19 +79,32 @@ pro PLOT_GOES_SUBROUTINE, A, gdata
         /device, $
         position=[xx,yy]*dpi )
 
-    save2, 'test.pdf'
+    ;save2, 'test.pdf'
 
     stop
 
 end
 
 
-pro plot_goes
+;!P.Color = '000000'x
+;!P.Background = 'ffffff'x
 
-    ;!P.Color = '000000'x
-    ;!P.Background = 'ffffff'x
+;gdata = GOES()
 
-    ;gdata = GOES()
+;PLOT_GOES, A, gdata
 
-    PLOT_GOES_SUBROUTINE, A, gdata
+xdata = gdata.tarray
+ydata = gdata.ydata
+
+ytitle = gdata.utbase
+
+;- try alog10(goesflux)
+
+ylog = 1
+
+win = window(dimensions=[8.0,4.0]*dpi )
+
+plt = plot2( xdata, ydata[*,0], /current, ylog=ylog )
+
+
 end

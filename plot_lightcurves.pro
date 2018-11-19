@@ -1,6 +1,6 @@
 
 
-; Last modified:    17 November 2018
+; Last modified:    18 November 2018
 ; Name of file = name of routine called by user.
 ; x and y titles both need to be optional somehow...
 ; ytitle changes depending on whether plotting values that are
@@ -12,6 +12,14 @@
 ;- flares before and after, etc. Label ticks outside of main subroutine? Takes
 ;- longer, but may be easier way to separate things, and leave less important
 ;- stuff for later)
+
+
+;- xdata = m x n array
+;-   m: array of JDs for each LC
+;-   n: # LCs
+;- ydata = m x n array
+;-   m: array of data points for each LC
+;-   n: # LCs
 
 
 
@@ -27,10 +35,10 @@ function PLOT_LIGHTCURVES, $
 
     common defaults
 
-    wx = 8.0
-    wy = 2.75
-    dw
-    win = window( dimensions=[wx,wy]*dpi, buffer=1 )
+    win_scale = 1
+    wx = win_scale*8.0
+    wy = win_scale*2.75
+    win = window( dimensions = [wx,wy]*dpi, buffer=0 )
 
 
     ; For single panel, pick margins, and use window dimensions to set width/height (the other unknown)
@@ -53,6 +61,7 @@ function PLOT_LIGHTCURVES, $
     nn = sz[1]
 
     plt = objarr(nn)
+    ;plt = objarr(3)
     for ii = 0, nn-1 do begin
 
         plt[ii] = PLOT2( $
@@ -61,18 +70,15 @@ function PLOT_LIGHTCURVES, $
             /device, $
             position=position, $
             overplot=ii<1, $
-            color = color[ii], $
-            name = name[ii], $
-            stairstep=1, $
-            thick=0.5, $
-            xthick=0.5, $
-            ythick=0.5, $
-            xminor=5, $
-            xtickinterval=75, $
-            ymajor=5, $
             yshowtext=1, $
+            stairstep=1, $
+            xminor=5, $
+            ymajor=5, $
+            xtickinterval=75, $
             xticklen=0.025, $
             yticklen=0.010, $
+            color = color[ii], $
+            name = name[ii], $
             _EXTRA = e )
     endfor
 
@@ -93,40 +99,84 @@ end
 ; Single lines creating each object that can easily be commented.
 ; Then just erase and re-draw.
 
+;- --> Put ML stuff into a subroutine that calls all the other subroutines?
+
 goto, start
 START:;---------------------------------------------------------------------------------
+dw
+
 time = strmid(A[0].time,0,5)
 
 xdata = A.jd
 ydata = A.flux
 
-xtickinterval = A[0].jd[75] - A[0].jd[0]
+ylog = 0
+
+;- subtract mean from input data, skip separate routine that does this after plotting.
+;ydata[*,0] = ydata[*,0] - min(ydata[*,0])
+;ydata[*,1] = ydata[*,1] - min(ydata[*,1])
+
+;- GOES data
+;xdata = gdata.tarray
+;ydata = gdata.ydata
+
+
+;- Plot AIA light curves
 plt = PLOT_LIGHTCURVES( $
     xdata, ydata, $
-    font_size=16, $
-    name=A.name, $
-    color=A.color, $
-    xtickinterval=xtickinterval )
+    xtickinterval = A[0].jd[75] - A[0].jd[0], $
+    ylog = ylog, $
+    color = A.color, $
+    name = A.name )
 
 LABEL_TIME, plt, time=time, jd=jd
 
-SHIFT_YDATA, plt
+
+;-----
+;- Shift curves in y by subtracting the mean.
+resolve_routine, 'shift_ydata', /either
 file = 'lc'
+SHIFT_YDATA, plt
 
-;NORMALIZE_YDATA, plt
+;- Normalize data between 0 and 1.
+;resolve_routine, 'normalize_ydata', /either
 ;file = 'lc_norm'
+;NORMALIZE_YDATA, plt
+;-   write this so it pulls ALL data from plt... which it might already be
+;-        doing, but GOES is its own variable, not part of plt.
 
+;- Overlay GOES flux on AIA light curves.
 ;resolve_routine, 'oplot_goes', /either
-;g = OPLOT_GOES( plt, data )
-;g = OPLOT_GOES( goes_data ) --> next time. Be more specific than 'data'.
-; --> use goes_data.utbase to set xtitle.
+;OPLOT_GOES, plt, gdata, ylog=ylog
 
+;-----
+
+;- Overlay vertical lines marking start, peak, and end times.
 resolve_routine, 'oplot_flare_lines', /either
-v = OPLOT_FLARE_LINES( plt, A[0].time, A[0].jd, /send_to_back )
+OPLOT_FLARE_LINES, plt, A[0].time, A[0].jd, /send_to_back
+
+
+;plt[0].delete
+;plt[1].delete
+;- plt still has 3 elements though... ?? Maybe just removes from graphic,
+;- but object itself still exists.
+
+;plt[2].yrange = [ min(gdata.ydata)/10.0, max(gdata.ydata)*1.1 ]
+;plt[2].ytitle = 'GOES flux (W m$^{-2}$)'
+
+
+
+;- Legend
+;- --> Put somewhere else to easily delete and re-create legend
+;-       without re-creating entire graphic every time.
+
+target=[plt]
 
 resolve_routine, 'legend2', /either
-leg = LEGEND2( target=[plt,v], position=[0.95, 0.95], /relative )
+;leg.delete
+leg = LEGEND2( target=target, position=[0.92,0.95], sample_width=0.50 )
 
-save2, file
+
+;save2, file
 
 end

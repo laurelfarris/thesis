@@ -34,15 +34,20 @@ function LEGEND2, $
     ; horizontal_alignment = 'Right'|'Center'|'Left'
     ; vertical_alignment = 'Top'|'Center'|'Bottom'
 
+    lx = 0.95
+    ly = 0.95
+
     leg = legend( $
         target=target, $
-        ;position = [x,y], $
-        ;/relative, $
-        font_size = fontsize-2, $
+        position = [lx,ly], $
+        /relative, $
+        font_size = fontsize, $
+        horizontal_spacing = 0.05, $
         linestyle = 6, $
         shadow = 0, $
+        thick = 0.5, $
         transparency = 100, $
-        sample_width = 0.20, $
+        ;sample_width = 0.40, $
         auto_text_color = 1, $
         _EXTRA=e )
     return, leg

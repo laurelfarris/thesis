@@ -7,7 +7,7 @@
 ;- To do:   Need to go straight from time string to jd and vice versa.
 
 
-function OPLOT_FLARE_LINES, $
+pro OPLOT_FLARE_LINES, $
     plt, $
     t_obs, $
     jd, $
@@ -38,22 +38,55 @@ function OPLOT_FLARE_LINES, $
 
     vert = objarr(N)
 
+
+    ; 1  0001
+    ; 2  0010
+    ; 3  0011
+    ; 4  0100
+    ; 5  0101
+    ; 6  0110
+    ; 7  0111
+
+    ; C  1100
+    ; D  1101
+    ; E  1110
+    ; F  1111
+
+
+    ;- Dots:
+    ; 1111 - spread out
+    ; 5555 - closer together
+
+    ;- Dashes
+    ; 3333
+    ; F0F0
+
+    ;- Dash dot
+    ; 7272
+
+    ;- Dash dot dot (IDL doesn't have a linestyle option for this...)
+    ; 7F92
+
+    ;- Dash dot dot dot
+    ; 7C92
+
     linestyle = [ $
-        ;[1, '3333'X], $
-        [1, 'FFAA'X], $
-        [1, '7F92'X], $
-        [1, '7777'X] ]
+        [1, '1111'X], $
+        [2, '7C92'X], $
+        [1, 'F0F0'X] ]
+
 
     foreach vx, x_indices, jj do begin
-        vert[jj] = plot2( $
+        vert[jj] = plot( $
             [ xx[vx], xx[vx] ], $
             yrange, $
             /current, $
-            overplot=plt[0], $
-            ystyle = 1, $
+            /overplot, $
+            ;overplot = plt[0], $
             ;thick = 0.0, $
             ;linestyle = linestyle[jj], $
             LINESTYLE = linestyle[*,jj], $
+            ystyle = 1, $
             name = name[jj], $
             color = 'dark gray', $
             _EXTRA=e )
@@ -74,5 +107,7 @@ function OPLOT_FLARE_LINES, $
             v_shaded.Order, /SEND_TO_BACK
         ;endfor
     endif
-    return, vert
+
+    plt = [ plt, vert ]
+    ;return, vert
 end

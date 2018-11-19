@@ -1,9 +1,11 @@
 
 
-; Last modified:        17 November 2018
+; Last modified:    18 November 2018
 
 pro SHIFT_YDATA, plt
+
     ; Shift data in Y-direction
+    ;- by subtracting either mean or min,
     ;- using same notation as typical line formula: y = mx + b
     ;- where y = new coordinates, linearly transformed from old coordinates x
     ;- by a factor of the slope, m.
@@ -21,21 +23,32 @@ pro SHIFT_YDATA, plt
 
     bb = 1.0
     ;---
-    ax = plt[0].axes
-    plt[0].GetData, xx, yy
-    aa = mean(yy)
-    plt[0].SetData, xx, yy-aa
-    ax[1].coord_transform = [aa,bb]
-    ;---
-    ax = plt[1].axes
-    plt[1].GetData, xx, yy
-    aa = mean(yy)
-    plt[1].SetData, xx, yy-aa
-    ax[3].coord_transform = [aa,bb]
 
-    ax[3].showtext = 1
 
-    ;format = '(F0.1)'
-    ;ax[1].tickformat = format
-    ;ax[3].tickformat = format
+
+    for ii = 0, n_elements(plt)-1 do begin
+
+        ax = plt[ii].axes
+
+        plt[ii].GetData, xx, yy
+
+        ;- subtract either the minimum or mean y-value.
+        aa = mean(yy)
+        ;aa = min(yy)
+
+        plt[ii].SetData, xx, yy-aa
+
+        if ii eq 0 then ax[1].coord_transform = [aa,bb]
+        if ii eq 1 then ax[3].coord_transform = [aa,bb]
+
+
+        ;- Even if this was already set, for some reason the text on ax[3]
+        ;- disappears, and have to put it back.
+        ax[3].showtext = 1
+
+        ;format = '(F0.1)'
+        ;ax[1].tickformat = format
+        ;ax[3].tickformat = format
+
+    endfor
 end

@@ -140,12 +140,16 @@ function PREP_AIA, index, cube, cadence=cadence, inst=inst, channel=channel
     ;   can't automatically generate these values unless I somehow
     ;    save them when aligning or prepping the data.
 
+
+    ;- Calculate total flux over AR
     cube = float(cube)
     ;flux = fltarr( sz[2] )
     flux = total( total( cube, 1), 1 )
 
+    ;- Standard AIA colors
     aia_lct, r, g, b, wave=fix(channel);, /load
     ct = [ [r], [g], [b] ]
+
     name = 'AIA ' + channel + '$\AA$'
 
     ;; MEMORY - Is this making copies of everything?
@@ -172,9 +176,6 @@ function PREP_AIA, index, cube, cadence=cadence, inst=inst, channel=channel
         'cadence', cadence )
 ;aia = dictionary( 'aia1600', aia1600, 'aia1700', aia1700 )
 end
-
-
-
 
 goto, start
 

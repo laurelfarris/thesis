@@ -1,22 +1,31 @@
 
 ;- Last modified:   17 November 2018
 
-function OPLOT_GOES, plt, data
-    ; AIA channels probably need to be normalized to overplot
+;function OPLOT_GOES, plt, goes, _EXTRA=e
+
+pro OPLOT_GOES, plt, goes, $
+        _EXTRA=e
 
     ; GOES - create struc if haven't already
     ;    make another struc for this?
-    if n_elements(data) eq 0 then data = GOES()
+    if n_elements(goes) eq 0 then goes = GOES()
+
+
+    ;- NOTE:
+    ;-   goes.ydata[*,0] = 1.0-8.0 Angstroms
+    ;-   goes.ydata[*,1] = 0.5-4.0 Angstroms
+    yy = goes.ydata[*,0]
+
+
+
+    ;- Subtract min instead of mean to avoid problems with ylog=1
+    ;yy = yy - min(yy)
+
 
 
     ;- Normalize y values
-    ;-   NOTE:
-    ;-     data.ydata[*,0] = 1-8 Angstrom.
-    ;-     data.ydata[*,1] = 0.5-4 Angstrom.
-    yy = data.ydata[*,0]
     yy = yy - min(yy)
     yy = yy / max(yy)
-
 
     ;- Set x values to overlay GOES on current LCs so that date/times
     ;-    line up correctly.
@@ -38,7 +47,7 @@ function OPLOT_GOES, plt, data
     ;print, jd[-1], format=format
 
 
-    ;- Hardcoded values from data.UTBASE
+    ;- Hardcoded values from goes.UTBASE
     mo = 2
     day = 15
     year = 2011
@@ -50,16 +59,16 @@ function OPLOT_GOES, plt, data
 
     for ii = 0, D-1 do begin
 
-        ;hour = fix(  data.tarray[ii]/3600)
-        ;min  = fix(((data.tarray[ii]/3600)-hour) * 60 )
+        ;hour = fix(  goes.tarray[ii]/3600)
+        ;min  = fix(((goes.tarray[ii]/3600)-hour) * 60 )
         ;sec  = fix( $
-        ;    ((((data.tarray[ii]/3600)-hour)*3600)-min) * 60 )
+        ;    ((((goes.tarray[ii]/3600)-hour)*3600)-min) * 60 )
 
-        hour = data.tarray[ii]/3600
+        hour = goes.tarray[ii]/3600
         hour = fix(hour)
-        min  = data.tarray[ii]/60 - hour*60
+        min  = goes.tarray[ii]/60 - hour*60
         min  = fix(min)
-        sec  = data.tarray[ii] - hour*3600 - min*60
+        sec  = goes.tarray[ii] - hour*3600 - min*60
         sec  = fix(sec)
 
         goes_jd[ii] = julday( mo, day, year, hour, min, sec )
@@ -75,7 +84,10 @@ function OPLOT_GOES, plt, data
         goes_jd, yy, $
         /overplot, $
         LINESTYLE = [1, 'FCFC'X], $
-        name = data.sat + ' 1-8$\AA$' )
+        name = goes.sat + ' 1-8$\AA$', $
+        _EXTRA = e )
 
-    return, g
+    plt = [ plt, g ]
+    ;plt[2] = g
+    ;return, g
 end
