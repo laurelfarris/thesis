@@ -152,6 +152,8 @@ function PREP_AIA, index, cube, cadence=cadence, inst=inst, channel=channel
 
     name = 'AIA ' + channel + '$\AA$'
 
+    map = fltarr( sz[0], sz[1], 686 )
+
     ;; MEMORY - Is this making copies of everything?
     struc = { $
         data: cube, $
@@ -165,7 +167,8 @@ function PREP_AIA, index, cube, cadence=cadence, inst=inst, channel=channel
         color: '', $
         ct: ct, $
         channel: channel, $
-        name: name $
+        name: name, $
+        map: map $
     }
     return, struc
 
@@ -203,6 +206,13 @@ A[1].color = 'red'
 ;aia1700.color = 'dark cyan'
 ;A = [ aia1600, aia1700 ]
 
+print, '   Type ".CONTINUE" to restore power maps.'
+stop
+
+for cc = 0, 1 do begin
+    restore, '../aia' + A[cc].channel + 'map_2.sav'
+    A[cc].map = map
+endfor
 stop
 
 ; To do: save variables with same name so can call this from subroutine.

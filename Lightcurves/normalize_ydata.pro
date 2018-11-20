@@ -6,10 +6,18 @@
 pro NORMALIZE_YDATA, plt
 
     for ii = 0, n_elements(plt)-1 do begin
+
         plt[ii].GetData, xx, yy
-        yy = yy-min(yy)
-        yy = yy/max(yy)
-        plt[ii].SetData, xx, yy
+
+        ;yy = yy-min(yy)
+        ;yy = yy/max(yy)
+
+        ;- 20 November 2018
+        ;- Finally figured a one-line way to do this... derp
+        yy_norm = (yy-min(yy)) / (max(yy)-min(yy))
+
+        plt[ii].SetData, xx, yy_norm
+
     endfor
 
     ax = plt[0].axes
