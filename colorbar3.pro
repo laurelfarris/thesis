@@ -1,9 +1,11 @@
 
 ;- 24 October 2018
 
-function colorbar3, target=target
+function colorbar3, $
+    target=target, $
+    _EXTRA = e
 
-    c_width = 0.02
+    c_width = 0.015
     c_gap = 0.01
 
     pos = target.position
@@ -18,7 +20,7 @@ function colorbar3, target=target
     ;print, position * [wx,wy,wx,wy]
 
     cbar = COLORBAR( $
-        target = target[ii], $
+        target = target, $
         position=position, $
         /normal, $
         ;/device, $
@@ -26,12 +28,13 @@ function colorbar3, target=target
         ;major=11, $
         textpos=1, $
         orientation=1, $
-        tickformat='(F0.1)', $
+        ;tickformat='(F0.1)', $
+        ;tickformat='(I0)', $
+        ;major = 5, $
         font_size = fontsize, $
         font_style = 2, $
         border = 1, $
-        title='log 3-minute power' )
+        _EXTRA = e )
 
-    endfor
     return, cbar
 end

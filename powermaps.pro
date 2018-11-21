@@ -33,8 +33,8 @@
 function POWERMAPS, $
     data, $
     cadence, $
-    fmin=fmin, $
-    fmax=fmax, $
+    ;fmin=fmin, $
+    ;fmax=fmax, $
     fcenter=fcenter, $
     bandwidth=bandwidth, $
     threshold=threshold, $

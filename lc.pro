@@ -47,7 +47,7 @@ function PLOT_LIGHTCURVES, $
     ;-  On second thought, plots look better when they're aligned,
     ;-     with the same width.
     left = 1.00
-    right = 1.00
+    right = 1.10
     bottom = 0.5
     top = 0.2
 
@@ -77,6 +77,7 @@ function PLOT_LIGHTCURVES, $
             xtickinterval=75, $
             xticklen=0.025, $
             yticklen=0.010, $
+            ;ytickformat='(E0.2)', $
             color = color[ii], $
             name = name[ii], $
             _EXTRA = e )
@@ -103,103 +104,80 @@ end
 
 goto, start
 START:;---------------------------------------------------------------------------------
-dw
 
 time = strmid(A[0].time,0,5)
 
 before = { $
     phase : "before", $
-    ind : [0:259], $
-    z_start = [16, 58, 196] }
+    xtickinterval : 15, $
+    ind : [0:259] }
 
 during = { $
     phase : "during", $
+    xtickinterval : 5, $
     ind : [260:344] }
 
 after1 = { $
     phase : "after1", $
+    xtickinterval : 15, $
     ind : [314:519] }
 
 after2 = { $
     phase : "after2", $
-    ind = [520:748] }
+    xtickinterval : 15, $
+    ind : [520:748] }
 
 
-SS = { before:before, during:during, after1:after1, after2:after2 }
+struc = { before:before, during:during, after1:after1, after2:after2 }
+
+
+for ss = 1, 3 do begin
+    dw
+
+    xdata = A.jd[struc.(ss).ind]
+    ydata = A.flux[struc.(ss).ind]
+
+
+    ;- Plot AIA light curves
+    plt = PLOT_LIGHTCURVES( $
+        xdata, ydata, $
+        xtickinterval = struc.(ss).xtickinterval/(60.*24.), $
+        xminor = struc.(ss).xtickinterval - 1, $
+        color = A.color, $
+        name = A.name )
+
+    LABEL_TIME, plt, time=time, jd=jd
+
+
+    ;- Shift curves in y by subtracting the mean.
+    resolve_routine, 'shift_ydata', /either
+    ;file = 'lc'
+    file = 'lc_' + struc.(ss).phase
+    SHIFT_YDATA, plt
+
+
+    target=[plt]
+
+    resolve_routine, 'legend2', /either
+    ;leg.delete
+    leg = LEGEND2( target=target, position=[0.92,0.95], sample_width=0.40 )
+
+
+    dz = 64
+
+
+    x1 = A[0].jd[75]
+    x2 = A[0].jd[75+dz-1]
+    y1 = (plt[0].yrange)[0] * 1.1
+    y2 = (plt[0].yrange)[1] * 0.9
+
+    ;plt[0].yrange = y2 * 1.1
+
+    ;ax1 = axis( 'x', location = y2, axis_range=[x1, x2], showtext=0, major=2, $
+    ;    tickdir=1)
+
 stop
-
-
-xdata = A.jd
-ydata = A.flux
-
-ylog = 0
-
-;- subtract mean from input data, skip separate routine that does this after plotting.
-;ydata[*,0] = ydata[*,0] - min(ydata[*,0])
-;ydata[*,1] = ydata[*,1] - min(ydata[*,1])
-
-;- GOES data
-;xdata = gdata.tarray
-;ydata = gdata.ydata
-
-
-;- Plot AIA light curves
-plt = PLOT_LIGHTCURVES( $
-    xdata, ydata, $
-    xtickinterval = A[0].jd[75] - A[0].jd[0], $
-    ylog = ylog, $
-    color = A.color, $
-    name = A.name )
-
-LABEL_TIME, plt, time=time, jd=jd
-
-
-;-----
-;- Shift curves in y by subtracting the mean.
-resolve_routine, 'shift_ydata', /either
-;file = 'lc'
-file = 'lc_' + phase
-SHIFT_YDATA, plt
-
-;- Normalize data between 0 and 1.
-;resolve_routine, 'normalize_ydata', /either
-;file = 'lc_norm'
-;NORMALIZE_YDATA, plt
-;-   write this so it pulls ALL data from plt... which it might already be
-;-        doing, but GOES is its own variable, not part of plt.
-
-;- Overlay GOES flux on AIA light curves.
-;resolve_routine, 'oplot_goes', /either
-;OPLOT_GOES, plt, gdata, ylog=ylog
-
-;-----
-
-;- Overlay vertical lines marking start, peak, and end times.
-resolve_routine, 'oplot_flare_lines', /either
-OPLOT_FLARE_LINES, plt, A[0].time, A[0].jd, /send_to_back
-
-
-;plt[0].delete
-;plt[1].delete
-;- plt still has 3 elements though... ?? Maybe just removes from graphic,
-;- but object itself still exists.
-
-;plt[2].yrange = [ min(gdata.ydata)/10.0, max(gdata.ydata)*1.1 ]
-;plt[2].ytitle = 'GOES flux (W m$^{-2}$)'
-
-
-
-;- Legend
-;- --> Put somewhere else to easily delete and re-create legend
-;-       without re-creating entire graphic every time.
-
-target=[plt]
-
-resolve_routine, 'legend2', /either
-;leg.delete
-leg = LEGEND2( target=target, position=[0.92,0.95], sample_width=0.50 )
-
-
-;save2, file
+    save2, file
+endfor
 
 end

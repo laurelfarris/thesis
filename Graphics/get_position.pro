@@ -3,23 +3,15 @@
 ; optional keywords:
 ;   margins (left, bottom, right, top),
 ;   xgap, ygap
-;
-;
-; 18 September 2018
-; This could probably use some extra subroutines to handle
-;   all the little ways this can be done (e.g. by setting margins,
-;   or width, height, and gaps. Don't need to set every parameter:
-;   page dimensions, margins, gaps, and image dimensions...
-;   one of these can be unknown, and solved for using the others.
-; Didn't modify anything today... just using the code as is.
 
 
-
-;- 21 October 2018
-;-   appears that setting right and bottom margins is pointless
-;-   the way my subroutines are currently set up.
-;-   (at least with images, since they have preserved aspect ratio...
-;-    this may not be the case for plots.)
+;- TO DO:
+;- Could write two separate routines
+;-   one where user inputs window size and gaps, and code calculates width/height,
+;-   and one where user inputs width/height and gaps, and code calculates window size.
+;- Then just see which one you prefer to use.
+;-   --> wrote image3 (which calls get_position) to determine width/height.
+;-         since for images, aspect ratio is preserved. Plot3 will prob handle this differently.
 
 
 function WRAP_GET_POSITION, $
@@ -44,9 +36,6 @@ function WRAP_GET_POSITION, $
 
     i = coords[0]
     j = coords[1]
-
-    ;- determine width using wx, margins, and xgap
-    ;width = wx - (right+left) - (float(xgap)*(cols-1))
 
     if not keyword_set(height) then height = width
 
@@ -81,21 +70,12 @@ function GET_POSITION, layout=layout, _EXTRA = e
 
     n_panels = cols*rows
 
-    ;- Defaults
+    ;- determine width using wx, margins, and xgap
+    ;width = wx - (right+left) - (float(xgap)*(cols-1))
 
-    ;- ??
-    ;left   = 1.00 - 0.25
-    ;right  = 1.00 + 0.25
-
-    left   = 0.50
-    right  = 0.50
-    bottom = 1.00
-    top    = 1.00
-    xgap   = 0.25
-    ygap   = 0.25
-
-    width = (wx - ( left + right + (cols-1)*xgap )) / cols
-    ;height = (wy - ( top + bottom + (cols-1)*xgap )) / cols
+    
+    ;width = (wx - ( left + right + (cols-1)*xgap )) / cols --> image3.pro
+    ;height = (wy - ( top + bottom + (cols-1)*xgap )) / cols --> maybe useful for plots
 
     position = WRAP_GET_POSITION( $
         layout = layout, $
@@ -103,12 +83,12 @@ function GET_POSITION, layout=layout, _EXTRA = e
         wy = wy, $
         width = width, $
         height = height, $
-        left = left, $
-        right = right, $
-        bottom = bottom, $
-        top = top, $
-        xgap = xgap, $
-        ygap = ygap, $
+        left   = 0.50, $
+        right  = 0.50, $
+        bottom = 1.00, $
+        top    = 1.00, $
+        xgap   = 0.25, $
+        ygap   = 0.25, $
         _EXTRA = e )
     return, position
 

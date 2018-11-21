@@ -1,6 +1,5 @@
 
-;- Tue Nov 20 14:59:38 MST 2018
-;- From bda.pro - trying to separate out the different routines.
+;- 20 November 2018
 
     ;- Plot LC for subregions outlined by polygons
 

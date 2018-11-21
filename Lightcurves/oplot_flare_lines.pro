@@ -75,6 +75,7 @@ pro OPLOT_FLARE_LINES, $
         [2, '7C92'X], $
         [1, 'F0F0'X] ]
 
+    linestyle = [1,2, 4]
 
     foreach vx, x_indices, jj do begin
         vert[jj] = plot( $
@@ -83,15 +84,16 @@ pro OPLOT_FLARE_LINES, $
             /current, $
             /overplot, $
             ;overplot = plt[0], $
-            ;thick = 0.0, $
+            thick = 0.5, $
             ;linestyle = linestyle[jj], $
-            LINESTYLE = linestyle[*,jj], $
+            ;LINESTYLE = linestyle[*,jj], $
             ystyle = 1, $
             name = name[jj], $
             color = 'dark gray', $
             _EXTRA=e )
         if keyword_set(send_to_back) then vert[jj].Order, /SEND_TO_BACK
     endforeach
+
 
     ; Shaded region
     if keyword_set(shaded) then begin
@@ -106,7 +108,24 @@ pro OPLOT_FLARE_LINES, $
                 fill_color='light gray' )
             v_shaded.Order, /SEND_TO_BACK
         ;endfor
+
+
+
+        ;- Another way to shade:
+        v_shaded = polygon( $
+            [x1, x2, x2, x1], $
+            [y1, y1, y2, y2], $
+            /data, $
+            linestyle = 4, $
+            fill_background = 0, $
+            fill_color='light gray' )
+        v_shaded.Order, /send_to_back
+
     endif
+
+
+        
+
 
     plt = [ plt, vert ]
     ;return, vert
