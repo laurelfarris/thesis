@@ -2,6 +2,10 @@
 
 ;- 24 October 2018
 
+;- Input 3D data cube and arrays of image kws, then loops through them.
+;- Not meant to be called just like IDL's image, so
+;-   use whatever keywords you need.
+
 function IMAGE3_wrapper, $
     data, $
     wx = wx, $
@@ -13,6 +17,7 @@ function IMAGE3_wrapper, $
     rows=rows, cols=cols, $
     title=title, $
     cbar=cbar, $
+    buffer=buffer, $
     _EXTRA=e
 
     common defaults
@@ -26,7 +31,7 @@ function IMAGE3_wrapper, $
 
     wy = top + bottom + (rows*height) + (rows-1)*xgap
 
-    win = window( dimensions=[wx,wy]*dpi, buffer=0 )
+    win = window( dimensions=[wx,wy]*dpi, buffer=buffer )
 
     im = objarr(N)
 
@@ -57,28 +62,22 @@ function IMAGE3,  $
     data, $
     _EXTRA=e
 
-
-    ;- use third dimension of sz to set up defaults
-    ;sz = size(data, /dimensions)
-    ;if sz eq 2 then data = reform(data, sz[0], sz[1], 1)
-    ;sz = size(data, /dimensions)
-    ;if sz eq 2 then begin
-    ;    print, "Reform function did not work. Returning."
-    ;    return
-    ;endif
-
     common defaults
 
     sz = size(data, /dimensions)
-    if n_elements(sz) eq 2 then N = 1 else N = sz[2]
+    ;if n_elements(sz) eq 2 then nn = 1 else nn = sz[2]
+
+    if n_elements(sz) eq 2 then $
+        data = reform( data, sz[0], sz[1], 1, /overwrite )
+    sz = size(data, /dimensions)
+    nn = sz[2]
 
     ; Use optional kw to add letter to each input title?
-    title = alph[0:N-1]
-
-    ;- margins = 0.5 inches, or 0.2 inches with no labels
+    title = alph[0:nn-1]
 
     im = image3_wrapper( $
         data, $
+        buffer = 1, $
         rows = 1, $
         cols = 1, $
         wx = 8.0, $
@@ -93,25 +92,3 @@ function IMAGE3,  $
         _EXTRA = e)
     return, im
 end
-
-
-
-;- Images I need to make:
-;-      * full disk
-;-      * AR images (closeup)
-;-      * polygons - boxes overlaid to mark subregions
-;-      * contours of HMI B_LOS or continuum to mark umbra/penumbra
-;-      * powermaps
-;-      * subregions
-;-      * WA plots - techically images
-;-      * array of images/maps for my own reference
-;-      *
-;-      *
-;- Keep routines that create graphics separate from those that
-;-   calculate and/or collect all the data.
-
-
-;- 23 October 2018
-;- image3 takes 3D data cube and arrays of image kws, then loops through them.
-;- Not meant to be called just like IDL's image, so
-;-   use whatever keywords you need.
