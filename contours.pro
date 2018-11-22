@@ -3,66 +3,57 @@
 
 ;- "saturates at +/- 1500 Mx cm^{-1}" -Schrijver2011
 
+function get_hmi, time, channel=channel
 
-goto, start
+    ;- HMI B_LOS or continuum
 
+    instr = 'hmi'
 
+    READ_MY_FITS, index, instr=instr, channel=channel, $
+        nodata=1, prepped=1, ind
+    hmi_time = strmid( index.date_obs, 11, 5 )
+    ind = (where( hmi_time eq time ))[0]
 
+    ;- Returns "cube" [750, 500, 398]
+    restore, '../hmi_' + channel + '.sav'
 
+    hmi = crop_data( cube, offset=[-15,0] ) ; default dimensions = [500,330]
+    c_data = hmi[*,*,ind]
 
-;- HMI B_LOS contours
-channel = 'mag'
+    return, c_data
+end
 
-;- Returns "cube" [750, 500, 398]
-restore, '../hmi_' + channel + '.sav'
-file = 'HMI_BLOS.pdf'
+pro CONTOURS, time=time, target=target, channel=channel
 
-hmi = crop_data( cube ) ; default dimensions = [500,330]
+    c_data = get_hmi(time, channel=channel)
 
-sz = size(hmi, /dimensions)
+    nn = n_elements(time)
+    contourr = objarr(nn)
 
+    if channel eq 'cont' then begin
+        data_avg = mean(c_data[350:450,50:150])
+        c_value = [0.6*data_avg, 0.9*data_avg]
+        c_color = ['white', 'black']
+    endif
+    ;c_value = [ -reverse(c_value), c_value ]
+    if channel eq 'mag' then begin
+        c_value = [-300, 300 ]
+        c_color = ['black', 'white']
+    endif
 
-READ_MY_FITS, index, instr='hmi', channel='mag', $
-    ;ind=[z_start-(dz/2)], $
-    nodata=1, $
-    prepped=1
-
-
-
+    for ii = 0, nn-1 do begin
+        contourr[ii] = CONTOUR( $
+            c_data, $
+            overplot=target, $
+            c_thick=0.5, $
+            c_label_show=0, $
+            c_value=c_value, $
+            c_color=c_color )
+    endfor
 
 ;- hmi line through middle of two sunspots (pos/neg)
-p = plot2( hmi[*,175,0] )
-stop
+;p = plot2( hmi[*,175,0] )
 
-
-hmi_time = strmid( index.date_obs, 11, 5 )
-
-start:;----------------------------------------------------------------------------------
-c_data = fltarr(sz[0], sz[1], n_elements(z_start)*2 )
-foreach zz, z_start, ii do begin
-    ind = (where( hmi_time eq time[zz] ))[0]
-    c_data[*,*,ii] = hmi[*,*,ind+(dz/2)]
-    c_data[*,*,ii+3] = hmi[*,*,ind+(dz/2)]
-endforeach
-stop
-
-nn = n_elements(im)
-
-;c_value = [ -reverse(c_value), c_value ]
-c_value = [-300, 300 ]
-c_color = ['black', 'white']
-
-c = objarr(nn)
-
-foreach jj, [0:nn-1], ii do begin
-    c[ii] = CONTOUR( $
-        c_data[*,*,ii], $
-        overplot=im[jj], $
-        c_thick=0.5, $
-        c_label_show=0, $
-        c_value=c_value, $
-        c_color=c_color )
-endforeach
 
 ;file = 'HMI_BLOS_contours.pdf'
 ;save2, file

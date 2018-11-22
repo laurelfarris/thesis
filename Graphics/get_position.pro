@@ -30,6 +30,9 @@ function WRAP_GET_POSITION, $
     rows = layout[1]
     location = layout[2]
 
+    ;width = (wx - ( left + right + (cols-1)*xgap )) / cols --> image3.pro
+    ;height = (wy - ( top + bottom + (cols-1)*xgap )) / cols --> maybe useful for plots
+
     image_array = indgen(cols,rows) + 1
     image_array = reform( image_array, cols, rows )
     coords = array_indices(image_array, where( image_array eq location ))
@@ -65,30 +68,18 @@ function GET_POSITION, layout=layout, _EXTRA = e
     wx = float(dim[0])
     wy = float(dim[1])
 
-    cols = layout[0]
-    rows = layout[1]
-
-    n_panels = cols*rows
-
-    ;- determine width using wx, margins, and xgap
-    ;width = wx - (right+left) - (float(xgap)*(cols-1))
-
-    
-    ;width = (wx - ( left + right + (cols-1)*xgap )) / cols --> image3.pro
-    ;height = (wy - ( top + bottom + (cols-1)*xgap )) / cols --> maybe useful for plots
-
     position = WRAP_GET_POSITION( $
         layout = layout, $
         wx = wx, $
         wy = wy, $
-        width = width, $
-        height = height, $
-        left   = 0.50, $
-        right  = 0.50, $
-        bottom = 1.00, $
-        top    = 1.00, $
+        width = 2.0, $
+        height = 2.0, $
+        left   = 0.75, $
+        right  = 0.75, $
+        bottom = 0.75, $
+        top    = 0.75, $
         xgap   = 0.25, $
-        ygap   = 0.25, $
+        ygap   = 0.75, $
         _EXTRA = e )
     return, position
 

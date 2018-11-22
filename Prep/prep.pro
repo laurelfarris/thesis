@@ -191,6 +191,7 @@ stop
 
 ; need to re-read data, but not headers... commented in subroutine for now.
 
+start:;---------------------------------------------------------------------------------------------
 A = []
 A = [ A, PREP_AIA( aia1600index, aia1600data, cadence=24., inst='aia', channel='1600' ) ]
 A = [ A, PREP_AIA( aia1700index, aia1700data, cadence=24., inst='aia', channel='1700' ) ]
@@ -208,7 +209,6 @@ A[1].color = 'red'
 print, '   Type ".CONTINUE" to restore power maps.'
 stop
 
-start:;---------------------------------------------------------------------------------------------
 for cc = 0, 1 do begin
     restore, '../aia' + A[cc].channel + 'map_2.sav'
     A[cc].map = map

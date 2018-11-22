@@ -7,6 +7,7 @@
 
 
 function polygon2, $
+    target=target, $
     center=center, $
     dimensions=dimensions, $
     _EXTRA=e
@@ -35,13 +36,12 @@ function polygon2, $
         [x1, x2, x2, x1 ], $
         [y1, y1, y2, y2 ], $
         data = 1, $
-        fill_transparency = 100, $
-        ;linestyle = 0, $
-        ;linestyle = [1, '0000'X], $
-        ;linestyle = '--', $
-        linestyle = [1, '3333'X], $
+        ;fill_transparency = 100, $
+        fill_background = 0, $
+        linestyle=0, $
+        ;linestyle = [1, '1111'X], $
         thick = 0.5, $
-        color='white', $
+        color='red', $
         _EXTRA=e )
 
     return, pol

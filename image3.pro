@@ -8,6 +8,7 @@
 
 function IMAGE3_wrapper, $
     data, $
+    ;X, Y, $
     wx = wx, $
     ;wy = wy, $
     ;width = width, $
@@ -16,7 +17,6 @@ function IMAGE3_wrapper, $
     top = top, bottom = bottom, ygap = ygap, $
     rows=rows, cols=cols, $
     title=title, $
-    cbar=cbar, $
     buffer=buffer, $
     _EXTRA=e
 
@@ -24,7 +24,7 @@ function IMAGE3_wrapper, $
     resolve_routine, 'get_position', /either
 
     sz = size(data, /dimensions)
-    if n_elements(sz) eq 2 then n = 1 else n = sz[2]
+    if n_elements(sz) eq 2 then nn = 1 else nn = sz[2]
 
     width = (wx - ( left + right + (cols-1)*xgap )) / cols
     height = width * float(sz[1])/sz[0]
@@ -33,9 +33,12 @@ function IMAGE3_wrapper, $
 
     win = window( dimensions=[wx,wy]*dpi, buffer=buffer )
 
-    im = objarr(N)
+    im = objarr(nn)
 
-    for ii = 0, N-1 do begin
+    ;if not arg_present(X) then X = indgen(sz[0])
+    ;if not arg_present(Y) then Y = indgen(sz[1])
+
+    for ii = 0, nn-1 do begin
         position = GET_POSITION( $
             layout=[cols,rows,ii+1], $
             width=width, $
@@ -48,6 +51,7 @@ function IMAGE3_wrapper, $
 
         im[ii] = image2( $
             data[*,*,ii], $
+            ;X, Y, $
             /current, /device, $
             position=position*dpi, $
             title = title[ii], $
@@ -60,6 +64,7 @@ end
 
 function IMAGE3,  $
     data, $
+    ;X, Y, $
     _EXTRA=e
 
     common defaults
@@ -77,6 +82,7 @@ function IMAGE3,  $
 
     im = image3_wrapper( $
         data, $
+        ;X, Y, $
         buffer = 1, $
         rows = 1, $
         cols = 1, $

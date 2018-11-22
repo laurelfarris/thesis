@@ -2,6 +2,10 @@
 ;- Last updated:    18 November 2018
 
 
+;- See "Make_plots.pro" for more GOES routines
+;-  (or probably copies of stuff that's already in here).
+
+
 
 pro PLOT_GOES, A, gdata
 

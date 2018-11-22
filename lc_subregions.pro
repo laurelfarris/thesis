@@ -1,27 +1,6 @@
 
 
-; Last modified:    18 November 2018
-; Name of file = name of routine called by user.
-; x and y titles both need to be optional somehow...
-; ytitle changes depending on whether plotting values that are
-; normalized, absolute, shifted, exptime-corrected, etc.
-
-
-;- 02 November 2018 (from Enote on subroutines):
-;- Need to be able to call LC routine for any length of time (full data set, small
-;- flares before and after, etc. Label ticks outside of main subroutine? Takes
-;- longer, but may be easier way to separate things, and leave less important
-;- stuff for later)
-
-
-;- xdata = m x n array
-;-   m: array of JDs for each LC
-;-   n: # LCs
-;- ydata = m x n array
-;-   m: array of data points for each LC
-;-   n: # LCs
-
-
+; Last modified:    21 November 2018
 
 function PLOT_LIGHTCURVES, $
     xdata, ydata, $
