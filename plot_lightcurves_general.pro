@@ -23,23 +23,27 @@
 
 
 
-function PLOT_LIGHTCURVES, $
+function PLOT_LIGHTCURVES_GENERAL, $
     xdata, ydata, $
-    norm=norm, $
     color=color, $
     name=name, $
+    buffer=buffer, $
     _EXTRA = e
+
     ;- 16 November 2018
-    ;- Need to assign defaults to color and name.
-    ;- They're required input as currently written.
+    ;- color and name are currently required input.
+    ;- Wrote this for a specific task, so it's okay for now.
+    ;- Not likely to be plotting light curves without assigning names or colors.
 
     common defaults
 
     win_scale = 1
-    wx = win_scale*8.0
-    wy = win_scale*2.75
-    win = window( dimensions = [wx,wy]*dpi, buffer=1 )
-
+    wx = 8.00*win_scale
+    wy = 2.75*win_scale
+    if keyword_set(buffer) then $
+        win = window( dimensions = [wx,wy]*dpi, buffer=1 ) $
+    else $
+        win = window( dimensions = [wx,wy]*dpi, location=[500,0] )
 
     ; For single panel, pick margins, and use window dimensions to set width/height (the other unknown)
     ;-  NOTE: left/right margins change depending on whether normalizing or not
@@ -58,22 +62,27 @@ function PLOT_LIGHTCURVES, $
     position = [x1,y1,x2,y2]*dpi
 
     sz = size(ydata, /dimensions)
+    if n_elements(sz) eq 1 then sz = reform(sz, sz[0], 1, /overwrite)
+
+    ;- nn = # curves to (over)plot
     nn = sz[1]
 
     plt = objarr(nn)
-    ;plt = objarr(3)
     for ii = 0, nn-1 do begin
 
         plt[ii] = PLOT2( $
             xdata[*,ii], ydata[*,ii], $
             /current, $
             /device, $
+            ;layout=[1,1,1], $
+            ;margin=0.5*dpi, $
             position=position, $
             overplot=ii<1, $
             yshowtext=1, $
             stairstep=1, $
             xminor=5, $
             ymajor=5, $
+            title='time', $
             xtickinterval=75, $
             xticklen=0.025, $
             yticklen=0.010, $
@@ -127,17 +136,12 @@ after2 = { $
     xtickinterval : 15, $
     ind : [520:748] }
 
-
 struc = { before:before, during:during, after1:after1, after2:after2 }
 
-
 for ss = 0, 0 do begin
-    dw
-
     xdata = A.jd[struc.(ss).ind]
     ;ydata = A.flux[struc.(ss).ind]
     ydata = A.data[382,193,0:259]
-
 
     ;- Plot AIA light curves
     plt = PLOT_LIGHTCURVES( $
@@ -146,9 +150,7 @@ for ss = 0, 0 do begin
         xminor = struc.(ss).xtickinterval - 1, $
         color = A.color, $
         name = A.name )
-
     LABEL_TIME, plt, time=time, jd=jd
-
 
     ;- Shift curves in y by subtracting the mean.
     resolve_routine, 'shift_ydata', /either
@@ -156,29 +158,17 @@ for ss = 0, 0 do begin
     ;file = 'lc_' + struc.(ss).phase
     file = 'lc_bp'
     SHIFT_YDATA, plt
-
     target=[plt]
-
     resolve_routine, 'legend2', /either
-    ;leg.delete
     leg = LEGEND2( target=target, position=[0.92,0.95], sample_width=0.40 )
-
-
     dz = 64
-
-
     x1 = A[0].jd[75]
     x2 = A[0].jd[75+dz-1]
     y1 = (plt[0].yrange)[0] * 1.1
     y2 = (plt[0].yrange)[1] * 0.9
-
     ;plt[0].yrange = y2 * 1.1
-
     ;ax1 = axis( 'x', location = y2, axis_range=[x1, x2], showtext=0, major=2, $
     ;    tickdir=1)
-
-stop
-    save2, file
+    ;save2, file
 endfor
-
 end

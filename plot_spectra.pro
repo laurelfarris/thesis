@@ -23,9 +23,53 @@
         ;if win eq !NULL then $
             ;win = window( dimensions=[8.0,4.0]*dpi, location=[500,0] )
 
+function PLOT_SPECTRA_GENERAL, $
+    frequency, power, $
+    color=color, $
+    name=name, $
+    buffer=buffer, $
+    _EXTRA = e
+
+    common defaults
+
+    xdata = frequency
+    ydata = power
+
+    win_scale = 1
+    wx = 8.00*win_scale
+    wy = 2.75*win_scale
+    if keyword_set(buffer) then $
+        win = window( dimensions = [wx,wy]*dpi, buffer=1 ) $
+    else $
+        win = window( dimensions = [wx,wy]*dpi, location=[500,0] )
+
+    left = 1.00
+    right = 1.10
+    bottom = 0.5
+    top = 0.2
+
+    x1 = left
+    y1 = bottom
+    x2 = wx - right
+    y2 = wy - top
+    position = [x1,y1,x2,y2]*dpi
+
+    sz = size(ydata, /dimensions)
+    if n_elements(sz) eq 1 then sz = reform(sz, sz[0], 1, /overwrite)
+
+    ;- nn = # curves to (over)plot
+    nn = sz[1]
+
+    plt = objarr(nn)
+    for ii = 0, nn-1 do begin
+
+        plt[ii] = PLOT2( $
+
+        cols=1
+        rows=1
 
         pos = get_position( layout=[cols,rows,1], width=6.5, height=2.5 )
-        
+
         plt[ii] = PLOT2( $
             frequency, $ ;(power-min(power))/(max(power)-min(power)), $
             power, $
@@ -66,6 +110,3 @@
         ax[0].title='frequency (mHz)'
         ax[0].tickformat='(F0.2)'
     ;endif
-
-
-
