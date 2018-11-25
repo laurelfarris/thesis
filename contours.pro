@@ -23,7 +23,7 @@ function get_hmi, time, channel=channel
     return, c_data
 end
 
-pro CONTOURS, time=time, target=target, channel=channel
+pro CONTOURS, contourr, time=time, target=target, channel=channel
 
     c_data = get_hmi(time, channel=channel)
 
@@ -32,23 +32,38 @@ pro CONTOURS, time=time, target=target, channel=channel
 
     if channel eq 'cont' then begin
         data_avg = mean(c_data[350:450,50:150])
-        c_value = [0.6*data_avg, 0.9*data_avg]
-        c_color = ['white', 'black']
+
+        ;- Outer edges of [penumbra, umbra]
+        c_value = [0.9*data_avg, 0.6*data_avg]
+
+        c_color = ['red','red']
+        c_thick = 1.0
+        name = 'umbra and penumbra boundaries'
     endif
-    ;c_value = [ -reverse(c_value), c_value ]
     if channel eq 'mag' then begin
-        c_value = [-300, 300 ]
+
+        c_value = [-300, 300]
         c_color = ['black', 'white']
+        c_thick = 0.5
+        ;c_value = [-1000, -300, 300, 1000]
+        ;c_value = [ -reverse(c_value), c_value ]
+
+        ;c_thick = [1.0, 2.0, 2.0, 1.0]
+        ;c_color = ['black', 'black', 'white', 'white']
+        name = 'B$_{LOS} \pm 300$'
+
     endif
 
     for ii = 0, nn-1 do begin
         contourr[ii] = CONTOUR( $
             c_data, $
             overplot=target, $
-            c_thick=0.5, $
-            c_label_show=0, $
             c_value=c_value, $
-            c_color=c_color )
+            ;c_thick=c_thick, $
+            c_color=c_color, $
+            c_linestyle='-', $
+            c_label_show=0, $
+            name = name )
     endfor
 
 ;- hmi line through middle of two sunspots (pos/neg)

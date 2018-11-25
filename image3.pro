@@ -20,6 +20,7 @@ function IMAGE3_wrapper, $
     buffer=buffer, $
     _EXTRA=e
 
+
     common defaults
     resolve_routine, 'get_position', /either
 
@@ -31,7 +32,11 @@ function IMAGE3_wrapper, $
 
     wy = top + bottom + (rows*height) + (rows-1)*xgap
 
-    win = window( dimensions=[wx,wy]*dpi, buffer=buffer )
+    if keyword_set(buffer) then $
+        win = window(dimensions=[wx,wy]*dpi, buffer=1) $
+    else $
+        win = window(dimensions=[wx,wy]*dpi, location=[500,0])
+        
 
     im = objarr(nn)
 
