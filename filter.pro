@@ -61,32 +61,24 @@ end
 goto, start
 
 start:;---------------------------------------------------------------------------------
-inverseTransform = []
-flux = []
 
-for cc = 0, 1 do begin
-    cadence = A[cc].cadence
-    time = strmid(A[0].time,0,5); to keep consistent array sizes
-    t1 = (where(time eq '01:30'))[-1]
-    t2 = (where(time eq '02:30'))[0]
-    ind = [t1:t2]
-    background = mean(A[cc].flux[110:259])
-    flux = [ [flux], [ A[cc].flux[ind] ] ]
-    ;flux = [ [flux], [ A[cc].flux[ind] - background ] ]
-    ;flux = [ [flux], [A[cc].flux[ind] - min(A[cc].flux[ind])] ]
+time = strmid(A[0].time,0,5)
+    ; to keep consistent array sizes, plus already know that
+    ; the same indices are returned for both channels :)
+t1 = (where(time eq '01:30'))[-1]
+t2 = (where(time eq '02:30'))[0]
+ind = [t1:t2]
+flux = A.flux[ind]
 
-    ;inverseTransform = FILTER(flux, cadence)
-    inverseTransform = [ [inverseTransform], [FILTER(flux[*,cc], cadence)] ]
-endfor
+;flux = [ [flux], [A[cc].flux[ind] - min(A[cc].flux[ind])] ]
 
-;- Plotting
-
+;- Plot original light curves
 xdata = [ [ind], [ind] ]
 wx = 8.0
-wy = 3.0
-
+wy = 2.5
+dw
 resolve_routine, 'batch_plot', /either
-plt2 = BATCH_PLOT( $
+plt = BATCH_PLOT( $
     xdata, flux, $
     xtickinterval=25, $
     color=[A[0].color, A[1].color], $
@@ -94,43 +86,61 @@ plt2 = BATCH_PLOT( $
     wx=wx, wy=wy, $
     yticklen=0.010, $
     stairstep=1, $
-    buffer=0 )
+    buffer=1 )
 
-;resolve_routine, 'shift_ydata', /either
-;SHIFT_YDATA, plt2, background=background
+delt = [ min(flux[*,0]), (min(flux[*,1])-1.e7) ]
+resolve_routine, 'shift_ydata', /either
+SHIFT_YDATA, plt, delt=delt
 
 ;- Overplot pre-flare background
+background = mean(A.flux[120:259], dim=1) - delt
+
 for jj = 0, 1 do begin
     hor = plot2( $
-        plt2[0].xrange, [ background[jj], background[jj] ], /overplot, $
+        plt[0].xrange, $
+        [ background[jj], background[jj] ], $
+        /overplot, $
         linestyle=[1, '1111'X], $
-        ;linestyle=[1, '5555'X], $
         name = 'Background' )
+endfor
+
+inverseTransform = []
+for cc = 0, 1 do begin
+    inverseTransform = [ [inverseTransform], $
+        [FILTER(flux[*,cc], A[cc].cadence)] ]
 endfor
 
 ;inverseTransform[*,0] = inverseTransform[*,0] + bg[0]
 ;inverseTransform[*,1] = inverseTransform[*,1] + bg[1]
 for ii = 0, 1 do begin
-plt3 = plot2( $
+plt2 = plot2( $
     xdata[*,ii], $
-    inverseTransform[*,ii], $
-    thick=1.0, $
+    inverseTransform[*,ii] - delt[ii], $
+    ;thick=1.0, $
     /overplot, $
-    linestyle=[1,'03FF'X], $
+    yticklen=0.010, $
+    yminor=3, $
+    linestyle=[1,'07FF'X], $
     name = 'FFT filter (400s)', $
     color='black' )
 endfor
 
 resolve_routine, 'legend2', /either
 leg = legend2( $
-    target=[plt2, plt3, hor], $
-    /upperright, $
+    target=[plt, plt2, hor], $
+    /upperleft, $
     sample_width=0.13*wy )
 
 ax = plt2[0].axes
 ax[0].tickname = time[ax[0].tickvalues]
-print, ax[0].tickname
+ax[3].showtext=1
 
+ax[1].tickinterval = 2.e7
+ax[1].title = A[0].name + ' (DN s$^{-1}$)'
+ax[3].tickinterval = 0.2e8
+ax[3].title = A[1].name + ' (DN s$^{-1}$)'
+
+save2, 'detrendedLC'
 stop
 
 detrended = flux - inverseTransform
@@ -142,8 +152,8 @@ plt3 = BATCH_PLOT( $
     title = 'Detrended', $
     color='dark orange', $
     wx = 8.0, wy=3.0, left = 0.75, right=0.25, $
-    thick = 2.0, $
-    buffer=0)
+    ;thick = 2.0, $
+    buffer=1)
 
 hor = plot2( $
     plt3.xrange, [0.0, 0.0], /overplot, linestyle=[1, '5555'X] )

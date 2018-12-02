@@ -33,7 +33,11 @@ end
 
 ;----------------------------------------------------------------------------------
 
-pro SHIFT_YDATA, plt, background=background
+pro SHIFT_YDATA, $
+    plt, $
+    ;background=background, $
+    delt=delt
+
     ; Last modified:    18 November 2018
 
     ; Shift data in Y-direction
@@ -64,12 +68,15 @@ pro SHIFT_YDATA, plt, background=background
         ax = plt[ii].axes
         plt[ii].GetData, xx, yy
 
+
         ;- subtract min, mean, or background
-        ;aa = mean(yy)
-        ;aa = min(yy)
-        if keyword_set(background) then begin
-            aa = yy - background[ii]
-        endif
+        ;- Or just have user input amount to shift...
+
+        if not keyword_set(delt) then $
+            aa = mean(yy) $
+            ;aa = background[ii]
+            ;aa = min(yy)
+        else aa = delt[ii]
 
         plt[ii].SetData, xx, yy-aa
 

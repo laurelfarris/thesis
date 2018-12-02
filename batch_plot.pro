@@ -115,9 +115,10 @@ function WRAP_BATCH_PLOT, $
 
 
     ;- Add some extra white space between plot lines and x-axes.
-    yr = plt[0].yrange
-    delt = 0.05*(yr[1] - yr[0])
-    plt[0].yrange = [ yr[0]-delt, yr[1]+delt ]
+    ;yr = plt[0].yrange
+    ;delt = 0.05*(yr[1] - yr[0])
+    ;plt[0].yrange = [ yr[0]-delt, yr[1]+delt ]
+    ;-  Messes up attempts to shift_ydata after creating plt...
 
 
     ;- Display index (frame #) on upper x-axis.
@@ -172,7 +173,7 @@ function BATCH_PLOT, $
 
     name = strarr(sz[1])
     linestyle = make_array( sz[1], value='-', /string )
-    thick = make_array( sz[1], value=1.0, /float )
+    thick = make_array( sz[1], value=0.5, /float )
 
     plt = WRAP_BATCH_PLOT( $
         xdata, ydata, $

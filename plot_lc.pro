@@ -2,9 +2,7 @@
 
 ; Last modified:    28 November 2018
 
-
-
-
+goto, start
 
 file = 'lc'
 
@@ -19,10 +17,10 @@ plt = BATCH_PLOT(  $
     xdata, ydata, $
     ;xrange=[0,748], $
     xtickinterval=xtickinterval, $
-    ylog = 1, $
+    ;ylog = 1, $
     color=A.color, $
     name=A.name, $
-    buffer=0 )
+    buffer=1 )
 
 resolve_routine, 'label_time', /either
 LABEL_TIME, plt, time=A.time, jd=A.jd
@@ -34,9 +32,7 @@ resolve_routine, 'oplot_flare_lines', /either
 OPLOT_FLARE_LINES, plt, t_obs=A[0].time, jd=A.jd
 
 resolve_routine, 'legend2', /either
-leg = LEGEND2( target=plt, sample_width=0.30 )
-
-stop
+leg = LEGEND2( target=plt, /upperleft )
 
 ax = plt[0].axes
 ax[1].title = ytitle[0]
@@ -56,5 +52,18 @@ ax[3].minor = 3
 ; Then just erase and re-draw.
 
 ;- --> Put ML stuff into a subroutine that calls all the other subroutines?
+
+;- 02 December 2018
+;- Mark BDA times on LC.
+
+start:
+time = strmid(A[0].time,0,5)
+bda_times = ['01:00', '01:45', '02:30', '03:15']
+ind = n_elements(bda_times)
+ind = where( time eq bda_times )
+print, ind
+
+
+;save2, file
 
 end

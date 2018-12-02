@@ -76,7 +76,6 @@ dz = 64
 power = fltarr(685, 2)
 xdata = [[indgen(685)],[indgen(685)]] + (dz/2)
 
-;resolve_routine, 'get_power_from_flux', /either
 for cc = 0, 1 do begin
     power[*,cc] = GET_POWER_FROM_FLUX( $
         ;A[cc].flux, $
@@ -97,19 +96,26 @@ endfor
         xrange=[0,748], $
         ytitle='3-minute power', $
         ylog=1, $
-        yrange=[1.0e7, 1.0e15], $
-        yminor=4, $
+        ;yrange=[1.0e7, 1.0e15], $  ;- FT(flux)
+        ;ytickvalues = 10.^[8:14], $;- FT(flux)
+        ;yrange = [1.e-4, 1.e5], $  ;- FT(flux per pixel)
+        ;ytickvalues = 10.^[-4:4:2], $;- FT(flux per pixel)
+        yminor=9, $
         wy=3.0, $
         color=A.color, $
         name=A.name, $
-        buffer=0 )
-
+        buffer=1 )
 
     ax = plt[0].axes
-    ax[1].tickvalues = 10.^[8:14]
 
-    resolve_routine, 'normalize_ydata', /either
-    NORMALIZE_YDATA, plt
+    ;- FT( flux )
+    ;ax[1].tickvalues = 10.^[8:14]
+
+    ;- FT( flux per pixel )
+    ;ax[1].tickvalues = 10.^[-4:4:2]
+
+    ;resolve_routine, 'normalize_ydata', /either
+    ;NORMALIZE_YDATA, plt
 
     resolve_routine, 'label_time', /either
     LABEL_TIME, plt, time=A.time;, jd=A.jd
@@ -118,11 +124,11 @@ endfor
     OPLOT_FLARE_LINES, plt, t_obs=A[0].time;, jd=A.jd
 
     resolve_routine, 'legend2', /either
-    leg = LEGEND2( target=plt, sample_width=0.30 )
+    leg = LEGEND2( target=plt, /upperleft )
 
 
 resolve_routine, 'save2', /either
 file = 'time-3minpower_flux'
-;save2, file
+save2, file
 
 end

@@ -27,7 +27,7 @@ pro NORMALIZE_YDATA, plt
         ;yy = yy/max(yy)
 
         ;- 20 November 2018
-        ;- Finally figured a one-line way to do this... derp
+        ;- Finally figured a one-line way to normalize between 0 and 1
         yy_norm = (yy-min(yy)) / (max(yy)-min(yy))
 
         plt[ii].SetData, xx, yy_norm

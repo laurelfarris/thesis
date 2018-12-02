@@ -4,7 +4,7 @@
 
 function LEGEND2, $
     target=target, $
-    left=left, $
+    upperleft=upperleft, $
     upperright=upperright, $
     lowerright=lowerright, $
     _EXTRA=e
@@ -22,12 +22,14 @@ function LEGEND2, $
     ;- position in inches
     pos = (target[0].position)*([wx,wy,wx,wy]/dpi)
 
+    sample_width = 0.10*(pos[3]-pos[1])
 
-    xoffset = 0.50
+
+    xoffset = 0.10
     yoffset = 0.05
 
     ;- legend position at upper LEFT corner
-    if keyword_set(left) then begin
+    if keyword_set(upperleft) then begin
         lx = pos[0] + xoffset
         ly = pos[3] - yoffset
         horizontal_alignment = 0.0  ; left
@@ -44,6 +46,8 @@ function LEGEND2, $
 
     ;- legend position at LOWER RIGHT corner
     if keyword_set(lowerright) then begin
+        xoffset = 0.50
+        yoffset = 0.05
         lx = pos[2] - xoffset
         ly = pos[1] + yoffset
         horizontal_alignment = 1.0  ; right
@@ -72,7 +76,7 @@ function LEGEND2, $
         shadow = 0, $
         thick = 0.5, $
         transparency = 100, $
-        sample_width = 0.40, $
+        sample_width = sample_width, $
         auto_text_color = 1, $
         _EXTRA=e )
     return, leg

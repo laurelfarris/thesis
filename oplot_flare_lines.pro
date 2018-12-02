@@ -52,6 +52,7 @@ pro OPLOT_FLARE_LINES, $
     for ii = 0, nn-1 do $
         x_indices[ii] = (where( time eq flare_times[ii] ))[0]
 
+    ;- Not sure what these lines are for... can probably delete.
     ;Result = JULDAY( Month, Day, Year, Hour, Minute, Second)
     ;win = GetWindows( /current, NAMES=window_names )
     ;win.Select, /all
@@ -59,17 +60,13 @@ pro OPLOT_FLARE_LINES, $
 
     plt[0].GetData, xx, yy ;- only needed when xdata = jd... I think.
     yrange = plt[0].yrange
-
     vert = objarr(nn)
-
     linestyle = [1,2,4]
-
-    ;color = ['slate gray', 'dark slate gray', 'dim gray' ]
 
     foreach vx, x_indices, jj do begin
         vert[jj] = plot( $
-            ;[ xx[vx], xx[vx] ], $
-            [ vx, vx ], $
+            [ xx[vx], xx[vx] ], $
+            ;[ vx, vx ], $
             yrange, $
             /current, $
             /overplot, $
