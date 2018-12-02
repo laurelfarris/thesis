@@ -39,6 +39,25 @@ pro OPLOT_FLARE_LINES, $
     vert = objarr(N)
 
 
+    linestyle = [1,2, 4]
+
+    foreach vx, x_indices, jj do begin
+        vert[jj] = plot( $
+            [ xx[vx], xx[vx] ], $
+            yrange, $
+            /current, $
+            /overplot, $
+            ;overplot = plt[0], $
+            thick = 0.5, $
+            ;linestyle = linestyle[jj], $
+            ;LINESTYLE = linestyle[*,jj], $
+            ystyle = 1, $
+            name = name[jj], $
+            color = 'dark gray', $
+            _EXTRA=e )
+        if keyword_set(send_to_back) then vert[jj].Order, /SEND_TO_BACK
+    endforeach
+
     ; 1  0001
     ; 2  0010
     ; 3  0011
@@ -74,25 +93,6 @@ pro OPLOT_FLARE_LINES, $
         [1, '1111'X], $
         [2, '7C92'X], $
         [1, 'F0F0'X] ]
-
-    linestyle = [1,2, 4]
-
-    foreach vx, x_indices, jj do begin
-        vert[jj] = plot( $
-            [ xx[vx], xx[vx] ], $
-            yrange, $
-            /current, $
-            /overplot, $
-            ;overplot = plt[0], $
-            thick = 0.5, $
-            ;linestyle = linestyle[jj], $
-            ;LINESTYLE = linestyle[*,jj], $
-            ystyle = 1, $
-            name = name[jj], $
-            color = 'dark gray', $
-            _EXTRA=e )
-        if keyword_set(send_to_back) then vert[jj].Order, /SEND_TO_BACK
-    endforeach
 
 
     ; Shaded region

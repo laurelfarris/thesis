@@ -1,5 +1,9 @@
 
 
+
+;- Plotting P(t) for several central periods:
+;- 2-minute power, 3-minute power, and 5-minute power.
+
 cc = 0
 cadence = A[cc].cadence
 

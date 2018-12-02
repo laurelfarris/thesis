@@ -1,3 +1,4 @@
+;- 21 November 2018
 ;
 ; input:    frequency, power
 ;              (fourier2.pro needs to be run before this)

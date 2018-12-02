@@ -1,131 +1,203 @@
+function IMAGE_POWERMAPS, $
+    map, $
+    rows=rows, $
+    cols=cols, $
+    titles=titles, $
+    _EXTRA=e
 
+    common defaults
+    ;resolve_routine, 'colorbar2', /either
+    resolve_routine, 'get_position', /either
+
+    sz = size(map, /dimensions)
+
+    wx = 8.5
+    wy = wx * (float(rows)/cols) * (float(sz[1])/sz[0])
+    dw
+    win = window( dimensions=[wx,wy]*dpi, /buffer )
+
+    width = 2.5
+    height = width * float(sz[1])/sz[0]
+
+    left=0.5
+    top=0.5
+    xgap=1.00
+
+    ;- appears that setting right and bottom margins is pointless,
+    ;- at least with the way my subroutines are currently set up.
+    ;- (also images have preserved aspect ratio... this may not
+    ;- be the case for plots.)
+
+    im = image3( map, $
+        xshowtext=0, $
+        yshowtext=0, $
+        ;min_value=1.2*min(map), $
+        ;max_value=0.5*max(map), $
+        title=titles )
+
+    cbar = colorbar3( target=im )
+
+    return, im
+end
 
 
 goto, start
 
-start:;---------------------------------------------------------------------------------
+;- 01 December 2018
+;- when does post-peak emission fall to half peak-background?
+cc = 0
+bg = mean(A[cc].flux[125:259])
+;flux = A[0].flux[260:375]
+flux = A[cc].flux
+delt = (max(flux)-bg)
+flare_end = bg + 0.5*delt
+ind = where( flux ge flare_end )
+stop
 
 
-cc = 1
-time = strmid(A[cc].time,0,5)
+;-------------------------------------------------------------------------------------------------------
+;- 18 October 2018
+;-
+;- Power maps:
+;-   Multiply power maps by mask, which can be created using any threshold.
+;-   Compare same power map using multiple thresholds.
+;-   Show images used to compute maps: ruNMing average? standard deviation?
+;-   How should power maps be scaled visually?  @methods
+;-
+;- Copy FT bit with fcenter to some other fourier related subroutine.
+
+start:;-------------------------------------------------------------------------------------------------
+
+fcenter = 1./180
+bandwidth = 0.001
+fmin = fcenter - (bandwidth/2.)
+fmax = fcenter + (bandwidth/2.)
+
+
+;- 'NM' = Number of Maps
+NM = 9
 dz = 64
+;t0 = '01:05'
+;t0 = '01:23'
+; 01:23 - 02:34 --> z = 207 - 386
 
-;z_start=[16, 58, 196]
-z_start=[0, 1, 2] * dz
+t0 = '00:24'
+;---
 
-fmin = 0.0025
-fmax = 0.02
-
-fcenter=0.0039
-
-color = [ 'black', 'red', 'blue'  ]
-
-win = window( dimensions=[7.0, 4.0]*dpi )
-p = objarr(3)
-
-foreach zz, z_start, ii do begin
-
-
-    flux = (A[cc].flux[zz:zz+dz-1])/(500.*330)
-    result = fourier2( flux, 24 )
-    frequency = reform( result[0,*] )
-    power = reform( result[1,*] )
-    ind = where( frequency ge fmin and frequency le fmax )
-
-    p[ii] = plot2( frequency[ind], power[ind], /current, overplot=ii<1, $
-        ylog = 1, $
-        symbol='Circle', $
-        xtitle='frequency (Hz)', $
-        ytitle='power (per pixel)', $
-        color=color[ii], $
-        name = time[zz] + '-' + time[zz+dz-1] )
-
-
-endforeach
-v = plot2( [fcenter,fcenter], p[0].yrange, /overplot, linestyle='--', ystyle=1 )
-leg = legend2( target=p )
-
+time = strmid(A[0].time, 0, 5)
+z0 = (where( time eq t0 ))[0]
+zf = z0 + NM*dz - 1
+z_ind = [z0:zf]
+print, ''
+print, time[z_ind[0]]
+print, time[z_ind[-1]]
 stop
 
+data = A.data[*,*,z_ind,*]
+sz = size(data, /dimensions)
 
-dw
+;-  Test: third dimension should = dz*NM
+if sz[2] ne dz*NM then begin
+    print, "Numbers don't match."
+    stop
+endif
 
+;mask1 = fltarr(sz)
+;threshold = 10000
+;mask1[where( data lt threshold )] = 1.0
+;mask1[where( data ge threshold )] = 0.0
+;sat = where(mask1 eq 0.0)
+;unsat = where(mask1 eq 1.0)
 
-map = powermaps( A[cc].data, 24, z_start=z_start, dz=dz, $
-    fcenter=fcenter, $
-    bandwidth=0.001 )
-
-win = window( dimensions=[8.0, 11.0]*dpi )
-imdata = alog10(map)
-foreach zz, z_start, ii do begin
-im = image2( $
-    imdata[*,*,ii], $
-    /current, $
-    layout=[1,3,ii+1], $
-    margin=0.1, $
-    min_value = min(imdata), $
-    max_value = max(imdata), $
-    title = time[zz] + '-' + time[zz+dz-1], $
-    xshowtext=0, yshowtext=0, $
-    rgb_table=A[cc].ct )
-
-endforeach
-
-
-
-stop
-
-
-imdata = []
-restore, '../hmi_cont.sav'
-imdata = [ [[imdata]], [[crop_data(cube[*,*,0])]] ]
-restore, '../hmi_mag.sav'
-imdata = [ [[imdata]], [[crop_data(cube[*,*,0])]] ]
-
-avg_cont = mean( imdata[350:450,50:150,0] )
-
-c_value = [ [[0.6, 0.9]*avg_cont], [[-300,300]] ]
-c_color = [ ['red', 'blue'], ['red', 'blue'] ]
-stop
-
-
-
-;title = []
-read_my_fits, index, instr='hmi', channel='cont', ind=[0], nodata=1, prepped=1
-print, index.date_obs
-;title = [ title, 'HMI continuum (' + index.date_obs + ')' ]
-read_my_fits, index, instr='hmi', channel='mag', ind=[0], nodata=1, prepped=1
-print, index.date_obs
-;title = [ title, 'HMI B$_{LOS}$ (' + index.date_obs + ')' ]
-stop
-
-
-dw
-win = window( dimensions=[8.5, 11.0]*dpi, location=[500,0] )
-im = objarr(2)
-for ii = 0, 1 do begin
-    im[ii] = image2( $
-        imdata[*,*,ii], $
-        /current, $
-        layout=[2,2,ii+3], $
-        margin=0.1, $
-        title = title[ii], $
-        xshowtext=0, yshowtext=0 )
-
-    ;continue
-    c = contour( $
-        imdata[*,*,ii], $
-        /overplot, $
-        c_label_show=0, $
-        c_thick=0.0, $
-        c_value=c_value[*,ii], $
-        c_color=c_color[*,ii], $
-        c_linestyle='-')
-
+titles = []
+for cc = 0, 1 do begin
+    for ii = 0, NM-1 do begin
+        ind = indgen(dz) + z0 + (dz*ii)
+        titles = [ titles, $
+            A[cc].channel + '$\AA$ ' + $
+            time[ind[0]] + '-' + time[ind[-1]] ]
+        CONTINUE
+        print, "CONTINUE didn't work"
+    endfor
 endfor
 
-yoffset = 0.2
-im[0].position = im[0].position + [0.0, yoffset, 0.0, yoffset]
-im[1].position = im[1].position + [0.0, yoffset, 0.0, yoffset]
+titles = 'AIA ' + titles + ' UT'
+titles = reform( titles, NM, 2)
+foreach t, titles do print, t
+stop ;---
+
+
+;-  Calculate power maps and saturation mask together
+
+map   = fltarr( sz[0], sz[1], NM, 2)
+;mask2 = fltarr( sz[0], sz[1], NM, 2)
+
+resolve_routine, 'powermaps', /either
+for cc = 0, 1 do begin
+    for ii = 0, NM-1 do begin
+        ind = indgen(dz) + z0 + (dz*ii)
+        map[*,*,ii,cc] = POWERMAPS( $
+            A[cc].data[*,*,ind], $
+            A[cc].cadence, fmin=fmin, fmax=fmax )
+        ;mask2[*,*,ii,cc] = PRODUCT( mask1[*,*,ind,cc], 3 )
+    endfor
+endfor
+stop ;---
+
+
+;-
+;- 'sat' = cube same size as data equal to 0s and 1s
+sat = fltarr( sz[0], sz[1], NM, 2)
+
+for cc = 0, 1 do begin
+    for ii = 0, NM-1 do begin
+        ind = indgen(dz) + z0 + (dz*ii)
+        mask[*,*,ii,cc] = PRODUCT( mask1[*,*,ind,cc], 3 )
+    endfor
+endfor
+stop ;---
+resolve_routine, 'save2', /either
+for cc = 0, 1 do begin
+
+    image_data = alog10(map[*,*,*,cc])
+    ;image_data = AIA_INTSCALE( map[*,*,*,cc], wave=fix(A[cc].channel), exptime=A[cc].exptime )
+    ;image_data = (map[*,*,*,cc])^0.2
+    im = IMAGE_POWERMAPS( $
+        image_data, $
+        min_value = min(image_data), $
+        max_value = max(image_data), $
+        rows = 4, $
+        cols = 2, $
+        rgb_table = AIA_COLORS( wave=fix(A[cc].channel) ), $
+        titles = titles[*,cc] )
+
+    file = 'aia' + A[cc].channel + 'map_45.pdf'
+    save2, file
+endfor
+stop
+
+
+;time = strmid(A[ii].time,0,8)
+;index = indgen(n_elements(time))
+;time_range = time + '-' + shift(time, -(dz-1)) + ' (' + strtrim(index,1) + '-' + strtrim(shift(index, -(dz-1)), 1)  + ')'
+;time_range = time_range[ 0 : sz[2]-1 ]
+;ind = [ 0 : sz[2]-1 : 40 ]
+
+;-  power_maps.pro is written to take entire data set and an array of starting indices.
+;-  This is probably faster than passing hugs arrays back and forth when computing a bunch of maps...
+;-  not sure what the best coding practice would be in this case, if there even is one.
+;-  kws are optional: if z isn't specified then default is to start at index 0
+;-  and if dz isn't set then map is calculated over entire data cube.
+
+dw
+win = window(/buffer)
+for ii = 0, 3 do begin
+    im = image2( mask2[*,*,ii,0], /current, $
+        layout=[2,2,ii+1], margin=0.1, $
+        title = 'mask map' )
+endfor
+save2, 'saturation_mask.pdf'
+stop
+end
 
 end

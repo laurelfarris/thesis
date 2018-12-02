@@ -1,5 +1,5 @@
 
-; Last modified:   17 June 2018
+; Last modified:   25 November 2018
 
 ; Purpose:      Get power as function of time from total flux
 
@@ -14,8 +14,8 @@
 
 
 function GET_POWER_FROM_FLUX, $
-    flux=flux, $
-    cadence=cadence, $
+    flux, $
+    cadence, $
     dz=dz, $
     fmin=fmin, $
     fmax=fmax, $
@@ -25,11 +25,13 @@ function GET_POWER_FROM_FLUX, $
     ; This first bit is exactly like power_maps.pro....
     N = n_elements(flux)
     z_start = indgen(N-dz)
-    power = fltarr(N-dz)  ; initialize power array
+    power_from_flux = fltarr(N-dz)  ; initialize power array
 
     ; Calculate power per pixel
     ;   23 July 2018
-    ;   - moved this to divide flux by n_pixels before calculating FT
+    ;     - changed this to divide flux by n_pixels before calculating FT
+    ;   25 November 2018
+    ;     - probably a good idea: flux*10^n increases power by factor of 10^2n.
 
     ; this is sloppy... make it better.
     if keyword_set(data) then begin
@@ -40,41 +42,87 @@ function GET_POWER_FROM_FLUX, $
     endif else new_flux = flux
 
     ; Calculate power for time series between each value of z and z+dz
-    resolve_routine, 'calc_ft', /either
-    foreach z, z_start, i do begin
-        struc = CALC_FT( $
-            new_flux[z:z+dz-1], cadence, fmin=fmin, fmax=fmax, norm=norm )
-        power[i] = struc.mean_power
+    ;resolve_routine, 'calc_ft', /either
+    ;foreach z, z_start, i do begin
+    ;    struc = CALC_FT( $
+    ;        new_flux[z:z+dz-1], cadence, fmin=fmin, fmax=fmax, norm=norm )
+    ;    power[i] = struc.mean_power
+    ;endforeach
+
+    resolve_routine, 'calc_fourier2', /either
+    foreach zz, z_start, ii do begin
+
+        CALC_FOURIER2, new_flux[zz:zz+dz-1], cadence, $
+            frequency, power, fmax=fmax, fmin=fmin
+
+        power_from_flux[ii] = mean(power)
     endforeach
 
     ; Default frequency bandpass = 1 mHz (centered at 3-minute period)
-
-    return, power
+    return, power_from_flux
 end
 
-; Save power arrays to variable ---------------------------------------------------------------------------------
-    for i = 0, n_elements(A)-1 do begin
-        ;A[i].power_flux = GET_POWER_FROM_FLUX( $
-power_flux = GET_POWER_FROM_FLUX( $
-            flux=A[i].flux, $
-            cadence=A[i].cadence, $
-            dz=64, $
-            fmin=0.005, $
-            fmax=0.006, $
-            norm=0, $
-            data=A[i].data )
-    endfor
+;- 25 November 2018
+;- P(t) plots from flux.
 
-stop;---------------------------------------------------------------------------------
+goto, start
+start:;----------------------------------------------------------------------------------------
 
 
+dz = 64
 
-power_test = get_power_from_flux( $
-    flux=A[0].flux/(330.*500), cadence=24, dz=64, $
-    fmin=0.005, fmax=0.006, norm=0 )
+; Calculate P(t) from integrated emission
 
-p1 = plot2( A[0].power_flux, name='FT(flux)/N', ylog=1)
-p2 = plot2( power_test, /overplot, name='FT(flux/N)', color='red', ylog=1 )
+power = fltarr(685, 2)
+xdata = [[indgen(685)],[indgen(685)]] + (dz/2)
 
+;resolve_routine, 'get_power_from_flux', /either
+for cc = 0, 1 do begin
+    power[*,cc] = GET_POWER_FROM_FLUX( $
+        ;A[cc].flux, $
+        A[cc].flux/(500.*330.), $  ;- flux per pixel
+        A[cc].cadence, $
+        dz=dz, fmin=0.005, fmax=0.006, $
+        norm=0 )
+endfor
+
+
+    sz = size(power,/dimensions)
+    xdata = [ [indgen(sz[0])], [indgen(sz[0])] ] + (dz/2)
+
+    resolve_routine, 'batch_plot', /either
+    dw
+    plt = BATCH_PLOT( $
+        xdata, power, $
+        xrange=[0,748], $
+        ytitle='3-minute power', $
+        ylog=1, $
+        yrange=[1.0e7, 1.0e15], $
+        yminor=4, $
+        wy=3.0, $
+        color=A.color, $
+        name=A.name, $
+        buffer=0 )
+
+
+    ax = plt[0].axes
+    ax[1].tickvalues = 10.^[8:14]
+
+    resolve_routine, 'normalize_ydata', /either
+    NORMALIZE_YDATA, plt
+
+    resolve_routine, 'label_time', /either
+    LABEL_TIME, plt, time=A.time;, jd=A.jd
+
+    resolve_routine, 'oplot_flare_lines', /either
+    OPLOT_FLARE_LINES, plt, t_obs=A[0].time;, jd=A.jd
+
+    resolve_routine, 'legend2', /either
+    leg = LEGEND2( target=plt, sample_width=0.30 )
+
+
+resolve_routine, 'save2', /either
+file = 'time-3minpower_flux'
+;save2, file
 
 end

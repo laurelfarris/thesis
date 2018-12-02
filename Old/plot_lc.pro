@@ -23,7 +23,7 @@
 
 
 
-function PLOT_LIGHTCURVES, $
+function PLOT_LC, $
     xdata, ydata, $
     norm=norm, $
     color=color, $
@@ -88,9 +88,9 @@ function PLOT_LIGHTCURVES, $
 ;    ax[2].minor = 4
 ;    ax[2].showtext = 1
 
-    ytitle = name + ' (DN s$^{-1}$)'
-    ax[1].title = ytitle[0]
-    ax[3].title = ytitle[1]
+;    ytitle = name + ' (DN s$^{-1}$)'
+;    ax[1].title = ytitle[0]
+;    ax[3].title = ytitle[1]
     ax[3].showtext = 1
     return, plt
 

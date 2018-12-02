@@ -76,25 +76,31 @@ function GOES
     ;a->plot, charsize=1.5
 
     ; Show current parameter values
-    a->help
+    ;a->help
 
     ;-- extract data and derived quantities into a structure
     data = a->getdata(/struct)
-    help, data, /struct
-    return, data
 
-    ; -----------
-    print, min(data.ydata[*,0])
-    print, max(data.ydata[*,0])
+    ;xst0 = data.utbase
+    ;ex2int, anytim2ex(xst0), xst_msod, xst_ds79
+    ;xst = [xst_msod, xst_ds79]
+    ;utstring = anytim2utplot(xst)
 
-    print, min(data.ydata[*,1])
-    print, max(data.ydata[*,1])
+    ;utplot, data.tarray, data.ydata[*,0], data.utbase, /sav
 
-    plot, data.ydata[*,0];, linestyle=1
+
+    ;help, data, /struct
+    ;return, data
+
+    ;plot, data.ydata[*,0];, linestyle=1
     ;oplot, data.ydata[*,1];, linestyle=2
 
     ; set parameters and plot at the same time:
-    ;a->plot, tstart=tstart, tend=tend, sat=sat
+    a->plot, tstart=tstart, tend=tend, sat=sat
+    print, a[0].title
+    print, a[0].xtitle
+    print, a[0].ytitle
+    stop
 
     ; GETDATA args/keywords, all of which are included with /struct:
     ;low = a->getdata( /low )       ; low channel only (1-8 A, or 0.5-4 A?)
@@ -105,8 +111,15 @@ function GOES
 
     ;UTPLOT, times, high, utbase
 
-    TOGGLE, /landscape, filename='goes.ps'
-    a->plot, xcharsize=1.25, ycharsize=1.25
-    TOGGLE
+    ;TOGGLE, /landscape, filename='goes.ps'
+    ;a->plot, xcharsize=1.25, ycharsize=1.25
+    ;TOGGLE
+    return, d
+
+end
+
+
+print, 'blah'
+d = goes()
 
 end

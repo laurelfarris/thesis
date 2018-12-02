@@ -116,9 +116,6 @@ FUNCTION Fourier2, Flux, Delt, $
 
     ; Examine V a little bit here.
     V = FFT(newflux,-1)
-    help, V
-
-    stop
 
     ; To convert your FFT to power, take the absolute value
     ; (i.e. sqrt(a^2 plus b^2))
