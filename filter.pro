@@ -60,34 +60,11 @@ end
 
 goto, start
 
-
-resolve_routine, 'plot_spectra', /either
-plt = PLOT_SPECTRA( $
-    ;frequency, shiftedPower[0:(NN/2)], $
-    [ [frequency], [frequency2] ], $
-    [ [power], [power2] ], $
-    wx=8.0, wy=3.0, $
-    ylog=1, yminor=4, $
-    color=['dark orange', 'blue'], $
-    thick = [3.0, 2.0], $
-    linestyle=[0, 5], $
-    ;thick=2.0, $
-    ;ytickinterval=1.0, $
-    ;ytickformat='(F0.1)', $
-    name=['FFT(flux) power', 'FFT(detrended) power'], $
-    buffer=1 )
-
-;resolve_routine, 'calc_fourier2', /either
-;CALC_FOURIER2, flux, 24, frequency, power
-;CALC_FOURIER2, detrended, 24, frequency2, power2
-
-
 start:;---------------------------------------------------------------------------------
 inverseTransform = []
 flux = []
 
 for cc = 0, 1 do begin
-
     cadence = A[cc].cadence
     time = strmid(A[0].time,0,5); to keep consistent array sizes
     t1 = (where(time eq '01:30'))[-1]
@@ -102,16 +79,7 @@ for cc = 0, 1 do begin
     inverseTransform = [ [inverseTransform], [FILTER(flux[*,cc], cadence)] ]
 endfor
 
-
-
 ;- Plotting
-
-
-;bg = [ mean(A[0].flux[110:259]), mean(A[1].flux[110:259]) ]
-;bg = [0.0, 2.e7]
-;flux[*,0] = flux[*,0] + bg[0]
-;flux[*,1] = flux[*,1] + bg[1]
-
 
 xdata = [ [ind], [ind] ]
 wx = 8.0
@@ -119,37 +87,29 @@ wy = 3.0
 
 resolve_routine, 'batch_plot', /either
 plt2 = BATCH_PLOT( $
-    xdata, $
-    flux, $
+    xdata, flux, $
     xtickinterval=25, $
-    ;[ [A[0].flux[ind]], [A[1].flux[ind]] ], $
     color=[A[0].color, A[1].color], $
     name=[A[0].name, A[1].name], $
     wx=wx, wy=wy, $
-    ;left=0.75, right=0.25, $
-    ;ymajor=0, ;yminor=4, $
     yticklen=0.010, $
     stairstep=1, $
-    ;ytickname = "", $
-    ;ytickformat='(e0.1)', $
     buffer=0 )
 
-
 ;resolve_routine, 'shift_ydata', /either
-;SHIFT_YDATA, plt2, $
-;    background=[ mean(A[0].flux[110:259]), mean(A[1].flux[110:259]) ]
+;SHIFT_YDATA, plt2, background=background
 
 ;- Overplot pre-flare background
 for jj = 0, 1 do begin
     hor = plot2( $
-        plt2[0].xrange, [bg[jj], bg[jj]], $
-        /overplot, linestyle=[1, '5555'X], $
+        plt2[0].xrange, [ background[jj], background[jj] ], /overplot, $
+        linestyle=[1, '1111'X], $
+        ;linestyle=[1, '5555'X], $
         name = 'Background' )
 endfor
 
-
-inverseTransform[*,0] = inverseTransform[*,0] + bg[0]
-inverseTransform[*,1] = inverseTransform[*,1] + bg[1]
+;inverseTransform[*,0] = inverseTransform[*,0] + bg[0]
+;inverseTransform[*,1] = inverseTransform[*,1] + bg[1]
 for ii = 0, 1 do begin
 plt3 = plot2( $
     xdata[*,ii], $
@@ -160,11 +120,6 @@ plt3 = plot2( $
     name = 'FFT filter (400s)', $
     color='black' )
 endfor
-
-yr = plt2[0].yrange
-delt = 0.05*(yr[1] - yr[0])
-plt2[0].yrange = [ yr[0]-delt, yr[1]+delt ]
-
 
 resolve_routine, 'legend2', /either
 leg = legend2( $
@@ -193,7 +148,7 @@ plt3 = BATCH_PLOT( $
 hor = plot2( $
     plt3.xrange, [0.0, 0.0], /overplot, linestyle=[1, '5555'X] )
 
-;- Compare results from fourier2 (calc_fourier2) to 
+;- Compare results from fourier2 (calc_fourier2) to
 ;-  final forms of freq and power above.
 
 
@@ -212,5 +167,30 @@ hor = plot2( $
 ;dw
 ;plt = BATCH_PLOT( indgen(374), flux_filtered, buffer=1)
 ;save2, 'test'
+
+
+
+
+;- Power spectra
+
+;resolve_routine, 'calc_fourier2', /either
+;CALC_FOURIER2, flux, 24, frequency, power
+;CALC_FOURIER2, detrended, 24, frequency2, power2
+
+;resolve_routine, 'plot_spectra', /either
+;plt = PLOT_SPECTRA( $
+    ;frequency, shiftedPower[0:(NN/2)], $
+;    [ [frequency], [frequency2] ], $
+;    [ [power], [power2] ], $
+;    wx=8.0, wy=3.0, $
+;    ylog=1, yminor=4, $
+;    color=['dark orange', 'blue'], $
+;    thick = [3.0, 2.0], $
+;    linestyle=[0, 5], $
+    ;thick=2.0, $
+    ;ytickinterval=1.0, $
+    ;ytickformat='(F0.1)', $
+;    name=['FFT(flux) power', 'FFT(detrended) power'], $
+;    buffer=1 )
 
 end

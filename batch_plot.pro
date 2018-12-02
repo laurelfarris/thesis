@@ -114,6 +114,11 @@ function WRAP_BATCH_PLOT, $
     endfor
 
 
+    ;- Add some extra white space between plot lines and x-axes.
+    yr = plt[0].yrange
+    delt = 0.05*(yr[1] - yr[0])
+    plt[0].yrange = [ yr[0]-delt, yr[1]+delt ]
+
 
     ;- Display index (frame #) on upper x-axis.
     ;    ax[2].title = 'Index'
