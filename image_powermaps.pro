@@ -20,7 +20,7 @@ pro image_powermaps, struc, _EXTRA = e
         rows = 1, $
         cols = 1, $
         wx = 4.0, $
-        buffer = 1, $
+        buffer = 0, $
         left = 0.10, right = 0.10, bottom = 0.10, top = 0.50, $
         ;left = 0.25, right = 0.25, bottom = 0.25, top = 0.50, $
         _EXTRA = e )
@@ -32,7 +32,12 @@ cc = 0
 
 dz = 64
 time = strmid(A[cc].time,0,5)
+;z_start = 197 ;- pre-flare
+;z_start = 204 ;- pre-flare/impulsive
 z_start = 450 ;- post-flare
+
+
+
 zz = z_start
 
 ;- Intensity
@@ -52,4 +57,4 @@ map = { $
 IMAGE_POWERMAPS, intensity, rgb_table = A[cc].ct
 IMAGE_POWERMAPS, map, rgb_table = A[cc].ct
 
-endfor
+end

@@ -97,10 +97,9 @@ function GOES
 
     ; set parameters and plot at the same time:
     a->plot, tstart=tstart, tend=tend, sat=sat
-    print, a[0].title
-    print, a[0].xtitle
-    print, a[0].ytitle
-    stop
+;    print, a[0].title
+;    print, a[0].xtitle
+;    print, a[0].ytitle
 
     ; GETDATA args/keywords, all of which are included with /struct:
     ;low = a->getdata( /low )       ; low channel only (1-8 A, or 0.5-4 A?)
@@ -114,12 +113,11 @@ function GOES
     ;TOGGLE, /landscape, filename='goes.ps'
     ;a->plot, xcharsize=1.25, ycharsize=1.25
     ;TOGGLE
-    return, d
+    return, data
 
 end
 
 
-print, 'blah'
 d = goes()
 
 end

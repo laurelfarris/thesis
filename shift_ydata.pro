@@ -36,7 +36,8 @@ end
 pro SHIFT_YDATA, $
     plt, $
     ;background=background, $
-    delt=delt
+    delt=delt, $
+    ytitle=ytitle
 
     ; Last modified:    18 November 2018
 
@@ -86,6 +87,11 @@ pro SHIFT_YDATA, $
         ;- Even if this was already set, for some reason the text on ax[3]
         ;- disappears, and have to put it back.
         ax[3].showtext = 1
+
+        if keyword_set(ytitle) then begin
+            ax[1].title = ytitle[0]
+            ax[3].title = ytitle[1]
+        endif
 
         ;format = '(F0.1)'
         ;ax[1].tickformat = format

@@ -65,8 +65,8 @@ pro OPLOT_FLARE_LINES, $
 
     foreach vx, x_indices, jj do begin
         vert[jj] = plot( $
-            [ xx[vx], xx[vx] ], $
-            ;[ vx, vx ], $
+            ;[ xx[vx], xx[vx] ], $
+            [ vx, vx ], $
             yrange, $
             /current, $
             /overplot, $

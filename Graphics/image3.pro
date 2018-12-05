@@ -30,7 +30,7 @@ function IMAGE3_wrapper, $
     width = (wx - ( left + right + (cols-1)*xgap )) / cols
     height = width * float(sz[1])/sz[0]
 
-    wy = top + bottom + (rows*height) + (rows-1)*xgap
+    wy = top + bottom + (rows*height) + (rows-1)*ygap
 
     if keyword_set(buffer) then $
         win = window(dimensions=[wx,wy]*dpi, buffer=1) $

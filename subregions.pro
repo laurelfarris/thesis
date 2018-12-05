@@ -1,6 +1,6 @@
 
 
-;- 25 November 2018
+;- 02 December 2018
 
 goto, start
 
@@ -20,11 +20,11 @@ dz = 64
 ;- NOTE: powermap_subregions.pro should be combined with this stuff.
 
 
-;- HMI contours
+;- HMI contours ---> average stack of dz images!
 resolve_routine, 'contours', /either
 c_data = GET_HMI( time[zz+(dz/2)], channel='mag' )
 c = CONTOURS( c_data, target=im, channel='mag' )
-leg = legend2( target=c )
+;leg = legend2( target=c )
 
 
 ;- tiny subregions - need center coords for polygons AND plots!

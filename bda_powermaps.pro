@@ -119,11 +119,11 @@ stop ;---
 map   = fltarr( sz[0], sz[1], NM, 2)
 ;mask2 = fltarr( sz[0], sz[1], NM, 2)
 
-resolve_routine, 'power_maps', /either
+resolve_routine, 'powermaps', /either
 for cc = 0, 1 do begin
     for ii = 0, NM-1 do begin
         ind = indgen(dz) + z0 + (dz*ii)
-        map[*,*,ii,cc] = POWER_MAPS( $
+        map[*,*,ii,cc] = POWERMAPS( $
             A[cc].data[*,*,ind], $
             A[cc].cadence, fmin=fmin, fmax=fmax )
         ;mask2[*,*,ii,cc] = PRODUCT( mask1[*,*,ind,cc], 3 )
@@ -159,7 +159,7 @@ for cc = 0, 1 do begin
         titles = titles[*,cc] )
 
     file = 'aia' + A[cc].channel + 'map_45.pdf'
-    save2, file
+    ;save2, file
 endfor
 stop
 
@@ -170,7 +170,7 @@ stop
 ;time_range = time_range[ 0 : sz[2]-1 ]
 ;ind = [ 0 : sz[2]-1 : 40 ]
 
-;-  power_maps.pro is written to take entire data set and an array of starting indices.
+;-  powermaps.pro is written to take entire data set and an array of starting indices.
 ;-  This is probably faster than passing hugs arrays back and forth when computing a bunch of maps...
 ;-  not sure what the best coding practice would be in this case, if there even is one.
 ;-  kws are optional: if z isn't specified then default is to start at index 0
@@ -183,6 +183,6 @@ for ii = 0, 3 do begin
         layout=[2,2,ii+1], margin=0.1, $
         title = 'mask map' )
 endfor
-save2, 'saturation_mask.pdf'
+;save2, 'saturation_mask.pdf'
 stop
 end

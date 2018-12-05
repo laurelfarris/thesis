@@ -20,23 +20,30 @@
 
 function GET_POWER_FROM_MAPS, $
     data, $
-    channel=channel, $
-    dz=dz, $
+    dz, $
     threshold=threshold
 
 
     ;-  Calculate saturation mask
 
-    if not keyword_set(threshold) then threshold = 10000
+    if not keyword_set(threshold) then threshold = 15000
 
-    resolve_routine, 'mask', /either
-    data_mask = MASK( data, threshold=threshold )
+    ;resolve_routine, 'mask', /either
+    ;data_mask = MASK( data, threshold=threshold )
     ;- NOTE: default value of threshold will be returned to this
     ;-  level from MASK routine.
 
+    ;- Don't need a separate routine - can create mask with one line:
+    data_mask = data lt threshold
+
     sz = size(data_mask, /dimensions)
+    print, sz
 
     sz[2] = sz[2]-dz+1
+    print, sz
+
+
+    stop
 
     ; Create power map mask (this takes a while to run...)
     map_mask = fltarr(sz)
@@ -69,9 +76,9 @@ for cc = 0, n_elements(A)-1 do begin
     ;- Make .sav file, or at least don't overwrite variable.
     map_mask[*,*,*,cc] = GET_POWER_FROM_MAPS( $
         A[cc].data, $
-        channel=A[cc].channel, $
-        threshold=10000./A[cc].exptime, $
-        dz = dz )
+        dz, $
+        ;channel=A[cc].channel, $   --> not used in subroutine...
+        threshold=10000./A[cc].exptime )
 endfor
 
 ;- Correct maps for saturation

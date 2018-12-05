@@ -7,7 +7,10 @@ function SCINOT, tickvalues
 
     format = '(F0.1)'
     foreach xx, tickvalues, ii do begin
+
         b = floor(alog10(abs(xx)))
+
+
         a = xx * 10.^(-b)
 
         ;print, (float(round(a*10)))/10., format=format

@@ -8,6 +8,9 @@ pro LABEL_TIME, plt, time=time, jd=jd
 
     win = GetWindows(/current)
     ax = plt[0].axes
+
+;    g = goes()
+;    utbase = g.utbase
     ax[0].title = 'Start Time (15-Feb-2011 00:00:01 UT)'
 
     ;- Version1: LCs plotted as func of index, not jd.

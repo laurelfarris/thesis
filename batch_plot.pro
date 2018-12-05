@@ -86,6 +86,9 @@ function WRAP_BATCH_PLOT, $
 ;    if not keyword_set(name) then name = strarr(sz[1])
 
 
+    ;symbol = [ 'Circle', 'Square' ]
+
+
     plt = objarr(sz[1])
 
     for ii = 0, sz[1]-1 do begin
@@ -96,13 +99,13 @@ function WRAP_BATCH_PLOT, $
             /device, $
             overplot = ii<1, $
             position = position, $
-            ;symbol = 'Circle', $
             ;xtitle = xtitle, $
             ;ytitle = ytitle, $
             color = color[ii], $
             name = name[ii], $
             linestyle = linestyle[ii], $
             thick = thick[ii], $
+            ;symbol = symbol[ii], $
             ;xmajor=, $
             xminor=5, $
             ymajor=5, $
