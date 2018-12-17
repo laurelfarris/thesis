@@ -1,5 +1,14 @@
 
-;- Scientific notation
+
+;- 13 December 2018
+
+;- Purpose:
+;-  Format yticklabels in scientific notation ( 1.0 \times 10^{n} )
+
+;- Problems:
+;-  Rounding and setting the rounded values as ytickname
+;-  causes the numerical values to be unevenly spaced.
+;-  May have to manual set the desired tickvalues first.
 
 function SCINOT, tickvalues
 
@@ -29,7 +38,10 @@ end
 ;print, tickname
 
 
-testvalues = [ 2.987e3, 1.98423e5, 9.83746e7]
-test = scinot(testvalues)
-;print, test
+ytest = [ 2.987e3, 1.98423e5, 9.83746e7]
+xtest = indgen(n_elements(ytest))
+ytickname = SCINOT(ytest)
+
+p = plot2( xtest, ytest, ytickname=ytickname )
+
 end

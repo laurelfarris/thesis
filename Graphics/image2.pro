@@ -32,8 +32,8 @@ function image2, data, x, y,  _EXTRA=e
         yticklen = 0.02, $
         xsubticklen = 0.5, $
         ysubticklen = 0.5, $
-        xminor = 5, $
-        yminor = 5,  $
+        ;xminor = 5, $
+        ;yminor = 5,  $
         _EXTRA = e )
 
     return, im

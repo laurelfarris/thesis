@@ -47,8 +47,24 @@ function PREP_HMI, index, cube, cadence=cadence, inst=inst, channel=channel
     ;    save them when aligning or prepping the data.
     x1 = 2150
     y1 = 1485
-    X = ( (indgen(sz[0]) + x1) - index.crpix1 ) * index.cdelt1
-    Y = ( (indgen(sz[1]) + y1) - index.crpix2 ) * index.cdelt2
+    X = ( (indgen(sz[0]) + x1) - index[0].crpix1 ) * index[0].cdelt1
+    Y = ( (indgen(sz[1]) + y1) - index[0].crpix2 ) * index[0].cdelt2
+
+
+    ;- Test to make sure crpix and crdelt are the same for all files.
+    ;- test_arr = Nx4 array, where N = number of data points
+    ;-   (N shouldn't change...)
+    ;test_arr = []
+    ;test_arr = [ [test], [index.crpix1 - shift(index.crpix1, 1)] ]
+    ;test_arr = index.crpix2 - shift(index.crpix2, 1)
+    ;test_arr = index.cdelt1 - shift(index.cdelt1, 1)
+    ;test_arr = index.cdelt2 - shift(index.cdelt2, 1)
+    ;test_ind =  where( test_arr ne 0.0 )
+    ;if test_ind ne -1 then begin
+    ;   print, "Inconsistency in cdelt and/or crpix header keywords."
+    ;   stop
+    ;endif
+
 
     ;- Total flux summed over AR
     flux = total( total( cube, 1), 1 )
@@ -57,7 +73,6 @@ function PREP_HMI, index, cube, cadence=cadence, inst=inst, channel=channel
     if channel eq 'mag' then name = 'HMI B$_{LOS}$'
     if channel eq 'cont' then name = 'HMI intensity'
 
-    ;; MEMORY - Is this making copies of everything?
     struc = { $
         data: cube, $
         X: X, $
@@ -75,7 +90,16 @@ function PREP_HMI, index, cube, cadence=cadence, inst=inst, channel=channel
 end
 
 
+;- MEMORY - Is this making copies of everything?
+
 ;hmi_mag = PREP_HMI( hmi_mag_index, hmi_mag_data, cadence=45., inst='hmi', channel='mag' )
 ;hmi_cont = PREP_HMI( hmi_cont_index, hmi_cont_data, cadence=45., inst='hmi', channel='cont' )
+
+
+
+H = []
+H = [H, PREP_HMI( hmi_mag_index, hmi_mag_data, cadence=45., inst='hmi', channel='mag' )]
+H = [H, PREP_HMI( hmi_cont_index, hmi_cont_data, cadence=45., inst='hmi', channel='cont' )]
+
 
 end

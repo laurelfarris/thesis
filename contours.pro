@@ -1,5 +1,5 @@
 
-;- 20 November 2018
+;- 14 December 2018
 
 
 ;- "saturates at +/- 1500 Mx cm^{-1}" -Schrijver2011
@@ -65,4 +65,26 @@ function CONTOURS, c_data, target=target, channel=channel
     ;file = 'HMI_BLOS_contours.pdf'
     ;save2, file
     ;c.delete
+end
+
+
+;-  READ ME!!!!!!!!!!
+;- In current form, image_powermaps needs to be run BEFORE contours.
+;- dz and time are both defined there, and objarr "im" is returned to ML.
+;- Then contours.pro (current file) overlays contours on existing image.
+;-  (This is not ideal, but no time to make better subroutines right now.)
+
+c_data = GET_HMI( time[zz+(dz/2)], channel='mag' )
+;- NOTE: get_hmi.pro uses time to get closest hmi date_obs,
+;-        so the correct HMI is being used (at least I hope so...)
+
+
+c = CONTOURS( c_data, target=im, channel='mag' )
+
+
+;- HMI contours ---> average stack of dz images!
+;-   Except don't use average since B values are +/- N
+;-   (average would give you a bunch of zeroes).
+;- Use absolute values, or standard deviation.
+
 end

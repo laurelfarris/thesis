@@ -58,17 +58,15 @@ function PREP_AIA, index, cube, cadence=cadence, inst=inst, channel=channel
     jd = GET_JD( index.date_obs + 'Z' )
 
     LINEAR_INTERP, cube, jd, cadence, time
-    help, cube
+    ;help, cube
     cube = crop_data(cube)
-    help, cube
+    ;help, cube
     ;cube = fix( round( cube ) )
 
     ;- Correct for exposure time (standard data reduction)
-    ;-  ... or is it?
-
     exptime = index[0].exptime
     ;print, 'Exposure time = ', strtrim(exptime,1), ' seconds.'
-    ;cube = cube/exptime
+    cube = cube/exptime
 
     sz = size( cube, /dimensions )
 
@@ -93,10 +91,14 @@ function PREP_AIA, index, cube, cadence=cadence, inst=inst, channel=channel
 
     name = 'AIA ' + channel + '$\AA$'
 
-    map = fltarr( sz[0], sz[1], 686 )
+
+    ;- 14 Decemer 2018
+    ;map = fltarr( sz[0], sz[1], 686 )
+    map = make_array( sz[0], sz[1], 686, /float, /nozero )
+    ;- Not sure if /nozero helps free up memory, but worth a shot.
 
 
-    ;; MEMORY - Is this making copies of everything?
+    ;- MEMORY - Is this making copies of everything?
     struc = { $
         data: cube, $
         X: X, $
@@ -123,6 +125,7 @@ function PREP_AIA, index, cube, cadence=cadence, inst=inst, channel=channel
 end
 
 goto, start
+start:;---------------------------------------------------------------------------------------------
 
 ; A = replicate( struc, 2 )
 ; ... potentially useful?
@@ -130,11 +133,9 @@ goto, start
 ; need to re-read data, but not headers... commented in subroutine for now.
 
 
-start:;---------------------------------------------------------------------------------------------
 A = []
-A = [ A, PREP_AIA( aia1600index, aia1600data, cadence=24., inst='aia', channel='1600' ) ]
-A = [ A, PREP_AIA( aia1700index, aia1700data, cadence=24., inst='aia', channel='1700' ) ]
-
+A = [A, PREP_AIA( aia1600index, aia1600data, cadence=24., inst='aia', channel='1600' ) ]
+A = [A, PREP_AIA( aia1700index, aia1700data, cadence=24., inst='aia', channel='1700' ) ]
 
 print, 'NOTE: aia1600index, aia1600data, aia1700index, and aia1700data'
 print, '         still exist at ML. '

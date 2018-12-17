@@ -116,6 +116,16 @@ ax[3].tickname = scinot( ax[3].tickvalues )
 ax[3].minor = 3
 
 
+
+;- 14 December 2018
+;- Color axes to match data (assuming yshift has been applied)
+ax[1].text_color = A[0].color
+ax[3].color = A[1].color
+print, 'How to colored axes look??'
+print, 'ax[1] set color, ax[3] set text_color'
+stop
+
+
 ; Single lines creating each object that can easily be commented.
 ; Then just erase and re-draw.
 

@@ -6,7 +6,10 @@
 
 ;- Currently has hardcoded values for Sep 15, 2011 flare.
 
-;- To do:   Need to go straight from time string to jd and vice versa.
+;- To do:
+;-  Need to go straight from time string to jd and vice versa.
+;-  See comp book p10 for notes on oplot_vertical_lines,
+;-  which may or may not be helpful.
 
 
 pro OPLOT_FLARE_LINES, $
@@ -46,7 +49,24 @@ pro OPLOT_FLARE_LINES, $
     flare_times = [ '01:44', '01:56', '02:06' ]
     name = flare_times + [ ' UT (start)', ' UT (peak)', ' UT (end)' ]
     nn = n_elements(flare_times)
-    time = strmid( t_obs, 0, 5 )
+
+
+
+
+    ;- Having user enter time already cropped to hh:mm vs.
+    ;-  doing it in subroutine? Gets confusing when sometimes this is
+    ;-  done at ML and sometimes it isn't...
+
+    ;- Actually, user could enter time in either form.
+    ;- If time is already cropped, then applying strmid again
+    ;-  won't change anything.
+
+    time = strmid( t_obs, 0, 5 ) ;--> just in case user is feeling lazy?
+    ;time = t_obs
+
+
+
+
     x_indices = intarr(nn)
 
     for ii = 0, nn-1 do $

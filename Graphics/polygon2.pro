@@ -1,4 +1,4 @@
-; Last modified:    06 April 2018
+; Last modified:    14 December 2018
 ; Programmer:       Laurel Farris
 ; Description:      Use polygon to draw box around subregion in image.
 
@@ -6,7 +6,8 @@
 ;           dimensions = 2D array [width,height] in pixels (data units).
 
 
-function polygon2, $
+;function wrap_polygon2, $
+function POLYGON2, $
     target=target, $
     center=center, $
     dimensions=dimensions, $
@@ -47,3 +48,21 @@ function polygon2, $
     return, pol
 
 end
+;
+;
+;function polygon2, $
+;    target=target, $
+;    _EXTRA=e
+;
+;    ;- Not sure how to assign defaults to center and dimensions yet..
+;
+;    @colors
+;
+;    pol = wrap_polygon2( $
+;        target=target, $
+;        center=center, $
+;        dimensions=dimensions, $
+;    )
+;
+;    return, pol
+;end

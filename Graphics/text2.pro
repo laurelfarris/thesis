@@ -15,8 +15,12 @@
 ;- Looks much cleaner and easier to use.
 ;-  This looks like it could use some love...
 ;- 
+;- 17 December 2018
+;-   Why isn't this set up to take user-specified locations?
+;-   This should at least be an option, with defaults when not set by user.
 
-function text2, str, target=target, _EXTRA=e
+function text2, tx, ty, str, target=target, _EXTRA=e
+
 
     common defaults
 
@@ -30,26 +34,27 @@ function text2, str, target=target, _EXTRA=e
         ;  edited this code.
 
 
-    if not arg_present(str) then str = alph[0:N-1]
+    ;if not arg_present(str) then str = alph[0:N-1]
+    if n_elements(str) eq 0 then str = alph[0:N-1]
     t = objarr(N)
 
-    for i = 0, N-1 do begin
+    for ii = 0, N-1 do begin
 
-        tx = 0.9 * ((target[i]).position)[2]
-        ty = 0.9 * ((target[i]).position)[3]
+;        tx = 0.9 * ((target[i]).position)[2]
+;        ty = 0.9 * ((target[i]).position)[3]
 
         ;target.GetData, image, X, Y
         ;tx = X[-5]
         ;ty = Y[-5]
 
-        t[i] = TEXT( $
+        t[ii] = TEXT( $
             tx, ty, $
-            str[i], $
+            str[ii], $
             ;/data, $
             ;/normal, $
             ;/relative, $
             ;/device, $
-            alignment=1.0, $  ; 0.0 = left (default); 1.0 --> Right
+            ;alignment=1.0, $  ; 0.0 = left (default); 1.0 --> Right
             vertical_alignment=1.0, $;'Top', $  ; 1.0
             ;font_style = 'Bold', $  0,1,2,3 = normal,bold,italic,bold italic
             font_size=fontsize-1, $

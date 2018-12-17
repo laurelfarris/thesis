@@ -6,6 +6,17 @@
 ;- Not meant to be called just like IDL's image, so
 ;-   use whatever keywords you need.
 
+
+;- Does this get errors if product of default rows and cols (both=1)
+;-   doesn't match number of images in input array?
+
+
+;- 14 December 2018
+;- Loop to place images in window could either depend on rows and cols,
+;- or on sz[2] from input array... like how IDL often has multiple kws
+;- that could do the same thing or similar, but one will always override
+;- the other.
+
 function IMAGE3_wrapper, $
     data, $
     ;X, Y, $
@@ -77,13 +88,16 @@ function IMAGE3,  $
     sz = size(data, /dimensions)
     ;if n_elements(sz) eq 2 then nn = 1 else nn = sz[2]
 
+
+    ;- If input data only contains one image, then
+    ;- adjust dimensions so that the array is 2D:
+    ;-  Need second dimension to exist so don't get errors when
+    ;-   attempting to use SIZE(imdata).
     if n_elements(sz) eq 2 then $
         data = reform( data, sz[0], sz[1], 1, /overwrite )
+
     sz = size(data, /dimensions)
     nn = sz[2]
-
-    ; Use optional kw to add letter to each input title?
-    title = alph[0:nn-1]
 
     im = image3_wrapper( $
         data, $
@@ -99,7 +113,7 @@ function IMAGE3,  $
         bottom = 0.2, $
         xgap = 0.2, $
         ygap = 0.2, $
-        title = title, $
+        title = alph[0:nn-1], $
         _EXTRA = e)
     return, im
 end

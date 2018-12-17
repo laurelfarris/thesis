@@ -1,9 +1,16 @@
-; Last modified:    May 2018
-; Programmer:       Laurel Farris
-; Description:      subroutines with custom default configurations
+;- Last modified:    May 2018
+;- Programmer:       Laurel Farris
+;- Description:      subroutines with custom default configurations
+;- To Do:
+;-   Make sure xinput is working correctly as an optional argument.
+;-
+;-
+;-
 
 
-function plot2, xinput, yinput, _EXTRA=e
+function plot2, xinput, yinput, $
+    ;props=props, $
+    _EXTRA=e
 
     common defaults
     ; REQUIRING xinput for now, because fuck this.
@@ -18,32 +25,35 @@ function plot2, xinput, yinput, _EXTRA=e
         x = xinput
     endelse
 
+
+    ;if keyword_set(props) then plot_props = {e, props} else plot_props = e
+
     ;- font_style = 
-    ;-   0 (normal)
-    ;-   1 (bold)
-    ;-   2 (italic)
-    ;-   3 (bold italic)
+    ;-   0 ("Normal" or "rm")
+    ;-   1 ("Bold" or "bf")
+    ;-   2 ("Italic" or "it")
+    ;-   3 ("Bold Italic" or "bi")
 
     p = plot( $
         x, y, $
         font_size = fontsize, $
         ytickfont_size = fontsize, $
         xtickfont_size = fontsize, $
-        ;font_style = fontstyle, $
-        ;ytickfont_style = fontstyle, $
-        ;xtickfont_style = fontstyle, $
+        font_style = 0, $
+        ytickfont_style = 0, $
+        xtickfont_style = 0, $
         axis_style = 2, $
         thick = 0.5, $
         xthick = 0.5, $
         ythick = 0.5, $
         xtickdir = 0, $
         ytickdir = 0, $
-        xticklen = 0.02, $
-        yticklen = 0.02, $
+        ;xticklen = 0.02, $  --> set up ticklen in routine that calls this
+        ;yticklen = 0.02, $
         xsubticklen = 0.5, $
         ysubticklen = 0.5, $
-        xminor = 4, $
-        yminor = 4,  $
+        ;xminor = 4, $
+        ;yminor = 4,  $
         xstyle = 1, $
         ystyle = 3, $
         ; x|y style = 0 Nice
@@ -51,29 +61,9 @@ function plot2, xinput, yinput, _EXTRA=e
         ; x|y style = 2 Pad nice
         ; x|y style = 3 Pad exact
         ;symbol = 'Circle', $
-        sym_size = 0.5, $
+        ;sym_size = 0.5, $
         sym_filled = 1, $
+        ;_EXTRA = plot_props )
         _EXTRA = e )
     return, p
-end
-
-
-pro test_plot
-    ;; What is sym_size relative to?? Still can't figure it out.
-
-    x = indgen(10)
-    y = x^2
-
-    wx = 4.0
-    wy = 4.0 * 2
-
-    win = window( dimensions=[wx,wy*2]*dpi )
-    test = plot2( x, y, /current, symbol='.', sym_size=8.0, sym_filled=1 )
-
-
-    win = window( dimensions=[wx*2,wy]*dpi )
-    test = plot2( x, y, /current, symbol='.', sym_size=8.0, sym_filled=1 )
-
-
-
 end

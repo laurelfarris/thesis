@@ -1,13 +1,28 @@
-;; Last modified:   25 October 2017 18:53:29
+;- Last modified:  13 December 2018 10:27:22 MST
+;-
+;- Purpose:
+;-  get data from the VS0
+;-
+;- NOTE:
+;-  vsoget_original.pro is in directory for original codes, so don't need to preserve anything here.
+;-
+;- To Do:
+;-  Copy url from lmsal (or wherever) for help on this stuff.
 
-;get data from the VS0
+
+
+
+;- AIA: cycle through each of the EUV wavelengths and get images at intervals
+;        set by 'sample' keyword (e.g. sample='60' gets images at 1 minute intervals)
 ;
-;
-; AIA: cycle through each of the EUV wavelengths
-;   and get images at intervals set by 'sample' keyword [seconds]
 
 
-;; Search for files
+
+;- Start/End times, in UT
+
+tstart='2011/02/11 01:36:00'
+tend='2011/02/11 02:00:00' 
+
 tstart = '2011/02/15 00:00:00'
 tend =   '2011/02/15 04:59:59'
 ;tend =   '2011/02/15 00:02:00'
@@ -16,7 +31,22 @@ tend =   '2011/02/15 04:59:59'
 ;tstart = '2011/02/14 00:00:00'
 ;tend =   '2011/02/14 02:00:00'
 
+
+
+
+
+;- "sample kw --> Cadence desired (seconds).
+;-   (not instrumental cadence, just whatever interval you want between data files.
+;-   Maybe you only want data separated by an hour so you can see long term trends without
+;-   downloading a ton of data.)
 ;sample='60'
+;sample='12'
+;sample='60'
+
+
+
+
+;- Search for files
 
 ;dat94   = vso_search(tstart,tend, instr='aia',sample=sample,wave='94')
 ;dat131  = vso_search(tstart,tend, instr='aia',sample=sample,wave='131')
@@ -28,32 +58,44 @@ tend =   '2011/02/15 04:59:59'
 ;dat1600 = vso_search( tstart, tend, instr='aia', sample=sample, wave='1600')
 ;dat1700 = vso_search( tstart, tend, instr='aia', sample=sample, wave='1700')
 
+
+;datHMI=VSO_SEARCH(tstart,tend, instr='hmi')
 ;datHMI = VSO_SEARCH(tstart, tend, instr='hmi', physobs='intensity')
 datHMIlosV = VSO_SEARCH(tstart, tend, instr='hmi', physobs='LOS_velocity') 
 datHMIlosB = VSO_SEARCH(tstart, tend, instr='hmi', physobs='LOS_magnetic_field') 
 datHMIvectorB = VSO_SEARCH(tstart, tend, instr='hmi', physobs='VECTOR_MAGNETIC_FIELD') 
 
 
+;- Return a structure for each bandpass
+
+
+
 stop
 
 
-; Download the data.
-; This will take a long time and uninterupted internet connect.
-; Can run while ssh'd using the 'screen' command.
+
+;- Download data:
+;-   This will take a long time and uninterupted internet connect.
+;-   Can run while ssh'd using the 'screen' command.
+
+;-   keyword /NODOWNLOAD will get header info only (no data).
+;-   Shouldn't redownload data that's already stored in the local directory.
+
+
 
 ;dir='/solarstorm/laurel07/Data/AIA/'
 dir='/solarstorm/laurel07/Data/HMI/'
 
-;shouldn't redownload data that's already stored in the local directory
-;status94 = vso_get(dat94, /force, out_dir=dir)
-;status131 = vso_get(dat131, /force, out_dir=dir)
-;status171 = vso_get(dat171, /force, out_dir=dir)
-;status193 = vso_get(dat193, /force, out_dir=dir)
-;status211 = vso_get(dat211, /force, out_dir=dir)
-;status304 = vso_get(dat304, /force, out_dir=dir)
-;status335 = vso_get(dat335, /force, out_dir=dir)
-;status1600 = vso_get(dat1600, /force, out_dir=dir)
-;status1700 = vso_get(dat1700, /force, out_dir=dir)
+
+;status94 = VSO_GET(dat94, /force, out_dir=dir)
+;status131 = VSO_GET(dat131, /force, out_dir=dir)
+;status171 = VSO_GET(dat171, /force, out_dir=dir)
+;status193 = VSO_GET(dat193, /force, out_dir=dir)
+;status211 = VSO_GET(dat211, /force, out_dir=dir)
+;status304 = VSO_GET(dat304, /force, out_dir=dir)
+;status335 = VSO_GET(dat335, /force, out_dir=dir)
+;status1600 = VSO_GET(dat1600, /force, out_dir=dir)
+;status1700 = VSO_GET(dat1700, /force, out_dir=dir)
 
 statusHMIlosV=VSO_GET(datHMIlosV,/force,out_dir=dir)
 statusHMIlosB=VSO_GET(datHMIlosB,/force,out_dir=dir)

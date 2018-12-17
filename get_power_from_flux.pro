@@ -1,53 +1,49 @@
 
-; Last modified:   25 November 2018
 
-; Purpose:      Get power as function of time from total flux
-
-; Input:        flux, cadence
-; Keywords:     dz (sample length for fourier2.pro in data units)
-;               fmin, fmax (frequency_bandwidth)
-; Output:       Returns 1D array of power as function of time.
-; To do:        Add test codes
-;               Create new saturation routine (this currently addresses
-;                 saturation and calculation of total power with time.
+; LAST MODIFIED:
+;-   16 December 2018
+;-
+;- PURPOSE:
+;-   Get power as function of time, P(t), from total flux (integrated emission)
+;- INPUT:
+;-   flux, cadence
+;- KEYWORDS:
+;-   dz (sample length for fourier2.pro in data units)
+;-   fmin, fmax (frequency_bandwidth)
+;- OUTPUT:
+;-   Returns 1D array of power as function of time.
+;- TO DO:
+;-   Add test codes
+;-   Create new saturation routine (this currently addresses
+;-      saturation and calculation of total power with time.
 
 
 
 function GET_POWER_FROM_FLUX, $
     flux, $
     cadence, $
+    n_pix=n_pix, $
     dz=dz, $
     fmin=fmin, $
     fmax=fmax, $
-    norm=norm, $
-    data=data
+    norm=norm
+
 
     ; This first bit is exactly like power_maps.pro....
     N = n_elements(flux)
     z_start = indgen(N-dz)
     power_from_flux = fltarr(N-dz)  ; initialize power array
 
-    ; Calculate power per pixel
+
+
     ;   23 July 2018
     ;     - changed this to divide flux by n_pixels before calculating FT
     ;   25 November 2018
     ;     - probably a good idea: flux*10^n increases power by factor of 10^2n.
 
-    ; this is sloppy... make it better.
-    if keyword_set(data) then begin
-        sz = size(data,/dimensions)
-        n_pixels = float(sz[0]) * sz[1]
-        new_flux = flux / n_pixels
-        ;power = power / n_pixels
-    endif else new_flux = flux
+    if keyword_set(n_pix) then new_flux = flux/n_pix $
+        else new_flux=flux
 
-    ; Calculate power for time series between each value of z and z+dz
-    ;resolve_routine, 'calc_ft', /either
-    ;foreach z, z_start, i do begin
-    ;    struc = CALC_FT( $
-    ;        new_flux[z:z+dz-1], cadence, fmin=fmin, fmax=fmax, norm=norm )
-    ;    power[i] = struc.mean_power
-    ;endforeach
 
     resolve_routine, 'calc_fourier2', /either
     foreach zz, z_start, ii do begin
@@ -58,77 +54,62 @@ function GET_POWER_FROM_FLUX, $
         power_from_flux[ii] = mean(power)
     endforeach
 
-    ; Default frequency bandpass = 1 mHz (centered at 3-minute period)
     return, power_from_flux
 end
 
-;- 25 November 2018
-;- P(t) plots from flux.
 
 goto, start
+
+
+;- Calculate power from flux (per pixel).
+
 start:;----------------------------------------------------------------------------------------
-
-
 dz = 64
-
-; Calculate P(t) from integrated emission
-
 power = fltarr(685, 2)
-xdata = [[indgen(685)],[indgen(685)]] + (dz/2)
 
+
+;- NOTE: A[*].flux = exposure-time corrected, TOTAL flux over AR.
 for cc = 0, 1 do begin
     power[*,cc] = GET_POWER_FROM_FLUX( $
-        ;A[cc].flux, $
-        A[cc].flux/(500.*330.), $  ;- flux per pixel
+        A[cc].flux, $
         A[cc].cadence, $
-        dz=dz, fmin=0.005, fmax=0.006, $
+        n_pix = 500.*330., $
+        dz=dz, $
+        fmin=0.005, $
+        fmax=0.006, $
         norm=0 )
 endfor
 
+;stat1 = stats(power, /display)
+;stat2 = stats(power/n_pix, /display)
 
-    sz = size(power,/dimensions)
-    xdata = [ [indgen(sz[0])], [indgen(sz[0])] ] + (dz/2)
-
-    resolve_routine, 'batch_plot', /either
-    dw
-    plt = BATCH_PLOT( $
-        xdata, power, $
-        xrange=[0,748], $
-        ytitle='3-minute power', $
-        ylog=1, $
-        ;yrange=[1.0e7, 1.0e15], $  ;- FT(flux)
-        ;ytickvalues = 10.^[8:14], $;- FT(flux)
-        ;yrange = [1.e-4, 1.e5], $  ;- FT(flux per pixel)
-        ;ytickvalues = 10.^[-4:4:2], $;- FT(flux per pixel)
-        yminor=9, $
-        wy=3.0, $
-        color=A.color, $
-        name=A.name, $
-        buffer=1 )
-
-    ax = plt[0].axes
-
-    ;- FT( flux )
-    ;ax[1].tickvalues = 10.^[8:14]
-
-    ;- FT( flux per pixel )
-    ;ax[1].tickvalues = 10.^[-4:4:2]
-
-    ;resolve_routine, 'normalize_ydata', /either
-    ;NORMALIZE_YDATA, plt
-
-    resolve_routine, 'label_time', /either
-    LABEL_TIME, plt, time=A.time;, jd=A.jd
-
-    resolve_routine, 'oplot_flare_lines', /either
-    OPLOT_FLARE_LINES, plt, t_obs=A[0].time;, jd=A.jd
-
-    resolve_routine, 'legend2', /either
-    leg = LEGEND2( target=plt, /upperleft )
+;- FT(flux)
+;yrange=[1.0e7, 1.0e15] 
+;ytickvalues = 10.^[8:14]
 
 
-resolve_routine, 'save2', /either
+;- FT(flux per pixel)
+yrange = [1.e-4, 1.e5]  
+ytickvalues = [1.e-4, 1.e-2, 1.e0, 1.e2, 1.e4]
+;ytickvalues = 10.^[-4:2:2]
+
+props = { $
+    ylog : 1, $
+    yrange : yrange, $
+    ytickvalues : ytickvalues, $
+    yminor : 9, $
+    name : A.name }
+
 file = 'time-3minpower_flux'
+
+resolve_routine, 'plot_pt';, /either
+plot_pt, power, dz, A[0].time, $
+    ;file=file, $
+    _EXTRA = props
+
+
+
 save2, file
+
 
 end

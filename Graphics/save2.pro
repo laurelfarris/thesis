@@ -46,18 +46,31 @@ pro SAVE2, filename, $
     width = dims[0]
     height = dims[1]
 
+
     ; Add timestamp to figure
     if keyword_set(add_timestamp) then begin
-        ;tx = 0.95
-        ;ty = 0.1
-        tx = width - 0.2
-        ty = height / 2.0
+
+        ;- NOTE: width and height are currently in INCHES.
+
+;        tx = width - 0.2
+;        ty = height / 2.0
+;        alignment = 0.0
+
+        tx = width - 0.1
+        ty = 0.1
+        alignment = 1.0
+
+        print, tx
+        print, ty
+        print, dpi
+
         creation_time = text( $
             tx*dpi, ty*dpi, $
             systime(), $
             /device, $
-            baseline=[0.0,1.0,0.0], $
-            updir=[-1.0,0.0,0.0], $
+            alignment = alignment, $
+            ;baseline=[0.0,1.0,0.0], $
+            ;updir=[-1.0,0.0,0.0], $
             color='grey', $
             font_size=8 )
     endif
