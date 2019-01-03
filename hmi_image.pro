@@ -22,8 +22,7 @@ pro HMI, channels, cube, time, X, Y
         x0 = 2375; + fix(round( ind[i] * pixels_per_image ))
         y0 = 1660
 
-        READ_MY_FITS, index, data, inst='hmi', channel=channels[i], $
-            ind=[0]
+        READ_MY_FITS, index, data, inst='hmi', channel=channels[i], ind=[0]
 
         time[i] = index.date_obs
         cube[*,*,i] = crop_data(data, center=[x0,y0])

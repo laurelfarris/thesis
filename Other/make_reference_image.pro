@@ -3,8 +3,16 @@
 
 ; Input:  3D data cube, titles
 
-function MAKE_REFERENCE_IMAGES, data, title=title, _EXTRA=e
 
+;- 17 December 2018
+;- I think this was written to create relatively large images (~2 per page) to use
+;- for marking coords, doodling on, like the giant reference lightcurve.
+;- Subroutine may be useful for general imaging...
+
+;- At a glance, obviously it's making an array of tons of images...
+;- That can be helpful too :)
+
+function MAKE_REFERENCE_IMAGES, data, title=title, _EXTRA=e
 
     common defaults
 
@@ -19,7 +27,6 @@ function MAKE_REFERENCE_IMAGES, data, title=title, _EXTRA=e
     win = window( dimensions=[wx,wy]*dpi, /buffer )
     width = 2.0
     height = width * float(sz[1])/sz[0]
-
 
     left   = 0.1
     bottom = 0.1

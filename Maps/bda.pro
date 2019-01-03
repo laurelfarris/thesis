@@ -1,6 +1,14 @@
+;- 17 December 2018
+;- Makes array of graphics across single window:
+;-   one each for B, D, and A, where each phase in BDA has
+;-   several start indices to cover time periods of interest.
+;- (Also see bda_powermaps.pro, which generates a single image on which
+;-   contours and polygons can be viewed in detail.)
+;- At time of writing, powermap figures in article1 were generated from
+;-   this routine.
+
 
 ;- 04 December 2018
-
 goto, start
 
 ;restore, '../hmi_mag.sav'
@@ -84,8 +92,9 @@ for cc = 0, 1 do begin
         rows=rows, cols=cols )
 
 ;    for jj = 0, 5 do begin
-;        c[jj] = CONTOUR( $ ;            c_data[*,*,jj], $ ;            overplot=im[jj], $ ;            c_thick=0.5, $ ;            c_label_show=0, $ ;            c_value=c_value, $ ;            c_color=c_color ) ;    endfor
-;
+;        c[jj] = CONTOUR( c_data[*,*,jj], overplot=im[jj], c_thick=0.5, $
+;            c_label_show=0, c_value=c_value, c_color=c_color )
+;    endfor
 
     title_color = ["white", "black"]
     foreach zz, z_start, ii do begin

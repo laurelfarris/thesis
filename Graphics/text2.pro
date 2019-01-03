@@ -14,52 +14,50 @@
 ;- except no option to use different labels.
 ;- Looks much cleaner and easier to use.
 ;-  This looks like it could use some love...
-;- 
+;-
 ;- 17 December 2018
 ;-   Why isn't this set up to take user-specified locations?
 ;-   This should at least be an option, with defaults when not set by user.
+;-  This is actually kind of useless, since the only keyword I'm setting to
+;-    a custom value is font_size... may be a helpful reference, but that's
+;-    what Enote is for.
 
-function text2, tx, ty, str, target=target, _EXTRA=e
 
+function TEXT2, tx, ty, str, _EXTRA=e
 
     common defaults
 
-    ; string array of letters: (a), (b), ..., (z)
-    alph = '(' + string( bindgen(1,26)+(byte('a'))[0] ) + ')'
-
-    N = n_elements(target)
-        ; (9/18/2018) This only makes sense if first create array of
-        ;  graphics, then add text in a separate loop... which may
-        ;  have been my intention, but it's been too long since I've
-        ;  edited this code.
-
-
-    ;if not arg_present(str) then str = alph[0:N-1]
-    if n_elements(str) eq 0 then str = alph[0:N-1]
-    t = objarr(N)
-
-    for ii = 0, N-1 do begin
-
-;        tx = 0.9 * ((target[i]).position)[2]
-;        ty = 0.9 * ((target[i]).position)[3]
-
-        ;target.GetData, image, X, Y
-        ;tx = X[-5]
-        ;ty = Y[-5]
-
-        t[ii] = TEXT( $
+        text_object = TEXT( $
             tx, ty, $
-            str[ii], $
+            str, $
+            ;target=graphic
             ;/data, $
             ;/normal, $
             ;/relative, $
             ;/device, $
-            ;alignment=1.0, $  ; 0.0 = left (default); 1.0 --> Right
-            vertical_alignment=1.0, $;'Top', $  ; 1.0
+            ;alignment=1.0, $
+                ;- Horizontal alignment = 0.0|0.5|1.0 --> left (default)|center|right
+            ;vertical_alignment=1.0, $
+                ;- Vertical alignment = 0.0|0.5|1.0 --> bottom (default)|center|top
+            ;  COLOR
+            ;  FONT_COLOR
+            ;  FILL_BACKGROUND=0|1,
+            ;  FILL_COLOR=
             ;font_style = 'Bold', $  0,1,2,3 = normal,bold,italic,bold italic
+            ;font_name = ''
             font_size=fontsize-1, $
+            ;  baseline=,
+            ;  updir=
+            ;  CLIP=1, ;; ignored unless /data is set
+            ;  NAME=graphic_name,
+            ;  ONGLASS,
+            ;  ORIENTATION=angle, ;; counter-clockwise
+            ;  POSITION,  --> ? First arg? or its own keyword?
+            ;  STRING,  --> ?
+            ;  WINDOW
+            ;  TRANSPARENCY=0 ;; % transparency
+            ;  hide, $
             _EXTRA=e )
-    endfor
 
-    return, t
+        return, text_object
 end

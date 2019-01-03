@@ -3,6 +3,7 @@
 
 
 ;- Sun Dec  2 21:37:34 MST 2018
+;- Plot number of saturated pixels as function of index (time).
 
 
 ;nsat = float(aia1700index.nsatpix); + 1.0

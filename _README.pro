@@ -140,6 +140,14 @@ get_bda_indices, aia_1700_index, a7t1, a7t2
 ;---------------------------------------------------------------------------------------------
 
 
+
+;- 17 December 2018
+;-   Reason for not making directories for Imaging and Plotting
+;-   in addition to directories for Maps, Spectra, etc.
+;-   -> I have a routine called image_powermaps... where would that go?
+;-   Some generalized routines for plotting and imaging are great, but
+;-   they would probably just go in Graphics/.
+
 ;- 02 November 2018
 ;- plot3.pro, image3.pro are general routines for displaying
 ;- multiple panels in one graphic and/or something relatively simple

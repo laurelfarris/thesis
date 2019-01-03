@@ -1,0 +1,29 @@
+
+Thu Dec 20 08:11:02 MST 2018
+
+
+How to organize codes?
+
+Directories for "imaging" and "plotting" don't really work because those
+are used for everything. Put general codes in Graphics/
+
+Grouping by type of figure, e.g. "Lightcurves", "Maps", etc.
+gets complicated when they use a lot of the same base routines
+(like plotting something as function of time)
+or when want to produce each type of figure for the same subregion
+(which also has its own directory).
+
+Moved everything in "Quiet/" to "Subregions/", since quiet subregions
+are a subset of subregions...
+
+Subregions/ vs. Maps/...
+WHAT I'm looking at vs. analysis methods used... subregions could have
+powermaps, light curves, contours, all the things that are split into
+different directories.
+
+What codes do I tend to use together?
+That's probably the best way to organize them.
+
+Should have general routines that are specific to this project
+(unlike plot2, image3, etc.) that can take an array of z_start values,
+or a subset of data in x/y.

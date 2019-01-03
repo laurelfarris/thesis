@@ -32,7 +32,8 @@ function PLOT_GOES, gdata
 
     plt = objarr(2)
 
-    color = [ 'black', 'orchid' ]
+    ;color = [ 'black', 'orchid' ]
+    color = [ 'black', 'dark cyan' ]
     name = 'GOES ' + ['1.0-8.0 $\AA$', '0.5-4.0 $\AA$']
 
     xtickvalues = !x.tickv[0:4]

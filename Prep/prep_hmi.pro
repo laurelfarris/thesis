@@ -1,10 +1,15 @@
-
-;- 02 December 2018
-
-
+;-
+;- LAST MODIFIED:
+;-   Thu Dec 20 06:29:46 MST 2018
+;-
+;- PURPOSE:
+;-   Read HMI headers and restore .sav files (data)
+;- INPUT:
+;- KEYWORDS:
+;- OUTPUT:
+;- TO DO:
 
 function PREP_HMI, index, cube, cadence=cadence, inst=inst, channel=channel
-;- 05 October 2018
 
     ; Read headers
     if n_elements(index) eq 0 then begin
@@ -23,6 +28,7 @@ function PREP_HMI, index, cube, cadence=cadence, inst=inst, channel=channel
     ; "../hmi_mag.sav"  --> variable "cube", dimensions [750,500,400]
     ; "../hmi_cont.sav" --> variable "cube", dimensions [750,500,398]
     restore, '../hmi_' + channel + '.sav'
+    restore, '../' + inst + '_' + channel + '.sav'
 
     ; Interpolate to get missing data and corresponding timestamp,
     ;   then crop data to pixel dimensions [500,330,*].
@@ -99,7 +105,7 @@ end
 
 H = []
 H = [H, PREP_HMI( hmi_mag_index, hmi_mag_data, cadence=45., inst='hmi', channel='mag' )]
-H = [H, PREP_HMI( hmi_cont_index, hmi_cont_data, cadence=45., inst='hmi', channel='cont' )]
+;H = [H, PREP_HMI( hmi_cont_index, hmi_cont_data, cadence=45., inst='hmi', channel='cont' )]
 
 
 end

@@ -7,15 +7,9 @@
 ;-   multiply by AIA powermaps
 ;-
 ;- NOTE:
-;-  each map in AIA structure array ('A') is changed,
-;-  not simply making a copy
+;-  each map in AIA structure array ('A') is changed, not making a copy
 ;-
 ;-
-;-
-;-
-
-
-
 
 function POWERMAP_MASK, $
     data, $
@@ -23,9 +17,8 @@ function POWERMAP_MASK, $
     exptime=exptime, $
     threshold=threshold
 
-    
-    start_time = systime(/seconds)
 
+    start_time = systime(/seconds)
 
     if not keyword_set(threshold) then threshold = 15000.
 
@@ -50,4 +43,31 @@ function POWERMAP_MASK, $
         " minutes."
 
     return, map_mask
+end
+
+
+;+
+;- Thu Dec 20 09:59:36 MST 2018
+;- Multiply maps by saturation mask (from bda.pro)
+;-
+
+@restore_maps
+
+
+print, ''
+print, ' Type ".CONTINUE" to apply saturation mask to powermaps.'
+print, ''
+stop
+
+dz = 64
+
+threshold = 15000.
+
+for cc = 0, 1 do begin
+    map_mask = POWERMAP_MASK( A[cc].data, dz, exptime=A[cc].exptime, $
+        threshold=threshold
+
+    A[cc].map = A[cc].map * map_mask
+endfor
+
 end

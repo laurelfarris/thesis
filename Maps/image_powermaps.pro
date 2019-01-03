@@ -1,14 +1,26 @@
+;-
+;- 20 December 2018
+;-
+;- function IMAGE_POWERMAPS takes STRUCTURE argument, whose tags are
+;-   imdata (data to be imaged), graphic title, and filename to save as pdf.
+;- Returns reference to image object, 'im'.
+;-
+;-
+;- 17 December 2018
+;- Creates structures (at ML) that can be input for function
+;-  IMAGE_POWERMAPS, which returns reference to image object, 'im'.
+;- Only shows a single image, not an array.
+;- 3 structures: one for AIA intensity, one for HMI, and one for AIA power map.
+;- Images are averaged over some time segemnt of length dz,
+;- where starting indices for z are defined at main level below.
+;-
+;- NOTE:
+;- Run this routine (image_powermaps) from ML before calling contours.pro
+;-   (copied lines below from the bottom of that one).
+;- IDL> .run image_powermaps
+;- c_data = GET_CONTOUR_DATA( time[zz+(dz/2)], channel='mag' )
+;- c = CONTOURS( c_data, target=im, channel='mag' )
 
-
-;- 25 November 2018
-
-;- One image/map per file?
-;- Or create arrays of images?
-;- Keep each channel separate?
-
-;- Loop through image data, plus titles, rgb_tables, filename to save, ...
-
-;pro image_powermaps, struc, _EXTRA = e
 function image_powermaps, struc, _EXTRA = e
 
     imdata = alog10(struc.imdata)
@@ -26,23 +38,10 @@ function image_powermaps, struc, _EXTRA = e
         left = 0.10, right = 0.10, bottom = 0.10, top = 0.50, $
         ;left = 0.01, right = 0.01, bottom = 0.15, top = 0.15, $
         _EXTRA = e )
-
-;    pos = (im[0]).position
-;    width = pos[2]-pos[0]
-;    height = pos[3]-pos[1]
-;    print, ''
-;    print, im.xticklen
-;    print, (sqrt(height/width))/25.
-;    print, ''
-;    print, im.yticklen
-;    print, (sqrt(width/height))/25.
-;    print, ''
-;
-    ;- image3 should return im as objarr with as many elements as
-    ;-  matches the third dimension of struc.imdata.
-    ;- But can't really access it from ML if only created here, and not returned...
     return, im
 end
+
+
 
 goto, start
 start:;---------------------------------------------------------------------------------
@@ -54,8 +53,12 @@ z_start = 197 ;- pre-flare
 ;z_start = 204 ;- pre-flare/impulsive
 ;z_start = 450 ;- post-flare
 
-
 zz = z_start
+
+;----------------------------------------------------------------------------------------
+;- Structure for AIA intensity, hmi B_LOS, and AIA powermaps.
+;- Call IMAGE_POWERMAPS with one of these (i.e. only used one at a time)
+;- as first arg.
 
 ;- AIA intensity
 intensity = { $
@@ -76,7 +79,7 @@ map = { $
     title : A[cc].name + ' 5.6 mHz (' + time[zz] + '-' + time[zz+dz-1] + ' UT)', $
     file : 'aia' + A[cc].channel + 'big_map' }
 
-
+;----------------------------------------------------------------------------------------
 ;im1 = IMAGE_POWERMAPS( intensity, rgb_table = A[cc].ct )
 im = IMAGE_POWERMAPS( map, rgb_table = A[cc].ct )
 

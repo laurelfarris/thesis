@@ -23,19 +23,24 @@ function GET_IMAGE_DATA
     ;-   later improve read_my_fits.pro to take time (or array of times) to do this.
     ;-
     ;-
+    ;-
+    ;- 17 December 2018
+    ;-   I think the purpose of this was solely to create figure with intensity
+    ;-   images for the Data/Obs section of paper. No analysis is done here.
+    ;-   This was also before I had a working routine for hmi_prep, though this
+    ;-   at least doesn't read in the entire array just to show one image, and
+    ;-   prep routines don't contain full disk images.
+    ;-   This needs some work though... there's a lot of repeats when creating
+    ;-   the structures for each instrument/channel.
 
-
-    resolve_routine, 'read_my_fits'
-
-    display_time = '01:44'
-
-    ;- HMI
 
     instr = 'hmi'
+    display_time = '01:44'
 
     ; HMI B_LOS
     channel='mag'
 
+    resolve_routine, 'read_my_fits'
     READ_MY_FITS, index, data, instr=instr, channel=channel, nodata=1, prepped=1 ;ind=[0]
     time = strmid(index.date_obs, 11, 5)
     ind = (where( time eq display_time ))[0]

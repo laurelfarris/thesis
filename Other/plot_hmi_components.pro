@@ -1,3 +1,10 @@
+
+;- Thu Dec 20 08:00:20 MST 2018
+;- This is pretty old stuff... probably don't need it, but there may
+;-   be something useful buried somewhere.
+;- Calls procedure "my_plot", which doesn't exist.
+
+
 ;; Last modified:   02 February 2018 20:36:19
 
 ;; Subroutines:     fourier2 --> returns "Array containing power and phase
@@ -12,7 +19,7 @@
 
 
 
-pro plot_fft, flux, cad, Trange, 
+pro plot_fft, flux, cad, Trange,
 
 
     ;; Set up plot properties
@@ -46,7 +53,7 @@ pro plot_fft, flux, cad, Trange,
     pow = result[1,*]
     per = 1./fr
     per_min = per/60.
-    
+
     ;; Zoom in
     if keyword_set( Trange ) then begin
         i = where( per_min ge Trange[0] AND per_min le Trange[1] )
@@ -87,8 +94,8 @@ pro plot_fft, flux, cad, Trange,
     f5 = 1./300.
     v1 = props.yrange[0]
     v2 = props.yrange[1]
-    vert = plot( [f3, f3], [v1,v2], linestyle=2, /overplot ) 
-    vert2 = plot( [f5, f5], [v1,v2], linestyle=2, /overplot ) 
+    vert = plot( [f3, f3], [v1,v2], linestyle=2, /overplot )
+    vert2 = plot( [f5, f5], [v1,v2], linestyle=2, /overplot )
 
     ;; Add axis to show period
     ; convert desired periods (min) to Hz to find locs on x-axis
@@ -105,7 +112,7 @@ pro plot_fft, flux, cad, Trange,
     ;period_label = GET_LABELS( period_min, nmaj )
     ;ax[2].tickname = string( period_label, format='(F6.1)' )
 
-    
+
     ;; Column lables (HMI, AIA 1600, AIA 1700)
     ty = 1.0 - t/3.0
     tx = pos[0] + (pos[2]-pos[0])/2
@@ -155,10 +162,10 @@ for i = 0, sz[2]-1 do begin
     plocs = array_indices(d, where(d gt umbra AND d lt penumbra))
     qlocs = array_indices(d, where(d ge penumbra))
 
-    uflux = [ uflux, total( d[ ulocs[0,*], ulocs[1,*] ]) ] 
-    pflux = [ pflux, total( d[ plocs[0,*], plocs[1,*] ]) ] 
-    qflux = [ qflux, total( d[ qlocs[0,*], qlocs[1,*] ]) ] 
-    
+    uflux = [ uflux, total( d[ ulocs[0,*], ulocs[1,*] ]) ]
+    pflux = [ pflux, total( d[ plocs[0,*], plocs[1,*] ]) ]
+    qflux = [ qflux, total( d[ qlocs[0,*], qlocs[1,*] ]) ]
+
     upix = [upix, n_elements( d[ ulocs[0,*], ulocs[1,*] ]) ]
     ppix = [ppix, n_elements( d[ plocs[0,*], plocs[1,*] ]) ]
     qpix = [qpix, n_elements( d[ qlocs[0,*], qlocs[1,*] ]) ]
@@ -249,7 +256,7 @@ end
 ;
 ; OUTPUT:       N/A
 ;
-; TO DO:        
+; TO DO:
 ;
 ; AUTHOR:       Laurel Farris
 ;
@@ -282,7 +289,7 @@ function HMI_COMPONENTS, hmi_data
         hmi.Umbra[0,i]    = total( d[ ulocs[0,*], ulocs[1,*] ])
         hmi.Penumbra[0,i] = total( d[ plocs[0,*], plocs[1,*] ])
         hmi.Quiet[0,i]    = total( d[ qlocs[0,*], qlocs[1,*] ])
-        
+
         hmi.Umbra[1,i]    = n_elements( d[ ulocs[0,*], ulocs[1,*] ])
         hmi.Penumbra[1,i] = n_elements( d[ plocs[0,*], plocs[1,*] ])
         hmi.Quiet[1,i]    = n_elements( d[ qlocs[0,*], qlocs[1,*] ])
@@ -294,7 +301,7 @@ end
 
 pro MY_PLOT, d, cols, rows, props
 
-    
+
     a0 = d.(0)[0,*] + d.(1)[0,*] + d.(2)[0,*]
     a1 = d.(0)[0,*]
     a2 = d.(1)[0,*]
@@ -307,15 +314,15 @@ pro MY_PLOT, d, cols, rows, props
     a5 = a2/a5
     a6 = a3/a6
 
-    
-    x0 = (a0-min(a0))/(max(a0)-min(a0)) + 4.0 
-    x1 = (a1-min(a1))/(max(a1)-min(a1)) + 3.0 
-    x2 = (a2-min(a2))/(max(a2)-min(a2)) + 2.0 
-    x3 = (a3-min(a3))/(max(a3)-min(a3)) + 1.0 
+
+    x0 = (a0-min(a0))/(max(a0)-min(a0)) + 4.0
+    x1 = (a1-min(a1))/(max(a1)-min(a1)) + 3.0
+    x2 = (a2-min(a2))/(max(a2)-min(a2)) + 2.0
+    x3 = (a3-min(a3))/(max(a3)-min(a3)) + 1.0
     x4 = (a4-min(a4))/(max(a4)-min(a4)) + 3.0
     x5 = (a5-min(a5))/(max(a5)-min(a5)) + 2.0
     x6 = (a6-min(a6))/(max(a6)-min(a6)) + 1.0
-    
+
 ;    fx0 = a0/a0
 ;    fx1 = a1/a0
 ;    fx2 = a2/a0

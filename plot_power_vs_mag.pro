@@ -1,13 +1,7 @@
-
-
-
 ;- Fri Dec 14 02:36:40 MST 2018
-
-
 
 ;- Plot 3minute power as function of magnetic field strength
 ;-   (no spatial info here).
-
 
 goto, start
 
@@ -15,14 +9,8 @@ aia_dz = 64
 hmi_dz = (25.6 * 60)/H[0].cadence
 ;- dz is different for HMI because cadence is longer - almost twice as long.
 
-
-
 ;- H[0] is B_LOS, so index is unlikely to change.
 cc = 0
-
-
-stop
-
 
 ;- Compare HMI BLOS at beginning and end of 25.6-minute time segment,
 ;-   to mean over entire time segment.
@@ -74,7 +62,6 @@ endforeach
 
 stop
 
-
 start:;---------------------------------------------------------------------------------
 ;- Full AR
 
@@ -99,11 +86,9 @@ foreach zz, z_start, ii do begin
     ;help, sz[0]*sz[1]
     ;- NOTE: sz is returned as LONG data type
 
-
     xdata = reform(xdata, sz[0]*sz[1], /overwrite)
     ydata = reform(ydata, sz[0]*sz[1], /overwrite)
     ;- Both are floats after running REFORM.
-
 
     plt[ii] = PLOT2( $
         xdata, ydata, $
@@ -147,6 +132,5 @@ leg = legend2( target=plt )
 ;        rgb_table=A[0].ct, $
 ;        title=title[ii] )
 ;endfor
-
 
 end

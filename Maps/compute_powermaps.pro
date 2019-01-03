@@ -30,7 +30,7 @@
 ;-   only if threshold kw is set.
 
 
-function POWERMAPS, $
+function COMPUTE_POWERMAPS, $
     data, $
     cadence, $
     ;fmin=fmin, $

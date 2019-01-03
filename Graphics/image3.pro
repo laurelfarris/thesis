@@ -19,7 +19,7 @@
 
 function IMAGE3_wrapper, $
     data, $
-    ;X, Y, $
+    X, Y, $
     wx = wx, $
     ;wy = wy, $
     ;width = width, $
@@ -37,17 +37,26 @@ function IMAGE3_wrapper, $
 
     sz = size(data, /dimensions)
     if n_elements(sz) eq 2 then nn = 1 else nn = sz[2]
+    ;- REFORM(data) is applied before this routine is called,
+    ;-   so this shouldn't ever be true, and should be able to delete these lines.
+    ;- Unless I use the simple one-line and don't bother reforming data...
+    ;- Will have to test that at some point.
+    ;- Depends on what else sz is used for after this point.
 
+
+    ;- Use window width, margins (and xgap for multi-graphics) to set image width
     width = (wx - ( left + right + (cols-1)*xgap )) / cols
+
+    ;- Aspect ratio preserved for images, so scale height accordingly
     height = width * float(sz[1])/sz[0]
 
+    ;- Use top/bottom margins, ygap, and number of rows to determine window height.
     wy = top + bottom + (rows*height) + (rows-1)*ygap
 
     if keyword_set(buffer) then $
         win = window(dimensions=[wx,wy]*dpi, buffer=1) $
     else $
         win = window(dimensions=[wx,wy]*dpi, location=[500,0])
-        
 
     im = objarr(nn)
 
@@ -67,41 +76,44 @@ function IMAGE3_wrapper, $
 
         im[ii] = image2( $
             data[*,*,ii], $
-            ;X, Y, $
+            X, Y, $
             /current, /device, $
             position=position*dpi, $
             title = title[ii], $
             _EXTRA=e )
-    endfor
 
+    endfor
+    add_letters_to_figure, target=im
     return, im
 end
 
 
-function IMAGE3,  $
-    data, $
-    ;X, Y, $
-    _EXTRA=e
+function IMAGE3, data, X, Y, _EXTRA=e
 
     common defaults
 
+
     sz = size(data, /dimensions)
-    ;if n_elements(sz) eq 2 then nn = 1 else nn = sz[2]
 
-
-    ;- If input data only contains one image, then
-    ;- adjust dimensions so that the array is 2D:
-    ;-  Need second dimension to exist so don't get errors when
-    ;-   attempting to use SIZE(imdata).
+    ;- If data is 2D array (just one image), adjust dimensions to 2D.
+    ;-   (Need second dimension to use sz[2] a couple lines down...).
     if n_elements(sz) eq 2 then $
         data = reform( data, sz[0], sz[1], 1, /overwrite )
-
     sz = size(data, /dimensions)
     nn = sz[2]
 
+    ;- Or, pretty sure could just use this one line.. though may
+    ;- have to make a correction in image3_wrapper...
+    ;if n_elements(sz) eq 2 then nn = 1 else nn = sz[2]
+
+
+    ;- X and Y should be optional...
+    if n_elements(X) eq 0 then X = indgen(sz[0])
+    if n_elements(Y) eq 0 then Y = indgen(sz[1])
+
     im = image3_wrapper( $
         data, $
-        ;X, Y, $
+        X, Y, $
         buffer = 1, $
         rows = 1, $
         cols = 1, $
