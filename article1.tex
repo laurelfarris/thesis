@@ -1,0 +1,128 @@
+\documentclass[twocolumn,tighten]{aastex62}
+ % {---
+%\documentclass[modern]{aastex62}
+%\documentclass[modern,linenumbers]{aastex62}
+
+%\renewcommand{\baselinestretch}{1.20}
+%\setlength{\columnsep}{0.50in} % Default = 28.6 pt. Divide by 72 to get inches.
+%\setlength{\parskip}{1.0em}
+
+% 16 November 2018 - add date to footer
+%\usepackage{fancyhdr}
+%\fancyhf{} % clear existing header/footer stuff (including page numbers)
+%\renewcommand{\headrulewidth}{0pt} % remove the header rule
+%\fancyhead[LE,RO]{\thepage} % Put page numbers on left side of even pages, and on right side of odd pages
+%\usepackage{datetime}
+%%\fancyfoot[L]{\today\ \currenttime}
+%\fancyfoot[L]{\small\today}
+%\pagestyle{fancy} % header/footer stuff won't show up without this.
+
+
+
+\usepackage{printlen}
+
+\usepackage{enumitem}
+\setlist{noitemsep}
+\usepackage{amsmath}
+
+\usepackage{natbib}
+\bibliographystyle{aasjournal}
+
+\usepackage{graphicx}
+\graphicspath{
+    {$HOME/Dropbox/Figures/},
+    {$HOME/Dropbox/Figures/Temp/},
+    {$HOME/Dropbox/Figures/Lightcurves/}
+}
+\usepackage{xcolor}
+% ---}
+
+% In-text notes {---
+
+\renewcommand{\figurename}{Fig.}
+
+\newcommand{\correction}[1]{
+    \textcolor{blue!60!black}{#1}
+}
+\newcommand{\mynote}[1]{
+    {\sffamily\small\color{red}#1}
+}
+
+\usepackage{soul}
+\definecolor{darkpastelgreen}{rgb}{0.01, 0.75, 0.24}
+\newcommand{\myfig}{
+    \textcolor{red}{\textbf{\hl{FIGURE}}}
+}
+      %\textbf{{FIGURE}}
+    %{\color{darkpastelgreen}$\bigstar$ }
+
+%\renewcommand\correction[1]{} % --> Hide notes
+%\renewcommand\mynote[1]{} % --> Hide notes
+%\renewcommand\myfig[1]{} % --> Hide notes
+
+% ---}
+
+\usepackage{hyperref}
+\hypersetup{colorlinks=true,
+    %linkcolor=yellow
+    }
+\urlstyle{same}
+
+\begin{document}
+
+\title{\input{title}}
+
+\author{Laurel Farris}
+\affiliation{New Mexico State University}
+
+\author{R. T. James McAteer}
+\affiliation{New Mexico State University}
+
+%\author{Jack Ireland}
+%\affiliation{NASA Goddard Space Flight Center}
+
+\begin{abstract}
+    \input{abstract}
+\end{abstract}
+\keywords{chromosphere, flares, oscillations}
+
+%\section{Action items}
+%\mynote{
+%    Every time something occurs to me (task, source, question, coding idea, etc.)
+%    and I don't have immediate access to the appropriate section or note to
+%    jot it down in, add the things right here at the beginning of the article,
+%    and sort them out later. Don't waste time finding the perfect spot to write
+%    something down! There should be designated time in your routine to organize
+%    stuff.
+%    \begin{itemize}
+%        \item blah
+%    \end{itemize}
+%}
+
+\section{Introduction}\label{introduction}
+\input{introduction}
+
+\clearpage
+\section{Observations and data reduction}\label{data}
+\input{data}
+
+\clearpage
+\section{Analysis}\label{analysis}
+\input{analysis}
+
+\clearpage
+\section{Results}\label{results}
+\input{results}
+
+\clearpage
+\section{Discussion}\label{discussion}
+\input{discussion}
+
+\clearpage
+\section{Conclusions and future work}\label{conclusions}
+\input{conclusions}
+
+
+\clearpage
+\bibliography{reffile}
+\end{document}
