@@ -6,13 +6,16 @@
 ;-   Calculate power as function of time, P(t), by summing over power maps.
 ;-
 ;- INPUT:
-;-   flux, cadence
-;- KEYWORDS:
-;- OUTPUT:
+;- 24 January 2019
+;-   Nothing... apparently, GET_POWER_FROM_MAPS is just a ML routine,
+;-   no function or procedure to call.
+;- KEYWORDS:  N/A
+;- OUTPUT:  N/A
 ;- TO DO:
 ;-   Add test codes
 ;-   Create new saturation routine (this currently addresses
 ;-      saturation and calculation of total power with time.
+;-
 
 
 
