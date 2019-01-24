@@ -105,7 +105,8 @@ end
 
 H = []
 H = [H, PREP_HMI( hmi_mag_index, hmi_mag_data, cadence=45., inst='hmi', channel='mag' )]
-;H = [H, PREP_HMI( hmi_cont_index, hmi_cont_data, cadence=45., inst='hmi', channel='cont' )]
+H = [H, PREP_HMI( hmi_cont_index, hmi_cont_data, cadence=45., inst='hmi', channel='cont' )]
+
 
 
 end

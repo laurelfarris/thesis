@@ -2,32 +2,19 @@
 \expandafter\ifx\csname natexlab\endcsname\relax\def\natexlab#1{#1}\fi
 \providecommand{\url}[1]{\href{#1}{#1}}
 \providecommand{\dodoi}[1]{doi:~\href{http://doi.org/#1}{\nolinkurl{#1}}}
-\providecommand{\doeprint}[1]{\href{http://ascl.net/#1}{\nolinkurl{http://ascl.net/#1}}}
-\providecommand{\doarXiv}[1]{\href{https://arxiv.org/abs/#1}{\nolinkurl{https://arxiv.org/abs/#1}}}
+\providecommand{\doeprint}[1]{\href{http://ascl.net/#1}{\nolinkurl{http://ascl%
+.net/#1}}}
+\providecommand{\doarXiv}[1]{\href{https://arxiv.org/abs/#1}{\nolinkurl{https:%
+//arxiv.org/abs/#1}}}
 
 \bibitem[{{Awasthi} {et~al.}(2018){Awasthi}, {Rudawy}, {Falewicz}, {Berlicki},
   \& {Liu}}]{Awasthi2018}
 {Awasthi}, A.~K., {Rudawy}, P., {Falewicz}, R., {Berlicki}, A., \& {Liu}, R.
   2018, \apj, 858, 98, \dodoi{10.3847/1538-4357/aabd76}
 
-\bibitem[{{Beckers} \& {Tallant}(1969)}]{Beckers1969}
-{Beckers}, J.~M., \& {Tallant}, P.~E. 1969, \solphys, 7, 351,
-  \dodoi{10.1007/BF00146140}
-
 \bibitem[{{Brosius} \& {Daw}(2015)}]{Brosius2015}
 {Brosius}, J.~W., \& {Daw}, A.~N. 2015, \apj, 810, 45,
   \dodoi{10.1088/0004-637X/810/1/45}
-
-\bibitem[{{Brosius} {et~al.}(2016){Brosius}, {Daw}, \& {Inglis}}]{Brosius2016}
-{Brosius}, J.~W., {Daw}, A.~N., \& {Inglis}, A.~R. 2016, \apj, 830, 101,
-  \dodoi{10.3847/0004-637X/830/2/101}
-
-\bibitem[{{Brynildsen} {et~al.}(2004){Brynildsen}, {Maltby}, {Fredvik}, \&
-  {Kjeldseth-Moe}}]{Brynildsen2004}
-{Brynildsen}, N., {Maltby}, P., {Fredvik}, T., \& {Kjeldseth-Moe}, O. 2004, in
-  ESA Special Publication, Vol. 547, SOHO 13 Waves, Oscillations and
-  Small-Scale Transients Events in the Solar Atmosphere: Joint View from SOHO
-  and TRACE, ed. H.~{Lacoste}, 45
 
 \bibitem[{{Chae} \& {Goode}(2015)}]{Chae2015}
 {Chae}, J., \& {Goode}, P.~R. 2015, \apj, 808, 118,
@@ -108,9 +95,6 @@
 {Nakariakov}, V.~M., \& {Melnikov}, V.~F. 2009, \ssr, 149, 119,
   \dodoi{10.1007/s11214-009-9536-3}
 
-\bibitem[{{Orrall}(1966)}]{Orrall1966}
-{Orrall}, F.~Q. 1966, \apj, 143, 917, \dodoi{10.1086/148567}
-
 \bibitem[{{Pesnell} {et~al.}(2012){Pesnell}, {Thompson}, \&
   {Chamberlin}}]{Pesnell2012}
 {Pesnell}, W.~D., {Thompson}, B.~J., \& {Chamberlin}, P.~C. 2012, \solphys,
@@ -133,12 +117,6 @@
   {Elmore}, {Norton}, \& {Tomczyk}}]{Schou2012}
 {Schou}, J., {Scherrer}, P.~H., {Bush}, R.~I., {et~al.} 2012, \solphys, 275,
   229, \dodoi{10.1007/s11207-011-9842-2}
-
-\bibitem[{{Sim{\~o}es} {et~al.}(2018){Sim{\~o}es}, {Reid}, {Milligan}, \&
-  {Fletcher}}]{Simoes2018}
-{Sim{\~o}es}, P.~J.~A., {Reid}, H.~A.~S., {Milligan}, R.~O., \& {Fletcher}, L.
-  2018, ArXiv e-prints.
-\newblock \doarXiv{1808.01488}
 
 \bibitem[{{Stangalini} {et~al.}(2011){Stangalini}, {Del Moro}, {Berrilli}, \&
   {Jefferies}}]{Stangalini2011}

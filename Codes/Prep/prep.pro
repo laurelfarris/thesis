@@ -148,20 +148,3 @@ function PREP, index, cube, cadence=cadence, inst=inst, channel=channel, $
     }
     return, struc
 end
-
-
-A = []
-A = [A, PREP_AIA( aia1600index, aia1600data, cadence=24., inst='aia', channel='1600' ) ]
-A = [A, PREP_AIA( aia1700index, aia1700data, cadence=24., inst='aia', channel='1700' ) ]
-
-print, 'NOTE: aia1600index, aia1600data, aia1700index, and aia1700data'
-print, '         still exist at ML. '
-
-A[0].color = 'blue'
-A[1].color = 'red'
-
-;H = []
-;H = [H, PREP_HMI( hmi_mag_index, hmi_mag_data, cadence=45., inst='hmi', channel='mag' )]
-;H = [H, PREP_HMI( hmi_cont_index, hmi_cont_data, cadence=45., inst='hmi', channel='cont' )]
-
-end

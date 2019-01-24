@@ -1,0 +1,12 @@
+
+
+
+
+
+Wed Jan 23 19:27:50 MST 2019
+
+Ideally, prep_hmi.pro and prep_aia.pro would be combined into one routine
+since they're so similar.
+
+Currently using the two separate routines since having them combined would
+be "nice", but not high priority right now.

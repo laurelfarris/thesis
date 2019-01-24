@@ -1,29 +1,24 @@
-This section first described the general results from the power
-maps that remained consistant throughout the time series.
-Then \S\ref{time} describes the temporal variation in power:
-before, during, and after the flare.
 
-\subsection{Spatial distribution of 3-minute power}
+\subsection{Spatial distribution of oscillatory power}
 
-The dark regions in many of the power maps, particularly
-in the center of maps that cover time during the X-class flare,
-represent locations where saturation occurred, and were set to
-zero in order to improve contrast between the remaining pixels.
-Bleeding that occurred at the edges of saturated areas could not
-be excluded since these values started to approach those held
-by pixels that were not saturated.
+Many of the general patterns in the spatial distribution of 3-minute power
+were consistent throughout the time series.
+Figure \ref{contours} is presented as an illustrative example,
+showing post-flare
+intensity images and corresponding power maps for
+AIA 1600\AA{} and AIA 1700\AA{}, overlaid with
+HMI $B_{LOS}$ contours at $\pm$300 Gauss
+from the center of the time segment used to produce the power map
+(around 3:12 UT).
+Negative polarities are outlined in black and
+positive polarities are outlined in white.
 
-While the location of power enhancement appears to be correlated with
-intensity, not all locations of high intensity are accompanied by
+The location of power enhancement appears to be correlated with
+intensity, though not all locations of high intensity are accompanied by
 enhanced power.
-The 3-minute power appears to be spatially correlated with a few
-areas of high intensity in and
-directly around the active region, but does not branch out into the quiescent
+These locations are also constrained to areas
+directly around the active region, but do not appear to branch out into the quiescent
 network/internetwork regions beyond.
-This trend is consistent throughout the duration of the flare and post-flare
-phases.
-A particularly prominent spot emerges in the lower edge of AR\_1a
-and persists until the decay phase of the X-class flare.
 Power enhancement occurs in relatively \emph{small} regions.
 A few isolated regions of enhancement covered an area of
 $\sim 6" \times 6"$.
@@ -33,37 +28,6 @@ directly over the umbra.
 
 \subsubsection{Correlation with $B_{LOS}$}
 
-\begin{figure*}[htb!]\centering
-    \includegraphics[draft=false,width=0.48\textwidth]{aia1600big_image.pdf}
-    \includegraphics[draft=false,width=0.48\textwidth]{aia1700big_image.pdf}\\
-    \includegraphics[draft=false,width=0.48\textwidth]{aia1600big_map.pdf}
-    \includegraphics[draft=false,width=0.48\textwidth]{aia1700big_map.pdf}
-    \caption{%
-        Top row:
-        Post-flare images, shown as a composite product over
-        the time range shown, overlaid with contours showing the approximate
-        location of the $B_{LOS}$ at $\pm$300 Gauss.
-        Bottom rows: Spatial distribution of 3-minute power, obtained
-        by applying a pixel-by-pixel Fourier transform over the images
-        included in the top row.
-        The left column shows results from AIA 1600\AA{}, and
-        the right column shows results from AIA 1700\AA{}.
-        White and black contours represent positive and negative polarity,
-        respectively.
-    \label{contours}}
-\end{figure*}
-
-\myfig Figure~\ref{contours} shows post-flare power maps for
-AIA 1600\AA{} and AIA 1700\AA{}, overlaid with
-HMI $B_{LOS}$ contours at $\pm$300 Gauss
-from the center of the time segment used to produce the power map
-(around 1:31 UT).
-Negative polarities are outlined in black and
-positive polarities are outlined in white.
-This figure serves as an example of general spatial distribution
-of oscillatory power, and
-will be used as a reference in this section.
-
 In most power maps, the power enhancement
 is located along the boundaries of magnetic field
 strength = $\pm$300 Gauss,
@@ -71,29 +35,49 @@ which correlates with the outer boundary of the penumbra.
 (It should be noted that the alignment procedures may have resulted in a slight
 offset between the channels, in addition to any existing LOS affects.)
 
-In addition to being localized to small areas,
-the enhanced areas appear to be located over
-umbral regions at opposite polarities on the HMI magnetogram in
-\myfig Figure~\ref{images}.
-
 \subsection{Temporal evolution of oscillatory power}\label{time}
 
+\subsubsection{Pre-flare}
+
+Figure~\ref{before} shows the spatial distribution of 3-minute power for
+various time segments of interest from 00:00 UT up to 01:44 UT.
+This period includes a C-class flare that occurred an hour before the
+X-class flare in AR\_2b.
+A particularly prominent spot emerges in the lower edge of AR\_1a
+and persists until the decay phase of the X-class flare.
+
+
+\subsubsection{During the flare}
+
+Figure~\ref{during}
+shows the spatial distribution of 3-minute power for
+various time segments of interest during the X-class flare.
+Pixels that saturated were excluded from the maps
+to improve contrast between the remaining pixels.
+Bleeding that occurred at the edges of saturated areas could not
+be excluded since these values started to approach those held
+by pixels that were not saturated.
+
+Maps (a)-(c) were produced from intensity images that
+included pre-flare and precursor emission, before the channels
+began to saturate.
+They are as close in time as allowed by the instrumental cadence,
+and there is still a noticeable increase in enhancement in the flare site
+over AR\_1b and AR\_2a.
+
+Maps (d)-(f) include emission from the impulsive phase,
+and maps (g)-(i) include emission from AIA peak emission and
+onward through the decay phase.
+
+
+\subsubsection{Post-flare}
+
+Figure~\ref{after}
+shows the spatial distribution of 3-minute power for
+various time segments of interest during the X-class flare.
+There were two small events after the X-class flare.
+
 \subsubsection{Discrete wavelet analysis}
-\begin{figure*}[htb!]\centering
-    \includegraphics[draft=false,width=0.9\textwidth]{wa.pdf}
-    \caption{
-        Time-frequency power plots from AIA 1600\AA{} (top panel) and AIA
-        1700\AA{} (bottom panel), obtained by applying a Fourier transform to
-        integrated emission from NOAA AR 11158 in discrete time increments of
-        64 frames ($\sim$25.6 minutes) each. The dashed horizontal line marks the
-        central frequency $\nu_{c}$ at $\sim$5.6 mHz, corresponding to a period
-        of 3 minutes. The dotted horizontal lines on either side of $\nu_{c}$
-        mark the edges of the frequency bandpass $\Delta\nu$ = 1 mHz. The
-        vertical lines mark the flare, start, peak, and end times as determined
-        by \textit{GOES}. The power is scaled logarithmically and over the same
-        range in both channels.
-        \label{wa}}
-\end{figure*}
 
 The technique described in \S\ref{analysis} was applied
 to the integrated flux from AR 11158 at
@@ -104,7 +88,8 @@ to compare the spectral power at a range of frequencies.
 This method produces similar results to those
 obtained with wavelet analysis, though
 at lower resulting frequency and time resolution.
-The results are are shown in \myfig Figure~\ref{wa}
+The results are are shown in
+Figure~\ref{wa}
 for frequencies between 2.5 and 20.0 mHz (400 and 50 seconds, respectively).
 The central frequency $\nu_{c} = 5.56$ mHz
 and the frequency bandpass $\Delta\nu$ at 5 and 6 mHz
@@ -122,117 +107,7 @@ the same frequencies for adjacent time segments.
 At all points in time when power enhancement occurs for any frequency,
 there appears to be a correlation with flux increase.
 
-\subsubsection{3-minute power vs. time}
 
-\begin{figure*}[htb!]\centering
-    \includegraphics[draft=false,width=1.00\textwidth]{time-3minpower_flux.pdf}
-    \includegraphics[draft=false,width=1.00\textwidth]{time-3minpower_maps.pdf}
-    \caption{%
-        Temporal evolution of the 3-minute power $P(t)$ in
-        AIA 1600\AA{} (blue curve) and AIA 1700\AA{} (red curve).
-        Top: $P(t)$ obtained by applying a Fourier transform to the
-        integrated flux from AR 11158.
-        Bottom: $P(t)$ per unsaturated pixel, obtained by summing over power maps.
-        Each point in time
-        %represents the sum (in x and y) of each power map and
-        is plotted as a function of the center
-        of the time segment over which the Fourier transform was applied to
-        obtain the power map over which the point was summed.
-        %The axis labeled $T = 64$ is scaled to show the
-        %length of each time segment relative to the full time series.
-        The vertical dashed lines mark the \textit{GOES} start, peak, and end
-        times of the flare at 01:44, 01:56, and 02:06 UT, respectively.
-        \label{power_vs_time}}
-\end{figure*}
-
-The evolution of the 3-minute power with time
-was calculated from the power maps
-by summing over $x$ and $y$ in each map $P(x,y,t_{i})$, and taking the total
-to be the 3-minute power of the active region during each time segment.
-This is shown in
-\myfig Figure~\ref{power_vs_time}.
-Each point is plotted as a function of the center of the time segment
-over which the Fourier transform was applied to obtain that point.
-The axis labelled $T=64$ shows the scale for this length of time.
-
-Power as a function of time obtained from total flux and power maps
-is shown to check for possible contradictions between the two.
-Integrating flux over the AR
-before applying the Fourier transform
-has the potential effect of reducing or canceling signal from
-pixels whose intensity variations are out of phase.
-
-The 3-minute power for both AIA channels
-appears to have its own periodicity with time.
-The calculations were repeated for several other frequencies, including
-5-minute period and 2-minute period.
-The same trends were produced, with the additional result
-that the length of ``period'' scaled with the length of the period
-the plots were supposed to represent.
-It is reasonable to attribute this to computational effects.
-
-\subsubsection{Pre-flare}
-
-\begin{figure*}[htb!]\centering
-    \includegraphics[draft=false,width=0.9\textwidth]{aia1600before_20181204.pdf}
-    \includegraphics[draft=false,width=0.9\textwidth]{aia1700before_20181204.pdf}
-    \caption{%
-        Spatial distribution of 3-minute power before the X-class flare,
-        in log scale to bridge large contrasts.
-        Locations whose time segment included saturated pixels were set to zero.
-        \label{before}}
-\end{figure*}
-
-\myfig Figure~\ref{before} shows the spatial distribution of 3-minute power for
-various time segments of interest from 00:00 UT up to 01:44 UT.
-This period includes a C-class flare that occurred an hour before the
-X-class flare in AR\_2b.
-
-\subsubsection{During the flare}
-\begin{figure*}[htb!]\centering
-    \includegraphics[draft=false,width=0.9\textwidth]{aia1600during_20181204.pdf}
-    \includegraphics[draft=false,width=0.9\textwidth]{aia1700during_20181204.pdf}
-    \caption{%
-        Spatial distribution of 3-minute power during the X-class flare.
-        \label{during}}
-\end{figure*}
-
-\myfig Figure~\ref{during}
-shows the spatial distribution of 3-minute power for
-various time segments of interest during the X-class flare.
-Maps (a)-(c) include the first few frames when emission began
-to increase in the impulsive phase before the channels
-saturated.
-These three maps include pre-flare and precursor emission.
-They are as close in time as the instrumental cadence allowed,
-and there is a noticeable increase in enhancement in the flare site
-over AR\_1b and AR\_2a.
-
-The remainder of the power maps include saturated pixels in the data.
-Maps (d)-(f) include emission from the impulsive phase,
-and maps (g)-(i) include emission from AIA peak emission and
-onward through the decay phase.
-
-\subsubsection{Post-flare}
-\begin{figure*}[htb!]\centering
-    \includegraphics[draft=false,width=0.9\textwidth]{aia1600after_20181204.pdf}
-    \includegraphics[draft=false,width=0.9\textwidth]{aia1700after_20181204.pdf}
-    \caption{%
-        Spatial distribution of 3-minute power after the X-class flare.
-        \label{after}}
-\end{figure*}
-\myfig Figure~\ref{after}
-shows the spatial distribution of 3-minute power for
-various time segments of interest during the X-class flare.
-There were two small events after the X-class flare.
-Emission for the first one came first from
-
-\subsection{Discussion}
-
-Almost all events before and after the main X-class flare
-occurred in AR\_2b, including briefly at the beginning of the time series.
-
-\subsubsection{Lifetime and navigation of enhanced regions}
 The location of these enhancements does not move across the AR.
 Rather, it remains in one place until it fades away.
 One of the most prominent locations of enhanced power occurs before
@@ -252,6 +127,34 @@ The expected timescales would depend on the cooling rate of the plasma
 
 \subsubsection{AIA formation heights/temperatures}
 
+The evolution of the 3-minute power with time
+was calculated from the power maps
+by summing over $x$ and $y$ in each map $P(x,y,t_{i})$, and taking the total
+to be the 3-minute power of the active region during each time segment.
+This is shown in Figure~\ref{power_vs_time}.
+Each point is plotted as a function of the center of the time segment
+over which the Fourier transform was applied to obtain that point.
+The axis labelled $T=64$ shows the scale for this length of time.
+
+Power as a function of time obtained from total flux and power maps
+is shown to check for possible contradictions between the two.
+Integrating flux over the AR
+before applying the Fourier transform
+has the potential effect of reducing or canceling signal from
+pixels whose intensity variations are out of phase.
+
+The reason for the apparent periodicity in the plots of 3-minute power with time
+is unclear.
+The calculations were repeated for power centered on the
+5-minute period and the 2-minute period,
+and resulted in the same trend,
+with the additional observation
+that the length of the central period
+scaled with the period in the plot of power vs. time.
+This pattern is attributed to computational effects.
+
+
+
 The amplitude of the small-scale variations in 3-minute
 power is higher for AIA 1700\AA{} almost everywhere with
 the exception of the main phase of the X-class flare.
@@ -261,7 +164,7 @@ the exception of the main phase of the X-class flare.
 %a running average over the length of time segment $T$
 %was computed from
 %the data obtained from summing the power maps,
-%and is shown in \myfig Figure~\ref{power_vs_time}.
+%and is shown in Figure~\ref{power_vs_time}.
 %This greatly smoothed the periodicity in the power,
 %but with further loss of temporal resolution.
 
@@ -289,7 +192,6 @@ as well, which would cause the plasma to cool at a slower rate.
 If the 3-minute power originated from the transition region rather than the
 upper photosphere, this may coincide with the levitation of hot chromospheric
 plasma upward into post-flare loops.
-\mynote{Source?}
 Although the emission from AIA 1700\AA{} is generally thought to originate
 in lower formation heights than emission from 1600\AA{},
 the latter spans a broader temperature range, and contains
@@ -297,21 +199,98 @@ emission from \ion{C}{4} line.
 Determination of the AIA 1600\AA{} formation height is more complicated
 during flares because the \ion{C}{4} is more likely to be contributing
 to the signal, and both channels may be sampling at deeper layers than
-they are thought to during non-flaring times. \mynote{Source.}
+they are thought to during non-flaring times.
 
 The persistence of the 3-minute power toward the end of the gradual phase
 in AIA 1700\AA{} is consistent with the results of the wavelet analysis
 carried out by \cite{Milligan2017}.
 
-\subsection{Subregions}
+\clearpage
+
 
 \begin{figure*}[htb!]\centering
-    \includegraphics[draft=false,width=0.80\textwidth]{preflare.pdf}\\
-    \includegraphics[draft=false,width=0.80\textwidth]{postflare.pdf}
+    \includegraphics[draft=false,width=0.48\textwidth]{aia1600big_image.pdf}
+    \includegraphics[draft=false,width=0.48\textwidth]{aia1700big_image.pdf}\\
+    \includegraphics[draft=false,width=0.48\textwidth]{aia1600big_map.pdf}
+    \includegraphics[draft=false,width=0.48\textwidth]{aia1700big_map.pdf}
     \caption{%
-        Power maps from AIA 1600\AA{} before and after the flare
-        overlaid with contours from HMI B$_{LOS}$ at $\pm$300 Gauss.
-        Boxes outline subregions of interest.
-        \label{subregions}}
+        Top row:
+        Post-flare images, shown as a composite product over
+        the time range shown, overlaid with contours showing the approximate
+        location of the $B_{LOS}$ at $\pm$300 Gauss.
+        Bottom rows: Spatial distribution of 3-minute power, obtained
+        by applying a pixel-by-pixel Fourier transform over the images
+        included in the top row.
+        The left column shows results from AIA 1600\AA{}, and
+        the right column shows results from AIA 1700\AA{}.
+        White and black contours represent positive and negative polarity,
+        respectively.
+    \label{contours}}
 \end{figure*}
 
+\begin{figure*}[htb!]\centering
+    \includegraphics[draft=false,width=0.9\textwidth]{aia1600before_20181204.pdf}
+    \includegraphics[draft=false,width=0.9\textwidth]{aia1700before_20181204.pdf}
+    \caption{%
+        Spatial distribution of 3-minute power before the X-class flare,
+        in log scale to bridge large contrasts.
+        Locations whose time segment included saturated pixels were set to zero.
+        \label{before}}
+\end{figure*}
+
+\begin{figure*}[htb!]\centering
+    \includegraphics[draft=false,width=0.9\textwidth]{aia1600during_20181204.pdf}
+    \includegraphics[draft=false,width=0.9\textwidth]{aia1700during_20181204.pdf}
+    \caption{%
+        Spatial distribution of 3-minute power during the X-class flare,
+        in log scale to bridge large contrasts.
+        Locations whose time segment included saturated pixels were set to zero.
+        \label{during}}
+\end{figure*}
+
+\begin{figure*}[htb!]\centering
+    \includegraphics[draft=false,width=0.9\textwidth]{aia1600after_20181204.pdf}
+    \includegraphics[draft=false,width=0.9\textwidth]{aia1700after_20181204.pdf}
+    \caption{%
+        Spatial distribution of 3-minute power after the X-class flare,
+        in log scale to bridge large contrasts.
+        Locations whose time segment included saturated pixels were set to zero.
+        \label{after}}
+\end{figure*}
+
+\begin{figure*}[htb!]\centering
+    \includegraphics[draft=false,width=1.00\textwidth]{time-3minpower_flux.pdf}
+    \includegraphics[draft=false,width=1.00\textwidth]{time-3minpower_maps.pdf}
+    \caption{%
+        Temporal evolution of the 3-minute power $P(t)$ in
+        AIA 1600\AA{} (green curve) and AIA 1700\AA{} (purple curve).
+        Top: $P(t)$ obtained by applying a Fourier transform to the
+        integrated flux from AR 11158.
+        Bottom: $P(t)$ per unsaturated pixel, obtained by summing over power maps.
+        Each point in time
+        %represents the sum (in x and y) of each power map and
+        is plotted as a function of the center
+        of the time segment over which the Fourier transform was applied to
+        obtain the power map over which the point was summed.
+        %The axis labeled $T = 64$ is scaled to show the
+        %length of each time segment relative to the full time series.
+        The vertical dashed lines mark the \textit{GOES} start, peak, and end
+        times of the flare at 01:44, 01:56, and 02:06 UT, respectively.
+        \label{power_vs_time}}
+\end{figure*}
+
+\begin{figure*}[htb!]\centering
+    \includegraphics[draft=false,width=0.9\textwidth]{wa.pdf}
+    \caption{
+        Time-frequency power plots from AIA 1600\AA{} (top panel) and AIA
+        1700\AA{} (bottom panel), obtained by applying a Fourier transform to
+        integrated emission from NOAA AR 11158 in discrete time increments of
+        64 frames ($\sim$25.6 minutes) each. The dashed horizontal line marks the
+        central frequency $\nu_{c}$ at $\sim$5.6 mHz, corresponding to a period
+        of 3 minutes. The dotted horizontal lines on either side of $\nu_{c}$
+        mark the edges of the frequency bandpass $\Delta\nu$ = 1 mHz. The
+        vertical lines mark the flare, start, peak, and end times as determined
+        by \textit{GOES}. The power is scaled logarithmically and over the same
+        range in both channels.
+        \label{wa}}
+\end{figure*}
