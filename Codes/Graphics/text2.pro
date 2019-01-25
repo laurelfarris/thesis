@@ -45,7 +45,7 @@ function TEXT2, tx, ty, str, _EXTRA=e
             ;  FILL_COLOR=
             ;font_style = 'Bold', $  0,1,2,3 = normal,bold,italic,bold italic
             ;font_name = ''
-            font_size=fontsize-1, $
+            font_size=fontsize, $
             ;  baseline=,
             ;  updir=
             ;  CLIP=1, ;; ignored unless /data is set

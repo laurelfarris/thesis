@@ -4,7 +4,7 @@
 ;- USEAGE:
 ;-   IDL> @restore_maps
 
-restore, '../aia1600map_2.sav'
+restore, '/solarstorm/laurel07/aia1600map_2.sav'
 A[0].map = map
-restore, '../aia1700map_2.sav'
+restore, '/solarstorm/laurel07/aia1700map_2.sav'
 A[1].map = map

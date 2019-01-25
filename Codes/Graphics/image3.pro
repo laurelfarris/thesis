@@ -17,9 +17,16 @@
 ;- that could do the same thing or similar, but one will always override
 ;- the other.
 
+
+
+;- 24 January 2019
+;-   Commented line adding letter (a) to title.
+;-   Was probably using that when imaging arrays of BDA power maps
+;-    a couple months ago.
+
 function IMAGE3_wrapper, $
     data, $
-    X, Y, $
+    XX, YY, $
     wx = wx, $
     ;wy = wy, $
     ;width = width, $
@@ -30,6 +37,7 @@ function IMAGE3_wrapper, $
     title=title, $
     buffer=buffer, $
     _EXTRA=e
+
 
 
     common defaults
@@ -56,12 +64,12 @@ function IMAGE3_wrapper, $
     if keyword_set(buffer) then $
         win = window(dimensions=[wx,wy]*dpi, buffer=1) $
     else $
-        win = window(dimensions=[wx,wy]*dpi, location=[500,0])
+        win = window(dimensions=[wx,wy]*dpi, location=[250,0])
 
     im = objarr(nn)
 
-    ;if not arg_present(X) then X = indgen(sz[0])
-    ;if not arg_present(Y) then Y = indgen(sz[1])
+    ;if not arg_present(XX) then XX = indgen(sz[0])
+    ;if not arg_present(YY) then YY = indgen(sz[1])
 
     for ii = 0, nn-1 do begin
         position = GET_POSITION( $
@@ -76,19 +84,21 @@ function IMAGE3_wrapper, $
 
         im[ii] = image2( $
             data[*,*,ii], $
-            X, Y, $
+            XX, YY, $
             /current, /device, $
-            position=position*dpi, $
+            ;position=position*dpi, $
+            layout = [1,1,1], $
+            margin = [0.6, 0.3, 0.5, 0.2]*dpi, $
             title = title[ii], $
             _EXTRA=e )
 
     endfor
-    add_letters_to_figure, target=im
+    ;txt = ADD_LETTERS_TO_FIGURE( target=im )
     return, im
 end
 
 
-function IMAGE3, data, X, Y, _EXTRA=e
+function IMAGE3, data, XX, YY, _EXTRA=e
 
     common defaults
 
@@ -108,12 +118,12 @@ function IMAGE3, data, X, Y, _EXTRA=e
 
 
     ;- X and Y should be optional...
-    if n_elements(X) eq 0 then X = indgen(sz[0])
-    if n_elements(Y) eq 0 then Y = indgen(sz[1])
+    if n_elements(XX) eq 0 then XX = indgen(sz[0])
+    if n_elements(YY) eq 0 then YY = indgen(sz[1])
 
     im = image3_wrapper( $
         data, $
-        X, Y, $
+        XX, YY, $
         buffer = 1, $
         rows = 1, $
         cols = 1, $

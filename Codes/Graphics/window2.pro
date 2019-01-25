@@ -20,7 +20,14 @@ function WINDOW2, $
     ; NOTE: window_names = variable with retrieved window name(s).
     ;         --> will be undefined if window is NULL
 
-    ; Create new window
+
+    ;- Thu Jan 24 15:23:34 MST 2019
+    ;- copied some of this from wa.pro
+    help, win ;; obj (not array), but still has one element [0],
+              ;; which is why the following if statement doesn't work.
+              ;;if n_elements(win) eq 0 then begin ...
+              ;; Trying to access win[1] will generate error.
+
     if win eq !NULL then begin
 
         if not keyword_set(wx) then wx = 8.5
@@ -53,6 +60,10 @@ function WINDOW2, $
         ;count = n_elements(window_names)
         ;print, 'Current window: "' , window_names, '"'
         win.erase
+
+        ; Maybe win needs to be an object, not an array, e.g.:
+        ; win[0].erase or (win[0]).erase
+
     endelse
     return, win
 end

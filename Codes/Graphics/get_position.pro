@@ -1,4 +1,4 @@
-; Last modified:    26 July 2018
+;- Last modified:    26 July 2018
 ;-
 ;-
 ;- Returns graphic position in the form [x1, y1, x2, y2], in inches.
@@ -132,8 +132,8 @@ function WRAP_GET_POSITION, $
         ;wx : wx, wy : wy }
         
 
-    return, struc
-    ;return, position
+    ;return, struc
+    return, position
 end
 
 

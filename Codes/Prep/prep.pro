@@ -64,7 +64,7 @@ function PREP, index, cube, cadence=cadence, inst=inst, channel=channel, $
         ;- the same code that crops and interpolates cube also generates
         ;-   variables 'time' and 'jd', which are needed for structure
         if (inst eq 'aia') then begin
-            restore, '../aia' + channel + 'aligned.sav'
+            restore, '/solarstorm/laurel07/aia' + channel + 'aligned.sav'
             name = 'AIA ' + channel + '$\AA$'
             ;- Standard AIA colors
             aia_lct, r, g, b, wave=fix(channel);, /load

@@ -11,7 +11,7 @@
 ;- 04 December 2018
 goto, start
 
-;restore, '../hmi_mag.sav'
+;restore, '/solarstorm/laurel07/hmi_mag.sav'
 ;hmi = crop_data( cube )
 
 common defaults

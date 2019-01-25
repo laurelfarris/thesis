@@ -34,8 +34,36 @@ function GET_IMAGE_DATA
     ;-   the structures for each instrument/channel.
 
 
-    instr = 'hmi'
+
+
+    ;- date_obs of image(s) to display
     display_time = '01:44'
+
+
+
+
+    ;- HMI --------
+
+    instr = 'hmi'
+
+;    ; HMI continuum
+;    channel = 'cont'
+;
+;    READ_MY_FITS, index, data, instr=instr, channel=channel, nodata=1, prepped=1 ;ind=[0]
+;    time = strmid(index.date_obs, 11, 5)
+;    ind = (where( time eq display_time ))[0]
+;
+;    READ_MY_FITS, index, data, instr=instr, channel=channel, nodata=0, prepped=1, ind=ind
+;    sz = size( data, /dimensions )
+;    X = (indgen(sz[0]) - index.crpix1) * index.cdelt1
+;    Y = (indgen(sz[1]) - index.crpix2) * index.cdelt2
+;    time = strmid(index.date_obs, 11, 11)
+;    hmi_cont = { $
+;        data : data, $
+;        X : X, $
+;        Y : Y, $
+;        extra : { title : 'HMI continuum' + time + ' UT' } }
+
 
     ; HMI B_LOS
     channel='mag'
@@ -51,33 +79,15 @@ function GET_IMAGE_DATA
     Y = (indgen(sz[1]) - index.crpix2) * index.cdelt2
     time = strmid(index.date_obs, 11, 11)
     hmi_BLOS = { $
-        data : data, $
-        ;data : data<300>(-300), $
+        ;data : data, $
+        data : data<300>(-300), $
         X : X, $
         Y : Y, $
         extra : { title : 'HMI B$_{LOS}$ ' + time + ' UT'} }
 
-    ; HMI continuum
-    channel = 'cont'
-
-    READ_MY_FITS, index, data, instr=instr, channel=channel, nodata=1, prepped=1 ;ind=[0]
-    time = strmid(index.date_obs, 11, 5)
-    ind = (where( time eq display_time ))[0]
-
-    READ_MY_FITS, index, data, instr=instr, channel=channel, nodata=0, prepped=1, ind=ind
-    sz = size( data, /dimensions )
-    X = (indgen(sz[0]) - index.crpix1) * index.cdelt1
-    Y = (indgen(sz[1]) - index.crpix2) * index.cdelt2
-    time = strmid(index.date_obs, 11, 11)
-    hmi_cont = { $
-        data : data, $
-        ;data : data<300>(-300), $
-        X : X, $
-        Y : Y, $
-        extra : { title : 'HMI continuum' + time + ' UT' } }
 
 
-    ;- AIA
+    ;- AIA --------
     instr='aia'
 
     ; AIA 1600
@@ -127,7 +137,11 @@ function GET_IMAGE_DATA
             title : 'AIA ' + channel + '$\AA$ ' + time + ' UT', $
             rgb_table : [[r],[g],[b]] } }
 
-    S = { aia1600:aia1600, aia1700:aia1700, hmi_BLOS:hmi_BLOS, hmi_cont:hmi_cont }
+    S = { $
+        aia1600:aia1600, $
+        aia1700:aia1700, $
+        ;hmi_cont:hmi_cont, $
+        hmi_BLOS:hmi_BLOS }
     return, S
 end
 
@@ -232,7 +246,7 @@ pro IMAGE_STRUCTURE, S
     endfor
 
     resolve_routine, 'save2', /either
-    file = 'color_images_20181023_02.pdf'
+    file = 'color_images'
     save2, file;, /add_timestamp
     return
 
@@ -255,10 +269,13 @@ pro IMAGE_STRUCTURE, S
 end
 
 
-pro image_AR
 
 ;- Return 2D full disk data and other info in structure S.
-S = GET_IMAGE_DATA()
+;S = GET_IMAGE_DATA()
+;print, ''
+;help, S
+;print, ''
+;stop
 
 ;- Use procedure to create the graphic.
 IMAGE_STRUCTURE, S

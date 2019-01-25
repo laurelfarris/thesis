@@ -35,11 +35,9 @@ goto, start
 ;    314, 386, 450, $
 ;    525, 600, 658 ]
 
-
-
 ;- Space
 ;- Center coords of each subregion (and hence, polygon)
-;-  --> need center for both polygons AND plots.
+;-  --> need center variable for both polygons AND plots.
 center = [ $
     [ 80, 120], $
     [115, 090], $
@@ -51,6 +49,23 @@ center = [ $
     [280, 180], $
     [367, 213], $
     [382, 193] ]
+
+
+start:;---------------------------------------------------------------------------------
+
+
+;- Thu Jan 24 11:36:54 MST 2019
+;-   Comparing P(t) plots for subregions.
+
+
+;- 1-3 plus 2 new subregions, one also in AR_2b, one in quiescent region.
+center = [ $
+    ;[ 80, 120], $ --> saturated
+    [128, 143], $
+    [115, 090], $
+    [115, 115], $
+    [142, 110], $
+    [110,  45] ]
 
 mm = (size(center,/dimensions))[1]
 
@@ -64,6 +79,9 @@ r = 20
 
 @color
 
+
+;foreach pp, pol do pp.delete
+
 pol = objarr(mm)
 for ii = 0, mm-1 do begin
     pol[ii] = POLYGON2( $
@@ -73,6 +91,7 @@ for ii = 0, mm-1 do begin
         thick=2.0, $
         color=color[ii] )
 endfor
+stop
 
 ;- Where target "im" is created in ML after .RUN image_powermaps...
 ;- This is way too sloppy. I like the idea of separating each graphic
@@ -189,10 +208,7 @@ for tt = 0, n_phases-1 do begin
     endforeach
 endfor
 
-
-
-
-start:;---------------------------------------------------------------------------------
+;---------------------------------------------------------------------------------
 
 plt = plot3( xdata, ydata, rows=1, cols=3, buffer=0 )
 

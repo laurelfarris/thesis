@@ -1,7 +1,9 @@
 ;-
-;- LAST MODIFIED: Thu Dec 20 06:33:23 MST 2018
+;- LAST MODIFIED:
+;-   Thu Dec 20 06:33:23 MST 2018
 ;-
 ;- PURPOSE:
+;-   Read AIA headers and restore .sav files (data)
 ;- INPUT:
 ;- KEYWORDS:
 ;- OUTPUT:
@@ -37,7 +39,8 @@ function POWER_IN_STRUC, struc
 end
 
 
-function PREP_AIA, index, cube, cadence=cadence, inst=inst, channel=channel
+function PREP_AIA, index, cube, cadence=cadence, inst=inst, channel=channel, $
+    ind=ind
 
     ; Read headers
     if n_elements(index) eq 0 then begin
@@ -62,7 +65,9 @@ function PREP_AIA, index, cube, cadence=cadence, inst=inst, channel=channel
     ;   Also get time and jd, which are needed for structure
     ;if n_elements(cube) eq 0 then begin
 
-    if (inst eq 'aia') then restore, '../aia' + channel + 'aligned.sav'
+    if (inst eq 'aia') then restore, $
+        '/solarstorm/laurel07/aia' + channel + 'aligned.sav'
+
 
     time = strmid(index.date_obs,11,11)
     jd = GET_JD( index.date_obs + 'Z' )

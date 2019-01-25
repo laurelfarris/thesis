@@ -3,17 +3,18 @@
 
 
 color = [ $
-    ;'blue', $
-    'medium blue', $
-    ;'red', $
-    'firebrick', $
-    ;'green', $
-    'dark green', $
+    'blue', $
+    ;'medium blue', $
+    'green', $
+    ;'dark green', $
+    'red', $
+    ;'firebrick', $
+    'orange', $
+    'purple', $
     'dark cyan', $
     'indian red', $
     'dark olive green', $
     'dark orange', $
-    'purple', $
     'dark orchid', $
     'lime green', $
     'deep sky blue', $

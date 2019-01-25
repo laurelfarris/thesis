@@ -1,3 +1,38 @@
+
+function WA_AVERAGE, flux, power, dz=dz
+    ; This is a little hacky... optimize later.
+
+    ;- Thu Jan 24 15:17:59 MST 2019
+    ;-   Merged wa_average.pro and wa.pro, then deleted wa_average.pro.
+    ;-   Not sure yet what I was even trying to do here...
+
+
+    x = n_elements(flux)
+    y = n_elements(power)
+    arr = fltarr( x, y )
+
+    ; Set sub-arrays of length dz equal to power[i]
+    ; step in x and y at the same time
+    for i = 0, y-1 do begin
+        arr[ i : i+dz-1, i ] = power[i]
+        ;arr[ 0 : dz-1, i ] = power[i]
+        ;arr[ *, i ] = shift(...)
+    endfor
+
+    ; Set new power to average(arr)
+    arr2 = mean( arr, dimension=2 )
+    N = n_elements(arr2)
+
+    i1 = dz-1
+    i2 = N-dz ; no need to subtract 1 because of inclusivity of indices.
+
+    new_power = arr2[i1:i2]
+    return, new_power
+end
+
+
+;----------------------------------------------------------------------------------
+
 ; Last modified:   14 July 2018
 
 ; Maybe could be called by power_maps in the intermost loop.
@@ -22,6 +57,11 @@ pro better
         power2[i] = mean( power[ i : i+dz-1 ] )
     endfor
     ; plot vs. t = [ (dz/2) : N - (dz/2) ]
+
+end
+
+
+arr = WA_AVERAGE( A.power_flux )
 
 end
 
@@ -60,22 +100,13 @@ end
 goto, start
 start:
 
-resolve_routine, 'oplot_horizontal_lines', /either
+;resolve_routine, 'oplot_horizontal_lines', /either
 resolve_routine, 'oplot_flare_lines', /either
-resolve_routine, 'oplot_vertical_lines', /either
+;resolve_routine, 'oplot_vertical_lines', /either
 
 wx = 7.5
 wy = 9.0
-win = GetWindows(/current)
-help, win ;; obj (not array), but still has one element [0],
-          ;; which is why the following if statement doesn't work.
-          ;;if n_elements(win) eq 0 then begin ...
-          ;; Trying to access win[1] will generate error.
-if win eq !NULL then begin
-    win = window( dimensions=[wx,wy]*dpi, buffer=1 )
-endif else begin
-    win.erase ; if errors here - win may need to be an object, not an array.
-endelse
+win = window( dimensions=[wx,wy]*dpi, buffer=1 )
 
 
 dz = 64  ; length of time segment (#images) over which to calculate FT

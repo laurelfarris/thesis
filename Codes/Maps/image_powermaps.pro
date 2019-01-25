@@ -20,6 +20,15 @@
 ;- IDL> .run image_powermaps
 ;- c_data = GET_CONTOUR_DATA( time[zz+(dz/2)], channel='mag' )
 ;- c = CONTOURS( c_data, target=im, channel='mag' )
+;-
+;-
+;- Thu Jan 24 12:21:51 MST 2019
+;-   TO DO: write so that IMAGE_POWERMAPS can be called without
+;-           defining H. Currently creates THREE structures, then
+;-           images one of them.
+
+
+
 
 function image_powermaps, struc, _EXTRA = e
 
@@ -61,26 +70,25 @@ zz = z_start
 ;- as first arg.
 
 ;- AIA intensity
-intensity = { $
-    imdata : mean(A[cc].data[*,*,[z_start:z_start+dz-1]], dim=3), $
+;intensity = { $
+;    imdata : mean(A[cc].data[*,*,[z_start:z_start+dz-1]], dim=3), $
     ;imdata : aia_intscale( data, wave=1600, exptime=1.0 ) ;exptime=A[cc].exptime ), $
-    title : A[cc].name + ' (' + A[cc].time[zz] + '-' + A[cc].time[zz+dz-1] + ' UT)', $
-    file : 'aia' + A[cc].channel + 'big_image' }
+;    title : A[cc].name + ' (' + A[cc].time[zz] + '-' + A[cc].time[zz+dz-1] + ' UT)', $
+;    file : 'aia' + A[cc].channel + 'big_image' }
+;im1 = IMAGE_POWERMAPS( intensity, rgb_table = A[cc].ct )
 
 ;- HMI
-hmi = { $
-    imdata : mean(H[0].data[*,*,[z_start:z_start+dz-1]], dim=3), $
-    title : H[0].name, $
-    file : 'hmi' + H[0].channel + 'big_image' }
+;hmi = { $
+;    imdata : mean(H[0].data[*,*,[z_start:z_start+dz-1]], dim=3), $
+;    title : H[0].name, $
+;    file : 'hmi' + H[0].channel + 'big_image' }
+;im = IMAGE_POWERMAPS( hmi, rgb_table = ??? )
 
 ;- Maps
 map = { $
     imdata : A[cc].map[*,*,z_start], $
     title : A[cc].name + ' 5.6 mHz (' + time[zz] + '-' + time[zz+dz-1] + ' UT)', $
     file : 'aia' + A[cc].channel + 'big_map' }
-
-;----------------------------------------------------------------------------------------
-;im1 = IMAGE_POWERMAPS( intensity, rgb_table = A[cc].ct )
 im = IMAGE_POWERMAPS( map, rgb_table = A[cc].ct )
 
 end

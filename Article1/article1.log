@@ -1,4 +1,4 @@
-This is pdfTeXk, Version 3.141592-1.40.3 (Web2C 7.5.6) (format=pdflatex 2015.11.14)  24 JAN 2019 00:21
+This is pdfTeXk, Version 3.141592-1.40.3 (Web2C 7.5.6) (format=pdflatex 2015.11.14)  24 JAN 2019 21:51
 entering extended mode
  %&-line parsing enabled.
 **article1
@@ -424,35 +424,35 @@ Package: soul 2003/11/17 v2.4 letterspacing/underlining (mf)
 \SOUL@uldp=\dimen138
 \SOUL@ulht=\dimen139
 )
-Package hyperref Info: Option `colorlinks' set `true' on input line 68.
+Package hyperref Info: Option `colorlinks' set `true' on input line 69.
 Class revtex4-1 Info: Unrecognized array package. Please update this document c
-lass! (Proceeding with fingers crossed.) on input line 71.
-Class revtex4-1 Info: Repairing hyperref 6.75r \href on input line 71.
+lass! (Proceeding with fingers crossed.) on input line 72.
+Class revtex4-1 Info: Repairing hyperref 6.75r \href on input line 72.
 Class revtex4-1 Info: Patching unrecognized longtable package. (Proceeding with
- fingers crossed) on input line 71.
-Class revtex4-1 Info: Robustifying \LaTeX's \boldmath command on input line 71.
+ fingers crossed) on input line 72.
+Class revtex4-1 Info: Robustifying \LaTeX's \boldmath command on input line 72.
 
-Class revtex4-1 Info: cite was not loaded (OK!) on input line 71.
-Class revtex4-1 Info: mcite was not loaded (OK!) on input line 71.
-Class revtex4-1 Info: multicol was not loaded (OK!) on input line 71.
+Class revtex4-1 Info: cite was not loaded (OK!) on input line 72.
+Class revtex4-1 Info: mcite was not loaded (OK!) on input line 72.
+Class revtex4-1 Info: multicol was not loaded (OK!) on input line 72.
  (./article1.aux)
 \openout1 = `article1.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 71.
-LaTeX Font Info:    ... okay on input line 71.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 71.
-LaTeX Font Info:    ... okay on input line 71.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 71.
-LaTeX Font Info:    ... okay on input line 71.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 71.
-LaTeX Font Info:    ... okay on input line 71.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 71.
-LaTeX Font Info:    ... okay on input line 71.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 71.
-LaTeX Font Info:    ... okay on input line 71.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 71.
-LaTeX Font Info:    ... okay on input line 71.
-Package hyperref Info: Link coloring ON on input line 71.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 72.
+LaTeX Font Info:    ... okay on input line 72.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 72.
+LaTeX Font Info:    ... okay on input line 72.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 72.
+LaTeX Font Info:    ... okay on input line 72.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 72.
+LaTeX Font Info:    ... okay on input line 72.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 72.
+LaTeX Font Info:    ... okay on input line 72.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 72.
+LaTeX Font Info:    ... okay on input line 72.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 72.
+LaTeX Font Info:    ... okay on input line 72.
+Package hyperref Info: Link coloring ON on input line 72.
 
 (/usr/share/texmf/tex/latex/hyperref/nameref.sty
 Package: nameref 2006/12/27 v2.28 Cross-referencing by name of section
@@ -462,20 +462,20 @@ Package: refcount 2006/02/20 v3.0 Data extraction from references (HO)
 )
 \c@section@level=\count156
 )
-LaTeX Info: Redefining \ref on input line 71.
-LaTeX Info: Redefining \pageref on input line 71.
+LaTeX Info: Redefining \ref on input line 72.
+LaTeX Info: Redefining \pageref on input line 72.
  (./abstract.tex)
-LaTeX Font Info:    Try loading font information for U+lasy on input line 102.
+LaTeX Font Info:    Try loading font information for U+lasy on input line 103.
 
 (/usr/share/texmf/tex/latex/base/ulasy.fd
 File: ulasy.fd 1998/08/17 v2.2e LaTeX symbol font definitions
 )
-LaTeX Font Info:    Try loading font information for U+msa on input line 102.
+LaTeX Font Info:    Try loading font information for U+msa on input line 103.
 
 (/usr/share/texmf/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2002/01/19 v2.2g AMS font definitions
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 102.
+LaTeX Font Info:    Try loading font information for U+msb on input line 103.
 
 (/usr/share/texmf/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2002/01/19 v2.2g AMS font definitions
@@ -494,133 +494,149 @@ LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10> not available
 File: $HOME/Dropbox/Figures/lc.pdf Graphic file (type pdf)
 
 <use $HOME/Dropbox/Figures/lc.pdf>
-<$HOME/Dropbox/Figures/lc_goes.pdf, id=98, 578.16pt x 252.945pt>
-File: $HOME/Dropbox/Figures/lc_goes.pdf Graphic file (type pdf)
+<$HOME/Figures/lc_goes_20190124.pdf, id=98, 578.16pt x 252.945pt>
+File: $HOME/Figures/lc_goes_20190124.pdf Graphic file (type pdf)
 
-<use $HOME/Dropbox/Figures/lc_goes.pdf>
+<use $HOME/Figures/lc_goes_20190124.pdf>
 <$HOME/Dropbox/Figures/images.pdf, id=100, 578.16pt x 361.35pt>
 File: $HOME/Dropbox/Figures/images.pdf Graphic file (type pdf)
 
-<use $HOME/Dropbox/Figures/images.pdf>) [3] [4 </home/users/laurel07/Dropbox/Fi
-gures/lc.pdf> </home/users/laurel07/Dropbox/Figures/lc_goes.pdf>]
+<use $HOME/Dropbox/Figures/images.pdf>
+<$HOME/Figures/hmi_label_sunspots_20190124.pdf, id=101, 328.22626pt x 226.59656
+pt>
+File: $HOME/Figures/hmi_label_sunspots_20190124.pdf Graphic file (type pdf)
+ <use $HOME/Figures/hmi_label_sunspots_20190124.pdf>
+Overfull \hbox (14.29219pt too wide) in paragraph at lines 105--106
+ [][] 
+ []
 
-LaTeX Warning: A float is stuck (cannot be placed) on input line 110.
+) [3] [4 </home/users/laurel07/Dropbox/Figures/lc.pdf> </home/users/laurel07/Fi
+gures/lc_goes_20190124.pdf>]
+
+LaTeX Warning: A float is stuck (cannot be placed) on input line 111.
 
 
 Class revtex4-1 Warning: Deferred float stuck during \clearpage processing.
 
-[5 </home/users/laurel07/Dropbox/Figures/images.pdf>] (./analysis.tex) [6]
-(./results.tex [7] [8]
-<$HOME/Dropbox/Figures/aia1600big_image.pdf, id=209, 289.08pt x 224.33812pt>
+[5 </home/users/laurel07/Dropbox/Figures/images.pdf>]
+
+LaTeX Warning: A float is stuck (cannot be placed) on input line 111.
+
+
+Class revtex4-1 Warning: Deferred float stuck during \clearpage processing.
+
+[6 </home/users/laurel07/Figures/hmi_label_sunspots_20190124.pdf>]
+(./analysis.tex) [7] (./results.tex [8] [9]
+<$HOME/Dropbox/Figures/aia1600big_image.pdf, id=222, 289.08pt x 224.33812pt>
 File: $HOME/Dropbox/Figures/aia1600big_image.pdf Graphic file (type pdf)
 
 <use $HOME/Dropbox/Figures/aia1600big_image.pdf>
-<$HOME/Dropbox/Figures/aia1700big_image.pdf, id=210, 289.08pt x 224.33812pt>
+<$HOME/Dropbox/Figures/aia1700big_image.pdf, id=223, 289.08pt x 224.33812pt>
 File: $HOME/Dropbox/Figures/aia1700big_image.pdf Graphic file (type pdf)
 
 <use $HOME/Dropbox/Figures/aia1700big_image.pdf>
-<$HOME/Dropbox/Figures/aia1600big_map.pdf, id=211, 289.08pt x 224.33812pt>
+<$HOME/Dropbox/Figures/aia1600big_map.pdf, id=224, 289.08pt x 224.33812pt>
 File: $HOME/Dropbox/Figures/aia1600big_map.pdf Graphic file (type pdf)
 
 <use $HOME/Dropbox/Figures/aia1600big_map.pdf>
-<$HOME/Dropbox/Figures/aia1700big_map.pdf, id=212, 289.08pt x 224.33812pt>
+<$HOME/Dropbox/Figures/aia1700big_map.pdf, id=225, 289.08pt x 224.33812pt>
 File: $HOME/Dropbox/Figures/aia1700big_map.pdf Graphic file (type pdf)
 
 <use $HOME/Dropbox/Figures/aia1700big_map.pdf>
-<$HOME/Dropbox/Figures/Temp/aia1600before_20181204.pdf, id=213, 578.16pt x 356.
+<$HOME/Dropbox/Figures/Temp/aia1600before_20181204.pdf, id=226, 578.16pt x 356.
 0803pt>
 File: $HOME/Dropbox/Figures/Temp/aia1600before_20181204.pdf Graphic file (type 
 pdf)
  <use $HOME/Dropbox/Figures/Temp/aia1600before_20181204.pdf>
-<$HOME/Dropbox/Figures/Temp/aia1700before_20181204.pdf, id=214, 578.16pt x 356.
+<$HOME/Dropbox/Figures/Temp/aia1700before_20181204.pdf, id=227, 578.16pt x 356.
 0803pt>
 File: $HOME/Dropbox/Figures/Temp/aia1700before_20181204.pdf Graphic file (type 
 pdf)
  <use $HOME/Dropbox/Figures/Temp/aia1700before_20181204.pdf>
-<$HOME/Dropbox/Figures/Temp/aia1600during_20181204.pdf, id=215, 578.16pt x 356.
+<$HOME/Dropbox/Figures/Temp/aia1600during_20181204.pdf, id=228, 578.16pt x 356.
 0803pt>
 File: $HOME/Dropbox/Figures/Temp/aia1600during_20181204.pdf Graphic file (type 
 pdf)
  <use $HOME/Dropbox/Figures/Temp/aia1600during_20181204.pdf>
-<$HOME/Dropbox/Figures/Temp/aia1700during_20181204.pdf, id=216, 578.16pt x 356.
+<$HOME/Dropbox/Figures/Temp/aia1700during_20181204.pdf, id=229, 578.16pt x 356.
 0803pt>
 File: $HOME/Dropbox/Figures/Temp/aia1700during_20181204.pdf Graphic file (type 
 pdf)
  <use $HOME/Dropbox/Figures/Temp/aia1700during_20181204.pdf>
-<$HOME/Dropbox/Figures/Temp/aia1600after_20181204.pdf, id=217, 578.16pt x 356.0
+<$HOME/Dropbox/Figures/Temp/aia1600after_20181204.pdf, id=230, 578.16pt x 356.0
 803pt>
 File: $HOME/Dropbox/Figures/Temp/aia1600after_20181204.pdf Graphic file (type p
 df)
  <use $HOME/Dropbox/Figures/Temp/aia1600after_20181204.pdf>
-<$HOME/Dropbox/Figures/Temp/aia1700after_20181204.pdf, id=218, 578.16pt x 356.0
+<$HOME/Dropbox/Figures/Temp/aia1700after_20181204.pdf, id=231, 578.16pt x 356.0
 803pt>
 File: $HOME/Dropbox/Figures/Temp/aia1700after_20181204.pdf Graphic file (type p
 df)
  <use $HOME/Dropbox/Figures/Temp/aia1700after_20181204.pdf>
-<$HOME/Dropbox/Figures/time-3minpower_flux.pdf, id=219, 578.16pt x 216.81pt>
+<$HOME/Dropbox/Figures/time-3minpower_flux.pdf, id=232, 578.16pt x 216.81pt>
 File: $HOME/Dropbox/Figures/time-3minpower_flux.pdf Graphic file (type pdf)
 
 <use $HOME/Dropbox/Figures/time-3minpower_flux.pdf>
-<$HOME/Dropbox/Figures/time-3minpower_maps.pdf, id=220, 578.16pt x 216.81pt>
+<$HOME/Dropbox/Figures/time-3minpower_maps.pdf, id=233, 578.16pt x 216.81pt>
 File: $HOME/Dropbox/Figures/time-3minpower_maps.pdf Graphic file (type pdf)
 
 <use $HOME/Dropbox/Figures/time-3minpower_maps.pdf>
-<$HOME/Dropbox/Figures/wa.pdf, id=221, 542.025pt x 650.43pt>
+<$HOME/Dropbox/Figures/wa.pdf, id=234, 542.025pt x 650.43pt>
 File: $HOME/Dropbox/Figures/wa.pdf Graphic file (type pdf)
 
-<use $HOME/Dropbox/Figures/wa.pdf>) [9] [10 </home/users/laurel07/Dropbox/Figur
-es/aia1600big_image.pdf> </home/users/laurel07/Dropbox/Figures/aia1700big_image
-.pdf> </home/users/laurel07/Dropbox/Figures/aia1600big_map.pdf> </home/users/la
-urel07/Dropbox/Figures/aia1700big_map.pdf>]
+<use $HOME/Dropbox/Figures/wa.pdf>) [10] [11 </home/users/laurel07/Dropbox/Figu
+res/aia1600big_image.pdf> </home/users/laurel07/Dropbox/Figures/aia1700big_imag
+e.pdf> </home/users/laurel07/Dropbox/Figures/aia1600big_map.pdf> </home/users/l
+aurel07/Dropbox/Figures/aia1700big_map.pdf>]
 
-LaTeX Warning: A float is stuck (cannot be placed) on input line 118.
+LaTeX Warning: A float is stuck (cannot be placed) on input line 119.
 
 
 Class revtex4-1 Warning: Deferred float stuck during \clearpage processing.
 
-[11 </home/users/laurel07/Dropbox/Figures/Temp/aia1600before_20181204.pdf> </ho
+[12 </home/users/laurel07/Dropbox/Figures/Temp/aia1600before_20181204.pdf> </ho
 me/users/laurel07/Dropbox/Figures/Temp/aia1700before_20181204.pdf>]
 
-LaTeX Warning: A float is stuck (cannot be placed) on input line 118.
+LaTeX Warning: A float is stuck (cannot be placed) on input line 119.
 
 
 Class revtex4-1 Warning: Deferred float stuck during \clearpage processing.
 
-[12 </home/users/laurel07/Dropbox/Figures/Temp/aia1600during_20181204.pdf> </ho
+[13 </home/users/laurel07/Dropbox/Figures/Temp/aia1600during_20181204.pdf> </ho
 me/users/laurel07/Dropbox/Figures/Temp/aia1700during_20181204.pdf>]
 
-LaTeX Warning: A float is stuck (cannot be placed) on input line 118.
+LaTeX Warning: A float is stuck (cannot be placed) on input line 119.
 
 
 Class revtex4-1 Warning: Deferred float stuck during \clearpage processing.
 
-[13 </home/users/laurel07/Dropbox/Figures/Temp/aia1600after_20181204.pdf> </hom
+[14 </home/users/laurel07/Dropbox/Figures/Temp/aia1600after_20181204.pdf> </hom
 e/users/laurel07/Dropbox/Figures/Temp/aia1700after_20181204.pdf>]
 
-LaTeX Warning: A float is stuck (cannot be placed) on input line 118.
+LaTeX Warning: A float is stuck (cannot be placed) on input line 119.
 
 
 Class revtex4-1 Warning: Deferred float stuck during \clearpage processing.
 
-[14 </home/users/laurel07/Dropbox/Figures/time-3minpower_flux.pdf> </home/users
+[15 </home/users/laurel07/Dropbox/Figures/time-3minpower_flux.pdf> </home/users
 /laurel07/Dropbox/Figures/time-3minpower_maps.pdf>]
 
-LaTeX Warning: A float is stuck (cannot be placed) on input line 118.
+LaTeX Warning: A float is stuck (cannot be placed) on input line 119.
 
 
 Class revtex4-1 Warning: Deferred float stuck during \clearpage processing.
 
-[15 </home/users/laurel07/Dropbox/Figures/wa.pdf>] (./discussion.tex
+[16 </home/users/laurel07/Dropbox/Figures/wa.pdf>] (./discussion.tex
 
 LaTeX Font Warning: Font shape `OT1/cmss/m/it' in size <9> not available
 (Font)              Font shape `OT1/cmss/m/sl' tried instead on input line 20.
 
-) [16] (./conclusions.tex) (./article1.bbl [17]) [18] (./article1.aux) ) 
+) [17] (./conclusions.tex) (./article1.bbl [18]) [19] (./article1.aux) ) 
 Here is how much of TeX's memory you used:
- 7152 strings out of 256214
- 93428 string characters out of 1916999
- 220308 words of memory out of 1500000
- 10223 multiletter control sequences out of 10000+200000
+ 7174 strings out of 256214
+ 93882 string characters out of 1916999
+ 220425 words of memory out of 1500000
+ 10232 multiletter control sequences out of 10000+200000
  15385 words of font info for 60 fonts, out of 1200000 for 2000
  645 hyphenation exceptions out of 8191
  32i,6n,37p,1049b,375s stack positions out of 5000i,500n,6000p,200000b,15000s
@@ -639,9 +655,9 @@ uesky/cm/cmsy10.pfb></usr/share/texmf/fonts/type1/bluesky/cm/cmsy7.pfb></usr/sh
 are/texmf/fonts/type1/bluesky/cm/cmsy9.pfb></usr/share/texmf/fonts/type1/bluesk
 y/cm/cmti10.pfb></usr/share/texmf/fonts/type1/bluesky/cm/cmti8.pfb></usr/share/
 texmf/fonts/type1/bluesky/cm/cmti9.pfb>
-Output written on article1.pdf (18 pages, 14077734 bytes).
+Output written on article1.pdf (19 pages, 14233108 bytes).
 PDF statistics:
- 564 PDF objects out of 1000 (max. 8388607)
- 71 named destinations out of 1000 (max. 131072)
- 97 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 580 PDF objects out of 1000 (max. 8388607)
+ 73 named destinations out of 1000 (max. 131072)
+ 102 words of extra memory for PDF output out of 10000 (max. 10000000)
 

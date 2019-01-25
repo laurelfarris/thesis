@@ -25,10 +25,14 @@ pro OPLOT_FLARE_LINES, $
 
 
 
+
+
     if keyword_set(goes) then begin
-        ;- For plotting GOES data:
-        x_indices = fltarr(3)
+        ;- GOES light curves:
+
         flare_times = '15-Feb-2011 ' + [ '01:44:00', '01:56:00', '02:06:00' ]
+        nn = n_elements(flare_times)
+        x_indices = fltarr(nn)
 
         ;- Hardcoded this on the fly, but should be user-defined/input value.
         utbase = '15-Feb-2011 00:00:01.725'
@@ -37,52 +41,54 @@ pro OPLOT_FLARE_LINES, $
         ;-   (needed for int2secarr routine).
         ex2int, anytim2ex(utbase), msod_ref, ds79_ref
 
-        for ii = 0, 2 do begin
+        for ii = 0, nn-1 do begin
             ex2int, anytim2ex(flare_times[ii]), msod, ds79
             x_indices[ii] = int2secarr( [msod,ds79], [msod_ref,ds79_ref] )
         endfor
-    endif
+        ;- Get x_indices
 
 
-    ;- AIA light curves
+    endif else begin
+        ;- AIA light curves
 
-    flare_times = [ '01:44', '01:56', '02:06' ]
+        ;- My guess is that the codes for plotting AIA LCs have
+        ;-   an input value for t_obs...
+
+
+        flare_times = [ '01:44', '01:56', '02:06' ]
+        nn = n_elements(flare_times)
+
+        ;- Having user enter time already cropped to hh:mm vs.
+        ;-  doing it in subroutine? Gets confusing when sometimes this is
+        ;-  done at ML and sometimes it isn't...
+
+        ;- Actually, user could enter time in either form.
+        ;- If time is already cropped, then applying strmid again
+        ;-  won't change anything.
+
+        time = strmid( t_obs, 0, 5 ) ;--> just in case user is feeling lazy?
+        ;time = t_obs
+
+        x_indices = intarr(nn)
+
+        for ii = 0, nn-1 do $
+            x_indices[ii] = (where( time eq flare_times[ii] ))[0]
+    endelse
+
+
+
+    ;- Sloppy...
+    flare_times = [ '01:44', '01:56', '02:06' ] ; copied from AIA block above..
+               ;- want names to be consistent, whether GOES or AIA.
     name = flare_times + [ ' UT (start)', ' UT (peak)', ' UT (end)' ]
-    nn = n_elements(flare_times)
 
 
-
-
-    ;- Having user enter time already cropped to hh:mm vs.
-    ;-  doing it in subroutine? Gets confusing when sometimes this is
-    ;-  done at ML and sometimes it isn't...
-
-    ;- Actually, user could enter time in either form.
-    ;- If time is already cropped, then applying strmid again
-    ;-  won't change anything.
-
-    time = strmid( t_obs, 0, 5 ) ;--> just in case user is feeling lazy?
-    ;time = t_obs
-
-
-
-
-    x_indices = intarr(nn)
-
-    for ii = 0, nn-1 do $
-        x_indices[ii] = (where( time eq flare_times[ii] ))[0]
-
-    ;- Not sure what these lines are for... can probably delete.
-    ;Result = JULDAY( Month, Day, Year, Hour, Minute, Second)
-    ;win = GetWindows( /current, NAMES=window_names )
-    ;win.Select, /all
-    ;result = win.GetSelect()
-
-    plt[0].GetData, xx, yy ;- only needed when xdata = jd... I think.
+    ;plt[0].GetData, xx, yy ;- only needed when xdata = jd... I think.
     yrange = plt[0].yrange
+
+
     vert = objarr(nn)
     linestyle = [1,2,4]
-
     foreach vx, x_indices, jj do begin
         vert[jj] = plot( $
             ;[ xx[vx], xx[vx] ], $

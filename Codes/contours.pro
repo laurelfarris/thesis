@@ -52,7 +52,7 @@ function GET_CONTOUR_DATA, time, channel=channel
     ind = (where( hmi_time eq strmid(time,0,5) ))[0]
 
     ;- Returns "cube" [750, 500, 398], already centered on AR
-    restore, '../hmi_' + channel + '.sav'
+    restore, '/solarstorm/laurel07/hmi_' + channel + '.sav'
 
     ; Crop data to 500x330 (default dimensions in crop_data.pro)
     hmi = CROP_DATA( cube, offset=[-15,0] )
@@ -169,7 +169,8 @@ end
 ;-  generate image object 'im'
 
 ;- 2. Get contour data
-c_data = GET_CONTOUR_DATA( time[zz+(dz/2)], channel='mag' )
+if n_elements(c_data) eq 0 then $
+    c_data = GET_CONTOUR_DATA( time[zz+(dz/2)], channel='mag' )
 ;- NOTE: get_hmi.pro uses time to get closest hmi date_obs,
 ;-        so the correct HMI is being used (at least I hope so...)
 ;- Also have the option of retrieving c_data a different way, e.g., if

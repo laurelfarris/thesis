@@ -8,8 +8,13 @@
 ;- KEYWORDS:
 ;- OUTPUT:
 ;- TO DO:
+;-
+;- Thu Jan 24 15:35:04 MST 2019
+;-   Added "ind" keyword to set z-indices if only subset is desired.
+;-
 
-function PREP_HMI, index, cube, cadence=cadence, inst=inst, channel=channel
+function PREP_HMI, index, cube, cadence=cadence, inst=inst, channel=channel, $
+    ind=ind
 
     ; Read headers
     if n_elements(index) eq 0 then begin
@@ -18,7 +23,8 @@ function PREP_HMI, index, cube, cadence=cadence, inst=inst, channel=channel
             inst=inst, $
             channel=channel, $
             nodata=1, $
-            prepped=1
+            prepped=1, $
+            ind=ind
     endif
 
     print, 'Reading header for level ', $
@@ -27,8 +33,8 @@ function PREP_HMI, index, cube, cadence=cadence, inst=inst, channel=channel
     ; Restore data
     ; "../hmi_mag.sav"  --> variable "cube", dimensions [750,500,400]
     ; "../hmi_cont.sav" --> variable "cube", dimensions [750,500,398]
-    restore, '../hmi_' + channel + '.sav'
-    restore, '../' + inst + '_' + channel + '.sav'
+    restore, '/solarstorm/laurel07/hmi_' + channel + '.sav'
+    restore, '/solarstorm/laurel07/' + inst + '_' + channel + '.sav'
 
     ; Interpolate to get missing data and corresponding timestamp,
     ;   then crop data to pixel dimensions [500,330,*].
