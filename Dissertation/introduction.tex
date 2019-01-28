@@ -1,0 +1,182 @@
+\section{Introduction}
+
+\paragraph{``Overview'' from proposal:}
+
+Embedded in the main lightcurve of a solar flare are low amplitude, high
+frequency oscillations called quasi-periodic pulsations (QPPs). The
+chromosphere persistently oscillates at its acoustic cutoff frequency of 3
+minutes, in both quiet and active regions. A recent study of QPPs revealed an
+enhancement in the 3-minute oscillatory power in thermal emission during the
+main phase of a flare \citep{Milligan2017}. Here I propose to probe the
+oscillatory response of the chromosphere to flares in greater detail by
+addressing the following science questions:
+\begin{enumerate}
+    \item In which part(s) of the active region does the enhancement of the
+        3-minute power occur? Is it global or local?
+    \item When does the enhancement of the 3-minute power occur, relative to
+        the phases of flare development and evolution? At what rate does the
+        oscillatory power increase, and how long does the enhancement last?
+    \item How do chromospheric oscillations in velocity compare to oscillations
+        in intensity during flares?
+    \item Do flares of different sizes show the same oscillatory behavior in
+        the chromosphere?
+\end{enumerate}
+
+The current hypothesis is that the oscillations reflect the natural
+response of the chromosphere to a disturbance, rather than a reflection of
+the periodicity of the disturbance itself.
+The questions above will be addressed by a dissertation project,
+to be carried out in three phases:
+\begin{enumerate}%[label=\Roman*. ]
+    \item \textbf{Reproduce and augment the results from \cite{Milligan2017} by
+        studying the spatial and temporal localization of the 3-minute power
+        during the 2011 February 15 flare.}
+        Data from the Helioseismic and Magnetic Imager (HMI) and from the
+        Atmospheric Imaging Assembly (AIA), two instruments on board the
+        \textit{Solar Dynamics Observatory (SDO)},
+        will be analyzed, using the techniques of Fast Fourier Transforms (FFTs)
+        and wavelet analysis.
+        The preliminary results will then be expanded by
+        isolating distinct components of the active regions to constrain the
+        spatial variation and extent of the oscillatory reponse. Finally, a
+        longer data set will be used to include time before and after the
+        flare.
+    \item \textbf{Expand the methodology to include analysis of spectroscopic data from
+        the \textit{Interface Region Imaging Spectrograph (IRIS)}.}
+        The spatial
+        and spectroscopic capabilities of \textit{IRIS} were designed to probe
+        the chromosphere and transition region and address questions similar to
+        those put forth here. Previous studies have found chromospheric
+        oscillations to be more prominent in velocity than in intensity, and
+        the inclusion of spectroscopic data from \textit{IRIS} in Phase II will
+        benefit this study by removing some of the ambiguities present in
+        intensity images (such as those with multiple spectral lines in a
+        single bandpass), and providing information from multiple heights in
+        the lower atmosphere.
+    \item \textbf{Apply the techniques from the previous two phases to multiple flares
+        with a range of sizes.}
+        The methodology developed in Phases I and II
+        will be used to study multiple flares of various sizes in Phase III.
+        The primary goal of this phase is to go beyond analysis of a single
+        event and create a more general contribution to the flare model as a
+        whole.
+\end{enumerate}
+
+%The results from the time period before each flare begins will be
+%of particular interest, with the opportunity to contribute to models for space
+%weather prediction.
+%
+%
+%During the course of this dissertation I will learn to use spectroscopy and
+%imaging together, and continue to develop useful scientific and computational
+%skills for which there are many applications beyond this project alone.
+%
+%the enhancement
+%of the 3-minute oscillations appears to be concentrated in the center of
+%sunspot umbrae, though not in all sunspots contained in the active region.
+
+%\S\ref{background}
+%provides background information on flares and the chromosphere in general,
+%followed by a description of the relevant physics in \S\ref{physics}.
+%Plans for carrying out the steps listed above, along with some preliminary
+%results and predicted outcomes, are described in
+%\S\ref{project}.
+%A dissertation timeline is presented in
+%\S\ref{timeline}.
+
+\clearpage
+
+\begin{framed}
+\paragraph{single\_page\_freewriting.gdoc}
+
+    \mynote{Copied from proposal, probably needs some revising.}
+
+The overarching theme of my research is the investigation of the role of the
+chromosphere in flares. The field of solar physics and space weather is unique
+in that is has a dirct impact on humans and our way of life.
+\begin{enumerate}
+    \item How does understanding details of the flare process help with space
+        weather prediction?
+    \item What is some common work done to contribute to learning about flares?
+        Most work has focused on the corona
+    \item Importance of chrom in general (maybe\ldots seems like this just ends
+        up being a bullet underneath flares…)
+\end{enumerate}
+
+\begin{itemize}
+    \item Importance of chromosphere's role in flares:
+        \begin{itemize}
+            \item Light we see is emitted from this layer
+            \item Why are there gaps? Chromosphere can be hard to study\ldots
+        \end{itemize}
+\end{itemize}
+
+\mynote{From current paper (09 October 2018):
+Flare dynamics can be probed via
+quasi-periodic pulsations (QPPs), low-amplitude variations
+that have been observed in flare emission
+during all phases and across all wavelength
+regimes, with periods between 1 and 10 minutes.
+The cause of long-period
+($\gtrsim$ 1 minute) QPPs
+is generally thought to be one of two possible mechanisms.
+One is that they reflect the periodic buildup and release of magnetic
+energy through cycles of magnetic reconnection.
+The other is that they are triggered externally by the surrounding plasma.
+Many studies of QPPs have concentrated
+on non-thermal emission, but there are
+few reports of QPPs in thermal emission from the chromosphere
+associated with flares.}
+
+Flare emission contains QPPs, small scale oscillations within the main light
+curve. Most flare studies have been of non-thermal emission at the extreme ends
+of the spectrum (radio \& x-ray). Chromospheric oscillations are revealed in
+thermal emission, of which not many studies have been carries out. A recent
+study of a solar flare (Milligan et al. 2017) revealed an enhancement of the
+3-minute oscillatory power in thermal emission from the chromosphere, but not
+in x-ray emission. This indicates that the 3mOs were not excited according to
+the rate of energy injection, but rather that this was a response of the
+chromosphere at its own natural frequency, or cutoff frequency.
+\begin{enumerate}
+    \item Motivation:
+        \begin{itemize}
+            \item ``Few reports of QPPs in thermal emission in response to flare
+                energization''.
+            \item 3mOs do not depend on rate of energy injection, but may
+                transport a significant amount of mechanical energy, which
+                needs to be included in the flare energy budget.
+        \end{itemize}
+    \item Methods:
+        \begin{itemize}
+            \item Lyman alpha emission
+            \item X-rays
+            \item AIA 1600, 1700
+        \end{itemize}
+    \item Main results/conclusions:
+        \begin{itemize}
+            \item 3m Enhancement in thermal emission, but not X-rays\\
+                $\rightarrow$ Not signature of flare energy, but natural
+                response of chromosphere
+            \item Flare injected energy, causing chromosphere to oscillate at
+                the cutoff frequency
+        \end{itemize}
+\end{enumerate}
+
+For my project, I will probe the spatial dependence and temporal patterns of
+the oscillatory behavior of the chromosphere, using both images and spectra.
+I will then apply the developed methodology to multiple flares to compare
+results for flares of various sizes, contributing to the general field of
+solar flares and space weather prediction.
+
+\mynote[Thu Oct 18 16:11:32 EDT 2018]{
+    From Monsue2016:
+    ``\ldots H$\alpha$ observations of chromospheric
+    oscillations in the p-mode band can provide information about the physical
+    processes occurring in flaring regions. In particular,
+    \textbf{variations in the
+    oscillatory power as a function of frequency, spatial position, and time can be
+    used to probe energy transport at different heights within a flare.''}
+    (emphasis added).
+}
+
+\end{framed}
