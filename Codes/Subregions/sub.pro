@@ -67,10 +67,22 @@ center = [ $
     [142, 110], $
     [110,  45] ]
 
-mm = (size(center,/dimensions))[1]
 
 ;- length of one side of square polygon.
 r = 20
+;-----------
+;- 27 January 2019
+
+center = [ $
+    [373,217], $
+    [390,215] ]
+r = 5
+
+;---------
+
+
+
+mm = (size(center,/dimensions))[1]
 
 ;pol = POLYGON_SUBREGIONS( center, target=im, width=r, color=color )
 ;- I'm guessing there was some intermediate routine that would

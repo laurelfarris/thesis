@@ -1,12 +1,6 @@
 
 ; Last modified:    28 November 2018
 
-; Name of file = name of routine called by user.
-; x and y titles both need to be optional somehow...
-; ytitle changes depending on whether plotting values that are
-; normalized, absolute, shifted, exptime-corrected, etc.
-
-
 ;- 02 November 2018 (from Enote on subroutines):
 ;- Need to be able to call LC routine for any length of time (full data set, small
 ;- flares before and after, etc. Label ticks outside of main subroutine? Takes
@@ -21,11 +15,17 @@
 ;-   m: array of data points for each LC, power spectrum, whatev.
 ;-   n: # curves
 
-
+;-------------------------
 ;- 16 November 2018
 ;- color and name are currently required input.
 ;- Wrote this for a specific task, so it's okay for now.
 ;- Not likely to be plotting light curves without assigning names or colors.
+
+;- 25 January 2019
+;-   I assume that was before I added the wrapper... currently looks like
+;-   string array of colors can be defined using @color, and
+;-   NAME defaults to an array of empty strings, one for each plot.
+;-------------------------
 
 ;- TO DO:
 ;-   If x dimensions don't match y, replicate the array over dimension=2 so
@@ -45,8 +45,6 @@ function WRAP_BATCH_PLOT, $
     name=name, $
     linestyle = linestyle, $
     thick = thick, $
-;    xtitle=xtitle, $
-;    ytitle=ytitle, $
     buffer=buffer, $
     _EXTRA = e
 
@@ -145,34 +143,18 @@ end
 
 function BATCH_PLOT, $
     xdata, ydata, $
-    ;color=color, $
-    ;name=name, $
-    ;xtitle=xtitle, $
-    ;ytitle=ytitle, $
-    ;buffer=buffer, $
     _EXTRA = e
 
 
     sz = size(ydata, /dimensions)
+    ;- If ydata only contains one plot (no oplots):
     if n_elements(sz) eq 1 then begin
         ydata = reform(ydata, sz[0], 1, /overwrite)
         xdata = reform(xdata, sz[0], 1, /overwrite)
         sz = size(ydata, /dimensions)
     endif
 
-    color = [ $
-        'black', $
-        'blue', $
-        'red', $
-        'lime green', $
-        'deep sky blue', $
-        'dark orange', $
-        'dark cyan', $
-        'dark orchid', $
-        'sienna', $
-        'dim gray', $
-        'hot pink', $
-        '' ]
+    @color
 
     name = strarr(sz[1])
     linestyle = make_array( sz[1], value='-', /string )
@@ -182,8 +164,6 @@ function BATCH_PLOT, $
         xdata, ydata, $
         wx = 8.0, $
         wy = 3.0, $
-        ;xtitle = " ", $
-        ;ytitle = " ", $
         ;overplot = 0, $
         name = name, $
         color = color, $

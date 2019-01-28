@@ -1,7 +1,6 @@
 
 ;- 17 December 2018
 ;- Mess of code at the bottom messing with power maps and saturation masks.
-;- See image_powermaps_general.pro for consolidating codes that image powermaps.
 
 ;- 18 October 2018
 function BDA_POWERMAPS, $

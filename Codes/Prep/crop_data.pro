@@ -77,7 +77,8 @@ function CROP_DATA, data, $
     if n_elements(sz) gt 2 then begin
 
 
-        if not keyword_set(z_ind) then z_ind = [0:sz[2]-1]
+        ;if not keyword_set(z_ind) then z_ind = [0:sz[2]-1]
+        if z_ind eq !NULL then z_ind = [0:sz[2]-1]
 
         if n_elements(sz) eq 3 then $
             cube = data[ x1:x2, y1:y2, z_ind ]

@@ -137,7 +137,7 @@ stop
 
 ;- Vertical lines dividing up BDA.
 ;- See oplot_flare_lines.pro for comments on this.
-BDA_times = '15-Feb-2011 ' + ['01:44:00', '02:30:00']
+BDA_times = '15-Feb-2011 ' + ['01:46:00', '02:30:00']
 nn = n_elements(BDA_times)
 x_indices = fltarr(nn)
 utbase = '15-Feb-2011 00:00:01.725'

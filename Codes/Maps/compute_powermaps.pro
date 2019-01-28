@@ -45,7 +45,11 @@ function COMPUTE_POWERMAPS, $
 
     sz = size( data, /dimensions )
 
+    ;- Number of elements in z (z_start) will be the number of
+    ;-  maps returned (just 1 by default, starting at beginning of data).
     if n_elements(z_start) eq 0 then z=[0] else z=z_start
+
+
     if n_elements(dz) eq 0 then dz = sz[2]
 
     if keyword_set(fcenter) and keyword_set(bandwidth) then begin

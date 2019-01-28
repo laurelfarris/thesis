@@ -13,7 +13,6 @@
 ;- OUTPUT:
 ;-   Returns 1D array of power as function of time.
 ;- TO DO:
-;-   Add test codes
 ;-   Create new saturation routine (this currently addresses
 ;-      saturation and calculation of total power with time.
 
@@ -98,14 +97,15 @@ props = { $
     yrange : yrange, $
     ytickvalues : ytickvalues, $
     yminor : 9, $
+    ;symbol : 'circle', $
+    ;sym_filled : 0, $
+    ;sym_size : 0, $  ;; = 0.1 up to... not sure how big.
     name : A.name }
 
 file = 'time-3minpower_flux'
 
 resolve_routine, 'plot_pt';, /either
-plot_pt, power, dz, A[0].time, $
-    ;file=file, $
-    _EXTRA = props
+PLOT_PT, power, dz, A[0].time, _EXTRA = props
 
 
 

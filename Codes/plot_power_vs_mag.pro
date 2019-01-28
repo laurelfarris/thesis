@@ -1,50 +1,99 @@
-;- Fri Dec 14 02:36:40 MST 2018
 
+;- Sun Jan 27 13:39:46 MST 2019
 ;- Plot 3minute power as function of magnetic field strength
-;-   (no spatial info here).
+;-
+;-
+;- To Do:
+;-   Plot array of scatterplots, one for each time period of interest.
+;-   Locate or create general routine or reference file with coords of subregions
+;-     (both small ones and major ones around each sunspot).
+
+
+
+
+function PLOT_POWER_VS_MAG, mag, power
+
+    wx = 8.0
+    wy = 8.0
+    win = window( dimensions=[wx,wy]*dpi, location=[500,0] )
+
+    plt = scatterplot2( $
+        mag, power, $
+        /current, $
+        ;xrange=[200, max(xdata)], $
+        ylog=1, $
+        symbol='period', $
+        xtitle = 'ABS(B$_{LOS}$)', $
+        ytitle = '3-minute power' $
+        )
+
+end
+
 
 goto, start
+start:;----------------------------------------------------------------------------------
 
-aia_dz = 64
-hmi_dz = (25.6 * 60)/H[0].cadence
-;- dz is different for HMI because cadence is longer - almost twice as long.
+;im = image2( alog10(A[1].map[*,*,450]), /current, rgb_table = A[1].ct )
 
-;- H[0] is B_LOS, so index is unlikely to change.
-cc = 0
-
-;- Compare HMI BLOS at beginning and end of 25.6-minute time segment,
-;-   to mean over entire time segment.
-;imdata = [ $
-;    [[ H[0].data[*,*,0] ]], $
-;    [[ H[0].data[*,*,hmi_dz-1] ]], $
-;    [[ mean( H[0].data[*,*,0:hmi_dz-1], dimension=3 ) ]]  ]
-;title = [ $
-;    H[0].name+' '+H[0].time[0], $
-;    H[0].name+' '+H[0].time[hmi_dz-1], $
-;    'mean ' + H[0].name + ' ' + H[0].time[0] + '-' + H[0].time[hmi_dz-1] ]
-
-;dw
-;@win
-
-;for ii = 0, 2 do begin
-;    im = image2( $
-;        imdata[*,*,ii], $
-;        /current, $
-;        layout=[3,1,ii+1], $
-;        margin=0.1, $
-;        title=title[ii])
-;endfor
-;- very little seems to change...
+cc = 1
 
 
-;-----------------------------------------------------------------------
-;- zoom in on AR_1a for simplicity (many fewer plot points...)
+;- subregion coords
 r = 10
 x0 = 365
 y0 = 215
-;xdata = (mean( H[0].data[*,*,0:hmi_dz-1], dimension=3 ))[ [x0-r:x0+r-1], [y0-r:y0+r-1] ]
-;ydata = (A[cc].map[*,*,0])[ [x0-r:x0+r-1], [y0-r:y0+r-1] ]
-;-----------------------------------------------------------------------
+
+;- Start time(s)
+t_start = '01:19'
+;t_start = '03:00'
+
+stop
+;------------------------------------------------------------------------------------------
+
+
+;- Code below shouldn't have to change for different t_start, subregion, etc.
+;-   (for now).
+;- Uses a lot of info from A and H structures, so have to keep at main level for now.
+
+
+dz = 64
+dz_hmi = fix( (25.6 * 60)/H[0].cadence )
+;dz_hmi = 34
+
+time_aia = strmid(A[0].time, 0, 5)
+time_hmi = strmid(H[0].time, 0, 5)
+
+z_start_aia = (where( time_aia eq t_start ))[0]
+z_start_hmi = (where( time_hmi eq t_start ))[0]
+
+
+;- Crop data to desired subregion and time.
+power = CROP_DATA( A[cc].map, dimensions=[r,r], center=[x0,y0], $
+    z_ind=[z_start_aia] )
+mag = CROP_DATA( H[0].data, dimensions=[r,r], center=[x0,y0], $
+    z_ind=[z_start_hmi : z_start_hmi + dz_hmi - 1] )
+
+
+;- Average B_LOS over dt from which 3minute power was obtained.
+mag = mean( abs(mag), dimension=3 )
+
+
+sz = size(power, /dimensions)
+power = reform( power, sz[0]*sz[1] )
+mag = reform( mag, sz[0]*sz[1] )
+
+
+
+stop
+;- Stopping this for now
+;- Sun Jan 27 16:18:08 MST 2019
+
+
+
+
+;--------------------------------------------------------------------------------- 
+;- Below is original code from 2018-12-14.pro.
+;- Haven't looked through this yet.
 
 
 ;- Test using a few "Before" start indices.
@@ -62,7 +111,6 @@ endforeach
 
 stop
 
-start:;---------------------------------------------------------------------------------
 ;- Full AR
 
 dw
@@ -132,5 +180,8 @@ leg = legend2( target=plt )
 ;        rgb_table=A[0].ct, $
 ;        title=title[ii] )
 ;endfor
+
+
+
 
 end

@@ -13,7 +13,7 @@
 
 function POWERMAP_MASK, $
     data, $
-    dz, $
+    dz=dz, $
     exptime=exptime, $
     threshold=threshold
 
@@ -59,13 +59,13 @@ print, ' Type ".CONTINUE" to apply saturation mask to powermaps.'
 print, ''
 stop
 
-dz = 64
-
-threshold = 15000.
 
 for cc = 0, 1 do begin
-    map_mask = POWERMAP_MASK( A[cc].data, dz, exptime=A[cc].exptime, $
-        threshold=threshold
+    map_mask = POWERMAP_MASK( $
+        A[cc].data, $
+        dz=64, $
+        exptime=A[cc].exptime, $
+        threshold=10000. )
 
     A[cc].map = A[cc].map * map_mask
 endfor

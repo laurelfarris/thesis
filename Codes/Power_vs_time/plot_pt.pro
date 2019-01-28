@@ -19,8 +19,7 @@
 
 
 
-pro plot_pt, power, dz, time, $
-    file=file, $
+pro PLOT_PT, power, dz, time, $
     _EXTRA = e
 
 
@@ -73,11 +72,5 @@ pro plot_pt, power, dz, time, $
 
     ;- May need to keep these at bottom of code, right before saving,
     ;- if intermediate steps cause ax[3] to disappear again.
-
-    if keyword_set(file) then begin
-        resolve_routine, 'save2', /either
-        save2, file
-    endif
-
 
 end

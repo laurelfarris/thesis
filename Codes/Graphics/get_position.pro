@@ -180,8 +180,6 @@ function GET_POSITION, layout=layout, _EXTRA = e
         ;aspect_ratio = 1.0, $
         _EXTRA = e )
 
-    ;return, position
+    return, position
 
-    struc = position
-    return, struc ; (see commends at return statment in wrap_get_position)
 end

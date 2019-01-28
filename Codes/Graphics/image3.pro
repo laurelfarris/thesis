@@ -24,6 +24,11 @@
 ;-   Was probably using that when imaging arrays of BDA power maps
 ;-    a couple months ago.
 
+
+;- 27 January 2019
+;- Having problems with get_position, so using layout/margin for now.
+
+
 function IMAGE3_wrapper, $
     data, $
     XX, YY, $
@@ -54,12 +59,17 @@ function IMAGE3_wrapper, $
 
     ;- Use window width, margins (and xgap for multi-graphics) to set image width
     width = (wx - ( left + right + (cols-1)*xgap )) / cols
+    ;print, width
 
     ;- Aspect ratio preserved for images, so scale height accordingly
     height = width * float(sz[1])/sz[0]
+    ;print, height
+
 
     ;- Use top/bottom margins, ygap, and number of rows to determine window height.
     wy = top + bottom + (rows*height) + (rows-1)*ygap
+
+
 
     if keyword_set(buffer) then $
         win = window(dimensions=[wx,wy]*dpi, buffer=1) $
@@ -76,21 +86,24 @@ function IMAGE3_wrapper, $
             layout=[cols,rows,ii+1], $
             width=width, $
             height=height, $
-            wy=wy, $
+            wx=wx, $
             left=left, $
             top=top, $
             xgap=xgap, $
             ygap=ygap )
+
 
         im[ii] = image2( $
             data[*,*,ii], $
             XX, YY, $
             /current, /device, $
             ;position=position*dpi, $
-            layout = [1,1,1], $
-            margin = [0.6, 0.3, 0.5, 0.2]*dpi, $
+            layout = [cols,rows,ii+1], $
+            margin = [left,bottom,right,top]*dpi, $
             title = title[ii], $
             _EXTRA=e )
+        ;print, im[ii].position*wx
+
 
     endfor
     ;txt = ADD_LETTERS_TO_FIGURE( target=im )

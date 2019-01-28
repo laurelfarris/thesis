@@ -24,6 +24,23 @@ color = [ $
     '' ]
 
 
+;- 25 January 2019
+;- Copied from batch_plot.pro
+;- This may have caused some inconsistencies in plots that I thought
+;- should have shown the same colors, and in the same order...
+;    color = [ $
+;        'black', $
+;        'blue', $
+;        'red', $
+;        'lime green', $
+;        'deep sky blue', $
+;        'dark orange', $
+;        'dark cyan', $
+;        'dark orchid', $
+;        'sienna', $
+;        'dim gray', $
+;        'hot pink', $
+;        '' ]
 
 ;- NOTE:
 ;-  leaving empty string as last element allows me to

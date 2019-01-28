@@ -27,7 +27,7 @@ function SCATTERPLOT2, xinput, yinput, _EXTRA=e
         ;sym_fll_color
         ;sym_color = all symbols same color
         ;magnitude = array of color table indices that
-        ; correspond to the magntidue of each data point.
+        ; correspond to the magnitude of each data point.
         ;rgb_table = table from which to get magnitude colors
         axis_style = 2, $
         xstyle = 1, $
