@@ -1,12 +1,17 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2015.5.24)  14 DEC 2018 13:09
+This is pdfTeXk, Version 3.141592-1.40.3 (Web2C 7.5.6) (format=pdflatex 2015.11.14)  28 JAN 2019 04:56
 entering extended mode
- restricted \write18 enabled.
  %&-line parsing enabled.
 **dissertation
 (./dissertation.tex
-LaTeX2e <2015/01/01>
-Babel <3.9l> and hyphenation patterns for 79 languages loaded.
-(/Users/laurel/Library/texmf/tex/latex/aastex62/aastex62.cls
+LaTeX2e <2005/12/01>
+Babel <v3.8h> and hyphenation patterns for english, usenglishmax, dumylang, noh
+yphenation, arabic, basque, bulgarian, coptic, welsh, czech, slovak, german, ng
+erman, danish, esperanto, spanish, catalan, galician, estonian, farsi, finnish,
+ french, greek, monogreek, ancientgreek, croatian, hungarian, interlingua, ibyc
+us, indonesian, icelandic, italian, latin, mongolian, dutch, norsk, polish, por
+tuguese, pinyin, romanian, russian, slovenian, uppersorbian, serbian, swedish, 
+turkish, ukenglish, ukrainian, loaded.
+(/usr/share/texmf/tex/latex/aastex/V62/aastex62.cls
 Document Class: aastex62 2017/10/16 Version 6.2/AAS markup document class
 Class aastex Info: 
  
@@ -20,7 +25,7 @@ gridlines, draft watermark,
  
   on input line 105.
 \bibbaselineskip=\skip41
-(/usr/local/texlive/2015/texmf-dist/tex/latex/revtex/revtex4-1.cls
+(/usr/share/texmf/tex/latex/revtex/revtex4-1.cls
 Document Class: revtex4-1 2010/07/25/20:33:00 4.1r (http://publish.aps.org/revt
 ex4/ for documentation)
  Copyright (c) 2009 The American Physical Society.
@@ -80,7 +85,7 @@ Class revtex4-1 Info: Overriding \@vspace, \@vspacer, \@no@pgbk, \@newline, and
 \widetext@top=\box39
 \widetext@bot=\box40
 Class revtex4-1 Info: Selecting society aps on input line 7542.
-(/usr/local/texlive/2015/texmf-dist/tex/latex/revtex/aps4-1.rtx
+(/usr/share/texmf/tex/latex/revtex/aps4-1.rtx
 File: aps4-1 2010/07/25/20:33:00 4.1r (http://publish.aps.org/revtex4/ for docu
 mentation)
 Class revtex4-1 Info: RevTeX society APS selected on input line 31.
@@ -88,85 +93,83 @@ Class revtex4-1 Info: RevTeX society APS selected on input line 31.
 Class revtex4-1 Info: Selecting journal pra on input line 7544.
 Class revtex4-1 Info: APS journal PRA selected on input line 7545.
 
-(/usr/local/texlive/2015/texmf-dist/tex/latex/revtex/aps12pt4-1.rtx
+(/usr/share/texmf/tex/latex/revtex/aps12pt4-1.rtx
 File: aps12pt4-1 2010/07/25/20:33:00 4.1r (http://publish.aps.org/revtex4/ for 
 documentation)
 Class revtex4-1 Info: RevTeX pointsize 12pt selected on input line 30.
 )
-(/usr/local/texlive/2015/texmf-dist/tex/latex/textcase/textcase.sty
+(/usr/share/texmf/tex/latex/textcase/textcase.sty
 Package: textcase 2004/10/07 v0.07 Text only upper/lower case changing (DPC)
 )
-(/usr/local/texlive/2015/texmf-dist/tex/latex/url/url.sty
+(/usr/share/texmf/tex/latex/ltxmisc/url.sty
 \Urlmuskip=\muskip10
-Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
+Package: url 2005/06/27  ver 3.2  Verb mode for urls, etc.
 )
-(/usr/local/texlive/2015/texmf-dist/tex/latex/natbib/natbib.sty
-Package: natbib 2010/09/13 8.31b (PWD, AO)
+(/usr/share/texmf/tex/latex/natbib/natbib.sty
+Package: natbib 2007/02/05 8.0 (PWD)
 \bibhang=\skip45
 \bibsep=\skip46
-LaTeX Info: Redefining \cite on input line 694.
+LaTeX Info: Redefining \cite on input line 602.
 \c@NAT@ctr=\count94
 )
-Class revtex4-1 Info: Repairing natbib's \BibitemShut on input line 7549.
 
-(/usr/local/texlive/2015/texmf-dist/tex/latex/revtex/revsymb4-1.sty
+LaTeX Warning: You have requested, on input line 7549, version
+               `2009/11/07 8.31a (PWD, AO)' of package natbib,
+               but only version
+               `2007/02/05 8.0 (PWD)'
+               is available.
+
+(/usr/share/texmf/tex/latex/revtex/revsymb4-1.sty
 Package: revsymb4-1 2010/07/25/20:33:00 4.1r (http://publish.aps.org/revtex4/ f
 or documentation)
 LaTeX Info: Redefining \REV@mathfrak on input line 119.
 ))
-(/usr/local/texlive/2015/texmf-dist/tex/latex/base/latexsym.sty
+(/usr/share/texmf/tex/latex/base/latexsym.sty
 Package: latexsym 1998/08/17 v2.2e Standard LaTeX package (lasy symbols)
 \symlasy=\mathgroup4
 LaTeX Font Info:    Overwriting symbol font `lasy' in version `bold'
-(Font)                  U/lasy/m/n --> U/lasy/b/n on input line 52.
+(Font)                  U/lasy/m/n --> U/lasy/b/n on input line 47.
 )
-(/usr/local/texlive/2015/texmf-dist/tex/latex/graphics/graphicx.sty
-Package: graphicx 2014/10/28 v1.0g Enhanced LaTeX Graphics (DPC,SPQR)
+(/usr/share/texmf/tex/latex/graphics/graphicx.sty
+Package: graphicx 1999/02/16 v1.0f Enhanced LaTeX Graphics (DPC,SPQR)
 
-(/usr/local/texlive/2015/texmf-dist/tex/latex/graphics/keyval.sty
-Package: keyval 2014/10/28 v1.15 key=value parser (DPC)
+(/usr/share/texmf/tex/latex/graphics/keyval.sty
+Package: keyval 1999/03/16 v1.13 key=value parser (DPC)
 \KV@toks@=\toks16
 )
-(/usr/local/texlive/2015/texmf-dist/tex/latex/graphics/graphics.sty
-Package: graphics 2014/10/28 v1.0p Standard LaTeX Graphics (DPC,SPQR)
+(/usr/share/texmf/tex/latex/graphics/graphics.sty
+Package: graphics 2006/02/20 v1.0o Standard LaTeX Graphics (DPC,SPQR)
 
-(/usr/local/texlive/2015/texmf-dist/tex/latex/graphics/trig.sty
+(/usr/share/texmf/tex/fontinst/base/trig.sty
 Package: trig 1999/03/16 v1.09 sin cos tan (DPC)
 )
-(/usr/local/texlive/2015/texmf-dist/tex/latex/latexconfig/graphics.cfg
-File: graphics.cfg 2010/04/23 v1.9 graphics configuration of TeX Live
+(/usr/share/texmf/tex/latex/config/graphics.cfg
+File: graphics.cfg 2007/01/18 v1.5 graphics configuration of teTeX/TeXLive
 )
-Package graphics Info: Driver file: pdftex.def on input line 94.
+Package graphics Info: Driver file: pdftex.def on input line 90.
 
-(/usr/local/texlive/2015/texmf-dist/tex/latex/pdftex-def/pdftex.def
-File: pdftex.def 2011/05/27 v0.06d Graphics/color for pdfTeX
-
-(/usr/local/texlive/2015/texmf-dist/tex/generic/oberdiek/infwarerr.sty
-Package: infwarerr 2010/04/08 v1.3 Providing info/warning/error messages (HO)
-)
-(/usr/local/texlive/2015/texmf-dist/tex/generic/oberdiek/ltxcmds.sty
-Package: ltxcmds 2011/11/09 v1.22 LaTeX kernel commands for general use (HO)
-)
+(/usr/share/texmf/tex/latex/pdftex-def/pdftex.def
+File: pdftex.def 2007/01/08 v0.04d Graphics/color for pdfTeX
 \Gread@gobject=\count95
 ))
 \Gin@req@height=\dimen102
 \Gin@req@width=\dimen103
 )
-(/usr/local/texlive/2015/texmf-dist/tex/latex/amsfonts/amssymb.sty
-Package: amssymb 2013/01/14 v3.01 AMS font symbols
+(/usr/share/texmf/tex/latex/amsfonts/amssymb.sty
+Package: amssymb 2002/01/22 v2.2d
 
-(/usr/local/texlive/2015/texmf-dist/tex/latex/amsfonts/amsfonts.sty
-Package: amsfonts 2013/01/14 v3.01 Basic AMSFonts support
+(/usr/share/texmf/tex/latex/amsfonts/amsfonts.sty
+Package: amsfonts 2001/10/25 v2.2f
 \@emptytoks=\toks17
 \symAMSa=\mathgroup5
 \symAMSb=\mathgroup6
 LaTeX Font Info:    Overwriting math alphabet `\mathfrak' in version `bold'
-(Font)                  U/euf/m/n --> U/euf/b/n on input line 106.
-LaTeX Info: Redefining \frak on input line 111.
-LaTeX Info: Redefining \Bbb on input line 113.
+(Font)                  U/euf/m/n --> U/euf/b/n on input line 132.
+LaTeX Info: Redefining \frak on input line 135.
+LaTeX Info: Redefining \Bbb on input line 137.
 ))
-(/usr/local/texlive/2015/texmf-dist/tex/generic/epsf/epsf.sty
-This is `epsf.tex' v2.7.4 <14 February 2011>
+(/usr/share/texmf/tex/generic/epsf/epsf.sty
+This is `epsf.tex' v2.7.3 <23 July 2005>
 \epsffilein=\read1
 \epsfframemargin=\dimen104
 \epsfframethickness=\dimen105
@@ -202,8 +205,8 @@ This is `epsf.tex' v2.7.4 <14 February 2011>
 \DT@p@ftn=\toks18
 \pt@column=\count106
 \pt@ncol=\count107
- (/usr/local/texlive/2015/texmf-dist/tex/latex/tools/longtable.sty
-Package: longtable 2014/10/28 v4.11 Multi-page Table package (DPC)
+ (/usr/share/texmf/tex/latex/tools/longtable.sty
+Package: longtable 2004/02/01 v4.11 Multi-page Table package (DPC)
 \LTleft=\skip55
 \LTright=\skip56
 \LTpre=\skip57
@@ -220,10 +223,10 @@ Package: longtable 2014/10/28 v4.11 Multi-page Table package (DPC)
 \c@LT@chunks=\count112
 \LT@p@ftn=\toks19
 )
-(/usr/local/texlive/2015/texmf-dist/tex/latex/xcolor/xcolor.sty
+(/usr/share/texmf/tex/latex/xcolor/xcolor.sty
 Package: xcolor 2007/01/21 v2.11 LaTeX color extensions (UK)
 
-(/usr/local/texlive/2015/texmf-dist/tex/latex/latexconfig/color.cfg
+(/usr/share/texmf/tex/latex/config/color.cfg
 File: color.cfg 2007/01/18 v1.5 color configuration of teTeX/TeXLive
 )
 Package xcolor Info: Driver file: pdftex.def on input line 225.
@@ -237,708 +240,509 @@ Package xcolor Info: Model `HSB' substituted by `hsb' on input line 1358.
 Package xcolor Info: Model `Gray' substituted by `gray' on input line 1359.
 Package xcolor Info: Model `wave' substituted by `hsb' on input line 1360.
 )
-(/usr/local/texlive/2015/texmf-dist/tex/latex/hyperref/hyperref.sty
-Package: hyperref 2012/11/06 v6.83m Hypertext links for LaTeX
-
-(/usr/local/texlive/2015/texmf-dist/tex/generic/oberdiek/hobsub-hyperref.sty
-Package: hobsub-hyperref 2012/05/28 v1.13 Bundle oberdiek, subset hyperref (HO)
-
-
-(/usr/local/texlive/2015/texmf-dist/tex/generic/oberdiek/hobsub-generic.sty
-Package: hobsub-generic 2012/05/28 v1.13 Bundle oberdiek, subset generic (HO)
-Package: hobsub 2012/05/28 v1.13 Construct package bundles (HO)
-Package hobsub Info: Skipping package `infwarerr' (already loaded).
-Package hobsub Info: Skipping package `ltxcmds' (already loaded).
-Package: ifluatex 2010/03/01 v1.3 Provides the ifluatex switch (HO)
-Package ifluatex Info: LuaTeX not detected.
-Package: ifvtex 2010/03/01 v1.5 Detect VTeX and its facilities (HO)
-Package ifvtex Info: VTeX not detected.
-Package: intcalc 2007/09/27 v1.1 Expandable calculations with integers (HO)
-Package: ifpdf 2011/01/30 v2.3 Provides the ifpdf switch (HO)
-Package ifpdf Info: pdfTeX in PDF mode is detected.
-Package: etexcmds 2011/02/16 v1.5 Avoid name clashes with e-TeX commands (HO)
-Package etexcmds Info: Could not find \expanded.
-(etexcmds)             That can mean that you are not using pdfTeX 1.50 or
-(etexcmds)             that some package has redefined \expanded.
-(etexcmds)             In the latter case, load this package earlier.
-Package: kvsetkeys 2012/04/25 v1.16 Key value parser (HO)
-Package: kvdefinekeys 2011/04/07 v1.3 Define keys (HO)
-Package: pdftexcmds 2011/11/29 v0.20 Utility functions of pdfTeX for LuaTeX (HO
-)
-Package pdftexcmds Info: LuaTeX not detected.
-Package pdftexcmds Info: \pdf@primitive is available.
-Package pdftexcmds Info: \pdf@ifprimitive is available.
-Package pdftexcmds Info: \pdfdraftmode found.
-Package: pdfescape 2011/11/25 v1.13 Implements pdfTeX's escape features (HO)
-Package: bigintcalc 2012/04/08 v1.3 Expandable calculations on big integers (HO
-)
-Package: bitset 2011/01/30 v1.1 Handle bit-vector datatype (HO)
-Package: uniquecounter 2011/01/30 v1.2 Provide unlimited unique counter (HO)
-)
-Package hobsub Info: Skipping package `hobsub' (already loaded).
-Package: letltxmacro 2010/09/02 v1.4 Let assignment for LaTeX macros (HO)
-Package: hopatch 2012/05/28 v1.2 Wrapper for package hooks (HO)
-Package: xcolor-patch 2011/01/30 xcolor patch
-Package: atveryend 2011/06/30 v1.8 Hooks at the very end of document (HO)
-Package: atbegshi 2011/10/05 v1.16 At begin shipout hook (HO)
-Package: refcount 2011/10/16 v3.4 Data extraction from label references (HO)
-Package: hycolor 2011/01/30 v1.7 Color options for hyperref/bookmark (HO)
-)
-(/usr/local/texlive/2015/texmf-dist/tex/generic/ifxetex/ifxetex.sty
-Package: ifxetex 2010/09/12 v0.6 Provides ifxetex conditional
-)
-(/usr/local/texlive/2015/texmf-dist/tex/latex/oberdiek/auxhook.sty
-Package: auxhook 2011/03/04 v1.3 Hooks for auxiliary files (HO)
-)
-(/usr/local/texlive/2015/texmf-dist/tex/latex/oberdiek/kvoptions.sty
-Package: kvoptions 2011/06/30 v3.11 Key value format for package options (HO)
-)
+(/usr/share/texmf/tex/latex/hyperref/hyperref.sty
+Package: hyperref 2007/02/07 v6.75r Hypertext links for LaTeX
 \@linkdim=\dimen117
 \Hy@linkcounter=\count113
 \Hy@pagecounter=\count114
 
-(/usr/local/texlive/2015/texmf-dist/tex/latex/hyperref/pd1enc.def
-File: pd1enc.def 2012/11/06 v6.83m Hyperref: PDFDocEncoding definition (HO)
+(/usr/share/texmf/tex/latex/hyperref/pd1enc.def
+File: pd1enc.def 2007/02/07 v6.75r Hyperref: PDFDocEncoding definition (HO)
 )
-\Hy@SavedSpaceFactor=\count115
-
-(/usr/local/texlive/2015/texmf-dist/tex/latex/latexconfig/hyperref.cfg
+(/usr/share/texmf/tex/latex/config/hyperref.cfg
 File: hyperref.cfg 2002/06/06 v1.2 hyperref configuration of TeXLive
 )
-Package hyperref Info: Option `bookmarks' set `false' on input line 4319.
-Package hyperref Info: Option `pdfnewwindow' set `true' on input line 4319.
-Package hyperref Info: Option `colorlinks' set `true' on input line 4319.
-Package hyperref Info: Option `final' set `true' on input line 4319.
-Package hyperref Info: Hyper figures OFF on input line 4443.
-Package hyperref Info: Link nesting OFF on input line 4448.
-Package hyperref Info: Hyper index ON on input line 4451.
-Package hyperref Info: Plain pages OFF on input line 4458.
-Package hyperref Info: Backreferencing OFF on input line 4463.
-Package hyperref Info: Implicit mode ON; LaTeX internals redefined.
-Package hyperref Info: Bookmarks OFF on input line 4694.
-LaTeX Info: Redefining \href on input line 4952.
-\c@Hy@tempcnt=\count116
-LaTeX Info: Redefining \url on input line 5041.
-\XeTeXLinkMargin=\dimen118
-\Fld@menulength=\count117
-\Field@Width=\dimen119
-\Fld@charsize=\dimen120
-Package hyperref Info: Hyper figures OFF on input line 6295.
-Package hyperref Info: Link nesting OFF on input line 6300.
-Package hyperref Info: Hyper index ON on input line 6303.
-Package hyperref Info: backreferencing OFF on input line 6310.
-Package hyperref Info: Link coloring ON on input line 6313.
-Package hyperref Info: Link coloring with OCG OFF on input line 6320.
-Package hyperref Info: PDF/A mode OFF on input line 6325.
-LaTeX Info: Redefining \ref on input line 6365.
-LaTeX Info: Redefining \pageref on input line 6369.
-\Hy@abspage=\count118
-\c@Item=\count119
-\c@Hfootnote=\count120
+(/usr/share/texmf/tex/latex/oberdiek/kvoptions.sty
+Package: kvoptions 2006/08/22 v2.4 Connects package keyval with LaTeX options (
+HO)
 )
+Package hyperref Info: Option `bookmarks' set `false' on input line 2238.
+Package hyperref Info: Option `pdfnewwindow' set `true' on input line 2238.
+Package hyperref Info: Option `colorlinks' set `true' on input line 2238.
+Package hyperref Info: Option `final' set `true' on input line 2238.
+Package hyperref Info: Hyper figures OFF on input line 2288.
+Package hyperref Info: Link nesting OFF on input line 2293.
+Package hyperref Info: Hyper index ON on input line 2296.
+Package hyperref Info: Plain pages OFF on input line 2303.
+Package hyperref Info: Backreferencing OFF on input line 2308.
 
-Package hyperref Message: Driver (autodetected): hpdftex.
-
-(/usr/local/texlive/2015/texmf-dist/tex/latex/hyperref/hpdftex.def
-File: hpdftex.def 2012/11/06 v6.83m Hyperref driver for pdfTeX
-\Fld@listcount=\count121
-\c@bookmark@seq@number=\count122
-
-(/usr/local/texlive/2015/texmf-dist/tex/latex/oberdiek/rerunfilecheck.sty
-Package: rerunfilecheck 2011/04/15 v1.7 Rerun checks for auxiliary files (HO)
-Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 2
-82.
+Implicit mode ON; LaTeX internals redefined
+Package hyperref Info: Bookmarks OFF on input line 2450.
+LaTeX Info: Redefining \href on input line 2586.
+LaTeX Info: Redefining \url on input line 2599.
+\Fld@menulength=\count115
+\Field@Width=\dimen118
+\Fld@charsize=\dimen119
+\Choice@toks=\toks20
+\Field@toks=\toks21
+Package hyperref Info: Hyper figures OFF on input line 3102.
+Package hyperref Info: Link nesting OFF on input line 3107.
+Package hyperref Info: Hyper index ON on input line 3110.
+Package hyperref Info: backreferencing OFF on input line 3117.
+Package hyperref Info: Link coloring ON on input line 3120.
+\Hy@abspage=\count116
+\c@Item=\count117
+\c@Hfootnote=\count118
 )
-\Hy@SectionHShift=\skip59
+*hyperref using default driver hpdftex*
+(/usr/share/texmf/tex/latex/hyperref/hpdftex.def
+File: hpdftex.def 2007/02/07 v6.75r Hyperref driver for pdfTeX
+\Fld@listcount=\count119
 )
-(/usr/local/texlive/2015/texmf-dist/tex/latex/tools/array.sty
-Package: array 2014/10/28 v2.4c Tabular extension package (FMi)
-\col@sep=\dimen121
-\extrarowheight=\dimen122
-\NC@list=\toks20
-\extratabsurround=\skip60
-\backup@length=\skip61
+(/usr/share/texmf/tex/latex/tools/array.sty
+Package: array 2005/08/23 v2.4b Tabular extension package (FMi)
+\col@sep=\dimen120
+\extrarowheight=\dimen121
+\NC@list=\toks22
+\extratabsurround=\skip59
+\backup@length=\skip60
 )
-\colcount=\count123
-\firstcolcount=\count124
-\secondcolcount=\count125
-\thirdcolcount=\count126
-\columncount=\count127
-\howmanyDs=\count128
-\firsthowmanyDs=\count129
-\secondhowmanyDs=\count130
-\PartsOfTable=\count131
-\columnoneandtwo=\count132
-\colnumsused=\count133
-\loopnum=\count134
-\totalcolumncount=\count135
-\totalcolumns=\count136
+\colcount=\count120
+\firstcolcount=\count121
+\secondcolcount=\count122
+\thirdcolcount=\count123
+\columncount=\count124
+\howmanyDs=\count125
+\firsthowmanyDs=\count126
+\secondhowmanyDs=\count127
+\PartsOfTable=\count128
+\columnoneandtwo=\count129
+\colnumsused=\count130
+\loopnum=\count131
+\totalcolumncount=\count132
+\totalcolumns=\count133
 \firsttablebox=\box45
 \secondtablebox=\box46
 \thirdtablebox=\box47
 \longtablebox=\box48
 \splitbox=\box49
-\movetabledown=\dimen123
-\maxtablewidth=\dimen124
-\savetabskip=\dimen125
-\tempcounter=\count137
-\colheadcount=\count138
+\movetabledown=\dimen122
+\maxtablewidth=\dimen123
+\savetabskip=\dimen124
+\tempcounter=\count134
+\colheadcount=\count135
 \rotatetablebox=\box50
-\colorcount=\count139
-\refchangenumber=\count140
-\listchangenum=\count141
+\colorcount=\count136
+\refchangenumber=\count137
+\listchangenum=\count138
 
-(/usr/local/texlive/2015/texmf-dist/tex/generic/ulem/ulem.sty
+(/usr/share/texmf/tex/latex/ltxmisc/ulem.sty
 \UL@box=\box51
 \UL@hyphenbox=\box52
-\UL@skip=\skip62
-\UL@hook=\toks21
-\UL@height=\dimen126
-\UL@pe=\count142
-\UL@pixel=\dimen127
+\UL@skip=\skip61
+\UL@hook=\toks23
+\UL@pe=\count139
+\UL@pixel=\dimen125
 \ULC@box=\box53
-Package: ulem 2012/05/18
-\ULdepth=\dimen128
+Package: ulem 2000/05/26
+\ULdepth=\dimen126
 )
-\AuthorCollaborationLimit=\count143
-\largestAffilNum=\count144
-\countauthors=\count145
-\c@affilcount=\count146
+\AuthorCollaborationLimit=\count140
+\largestAffilNum=\count141
+\countauthors=\count142
+\c@affilcount=\count143
 \widetext@top=\box54
 \widetext@bot=\box55
 )
-(/usr/local/texlive/2015/texmf-dist/tex/latex/base/fontenc.sty
+(/usr/share/texmf/tex/latex/base/fontenc.sty
 Package: fontenc 2005/09/27 v1.99g Standard LaTeX package
 
-(/usr/local/texlive/2015/texmf-dist/tex/latex/base/t1enc.def
+(/usr/share/texmf/tex/latex/base/t1enc.def
 File: t1enc.def 2005/09/27 v1.99g Standard LaTeX file
-LaTeX Font Info:    Redeclaring font encoding T1 on input line 48.
+LaTeX Font Info:    Redeclaring font encoding T1 on input line 43.
 ))
-(/usr/local/texlive/2015/texmf-dist/tex/latex/framed/framed.sty
-Package: framed 2011/10/22 v 0.96: framed or shaded text with page breaks
-\OuterFrameSep=\skip63
-\fb@frw=\dimen129
-\fb@frh=\dimen130
-\FrameRule=\dimen131
-\FrameSep=\dimen132
+(/usr/share/texmf/tex/latex/ltxmisc/framed.sty
+Package: framed 2003/07/21 v 0.8a: framed or shaded text with page breaks
+\FrameRule=\dimen127
+\FrameSep=\dimen128
 )
-(/usr/local/texlive/2015/texmf-dist/tex/latex/ms/ragged2e.sty
-Package: ragged2e 2009/05/21 v2.1 ragged2e Package (MS)
+(/usr/share/texmf/tex/latex/ragged2e/ragged2e.sty
+Package: ragged2e 2003/03/25 v2.04 ragged2e Package (MS)
 
-(/usr/local/texlive/2015/texmf-dist/tex/latex/ms/everysel.sty
-Package: everysel 2011/10/28 v1.2 EverySelectfont Package (MS)
+(/usr/share/texmf/tex/latex/everysel/everysel.sty
+Package: everysel 1999/06/08 v1.03 EverySelectfont Package (MS)
 )
-\CenteringLeftskip=\skip64
-\RaggedLeftLeftskip=\skip65
-\RaggedRightLeftskip=\skip66
-\CenteringRightskip=\skip67
-\RaggedLeftRightskip=\skip68
-\RaggedRightRightskip=\skip69
-\CenteringParfillskip=\skip70
-\RaggedLeftParfillskip=\skip71
-\RaggedRightParfillskip=\skip72
-\JustifyingParfillskip=\skip73
-\CenteringParindent=\skip74
-\RaggedLeftParindent=\skip75
-\RaggedRightParindent=\skip76
-\JustifyingParindent=\skip77
+\CenteringLeftskip=\skip62
+\RaggedLeftLeftskip=\skip63
+\RaggedRightLeftskip=\skip64
+\CenteringRightskip=\skip65
+\RaggedLeftRightskip=\skip66
+\RaggedRightRightskip=\skip67
+\CenteringParfillskip=\skip68
+\RaggedLeftParfillskip=\skip69
+\RaggedRightParfillskip=\skip70
+\JustifyingParfillskip=\skip71
+\CenteringParindent=\skip72
+\RaggedLeftParindent=\skip73
+\RaggedRightParindent=\skip74
+\JustifyingParindent=\skip75
 )
-(/usr/local/texlive/2015/texmf-dist/tex/latex/tools/afterpage.sty
-Package: afterpage 2014/10/28 v1.08 After-Page Package (DPC)
-\AP@output=\toks22
+(/usr/share/texmf/tex/latex/tools/afterpage.sty
+Package: afterpage 1995/10/27 v1.08 After-Page Package (DPC)
+\AP@output=\toks24
 \AP@partial=\box56
 \AP@footins=\box57
 )
-(/usr/local/texlive/2015/texmf-dist/tex/latex/amsmath/amsmath.sty
-Package: amsmath 2013/01/14 v2.14 AMS math features
-\@mathmargin=\skip78
+(/usr/share/texmf/tex/latex/amsmath/amsmath.sty
+Package: amsmath 2000/07/18 v2.13 AMS math features
+\@mathmargin=\skip76
 
 For additional information on amsmath, use the `?' option.
-(/usr/local/texlive/2015/texmf-dist/tex/latex/amsmath/amstext.sty
+(/usr/share/texmf/tex/latex/amsmath/amstext.sty
 Package: amstext 2000/06/29 v2.01
 
-(/usr/local/texlive/2015/texmf-dist/tex/latex/amsmath/amsgen.sty
+(/usr/share/texmf/tex/latex/amsmath/amsgen.sty
 File: amsgen.sty 1999/11/30 v2.0
-\@emptytoks=\toks23
-\ex@=\dimen133
+\@emptytoks=\toks25
+\ex@=\dimen129
 )
-LaTeX Info: Redefining \text on input line 39.
+LaTeX Info: Redefining \text on input line 53.
 )
-(/usr/local/texlive/2015/texmf-dist/tex/latex/amsmath/amsbsy.sty
+(/usr/share/texmf/tex/latex/amsmath/amsbsy.sty
 Package: amsbsy 1999/11/29 v1.2d
-\pmbraise@=\dimen134
+\pmbraise@=\dimen130
 )
-(/usr/local/texlive/2015/texmf-dist/tex/latex/amsmath/amsopn.sty
+(/usr/share/texmf/tex/latex/amsmath/amsopn.sty
 Package: amsopn 1999/12/14 v2.01 operator names
 )
-\inf@bad=\count147
-LaTeX Info: Redefining \frac on input line 210.
-\uproot@=\count148
-\leftroot@=\count149
-LaTeX Info: Redefining \overline on input line 306.
-\classnum@=\count150
-\DOTSCASE@=\count151
-LaTeX Info: Redefining \ldots on input line 378.
-LaTeX Info: Redefining \dots on input line 381.
-LaTeX Info: Redefining \cdots on input line 466.
+\inf@bad=\count144
+LaTeX Info: Redefining \frac on input line 211.
+\uproot@=\count145
+\leftroot@=\count146
+LaTeX Info: Redefining \overline on input line 307.
+\classnum@=\count147
+\DOTSCASE@=\count148
+LaTeX Info: Redefining \ldots on input line 379.
+LaTeX Info: Redefining \dots on input line 382.
+LaTeX Info: Redefining \cdots on input line 467.
 \Mathstrutbox@=\box58
 \strutbox@=\box59
-\big@size=\dimen135
-LaTeX Font Info:    Redeclaring font encoding OML on input line 566.
-LaTeX Font Info:    Redeclaring font encoding OMS on input line 567.
-\macc@depth=\count152
-\c@MaxMatrixCols=\count153
+\big@size=\dimen131
+LaTeX Font Info:    Redeclaring font encoding OML on input line 567.
+LaTeX Font Info:    Redeclaring font encoding OMS on input line 568.
+\macc@depth=\count149
+\c@MaxMatrixCols=\count150
 \dotsspace@=\muskip11
-\c@parentequation=\count154
-\dspbrk@lvl=\count155
-\tag@help=\toks24
-\row@=\count156
-\column@=\count157
-\maxfields@=\count158
-\andhelp@=\toks25
-\eqnshift@=\dimen136
-\alignsep@=\dimen137
-\tagshift@=\dimen138
-\tagwidth@=\dimen139
-\totwidth@=\dimen140
-\lineht@=\dimen141
-\@envbody=\toks26
-\multlinegap=\skip79
-\multlinetaggap=\skip80
-\mathdisplay@stack=\toks27
-LaTeX Info: Redefining \[ on input line 2665.
-LaTeX Info: Redefining \] on input line 2666.
+\c@parentequation=\count151
+\dspbrk@lvl=\count152
+\tag@help=\toks26
+\row@=\count153
+\column@=\count154
+\maxfields@=\count155
+\andhelp@=\toks27
+\eqnshift@=\dimen132
+\alignsep@=\dimen133
+\tagshift@=\dimen134
+\tagwidth@=\dimen135
+\totwidth@=\dimen136
+\lineht@=\dimen137
+\@envbody=\toks28
+\multlinegap=\skip77
+\multlinetaggap=\skip78
+\mathdisplay@stack=\toks29
+LaTeX Info: Redefining \[ on input line 2666.
+LaTeX Info: Redefining \] on input line 2667.
 )
-(/usr/local/texlive/2015/texmf-dist/tex/latex/titlesec/titlesec.sty
-Package: titlesec 2011/12/15 v2.10.0 Sectioning titles
+(/usr/share/texmf/tex/latex/titlesec/titlesec.sty
+Package: titlesec 2005/01/22 v2.6 Sectioning titles
 \ttl@box=\box60
-\beforetitleunit=\skip81
-\aftertitleunit=\skip82
-\ttl@plus=\dimen142
-\ttl@minus=\dimen143
-\ttl@toksa=\toks28
-\titlewidth=\dimen144
-\titlewidthlast=\dimen145
-\titlewidthfirst=\dimen146
+\beforetitleunit=\skip79
+\aftertitleunit=\skip80
+\ttl@plus=\dimen138
+\ttl@minus=\dimen139
+\titlewidth=\dimen140
+\titlewidthlast=\dimen141
+\titlewidthfirst=\dimen142
 )
-(/usr/local/texlive/2015/texmf-dist/tex/latex/enumitem/enumitem.sty
-Package: enumitem 2011/09/28 v3.5.2 Customized lists
-\labelindent=\skip83
-\enit@outerparindent=\dimen147
-\enit@toks=\toks29
-\enit@inbox=\box61
-\enitdp@description=\count159
+(/usr/share/texmf/tex/latex/enumitem/enumitem.sty
+Package: enumitem 2005/05/12 v1.1 Customized lists
+\labelindent=\skip81
+\enit@outerparindent=\dimen143
 )
-(/usr/local/texlive/2015/texmf-dist/tex/latex/pgf/frontendlayer/tikz.sty
-(/usr/local/texlive/2015/texmf-dist/tex/latex/pgf/basiclayer/pgf.sty
-(/usr/local/texlive/2015/texmf-dist/tex/latex/pgf/utilities/pgfrcs.sty
-(/usr/local/texlive/2015/texmf-dist/tex/generic/pgf/utilities/pgfutil-common.te
-x
-\pgfutil@everybye=\toks30
-\pgfutil@tempdima=\dimen148
-\pgfutil@tempdimb=\dimen149
-
-(/usr/local/texlive/2015/texmf-dist/tex/generic/pgf/utilities/pgfutil-common-li
-sts.tex))
-(/usr/local/texlive/2015/texmf-dist/tex/generic/pgf/utilities/pgfutil-latex.def
-\pgfutil@abb=\box62
-(/usr/local/texlive/2015/texmf-dist/tex/latex/ms/everyshi.sty
-Package: everyshi 2001/05/15 v3.00 EveryShipout Package (MS)
+(/usr/share/texmf/tex/latex/pgf/frontendlayer/tikz.sty
+(/usr/share/texmf/tex/latex/pgf/basiclayer/pgf.sty
+(/usr/share/texmf/tex/latex/pgf/utilities/pgfrcs.sty
+(/usr/share/texmf/tex/generic/pgf/utilities/pgfutil-common.tex)
+(/usr/share/texmf/tex/generic/pgf/utilities/pgfutil-latex.def)
+(/usr/share/texmf/tex/generic/pgf/utilities/pgfrcs.code.tex
+Package: pgfrcs 2006/10/26 v1.10 (rcs-revision 1.14)
 ))
-(/usr/local/texlive/2015/texmf-dist/tex/generic/pgf/utilities/pgfrcs.code.tex
-Package: pgfrcs 2013/12/20 v3.0.0 (rcs-revision 1.28)
-))
-Package: pgf 2013/12/18 v3.0.0 (rcs-revision 1.14)
-(/usr/local/texlive/2015/texmf-dist/tex/latex/pgf/basiclayer/pgfcore.sty
-(/usr/local/texlive/2015/texmf-dist/tex/latex/pgf/systemlayer/pgfsys.sty
-(/usr/local/texlive/2015/texmf-dist/tex/generic/pgf/systemlayer/pgfsys.code.tex
-Package: pgfsys 2013/11/30 v3.0.0 (rcs-revision 1.47)
-(/usr/local/texlive/2015/texmf-dist/tex/generic/pgf/utilities/pgfkeys.code.tex
-\pgfkeys@pathtoks=\toks31
-\pgfkeys@temptoks=\toks32
+Package: pgf 2006/10/11 v1.10 (rcs-revision 1.7)
 
-(/usr/local/texlive/2015/texmf-dist/tex/generic/pgf/utilities/pgfkeysfiltered.c
-ode.tex
-\pgfkeys@tmptoks=\toks33
-))
-\pgf@x=\dimen150
-\pgf@y=\dimen151
-\pgf@xa=\dimen152
-\pgf@ya=\dimen153
-\pgf@xb=\dimen154
-\pgf@yb=\dimen155
-\pgf@xc=\dimen156
-\pgf@yc=\dimen157
-\w@pgf@writea=\write4
-\r@pgf@reada=\read2
-\c@pgf@counta=\count160
-\c@pgf@countb=\count161
-\c@pgf@countc=\count162
-\c@pgf@countd=\count163
-\t@pgf@toka=\toks34
-\t@pgf@tokb=\toks35
-\t@pgf@tokc=\toks36
+(/usr/share/texmf/tex/latex/pgf/basiclayer/pgfcore.sty
+(/usr/share/texmf/tex/latex/pgf/systemlayer/pgfsys.sty
+(/usr/share/texmf/tex/generic/pgf/systemlayer/pgfsys.code.tex
+Package: pgfsys 2006/10/16 v1.10 (rcs-revision 1.19)
+\pgf@x=\dimen144
+\pgf@y=\dimen145
+\pgf@xa=\dimen146
+\pgf@ya=\dimen147
+\pgf@xb=\dimen148
+\pgf@yb=\dimen149
+\pgf@xc=\dimen150
+\pgf@yc=\dimen151
 
-(/usr/local/texlive/2015/texmf-dist/tex/generic/pgf/systemlayer/pgf.cfg
-File: pgf.cfg 2008/05/14  (rcs-revision 1.7)
+(/usr/share/texmf/tex/generic/pgf/systemlayer/pgf.cfg
+File: pgf.cfg 2006/10/11  (rcs-revision 1.2)
 )
-Driver file for pgf: pgfsys-pdftex.def
+Package pgfsys Info: Driver file for pgf: pgfsys-pdftex.def on input line 845.
 
-(/usr/local/texlive/2015/texmf-dist/tex/generic/pgf/systemlayer/pgfsys-pdftex.d
-ef
-File: pgfsys-pdftex.def 2013/07/18  (rcs-revision 1.33)
+(/usr/share/texmf/tex/generic/pgf/systemlayer/pgfsys-pdftex.def
+File: pgfsys-pdftex.def 2006/10/23  (rcs-revision 1.14)
 
-(/usr/local/texlive/2015/texmf-dist/tex/generic/pgf/systemlayer/pgfsys-common-p
-df.def
-File: pgfsys-common-pdf.def 2013/10/10  (rcs-revision 1.13)
+(/usr/share/texmf/tex/generic/pgf/systemlayer/pgfsys-common-pdf.def
+File: pgfsys-common-pdf.def 2006/10/16  (rcs-revision 1.7)
 )))
-(/usr/local/texlive/2015/texmf-dist/tex/generic/pgf/systemlayer/pgfsyssoftpath.
-code.tex
-File: pgfsyssoftpath.code.tex 2013/09/09  (rcs-revision 1.9)
-\pgfsyssoftpath@smallbuffer@items=\count164
-\pgfsyssoftpath@bigbuffer@items=\count165
+(/usr/share/texmf/tex/generic/pgf/systemlayer/pgfsyssoftpath.code.tex
+File: pgfsyssoftpath.code.tex 2006/10/16  (rcs-revision 1.4)
 )
-(/usr/local/texlive/2015/texmf-dist/tex/generic/pgf/systemlayer/pgfsysprotocol.
-code.tex
+(/usr/share/texmf/tex/generic/pgf/systemlayer/pgfsysprotocol.code.tex
 File: pgfsysprotocol.code.tex 2006/10/16  (rcs-revision 1.4)
 ))
-(/usr/local/texlive/2015/texmf-dist/tex/generic/pgf/basiclayer/pgfcore.code.tex
-Package: pgfcore 2010/04/11 v3.0.0 (rcs-revision 1.7)
-(/usr/local/texlive/2015/texmf-dist/tex/generic/pgf/math/pgfmath.code.tex
-(/usr/local/texlive/2015/texmf-dist/tex/generic/pgf/math/pgfmathcalc.code.tex
-(/usr/local/texlive/2015/texmf-dist/tex/generic/pgf/math/pgfmathutil.code.tex)
-(/usr/local/texlive/2015/texmf-dist/tex/generic/pgf/math/pgfmathparser.code.tex
-\pgfmath@dimen=\dimen158
-\pgfmath@count=\count166
-\pgfmath@box=\box63
-\pgfmath@toks=\toks37
-\pgfmath@stack@operand=\toks38
-\pgfmath@stack@operation=\toks39
+(/usr/share/texmf/tex/generic/pgf/basiclayer/pgfcore.code.tex
+Package: pgfcore 2006/10/11 v1.10 (rcs-revision 1.4)
+
+(/usr/share/texmf/tex/generic/pgf/basiclayer/pgfcoremath.code.tex
+File: pgfcoremath.code.tex 2006/10/15  (rcs-revision 1.3)
+\c@pgf@counta=\count156
+\c@pgf@countb=\count157
+\c@pgf@countc=\count158
+\c@pgf@countd=\count159
 )
-(/usr/local/texlive/2015/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.code.
-tex
-(/usr/local/texlive/2015/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.basic
-.code.tex)
-(/usr/local/texlive/2015/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.trigo
-nometric.code.tex)
-(/usr/local/texlive/2015/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.rando
-m.code.tex)
-(/usr/local/texlive/2015/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.compa
-rison.code.tex)
-(/usr/local/texlive/2015/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.base.
-code.tex)
-(/usr/local/texlive/2015/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.round
-.code.tex)
-(/usr/local/texlive/2015/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.misc.
-code.tex)
-(/usr/local/texlive/2015/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.integ
-erarithmetics.code.tex)))
-(/usr/local/texlive/2015/texmf-dist/tex/generic/pgf/math/pgfmathfloat.code.tex
-\c@pgfmathroundto@lastzeros=\count167
-))
-(/usr/local/texlive/2015/texmf-dist/tex/generic/pgf/basiclayer/pgfcorepoints.co
-de.tex
-File: pgfcorepoints.code.tex 2013/10/07  (rcs-revision 1.27)
-\pgf@picminx=\dimen159
-\pgf@picmaxx=\dimen160
-\pgf@picminy=\dimen161
-\pgf@picmaxy=\dimen162
-\pgf@pathminx=\dimen163
-\pgf@pathmaxx=\dimen164
-\pgf@pathminy=\dimen165
-\pgf@pathmaxy=\dimen166
-\pgf@xx=\dimen167
-\pgf@xy=\dimen168
-\pgf@yx=\dimen169
-\pgf@yy=\dimen170
-\pgf@zx=\dimen171
-\pgf@zy=\dimen172
+(/usr/share/texmf/tex/generic/pgf/basiclayer/pgfcorepoints.code.tex
+File: pgfcorepoints.code.tex 2006/10/16  (rcs-revision 1.7)
+\pgf@picminx=\dimen152
+\pgf@picmaxx=\dimen153
+\pgf@picminy=\dimen154
+\pgf@picmaxy=\dimen155
+\pgf@pathminx=\dimen156
+\pgf@pathmaxx=\dimen157
+\pgf@pathminy=\dimen158
+\pgf@pathmaxy=\dimen159
+\pgf@tempdim=\dimen160
+\c@pgf@tempcount=\count160
+\pgf@xx=\dimen161
+\pgf@xy=\dimen162
+\pgf@yx=\dimen163
+\pgf@yy=\dimen164
+\pgf@zx=\dimen165
+\pgf@zy=\dimen166
 )
-(/usr/local/texlive/2015/texmf-dist/tex/generic/pgf/basiclayer/pgfcorepathconst
-ruct.code.tex
-File: pgfcorepathconstruct.code.tex 2013/10/07  (rcs-revision 1.29)
-\pgf@path@lastx=\dimen173
-\pgf@path@lasty=\dimen174
+(/usr/share/texmf/tex/generic/pgf/basiclayer/pgfcorepathconstruct.code.tex
+File: pgfcorepathconstruct.code.tex 2006/10/16  (rcs-revision 1.6)
+\pgf@path@lastx=\dimen167
+\pgf@path@lasty=\dimen168
 )
-(/usr/local/texlive/2015/texmf-dist/tex/generic/pgf/basiclayer/pgfcorepathusage
-.code.tex
-File: pgfcorepathusage.code.tex 2013/12/13  (rcs-revision 1.23)
-\pgf@shorten@end@additional=\dimen175
-\pgf@shorten@start@additional=\dimen176
+(/usr/share/texmf/tex/generic/pgf/basiclayer/pgfcorepathusage.code.tex
+File: pgfcorepathusage.code.tex 2006/10/16  (rcs-revision 1.7)
+\pgf@shorten@end@additional=\dimen169
+\pgf@shorten@start@additional=\dimen170
 )
-(/usr/local/texlive/2015/texmf-dist/tex/generic/pgf/basiclayer/pgfcorescopes.co
-de.tex
-File: pgfcorescopes.code.tex 2013/10/09  (rcs-revision 1.44)
-\pgfpic=\box64
-\pgf@hbox=\box65
-\pgf@layerbox@main=\box66
-\pgf@picture@serial@count=\count168
+(/usr/share/texmf/tex/generic/pgf/basiclayer/pgfcorescopes.code.tex
+File: pgfcorescopes.code.tex 2006/10/23  (rcs-revision 1.20)
+\pgfpic=\box61
+\pgf@hbox=\box62
+\pgf@layerbox@main=\box63
+\pgf@picture@serial@count=\count161
 )
-(/usr/local/texlive/2015/texmf-dist/tex/generic/pgf/basiclayer/pgfcoregraphicst
-ate.code.tex
-File: pgfcoregraphicstate.code.tex 2013/09/19  (rcs-revision 1.11)
-\pgflinewidth=\dimen177
+(/usr/share/texmf/tex/generic/pgf/basiclayer/pgfcoregraphicstate.code.tex
+File: pgfcoregraphicstate.code.tex 2006/10/16  (rcs-revision 1.6)
+\pgflinewidth=\dimen171
 )
-(/usr/local/texlive/2015/texmf-dist/tex/generic/pgf/basiclayer/pgfcoretransform
-ations.code.tex
-File: pgfcoretransformations.code.tex 2013/10/10  (rcs-revision 1.17)
-\pgf@pt@x=\dimen178
-\pgf@pt@y=\dimen179
-\pgf@pt@temp=\dimen180
+(/usr/share/texmf/tex/generic/pgf/basiclayer/pgfcoretransformations.code.tex
+File: pgfcoretransformations.code.tex 2006/10/11  (rcs-revision 1.4)
+\pgf@pt@x=\dimen172
+\pgf@pt@y=\dimen173
+\pgf@pt@temp=\dimen174
 )
-(/usr/local/texlive/2015/texmf-dist/tex/generic/pgf/basiclayer/pgfcorequick.cod
-e.tex
-File: pgfcorequick.code.tex 2008/10/09  (rcs-revision 1.3)
+(/usr/share/texmf/tex/generic/pgf/basiclayer/pgfcorequick.code.tex
+File: pgfcorequick.code.tex 2006/10/11  (rcs-revision 1.2)
 )
-(/usr/local/texlive/2015/texmf-dist/tex/generic/pgf/basiclayer/pgfcoreobjects.c
-ode.tex
+(/usr/share/texmf/tex/generic/pgf/basiclayer/pgfcoreobjects.code.tex
 File: pgfcoreobjects.code.tex 2006/10/11  (rcs-revision 1.2)
 )
-(/usr/local/texlive/2015/texmf-dist/tex/generic/pgf/basiclayer/pgfcorepathproce
-ssing.code.tex
-File: pgfcorepathprocessing.code.tex 2013/09/09  (rcs-revision 1.9)
+(/usr/share/texmf/tex/generic/pgf/basiclayer/pgfcorepathprocessing.code.tex
+File: pgfcorepathprocessing.code.tex 2006/10/16  (rcs-revision 1.5)
 )
-(/usr/local/texlive/2015/texmf-dist/tex/generic/pgf/basiclayer/pgfcorearrows.co
-de.tex
-File: pgfcorearrows.code.tex 2013/11/07  (rcs-revision 1.40)
-\pgfarrowsep=\dimen181
+(/usr/share/texmf/tex/generic/pgf/basiclayer/pgfcorearrows.code.tex
+File: pgfcorearrows.code.tex 2006/10/16  (rcs-revision 1.6)
 )
-(/usr/local/texlive/2015/texmf-dist/tex/generic/pgf/basiclayer/pgfcoreshade.cod
-e.tex
-File: pgfcoreshade.code.tex 2013/07/15  (rcs-revision 1.15)
-\pgf@max=\dimen182
-\pgf@sys@shading@range@num=\count169
-)
-(/usr/local/texlive/2015/texmf-dist/tex/generic/pgf/basiclayer/pgfcoreimage.cod
-e.tex
-File: pgfcoreimage.code.tex 2013/07/15  (rcs-revision 1.18)
-
-(/usr/local/texlive/2015/texmf-dist/tex/generic/pgf/basiclayer/pgfcoreexternal.
-code.tex
-File: pgfcoreexternal.code.tex 2013/07/15  (rcs-revision 1.20)
-\pgfexternal@startupbox=\box67
-))
-(/usr/local/texlive/2015/texmf-dist/tex/generic/pgf/basiclayer/pgfcorelayers.co
-de.tex
-File: pgfcorelayers.code.tex 2013/07/18  (rcs-revision 1.7)
-)
-(/usr/local/texlive/2015/texmf-dist/tex/generic/pgf/basiclayer/pgfcoretranspare
-ncy.code.tex
-File: pgfcoretransparency.code.tex 2013/09/30  (rcs-revision 1.5)
-)
-(/usr/local/texlive/2015/texmf-dist/tex/generic/pgf/basiclayer/pgfcorepatterns.
-code.tex
-File: pgfcorepatterns.code.tex 2013/11/07  (rcs-revision 1.5)
+(/usr/share/texmf/tex/generic/pgf/basiclayer/pgfcoreshade.code.tex
+File: pgfcoreshade.code.tex 2006/10/16  (rcs-revision 1.7)
+\pgf@max=\dimen175
+\pgf@sys@shading@range@num=\count162
 )))
-(/usr/local/texlive/2015/texmf-dist/tex/generic/pgf/modules/pgfmoduleshapes.cod
-e.tex
-File: pgfmoduleshapes.code.tex 2013/10/31  (rcs-revision 1.34)
-\pgfnodeparttextbox=\box68
-)
-(/usr/local/texlive/2015/texmf-dist/tex/generic/pgf/modules/pgfmoduleplot.code.
-tex
-File: pgfmoduleplot.code.tex 2013/07/31  (rcs-revision 1.12)
-)
-(/usr/local/texlive/2015/texmf-dist/tex/latex/pgf/compatibility/pgfcomp-version
--0-65.sty
-Package: pgfcomp-version-0-65 2007/07/03 v3.0.0 (rcs-revision 1.7)
-\pgf@nodesepstart=\dimen183
-\pgf@nodesepend=\dimen184
-)
-(/usr/local/texlive/2015/texmf-dist/tex/latex/pgf/compatibility/pgfcomp-version
--1-18.sty
-Package: pgfcomp-version-1-18 2007/07/23 v3.0.0 (rcs-revision 1.1)
+(/usr/share/texmf/tex/latex/pgf/basiclayer/pgfbaseshapes.sty
+(/usr/share/texmf/tex/generic/pgf/basiclayer/pgfbaseshapes.code.tex
+Package: pgfbaseshapes 2006/10/16 v1.10 (rcs-revision 1.16)
+\pgfnodeparttextbox=\box64
 ))
-(/usr/local/texlive/2015/texmf-dist/tex/latex/pgf/utilities/pgffor.sty
-(/usr/local/texlive/2015/texmf-dist/tex/latex/pgf/utilities/pgfkeys.sty
-(/usr/local/texlive/2015/texmf-dist/tex/generic/pgf/utilities/pgfkeys.code.tex)
-) (/usr/local/texlive/2015/texmf-dist/tex/latex/pgf/math/pgfmath.sty
-(/usr/local/texlive/2015/texmf-dist/tex/generic/pgf/math/pgfmath.code.tex))
-(/usr/local/texlive/2015/texmf-dist/tex/generic/pgf/utilities/pgffor.code.tex
-Package: pgffor 2013/12/13 v3.0.0 (rcs-revision 1.25)
-
-(/usr/local/texlive/2015/texmf-dist/tex/generic/pgf/math/pgfmath.code.tex)
-\pgffor@iter=\dimen185
-\pgffor@skip=\dimen186
-\pgffor@stack=\toks40
-\pgffor@toks=\toks41
+(/usr/share/texmf/tex/latex/pgf/basiclayer/pgfbaseplot.sty
+(/usr/share/texmf/tex/generic/pgf/basiclayer/pgfbaseplot.code.tex
+Package: pgfbaseplot 2006/10/16 v1.10 (rcs-revision 1.5)
+\pgf@plotwrite=\write4
 ))
-(/usr/local/texlive/2015/texmf-dist/tex/generic/pgf/frontendlayer/tikz/tikz.cod
-e.tex
-Package: tikz 2013/12/13 v3.0.0 (rcs-revision 1.142)
-
-(/usr/local/texlive/2015/texmf-dist/tex/generic/pgf/libraries/pgflibraryplothan
-dlers.code.tex
-File: pgflibraryplothandlers.code.tex 2013/08/31 v3.0.0 (rcs-revision 1.20)
-\pgf@plot@mark@count=\count170
-\pgfplotmarksize=\dimen187
+(/usr/share/texmf/tex/latex/pgf/basiclayer/pgfbaseimage.sty
+(/usr/share/texmf/tex/generic/pgf/basiclayer/pgfbaseimage.code.tex
+Package: pgfbaseimage 2006/10/16 v1.10 (rcs-revision 1.5)
+))
+(/usr/share/texmf/tex/latex/pgf/basiclayer/pgfbaselayers.sty
+(/usr/share/texmf/tex/generic/pgf/basiclayer/pgfbaselayers.code.tex
+Package: pgfbaselayers 2006/10/16 v1.10 (rcs-revision 1.5)
+))
+(/usr/share/texmf/tex/latex/pgf/basiclayer/pgfbasesnakes.sty
+(/usr/share/texmf/tex/generic/pgf/basiclayer/pgfbasesnakes.code.tex
+Package: pgfbasesnakes 2006/10/16 v1.10 (rcs-revision 1.10)
+\pgfsnakeremainingdistance=\dimen176
+\pgfsnakecompleteddistance=\dimen177
+))
+(/usr/share/texmf/tex/latex/pgf/basiclayer/pgfbasepatterns.sty
+(/usr/share/texmf/tex/generic/pgf/basiclayer/pgfbasepatterns.code.tex
+Package: pgfbasepatterns 2006/10/16 v1.10 (rcs-revision 1.9)
+))
+(/usr/share/texmf/tex/latex/pgf/compatibility/pgfcomp-version-0-65.sty
+Package: pgfcomp-version-0-65 2006/10/11 v1.10 (rcs-revision 1.4)
+\pgf@nodesepstart=\dimen178
+\pgf@nodesepend=\dimen179
+))
+(/usr/share/texmf/tex/latex/tools/calc.sty
+Package: calc 2005/08/06 v4.2 Infix arithmetic (KKT,FJ)
+\calc@Acount=\count163
+\calc@Bcount=\count164
+\calc@Adimen=\dimen180
+\calc@Bdimen=\dimen181
+\calc@Askip=\skip82
+\calc@Bskip=\skip83
+LaTeX Info: Redefining \setlength on input line 75.
+LaTeX Info: Redefining \addtolength on input line 76.
+\calc@Ccount=\count165
+\calc@Cskip=\skip84
 )
-\tikz@lastx=\dimen188
-\tikz@lasty=\dimen189
-\tikz@lastxsaved=\dimen190
-\tikz@lastysaved=\dimen191
-\tikzleveldistance=\dimen192
-\tikzsiblingdistance=\dimen193
-\tikz@figbox=\box69
-\tikz@figbox@bg=\box70
-\tikz@tempbox=\box71
-\tikz@tempbox@bg=\box72
-\tikztreelevel=\count171
-\tikznumberofchildren=\count172
-\tikznumberofcurrentchild=\count173
-\tikz@fig@count=\count174
+(/usr/share/texmf/tex/latex/pgf/utilities/pgffor.sty
+(/usr/share/texmf/tex/generic/pgf/utilities/pgffor.code.tex
+Package: pgffor 2006/10/16 v1.10 (rcs-revision 1.5)
+\pgffor@iter=\dimen182
+\pgffor@skip=\dimen183
+))
+(/usr/share/texmf/tex/latex/xkeyval/xkeyval.sty
+Package: xkeyval 2006/11/18 v2.5f package option processing (HA)
 
-(/usr/local/texlive/2015/texmf-dist/tex/generic/pgf/modules/pgfmodulematrix.cod
-e.tex
-File: pgfmodulematrix.code.tex 2013/09/17  (rcs-revision 1.8)
-\pgfmatrixcurrentrow=\count175
-\pgfmatrixcurrentcolumn=\count176
-\pgf@matrix@numberofcolumns=\count177
+(/usr/share/texmf/tex/latex/xkeyval/xkeyval.tex
+\XKV@toks=\toks30
+\XKV@depth=\count166
+File: xkeyval.tex 2006/11/18 v2.5f key=value parser (HA)
+))
+(/usr/share/texmf/tex/generic/pgf/frontendlayer/tikz.code.tex
+Package: tikz 2006/10/17 v1.10 (rcs-revision 1.68)
+
+(/usr/share/texmf/tex/generic/pgf/libraries/pgflibraryplothandlers.code.tex
+File: pgflibraryplothandlers.code.tex 2006/10/16 v1.10 (rcs-revision 1.8)
+\pgf@plot@mark@count=\count167
+\pgfplotmarksize=\dimen184
 )
-\tikz@expandcount=\count178
+\tikz@lastx=\dimen185
+\tikz@lasty=\dimen186
+\tikz@lastxsaved=\dimen187
+\tikz@lastysaved=\dimen188
+\tikzleveldistance=\dimen189
+\tikzsiblingdistance=\dimen190
+\tikz@figbox=\box65
+\tikz@tempbox=\box66
+\tikztreelevel=\count168
+\tikznumberofchildren=\count169
+\tikznumberofcurrentchild=\count170
+\tikz@fig@count=\count171
+\tikz@expandcount=\count172
 
-(/usr/local/texlive/2015/texmf-dist/tex/generic/pgf/frontendlayer/tikz/librarie
-s/tikzlibrarytopaths.code.tex
-File: tikzlibrarytopaths.code.tex 2008/06/17 v3.0.0 (rcs-revision 1.2)
+(/usr/share/texmf/tex/generic/pgf/libraries/pgflibrarytikztopaths.code.tex
+File: pgflibrarytikztopaths.code.tex 2006/10/16 v1.10 (rcs-revision 1.5)
 )))
-(/usr/local/texlive/2015/texmf-dist/tex/latex/background/background.sty
-Package: background 2014/03/04 v2.1 background material
-
-(/usr/local/texlive/2015/texmf-dist/tex/latex/xkeyval/xkeyval.sty
-Package: xkeyval 2014/12/03 v2.7a package option processing (HA)
-
-(/usr/local/texlive/2015/texmf-dist/tex/generic/xkeyval/xkeyval.tex
-(/usr/local/texlive/2015/texmf-dist/tex/generic/xkeyval/xkvutils.tex
-\XKV@toks=\toks42
-\XKV@tempa@toks=\toks43
+(/usr/share/texmf/tex/latex/marginnote/marginnote.sty
+Package: marginnote 2006/10/26 v1.1 non floating margin notes for LaTeX
+\c@mn@abspage=\count173
 )
-\XKV@depth=\count179
-File: xkeyval.tex 2014/12/03 v2.7a key=value parser (HA)
-))
-(/usr/local/texlive/2015/texmf-dist/tex/latex/everypage/everypage.sty
-Package: everypage 2007/06/20 1.1 Hooks to run on every page
-))
-(/usr/local/texlive/2015/texmf-dist/tex/generic/schemata/schemata.sty
-Package: schemata 2013/09/23 v0.7 generic package to aid construction of topica
-l categories
-\rhs=\box73
-\lhs=\box74
-\rheight=\dimen194
-\lheight=\dimen195
-)
-(/usr/local/texlive/2015/texmf-dist/tex/latex/marginnote/marginnote.sty
-Package: marginnote 2012/03/29 v1.1i non floating margin notes for LaTeX
-\c@mn@abspage=\count180
-)
-Package hyperref Info: Option `colorlinks' set `true' on input line 152.
+Package hyperref Info: Option `colorlinks' set `true' on input line 153.
 Class revtex4-1 Info: Unrecognized array package. Please update this document c
-lass! (Proceeding with fingers crossed.) on input line 156.
+lass! (Proceeding with fingers crossed.) on input line 157.
+Class revtex4-1 Info: Repairing hyperref 6.75r \href on input line 157.
 Class revtex4-1 Info: Patching unrecognized longtable package. (Proceeding with
- fingers crossed) on input line 156.
-Class revtex4-1 Info: Robustifying \LaTeX's \boldmath command on input line 156
+ fingers crossed) on input line 157.
+Class revtex4-1 Info: Robustifying \LaTeX's \boldmath command on input line 157
 .
-Class revtex4-1 Info: cite was not loaded (OK!) on input line 156.
-Class revtex4-1 Info: mcite was not loaded (OK!) on input line 156.
-Class revtex4-1 Info: multicol was not loaded (OK!) on input line 156.
+Class revtex4-1 Info: cite was not loaded (OK!) on input line 157.
+Class revtex4-1 Info: mcite was not loaded (OK!) on input line 157.
+Class revtex4-1 Info: multicol was not loaded (OK!) on input line 157.
+ (./dissertation.aux
+(./introduction.aux) (./background.aux) (./literature.aux) (./methodology.aux)
+(./phase1.aux
 
-(./dissertation.aux (./introduction.aux) (./background.aux) (./literature.aux)
-(./methodology.aux) (./phase1.aux
+LaTeX Warning: Label `images' multiply defined.
+
+
+LaTeX Warning: Label `lc' multiply defined.
+
 
 LaTeX Warning: Label `detrended' multiply defined.
 
 ))
 \openout1 = `dissertation.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 156.
-LaTeX Font Info:    ... okay on input line 156.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 156.
-LaTeX Font Info:    ... okay on input line 156.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 156.
-LaTeX Font Info:    ... okay on input line 156.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 156.
-LaTeX Font Info:    ... okay on input line 156.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 156.
-LaTeX Font Info:    ... okay on input line 156.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 156.
-LaTeX Font Info:    ... okay on input line 156.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 156.
-LaTeX Font Info:    ... okay on input line 156.
- (/usr/local/texlive/2015/texmf-dist/tex/context/base/supp-pdf.mkii
-[Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count181
-\scratchdimen=\dimen196
-\scratchbox=\box75
-\nofMPsegments=\count182
-\nofMParguments=\count183
-\everyMPshowfont=\toks44
-\MPscratchCnt=\count184
-\MPscratchDim=\dimen197
-\MPnumerator=\count185
-\makeMPintoPDFobject=\count186
-\everyMPtoPDFconversion=\toks45
-) (/usr/local/texlive/2015/texmf-dist/tex/latex/oberdiek/epstopdf-base.sty
-Package: epstopdf-base 2010/02/09 v2.5 Base part for package epstopdf
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 157.
+LaTeX Font Info:    ... okay on input line 157.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 157.
+LaTeX Font Info:    ... okay on input line 157.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 157.
+LaTeX Font Info:    ... okay on input line 157.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 157.
+LaTeX Font Info:    ... okay on input line 157.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 157.
+LaTeX Font Info:    ... okay on input line 157.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 157.
+LaTeX Font Info:    ... okay on input line 157.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 157.
+LaTeX Font Info:    ... okay on input line 157.
+Package hyperref Info: Link coloring ON on input line 157.
+ (/usr/share/texmf/tex/latex/hyperref/nameref.sty
+Package: nameref 2006/12/27 v2.28 Cross-referencing by name of section
 
-(/usr/local/texlive/2015/texmf-dist/tex/latex/oberdiek/grfext.sty
-Package: grfext 2010/08/19 v1.1 Manage graphics extensions (HO)
+(/usr/share/texmf/tex/latex/oberdiek/refcount.sty
+Package: refcount 2006/02/20 v3.0 Data extraction from references (HO)
 )
-Package grfext Info: Graphics extension search list:
-(grfext)             [.png,.pdf,.jpg,.mps,.jpeg,.jbig2,.jb2,.PNG,.PDF,.JPG,.JPE
-G,.JBIG2,.JB2,.eps]
-(grfext)             \AppendGraphicsExtensions on input line 452.
-
-(/usr/local/texlive/2015/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
-File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
-e
-))
-\AtBeginShipoutBox=\box76
-Package hyperref Info: Link coloring ON on input line 156.
-
-(/usr/local/texlive/2015/texmf-dist/tex/latex/hyperref/nameref.sty
-Package: nameref 2012/10/27 v2.43 Cross-referencing by name of section
-
-(/usr/local/texlive/2015/texmf-dist/tex/generic/oberdiek/gettitlestring.sty
-Package: gettitlestring 2010/12/03 v1.4 Cleanup title references (HO)
+\c@section@level=\count174
 )
-\c@section@level=\count187
-)
-LaTeX Info: Redefining \ref on input line 156.
-LaTeX Info: Redefining \pageref on input line 156.
-LaTeX Info: Redefining \nameref on input line 156.
-
-ABD: EverySelectfont initializing macros
-LaTeX Info: Redefining \selectfont on input line 156.
- ABD: EveryShipout initializing macros
+LaTeX Info: Redefining \ref on input line 157.
+LaTeX Info: Redefining \pageref on input line 157.
+LaTeX Info: Redefining \selectfont on input line 157.
 Package marginnote Info: \pdfoutput not 0 and \pdflastxpos available.
-(marginnote)             Extended position detection mode activated.
-
-(./title.tex) (./abstract.tex) [1{/usr/local/texlive/2015/texmf-var/fonts/map/p
-dftex/updmap/pdftex.map}]
+(marginnote)             Extended possition detection mode activated.
+ (./title.tex)
+(./abstract.tex) [1{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
 
 LaTeX Font Warning: Font shape `T1/cmr/m/n' in size <16> not available
-(Font)              size <17.28> substituted on input line 192.
+(Font)              size <17.28> substituted on input line 193.
 
 
 LaTeX Font Warning: Font shape `T1/cmr/bx/n' in size <16> not available
-(Font)              size <17.28> substituted on input line 192.
+(Font)              size <17.28> substituted on input line 193.
 
 
 LaTeX Font Warning: Font shape `T1/cmr/bx/sc' in size <16> not available
-(Font)              size <17.28> substituted on input line 192.
+(Font)              size <17.28> substituted on input line 193.
 
 (./dissertation.toc
 LaTeX Font Info:    Try loading font information for U+lasy on input line 8.
- (/usr/local/texlive/2015/texmf-dist/tex/latex/base/ulasy.fd
+ (/usr/share/texmf/tex/latex/base/ulasy.fd
 File: ulasy.fd 1998/08/17 v2.2e LaTeX symbol font definitions
 )
 LaTeX Font Info:    Try loading font information for U+msa on input line 8.
- (/usr/local/texlive/2015/texmf-dist/tex/latex/amsfonts/umsa.fd
-File: umsa.fd 2013/01/14 v3.01 AMS symbols A
+
+(/usr/share/texmf/tex/latex/amsfonts/umsa.fd
+File: umsa.fd 2002/01/19 v2.2g AMS font definitions
 )
 LaTeX Font Info:    Try loading font information for U+msb on input line 8.
 
-(/usr/local/texlive/2015/texmf-dist/tex/latex/amsfonts/umsb.fd
-File: umsb.fd 2013/01/14 v3.01 AMS symbols B
+(/usr/share/texmf/tex/latex/amsfonts/umsb.fd
+File: umsb.fd 2002/01/19 v2.2g AMS font definitions
 ))
 \tf@toc=\write5
 \openout5 = `dissertation.toc'.
@@ -946,9 +750,14 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
  [2] [3]
 \openout2 = `introduction.aux'.
 
+ (./introduction.tex
+[1]
 
-(./introduction.tex [1]pdfTeX warning (ext4): destination with the same identif
-ier (name{page.}) has been already used, duplicate ignored
+Package hyperref Warning: No destination for bookmark of \addcontentsline,
+(hyperref)                destination is added on input line 1.
+
+pdfTeX warning (ext4): destination with the same identifier (name{page.}) has b
+een already used, duplicate ignored
 <to be read again> 
                    \relax 
 l.56     \item \textbf
@@ -960,14 +769,14 @@ s been already used, duplicate ignored
 l.88 
       [3]
 LaTeX Font Info:    Try loading font information for T1+cmss on input line 92.
- (/usr/local/texlive/2015/texmf-dist/tex/latex/base/t1cmss.fd
-File: t1cmss.fd 2014/09/29 v2.5h Standard LaTeX font definitions
+ (/usr/share/texmf/tex/latex/base/t1cmss.fd
+File: t1cmss.fd 1999/05/25 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Try loading font information for OMS+cmr on input line 107.
 
 
-(/usr/local/texlive/2015/texmf-dist/tex/latex/base/omscmr.fd
-File: omscmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
+(/usr/share/texmf/tex/latex/base/omscmr.fd
+File: omscmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <12> not available
 (Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 107.
@@ -980,7 +789,7 @@ l.182 \end{framed}
 ier (name{page.}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.241 
+l.242 
        [5]
 \openout2 = `background.aux'.
 
@@ -1039,11 +848,31 @@ LaTeX Font Warning: Font shape `OMS/cmsy/m/n' in size <6.5> not available
 (Font)              size <6> substituted on input line 66.
 
 
+LaTeX Font Warning: Font shape `OMX/cmex/m/n' in size <13> not available
+(Font)              size <12> substituted on input line 66.
+
+
 LaTeX Font Warning: Font shape `U/lasy/m/n' in size <13> not available
 (Font)              size <12> substituted on input line 66.
 
 
 LaTeX Font Warning: Font shape `U/lasy/m/n' in size <6.5> not available
+(Font)              size <6> substituted on input line 66.
+
+
+LaTeX Font Warning: Font shape `U/msa/m/n' in size <13> not available
+(Font)              size <12> substituted on input line 66.
+
+
+LaTeX Font Warning: Font shape `U/msa/m/n' in size <6.5> not available
+(Font)              size <6> substituted on input line 66.
+
+
+LaTeX Font Warning: Font shape `U/msb/m/n' in size <13> not available
+(Font)              size <12> substituted on input line 66.
+
+
+LaTeX Font Warning: Font shape `U/msb/m/n' in size <6.5> not available
 (Font)              size <6> substituted on input line 66.
 
 pdfTeX warning (ext4): destination with the same identifier (name{page.}) has b
@@ -1059,7 +888,7 @@ l.146 \section{3-minute oscillations}
                                       [9]
 Package marginnote Info: Margin note 13.1 is on absolute page 13
 (marginnote)              on input line 193.
-Package marginnote Info: xpos seems to be 90.33748pt,
+Package marginnote Info: xpos seams to be 5920357sp,
 (marginnote)             \marginnoterightadjust ignored on input line 193.
 pdfTeX warning (ext4): destination with the same identifier (name{page.}) has b
 een already used, duplicate ignored
@@ -1082,7 +911,7 @@ ine 228.
 
 Package marginnote Info: Margin note 14.1 is on absolute page 14
 (marginnote)              on input line 259.
-Package marginnote Info: xpos seems to be 90.33748pt,
+Package marginnote Info: xpos seams to be 5920357sp,
 (marginnote)             \marginnoteleftadjust ignored on input line 259.
 
 Package natbib Warning: Citation `Felipe2010; Bogdan2006 p. 323' on page  undef
@@ -1167,9 +996,8 @@ l.927 T
        hese points in time are [23]
 LaTeX Font Info:    Try loading font information for T1+cmtt on input line 981.
 
-
-(/usr/local/texlive/2015/texmf-dist/tex/latex/base/t1cmtt.fd
-File: t1cmtt.fd 2014/09/29 v2.5h Standard LaTeX font definitions
+ (/usr/share/texmf/tex/latex/base/t1cmtt.fd
+File: t1cmtt.fd 1999/05/25 v2.5h Standard LaTeX font definitions
 )pdfTeX warning (ext4): destination with the same identifier (name{page.}) has 
 been already used, duplicate ignored
 <to be read again> 
@@ -1240,9 +1068,9 @@ Missing character: There is no ’ in font cmr12!
 been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.243 
+l.244 
        [29
-\@writefile{toc}{\contentsline {subsection}{Flare classes}{}{equation.0.18}}
+\@writefile{toc}{\contentsline {subsection}{Flare classes}{}{equation.18}}
 ]
 \openout2 = `literature.aux'.
 
@@ -1256,384 +1084,315 @@ on with the same identifier (name{page.}) has been already used, duplicate igno
 red
 <to be read again> 
                    \relax 
-l.245 
+l.246 
        [31]
 \openout2 = `methodology.aux'.
 
  (./methodology.tex
 
-Package natbib Warning: Citation `hmi' on page  undefined on input line 65.
+Package natbib Warning: Citation `Viereck2007' on page  undefined on input line
+ 38.
 
 pdfTeX warning (ext4): destination with the same identifier (name{page.}) has b
 een already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.66 
-      [32]pdfTeX warning (ext4): destination with the same identifier (name{pag
-e.}) has been already used, duplicate ignored
+l.67 \mynote{From propopsal:}
+                              [32]
+<$HOME/Figures/hmi_label_sunspots_20190124.pdf, id=403, 328.22626pt x 226.59656
+pt>
+File: $HOME/Figures/hmi_label_sunspots_20190124.pdf Graphic file (type pdf)
+ <use $HOME/Figures/hmi_label_sunspots_20190124.pdf>
+
+Package natbib Warning: Citation `hmi' on page  undefined on input line 117.
+
+
+Package natbib Warning: Citation `Scherrer2012' on page  undefined on input lin
+e 121.
+
+
+Package natbib Warning: Citation `Schou2012' on page  undefined on input line 1
+33.
+
+pdfTeX warning (ext4): destination with the same identifier (name{page.}) has b
+een already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.118     \item L
-                 aunched June 2013; sun-synchronous, low-Earth orbit. [33]pdfTe
+l.134 
+       [33 </home/users/laurel07/Figures/hmi_label_sunspots_20190124.pdf>]
+<$HOME/Dropbox/Figures/lc.pdf, id=415, 578.16pt x 216.81pt>
+File: $HOME/Dropbox/Figures/lc.pdf Graphic file (type pdf)
+
+<use $HOME/Dropbox/Figures/lc.pdf>
+<$HOME/Figures/lc_goes_20190124.pdf, id=416, 578.16pt x 252.945pt>
+File: $HOME/Figures/lc_goes_20190124.pdf Graphic file (type pdf)
+
+<use $HOME/Figures/lc_goes_20190124.pdf>
+<$HOME/Dropbox/Figures/images.pdf, id=418, 578.16pt x 361.35pt>
+File: $HOME/Dropbox/Figures/images.pdf Graphic file (type pdf)
+
+<use $HOME/Dropbox/Figures/images.pdf>
+
+Package natbib Warning: Citation `McAteer2003' on page  undefined on input line
+ 180.
+
+
+Package natbib Warning: Citation `McAteer2004' on page  undefined on input line
+ 180.
+
+pdfTeX warning (ext4): destination with the same identifier (name{page.}) has b
+een already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.190 
+       [34 </home/users/laurel07/Dropbox/Figures/lc.pdf> </home/users/laurel07/
+Figures/lc_goes_20190124.pdf>]pdfTeX warning (ext4): destination with the same 
+identifier (name{page.}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.224 F
+       or this project, wavelet analysis and [35 </home/users/laurel07/Dropbox/
+Figures/images.pdf>]pdfTeX warning (ext4): destination with the same identifier
+ (name{page.}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.275     \item L
+                 aunched June 2013; sun-synchronous, low-Earth orbit. [36]pdfTe
 X warning (ext4): destination with the same identifier (name{page.}) has been a
 lready used, duplicate ignored
 <to be read again> 
                    \relax 
-l.171     \item I
-                 nitial approach: BDA with dz = 1 hour to [34]
-<$HOME/Dropbox/Figures/Quiet/aia1600quiet.pdf, id=411, 307.1475pt x 505.89pt>
-File: $HOME/Dropbox/Figures/Quiet/aia1600quiet.pdf Graphic file (type pdf)
-
-<use $HOME/Dropbox/Figures/Quiet/aia1600quiet.pdf>
-Package pdftex.def Info: $HOME/Dropbox/Figures/Quiet/aia1600quiet.pdf used on i
-nput line 194.
-(pdftex.def)             Requested size: 184.28981pt x 303.53633pt.
-
-<$HOME/Dropbox/Figures/Quiet/aia1700quiet.pdf, id=412, 307.1475pt x 505.89pt>
-File: $HOME/Dropbox/Figures/Quiet/aia1700quiet.pdf Graphic file (type pdf)
-
-<use $HOME/Dropbox/Figures/Quiet/aia1700quiet.pdf>
-Package pdftex.def Info: $HOME/Dropbox/Figures/Quiet/aia1700quiet.pdf used on i
-nput line 194.
-(pdftex.def)             Requested size: 184.28981pt x 303.53633pt.
-pdfTeX warning (ext4): destination with the same identifier (name{page.}) has b
-een already used, duplicate ignored
+l.328     \item I
+                 nitial approach: BDA with dz = 1 hour to [37]pdfTeX warning (e
+xt4): destination with the same identifier (name{page.}) has been already used,
+ duplicate ignored
 <to be read again> 
                    \relax 
-l.204 
-       [35]pdfTeX warning (ext4): destination with the same identifier (name{pa
+l.361 
+       [38]pdfTeX warning (ext4): destination with the same identifier (name{pa
 ge.}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.228 \end{itemize}
-                    [36 </Users/laurel/Dropbox/Figures/Quiet/aia1600quiet.pdf> 
-</Users/laurel/Dropbox/Figures/Quiet/aia1700quiet.pdf>]pdfTeX warning (ext4): d
-estination with the same identifier (name{page.}) has been already used, duplic
-ate ignored
-<to be read again> 
-                   \relax 
-l.231 
-       [37])pdfTeX warning (ext4): destination with the same identifier (name{p
+l.388 
+       [39])pdfTeX warning (ext4): destination with the same identifier (name{p
 age.}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.247 
-       [38
-\@writefile{toc}{\contentsline {subsection}{Data Analysis}{}{figure.1}}
+l.248 
+       [40
+\@writefile{toc}{\contentsline {subsection}{Data Analysis}{}{Item.20}}
 \@writefile{toc}{\contentsline {subsubsection}{``Discrete wavelet analysis''}{}
-{figure.1}}
+{Item.20}}
 ]
 \openout2 = `phase1.aux'.
 
  (./phase1.tex
-<$HOME/Dropbox/Figures/images.pdf, id=450, 578.16pt x 361.35pt>
 File: $HOME/Dropbox/Figures/images.pdf Graphic file (type pdf)
-
-<use $HOME/Dropbox/Figures/images.pdf>
-Package pdftex.def Info: $HOME/Dropbox/Figures/images.pdf used on input line 11
-.
-(pdftex.def)             Requested size: 433.62pt x 271.01184pt.
-
-<$HOME/Dropbox/Figures/lc.pdf, id=451, 578.16pt x 216.81pt>
+ <use $HOME/Dropbox/Figures/images.pdf>
 File: $HOME/Dropbox/Figures/lc.pdf Graphic file (type pdf)
 
 <use $HOME/Dropbox/Figures/lc.pdf>
-Package pdftex.def Info: $HOME/Dropbox/Figures/lc.pdf used on input line 23.
-(pdftex.def)             Requested size: 433.62pt x 162.60709pt.
-
-<$HOME/Dropbox/Figures/Lightcurves/lc_log_20181128.pdf, id=452, 578.16pt x 216.
+<$HOME/Dropbox/Figures/Lightcurves/lc_log_20181128.pdf, id=476, 578.16pt x 216.
 81pt>
 File: $HOME/Dropbox/Figures/Lightcurves/lc_log_20181128.pdf Graphic file (type 
 pdf)
  <use $HOME/Dropbox/Figures/Lightcurves/lc_log_20181128.pdf>
-Package pdftex.def Info: $HOME/Dropbox/Figures/Lightcurves/lc_log_20181128.pdf 
-used on input line 24.
-(pdftex.def)             Requested size: 433.62pt x 162.60709pt.
-
-<$HOME/Dropbox/Figures/lc_goes.pdf, id=453, 578.16pt x 252.945pt>
+<$HOME/Dropbox/Figures/lc_goes.pdf, id=477, 578.16pt x 252.945pt>
 File: $HOME/Dropbox/Figures/lc_goes.pdf Graphic file (type pdf)
 
-<use $HOME/Dropbox/Figures/lc_goes.pdf>
-Package pdftex.def Info: $HOME/Dropbox/Figures/lc_goes.pdf used on input line 2
-5.
-(pdftex.def)             Requested size: 433.62pt x 189.70828pt.
-pdfTeX warning (ext4): destination with the same identifier (name{page.}) has b
-een already used, duplicate ignored
+<use $HOME/Dropbox/Figures/lc_goes.pdf>pdfTeX warning (ext4): destination with 
+the same identifier (name{page.}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
 l.41 
-      [39 </Users/laurel/Dropbox/Figures/images.pdf>]
-<$HOME/Dropbox/Figures/Lightcurves/detrendedLC_20181202.pdf, id=473, 578.16pt x
+      [41]
+<$HOME/Dropbox/Figures/Lightcurves/detrendedLC_20181202.pdf, id=481, 578.16pt x
  180.675pt>
 File: $HOME/Dropbox/Figures/Lightcurves/detrendedLC_20181202.pdf Graphic file (
 type pdf)
- <use $HOME/Dropbox/Figures/Lightcurves/detrendedLC_20181202.pdf>
-Package pdftex.def Info: $HOME/Dropbox/Figures/Lightcurves/detrendedLC_20181202
-.pdf used on input line 45.
-(pdftex.def)             Requested size: 433.62pt x 135.5059pt.
-pdfTeX warning (ext4): destination with the same identifier (name{page.}) has b
-een already used, duplicate ignored
+ <use $HOME/Dropbox/Figures/Lightcurves/detrendedLC_20181202.pdf>pdfTeX warning
+ (ext4): destination with the same identifier (name{page.}) has been already us
+ed, duplicate ignored
 <to be read again> 
                    \relax 
 l.52 
-      [40 </Users/laurel/Dropbox/Figures/lc.pdf> </Users/laurel/Dropbox/Figures
-/Lightcurves/lc_log_20181128.pdf> </Users/laurel/Dropbox/Figures/lc_goes.pdf>]
-<$HOME/Dropbox/Figures/detrended_20181201.pdf, id=488, 578.16pt x 216.81pt>
+      [42 </home/users/laurel07/Dropbox/Figures/Lightcurves/lc_log_20181128.pdf
+> </home/users/laurel07/Dropbox/Figures/lc_goes.pdf>]
+<$HOME/Dropbox/Figures/detrended_20181201.pdf, id=493, 578.16pt x 216.81pt>
 File: $HOME/Dropbox/Figures/detrended_20181201.pdf Graphic file (type pdf)
 
 <use $HOME/Dropbox/Figures/detrended_20181201.pdf>
-Package pdftex.def Info: $HOME/Dropbox/Figures/detrended_20181201.pdf used on i
-nput line 60.
-(pdftex.def)             Requested size: 433.62pt x 162.60709pt.
-
-<$HOME/Dropbox/Figures/aia1600maps_before.pdf, id=489, 578.16pt x 246.1697pt>
+<$HOME/Dropbox/Figures/aia1600maps_before.pdf, id=494, 578.16pt x 246.1697pt>
 File: $HOME/Dropbox/Figures/aia1600maps_before.pdf Graphic file (type pdf)
 
 <use $HOME/Dropbox/Figures/aia1600maps_before.pdf>
-Package pdftex.def Info: $HOME/Dropbox/Figures/aia1600maps_before.pdf used on i
-nput line 81.
-(pdftex.def)             Requested size: 433.62pt x 184.6268pt.
-
-<$HOME/Dropbox/Figures/aia1700maps_before.pdf, id=490, 578.16pt x 246.1697pt>
+<$HOME/Dropbox/Figures/aia1700maps_before.pdf, id=495, 578.16pt x 246.1697pt>
 File: $HOME/Dropbox/Figures/aia1700maps_before.pdf Graphic file (type pdf)
 
 <use $HOME/Dropbox/Figures/aia1700maps_before.pdf>
-Package pdftex.def Info: $HOME/Dropbox/Figures/aia1700maps_before.pdf used on i
-nput line 82.
-(pdftex.def)             Requested size: 433.62pt x 184.6268pt.
-
-<$HOME/Dropbox/Figures/lc_before.pdf, id=491, 578.16pt x 198.7425pt>
+<$HOME/Dropbox/Figures/lc_before.pdf, id=496, 578.16pt x 198.7425pt>
 File: $HOME/Dropbox/Figures/lc_before.pdf Graphic file (type pdf)
 
 <use $HOME/Dropbox/Figures/lc_before.pdf>
-Package pdftex.def Info: $HOME/Dropbox/Figures/lc_before.pdf used on input line
- 83.
-(pdftex.def)             Requested size: 433.62pt x 149.0565pt.
-
-<$HOME/Dropbox/Figures/aia1600maps_during.pdf, id=494, 578.16pt x 246.1697pt>
+<$HOME/Dropbox/Figures/aia1600maps_during.pdf, id=499, 578.16pt x 246.1697pt>
 File: $HOME/Dropbox/Figures/aia1600maps_during.pdf Graphic file (type pdf)
 
 <use $HOME/Dropbox/Figures/aia1600maps_during.pdf>
-Package pdftex.def Info: $HOME/Dropbox/Figures/aia1600maps_during.pdf used on i
-nput line 94.
-(pdftex.def)             Requested size: 433.62pt x 184.6268pt.
-
-<$HOME/Dropbox/Figures/aia1700maps_during.pdf, id=495, 578.16pt x 246.1697pt>
+<$HOME/Dropbox/Figures/aia1700maps_during.pdf, id=500, 578.16pt x 246.1697pt>
 File: $HOME/Dropbox/Figures/aia1700maps_during.pdf Graphic file (type pdf)
 
 <use $HOME/Dropbox/Figures/aia1700maps_during.pdf>
-Package pdftex.def Info: $HOME/Dropbox/Figures/aia1700maps_during.pdf used on i
-nput line 95.
-(pdftex.def)             Requested size: 433.62pt x 184.6268pt.
-
-<$HOME/Dropbox/Figures/lc_during.pdf, id=496, 578.16pt x 198.7425pt>
+<$HOME/Dropbox/Figures/lc_during.pdf, id=501, 578.16pt x 198.7425pt>
 File: $HOME/Dropbox/Figures/lc_during.pdf Graphic file (type pdf)
 
 <use $HOME/Dropbox/Figures/lc_during.pdf>
-Package pdftex.def Info: $HOME/Dropbox/Figures/lc_during.pdf used on input line
- 96.
-(pdftex.def)             Requested size: 433.62pt x 149.0565pt.
-
-<$HOME/Dropbox/Figures/aia1600maps_after1.pdf, id=497, 578.16pt x 246.1697pt>
+<$HOME/Dropbox/Figures/aia1600maps_after1.pdf, id=502, 578.16pt x 246.1697pt>
 File: $HOME/Dropbox/Figures/aia1600maps_after1.pdf Graphic file (type pdf)
 
 <use $HOME/Dropbox/Figures/aia1600maps_after1.pdf>
-Package pdftex.def Info: $HOME/Dropbox/Figures/aia1600maps_after1.pdf used on i
-nput line 103.
-(pdftex.def)             Requested size: 433.62pt x 184.6268pt.
-
-<$HOME/Dropbox/Figures/aia1700maps_after1.pdf, id=498, 578.16pt x 246.1697pt>
+<$HOME/Dropbox/Figures/aia1700maps_after1.pdf, id=503, 578.16pt x 246.1697pt>
 File: $HOME/Dropbox/Figures/aia1700maps_after1.pdf Graphic file (type pdf)
 
 <use $HOME/Dropbox/Figures/aia1700maps_after1.pdf>
-Package pdftex.def Info: $HOME/Dropbox/Figures/aia1700maps_after1.pdf used on i
-nput line 104.
-(pdftex.def)             Requested size: 433.62pt x 184.6268pt.
-
-<$HOME/Dropbox/Figures/lc_after1.pdf, id=499, 578.16pt x 198.7425pt>
+<$HOME/Dropbox/Figures/lc_after1.pdf, id=504, 578.16pt x 198.7425pt>
 File: $HOME/Dropbox/Figures/lc_after1.pdf Graphic file (type pdf)
 
 <use $HOME/Dropbox/Figures/lc_after1.pdf>
-Package pdftex.def Info: $HOME/Dropbox/Figures/lc_after1.pdf used on input line
- 105.
-(pdftex.def)             Requested size: 433.62pt x 149.0565pt.
-
-<$HOME/Dropbox/Figures/aia1600maps_after2.pdf, id=500, 578.16pt x 246.1697pt>
+<$HOME/Dropbox/Figures/aia1600maps_after2.pdf, id=505, 578.16pt x 246.1697pt>
 File: $HOME/Dropbox/Figures/aia1600maps_after2.pdf Graphic file (type pdf)
 
 <use $HOME/Dropbox/Figures/aia1600maps_after2.pdf>
-Package pdftex.def Info: $HOME/Dropbox/Figures/aia1600maps_after2.pdf used on i
-nput line 112.
-(pdftex.def)             Requested size: 433.62pt x 184.6268pt.
-
-<$HOME/Dropbox/Figures/aia1700maps_after2.pdf, id=501, 578.16pt x 246.1697pt>
+<$HOME/Dropbox/Figures/aia1700maps_after2.pdf, id=506, 578.16pt x 246.1697pt>
 File: $HOME/Dropbox/Figures/aia1700maps_after2.pdf Graphic file (type pdf)
 
 <use $HOME/Dropbox/Figures/aia1700maps_after2.pdf>
-Package pdftex.def Info: $HOME/Dropbox/Figures/aia1700maps_after2.pdf used on i
-nput line 113.
-(pdftex.def)             Requested size: 433.62pt x 184.6268pt.
-
-<$HOME/Dropbox/Figures/lc_after2.pdf, id=502, 578.16pt x 198.7425pt>
+<$HOME/Dropbox/Figures/lc_after2.pdf, id=507, 578.16pt x 198.7425pt>
 File: $HOME/Dropbox/Figures/lc_after2.pdf Graphic file (type pdf)
 
 <use $HOME/Dropbox/Figures/lc_after2.pdf>
-Package pdftex.def Info: $HOME/Dropbox/Figures/lc_after2.pdf used on input line
- 114.
-(pdftex.def)             Requested size: 433.62pt x 149.0565pt.
-
-<$HOME/Dropbox/Figures/aia1600big_image.pdf, id=503, 289.08pt x 224.33812pt>
+<$HOME/Dropbox/Figures/aia1600big_image.pdf, id=508, 289.08pt x 224.33812pt>
 File: $HOME/Dropbox/Figures/aia1600big_image.pdf Graphic file (type pdf)
 
 <use $HOME/Dropbox/Figures/aia1600big_image.pdf>
-Package pdftex.def Info: $HOME/Dropbox/Figures/aia1600big_image.pdf used on inp
-ut line 121.
-(pdftex.def)             Requested size: 208.13574pt x 161.5199pt.
-
-<$HOME/Dropbox/Figures/aia1700big_image.pdf, id=504, 289.08pt x 224.33812pt>
+<$HOME/Dropbox/Figures/aia1700big_image.pdf, id=509, 289.08pt x 224.33812pt>
 File: $HOME/Dropbox/Figures/aia1700big_image.pdf Graphic file (type pdf)
 
 <use $HOME/Dropbox/Figures/aia1700big_image.pdf>
-Package pdftex.def Info: $HOME/Dropbox/Figures/aia1700big_image.pdf used on inp
-ut line 122.
-(pdftex.def)             Requested size: 208.13574pt x 161.5199pt.
-
-<$HOME/Dropbox/Figures/aia1600big_map.pdf, id=505, 289.08pt x 224.33812pt>
+<$HOME/Dropbox/Figures/aia1600big_map.pdf, id=510, 289.08pt x 224.33812pt>
 File: $HOME/Dropbox/Figures/aia1600big_map.pdf Graphic file (type pdf)
 
 <use $HOME/Dropbox/Figures/aia1600big_map.pdf>
-Package pdftex.def Info: $HOME/Dropbox/Figures/aia1600big_map.pdf used on input
- line 123.
-(pdftex.def)             Requested size: 208.13574pt x 161.5199pt.
-
-<$HOME/Dropbox/Figures/aia1700big_map.pdf, id=506, 289.08pt x 224.33812pt>
+<$HOME/Dropbox/Figures/aia1700big_map.pdf, id=511, 289.08pt x 224.33812pt>
 File: $HOME/Dropbox/Figures/aia1700big_map.pdf Graphic file (type pdf)
 
 <use $HOME/Dropbox/Figures/aia1700big_map.pdf>
-Package pdftex.def Info: $HOME/Dropbox/Figures/aia1700big_map.pdf used on input
- line 124.
-(pdftex.def)             Requested size: 208.13574pt x 161.5199pt.
-
-<$HOME/Dropbox/Figures/wa.pdf, id=507, 542.025pt x 650.43pt>
+<$HOME/Dropbox/Figures/wa.pdf, id=512, 542.025pt x 650.43pt>
 File: $HOME/Dropbox/Figures/wa.pdf Graphic file (type pdf)
 
 <use $HOME/Dropbox/Figures/wa.pdf>
-Package pdftex.def Info: $HOME/Dropbox/Figures/wa.pdf used on input line 134.
-(pdftex.def)             Requested size: 390.25534pt x 468.31917pt.
-
-<$HOME/Dropbox/Figures/time-3minpower_flux.pdf, id=508, 578.16pt x 216.81pt>
+<$HOME/Dropbox/Figures/time-3minpower_flux.pdf, id=513, 578.16pt x 216.81pt>
 File: $HOME/Dropbox/Figures/time-3minpower_flux.pdf Graphic file (type pdf)
 
 <use $HOME/Dropbox/Figures/time-3minpower_flux.pdf>
-Package pdftex.def Info: $HOME/Dropbox/Figures/time-3minpower_flux.pdf used on 
-input line 152.
-(pdftex.def)             Requested size: 433.62pt x 162.60709pt.
-
-<$HOME/Dropbox/Figures/time-3minpower_maps.pdf, id=509, 578.16pt x 216.81pt>
+<$HOME/Dropbox/Figures/time-3minpower_maps.pdf, id=514, 578.16pt x 216.81pt>
 File: $HOME/Dropbox/Figures/time-3minpower_maps.pdf Graphic file (type pdf)
 
 <use $HOME/Dropbox/Figures/time-3minpower_maps.pdf>
-Package pdftex.def Info: $HOME/Dropbox/Figures/time-3minpower_maps.pdf used on 
-input line 153.
-(pdftex.def)             Requested size: 433.62pt x 162.60709pt.
-
-<$HOME/Dropbox/Figures/preflare.pdf, id=510, 433.62pt x 316.18124pt>
+<$HOME/Dropbox/Figures/preflare.pdf, id=515, 433.62pt x 316.18124pt>
 File: $HOME/Dropbox/Figures/preflare.pdf Graphic file (type pdf)
 
 <use $HOME/Dropbox/Figures/preflare.pdf>
-Package pdftex.def Info: $HOME/Dropbox/Figures/preflare.pdf used on input line 
-174.
-(pdftex.def)             Requested size: 346.89731pt x 252.95981pt.
-
-<$HOME/Dropbox/Figures/postflare.pdf, id=511, 433.62pt x 370.38374pt>
+<$HOME/Dropbox/Figures/postflare.pdf, id=516, 433.62pt x 370.38374pt>
 File: $HOME/Dropbox/Figures/postflare.pdf Graphic file (type pdf)
 
-<use $HOME/Dropbox/Figures/postflare.pdf>
-Package pdftex.def Info: $HOME/Dropbox/Figures/postflare.pdf used on input line
- 175.
-(pdftex.def)             Requested size: 346.89731pt x 296.32434pt.
-)pdfTeX warning (ext4): destination with the same identifier (name{page.}) has 
-been already used, duplicate ignored
+<use $HOME/Dropbox/Figures/postflare.pdf>)pdfTeX warning (ext4): destination wi
+th the same identifier (name{page.}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.250 \include{phase1}
-                       [41 </Users/laurel/Dropbox/Figures/Lightcurves/detrended
-LC_20181202.pdf> </Users/laurel/Dropbox/Figures/detrended_20181201.pdf>]pdfTeX 
-warning (ext4): destination with the same identifier (name{page.}) has been alr
-eady used, duplicate ignored
+l.251 \include{phase1}
+                       [43 </home/users/laurel07/Dropbox/Figures/Lightcurves/de
+trendedLC_20181202.pdf> </home/users/laurel07/Dropbox/Figures/detrended_2018120
+1.pdf>]pdfTeX warning (ext4): destination with the same identifier (name{page.}
+) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.250 \include{phase1}
-                       [42 </Users/laurel/Dropbox/Figures/aia1600maps_before.pd
-f> </Users/laurel/Dropbox/Figures/aia1700maps_before.pdf> </Users/laurel/Dropbo
-x/Figures/lc_before.pdf>]pdfTeX warning (ext4): destination with the same ident
-ifier (name{page.}) has been already used, duplicate ignored
+l.251 \include{phase1}
+                       [44 </home/users/laurel07/Dropbox/Figures/aia1600maps_be
+fore.pdf> </home/users/laurel07/Dropbox/Figures/aia1700maps_before.pdf> </home/
+users/laurel07/Dropbox/Figures/lc_before.pdf>]pdfTeX warning (ext4): destinatio
+n with the same identifier (name{page.}) has been already used, duplicate ignor
+ed
 <to be read again> 
                    \relax 
-l.250 \include{phase1}
-                       [43 </Users/laurel/Dropbox/Figures/aia1600maps_during.pd
-f> </Users/laurel/Dropbox/Figures/aia1700maps_during.pdf> </Users/laurel/Dropbo
-x/Figures/lc_during.pdf>]pdfTeX warning (ext4): destination with the same ident
-ifier (name{page.}) has been already used, duplicate ignored
+l.251 \include{phase1}
+                       [45 </home/users/laurel07/Dropbox/Figures/aia1600maps_du
+ring.pdf> </home/users/laurel07/Dropbox/Figures/aia1700maps_during.pdf> </home/
+users/laurel07/Dropbox/Figures/lc_during.pdf>]pdfTeX warning (ext4): destinatio
+n with the same identifier (name{page.}) has been already used, duplicate ignor
+ed
 <to be read again> 
                    \relax 
-l.250 \include{phase1}
-                       [44 </Users/laurel/Dropbox/Figures/aia1600maps_after1.pd
-f> </Users/laurel/Dropbox/Figures/aia1700maps_after1.pdf> </Users/laurel/Dropbo
-x/Figures/lc_after1.pdf>]pdfTeX warning (ext4): destination with the same ident
-ifier (name{page.}) has been already used, duplicate ignored
+l.251 \include{phase1}
+                       [46 </home/users/laurel07/Dropbox/Figures/aia1600maps_af
+ter1.pdf> </home/users/laurel07/Dropbox/Figures/aia1700maps_after1.pdf> </home/
+users/laurel07/Dropbox/Figures/lc_after1.pdf>]pdfTeX warning (ext4): destinatio
+n with the same identifier (name{page.}) has been already used, duplicate ignor
+ed
 <to be read again> 
                    \relax 
-l.250 \include{phase1}
-                       [45 </Users/laurel/Dropbox/Figures/aia1600maps_after2.pd
-f> </Users/laurel/Dropbox/Figures/aia1700maps_after2.pdf> </Users/laurel/Dropbo
-x/Figures/lc_after2.pdf>]pdfTeX warning (ext4): destination with the same ident
-ifier (name{page.}) has been already used, duplicate ignored
+l.251 \include{phase1}
+                       [47 </home/users/laurel07/Dropbox/Figures/aia1600maps_af
+ter2.pdf> </home/users/laurel07/Dropbox/Figures/aia1700maps_after2.pdf> </home/
+users/laurel07/Dropbox/Figures/lc_after2.pdf>]pdfTeX warning (ext4): destinatio
+n with the same identifier (name{page.}) has been already used, duplicate ignor
+ed
 <to be read again> 
                    \relax 
-l.250 \include{phase1}
-                       [46 </Users/laurel/Dropbox/Figures/aia1600big_image.pdf>
- </Users/laurel/Dropbox/Figures/aia1700big_image.pdf> </Users/laurel/Dropbox/Fi
-gures/aia1600big_map.pdf> </Users/laurel/Dropbox/Figures/aia1700big_map.pdf>]pd
-fTeX warning (ext4): destination with the same identifier (name{page.}) has bee
-n already used, duplicate ignored
+l.251 \include{phase1}
+                       [48 </home/users/laurel07/Dropbox/Figures/aia1600big_ima
+ge.pdf> </home/users/laurel07/Dropbox/Figures/aia1700big_image.pdf> </home/user
+s/laurel07/Dropbox/Figures/aia1600big_map.pdf> </home/users/laurel07/Dropbox/Fi
+gures/aia1700big_map.pdf>]pdfTeX warning (ext4): destination with the same iden
+tifier (name{page.}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.250 \include{phase1}
-                       [47 </Users/laurel/Dropbox/Figures/wa.pdf>]pdfTeX warnin
-g (ext4): destination with the same identifier (name{page.}) has been already u
-sed, duplicate ignored
+l.251 \include{phase1}
+                       [49 </home/users/laurel07/Dropbox/Figures/wa.pdf>]pdfTeX
+ warning (ext4): destination with the same identifier (name{page.}) has been al
+ready used, duplicate ignored
 <to be read again> 
                    \relax 
-l.250 \include{phase1}
-                       [48 </Users/laurel/Dropbox/Figures/time-3minpower_flux.p
-df> </Users/laurel/Dropbox/Figures/time-3minpower_maps.pdf>]pdfTeX warning (ext
-4): destination with the same identifier (name{page.}) has been already used, d
-uplicate ignored
+l.251 \include{phase1}
+                       [50 </home/users/laurel07/Dropbox/Figures/time-3minpower
+_flux.pdf> </home/users/laurel07/Dropbox/Figures/time-3minpower_maps.pdf>]pdfTe
+X warning (ext4): destination with the same identifier (name{page.}) has been a
+lready used, duplicate ignored
 <to be read again> 
                    \relax 
-l.251 
-       [49 </Users/laurel/Dropbox/Figures/preflare.pdf> </Users/laurel/Dropbox/
-Figures/postflare.pdf>] (./dissertation.bblpdfTeX warning (ext4): destination w
-ith the same identifier (name{page.}) has been already used, duplicate ignored
+l.252 
+       [51 </home/users/laurel07/Dropbox/Figures/preflare.pdf> </home/users/lau
+rel07/Dropbox/Figures/postflare.pdf>] (./dissertation.bblpdfTeX warning (ext4):
+ destination with the same identifier (name{page.}) has been already used, dupl
+icate ignored
 <to be read again> 
                    \relax 
-l.190   Ulmschneider}]{Sutmann1998}
-                                    [50])pdfTeX warning (ext4): destination wit
-h the same identifier (name{page.}) has been already used, duplicate ignored
+l.188   Zhugzhda}]{Reznikova2012}
+                                  [52])pdfTeX warning (ext4): destination with 
+the same identifier (name{page.}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.266 
-       [51]
+l.267 
+       [53]
 
 Package natbib Warning: There were undefined citations.
 
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 267.
 (./dissertation.aux (./introduction.aux) (./background.aux) (./literature.aux)
-(./methodology.aux) (./phase1.aux))
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 267.
-Package atveryend Info: Empty hook `AtEndAfterFileList' on input line 267.
+(./methodology.aux) (./phase1.aux)
 
+Package natbib Warning: Citation(s) may have changed.
+(natbib)                Rerun to get citations correct.
+
+)
 
 LaTeX Font Warning: Size substitutions with differences
 (Font)              up to 1.28pt have occured.
@@ -1646,48 +1405,44 @@ LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 20530 strings out of 493089
- 365605 string characters out of 6134842
- 483594 words of memory out of 5000000
- 23458 multiletter control sequences out of 15000+600000
- 30179 words of font info for 79 fonts, out of 8000000 for 9000
- 1141 hyphenation exceptions out of 8191
- 55i,10n,64p,2104b,924s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/usr/local/texlive/2015/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc}
-</usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb><
-/usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></
-usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></u
-sr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr
-/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/l
-ocal/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/loc
-al/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/local
-/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/local/te
-xlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/local/texli
-ve/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texliv
-e/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb></usr/local/texlive/
-2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local/texlive/20
-15/texmf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb></usr/local/texliv
-e/2015/texmf-dist/fonts/type1/public/cm-super/sfbi1200.pfb></usr/local/texlive/
-2015/texmf-dist/fonts/type1/public/cm-super/sfbx1095.pfb></usr/local/texlive/20
-15/texmf-dist/fonts/type1/public/cm-super/sfbx1200.pfb></usr/local/texlive/2015
-/texmf-dist/fonts/type1/public/cm-super/sfcc2074.pfb></usr/local/texlive/2015/t
-exmf-dist/fonts/type1/public/cm-super/sfrm1095.pfb></usr/local/texlive/2015/tex
-mf-dist/fonts/type1/public/cm-super/sfrm1200.pfb></usr/local/texlive/2015/texmf
--dist/fonts/type1/public/cm-super/sfrm1440.pfb></usr/local/texlive/2015/texmf-d
-ist/fonts/type1/public/cm-super/sfrm1728.pfb></usr/local/texlive/2015/texmf-dis
-t/fonts/type1/public/cm-super/sfsi1000.pfb></usr/local/texlive/2015/texmf-dist/
-fonts/type1/public/cm-super/sfsi1095.pfb></usr/local/texlive/2015/texmf-dist/fo
-nts/type1/public/cm-super/sfss1095.pfb></usr/local/texlive/2015/texmf-dist/font
-s/type1/public/cm-super/sfsx1095.pfb></usr/local/texlive/2015/texmf-dist/fonts/
-type1/public/cm-super/sfti1095.pfb></usr/local/texlive/2015/texmf-dist/fonts/ty
-pe1/public/cm-super/sfti1200.pfb></usr/local/texlive/2015/texmf-dist/fonts/type
-1/public/cm-super/sftt1095.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/
-public/cm-super/sftt1200.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/pu
-blic/cm-super/sfxc1728.pfb>
-Output written on dissertation.pdf (54 pages, 13872549 bytes).
+ 10864 strings out of 256214
+ 159859 string characters out of 1916999
+ 283167 words of memory out of 1500000
+ 13683 multiletter control sequences out of 10000+200000
+ 29146 words of font info for 74 fonts, out of 1200000 for 2000
+ 645 hyphenation exceptions out of 8191
+ 45i,10n,38p,2104b,550s stack positions out of 5000i,500n,6000p,200000b,15000s
+ </home/users/laurel07/.texlive2007/texmf-var/fonts/pk/ljfour/jknappen/ec/ect
+i1095.600pk> </home/users/laurel07/.texlive2007/texmf-var/fonts/pk/ljfour/jknap
+pen/ec/ecbx1095.600pk> </home/users/laurel07/.texlive2007/texmf-var/fonts/pk/lj
+four/jknappen/ec/ectt1200.600pk> </home/users/laurel07/.texlive2007/texmf-var/f
+onts/pk/ljfour/jknappen/ec/ecsi1095.600pk> </home/users/laurel07/.texlive2007/t
+exmf-var/fonts/pk/ljfour/jknappen/ec/ectt1095.600pk> </home/users/laurel07/.tex
+live2007/texmf-var/fonts/pk/ljfour/jknappen/ec/ecrm1095.600pk> </home/users/lau
+rel07/.texlive2007/texmf-var/fonts/pk/ljfour/jknappen/ec/ecsx1095.600pk> </home
+/users/laurel07/.texlive2007/texmf-var/fonts/pk/ljfour/jknappen/ec/ecsi1000.600
+pk> </home/users/laurel07/.texlive2007/texmf-var/fonts/pk/ljfour/jknappen/ec/ec
+ss1095.600pk> </home/users/laurel07/.texlive2007/texmf-var/fonts/pk/ljfour/jkna
+ppen/ec/ecbi1200.600pk> </home/users/laurel07/.texlive2007/texmf-var/fonts/pk/l
+jfour/jknappen/ec/ecbx1200.600pk> </home/users/laurel07/.texlive2007/texmf-var/
+fonts/pk/ljfour/jknappen/ec/ecti1200.600pk> </home/users/laurel07/.texlive2007/
+texmf-var/fonts/pk/ljfour/jknappen/ec/ecxc1728.600pk> </home/users/laurel07/.te
+xlive2007/texmf-var/fonts/pk/ljfour/jknappen/ec/ecrm1200.600pk> </home/users/la
+urel07/.texlive2007/texmf-var/fonts/pk/ljfour/jknappen/ec/ecrm1440.600pk> </hom
+e/users/laurel07/.texlive2007/texmf-var/fonts/pk/ljfour/jknappen/ec/ecrm1728.60
+0pk> </home/users/laurel07/.texlive2007/texmf-var/fonts/pk/ljfour/jknappen/ec/e
+ccc2074.600pk></usr/share/texmf/fonts/type1/bluesky/cm/cmex10.pfb></usr/share/t
+exmf/fonts/type1/bluesky/cm/cmmi10.pfb></usr/share/texmf/fonts/type1/bluesky/cm
+/cmmi12.pfb></usr/share/texmf/fonts/type1/bluesky/cm/cmmi6.pfb></usr/share/texm
+f/fonts/type1/bluesky/cm/cmmi8.pfb></usr/share/texmf/fonts/type1/bluesky/cm/cmr
+10.pfb></usr/share/texmf/fonts/type1/bluesky/cm/cmr12.pfb></usr/share/texmf/fon
+ts/type1/bluesky/cm/cmr6.pfb></usr/share/texmf/fonts/type1/bluesky/cm/cmr8.pfb>
+</usr/share/texmf/fonts/type1/bluesky/cm/cmsy10.pfb></usr/share/texmf/fonts/typ
+e1/bluesky/cm/cmsy6.pfb></usr/share/texmf/fonts/type1/bluesky/cm/cmsy8.pfb></us
+r/share/texmf/fonts/type1/bluesky/ams/msam10.pfb>
+Output written on dissertation.pdf (56 pages, 13952994 bytes).
 PDF statistics:
- 923 PDF objects out of 1000 (max. 8388607)
- 710 compressed objects within 8 object streams
- 99 named destinations out of 1000 (max. 500000)
- 158 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 1547 PDF objects out of 1728 (max. 8388607)
+ 107 named destinations out of 1000 (max. 131072)
+ 162 words of extra memory for PDF output out of 10000 (max. 10000000)
 

@@ -1,68 +1,21 @@
 \section{Methodology}
 
-\mynote[Thursday, October 18, 2018]{
-    Rough outline for now;
-    appropriate content from first research article will be copied here eventually.}
+\subsection{Data reduction/prep}
 
-Outline:
-\begin{itemize}
-    \item Observations (flare SOL-Feb-15-2011)
-    \item Instruments/Data (SDO, IRIS)
-    \item Data reduction (alignment, saturation, \texttt{aia\_prep.pro})
-    \item Analysis (FT, WA)
-\end{itemize}
 
-\subsection{Observations}
+The standard data reduction routine
+\textit{aia\_prep.pro} from solarsoft was
+{applied to all data}.
 
-% {---
 
-\subsubsection{Flare(s)}
+\subsubsection{Alignment}
+\input{alignment}
 
-\mynote{Flare on 2011 February 15 took place ``close to disk center''.
-How close is ``close''? What are the difficulties in analyzing target close
-to the solar limb? Opacity issues?}
 
-\subsubsection{Data}
+\subsubsection{Saturation}
 
-\paragraph{The Solar Dynamics Observatory (SDO)}
-
-\subparagraph{The Atmospheric Imaging Assembly (AIA)}
-
-\mynote{From propopsal:}
-The Atmospheric Imaging Assembly (AIA) \citep{Lemen2012, Boerner2012}
-on board \textit{SDO} primarily collects EUV emission
-that originates in the corona.
-In addition it obtains thermal UV continuum data in
-two bandpasses centered on 1600\AA{} and 1700\AA{}. AIA 1700\AA{} samples the
-lower atmosphere around $T = 10^{3.7}$ K, close to $T_{min}$. AIA 1600\AA{}
-samples the transition region and upper chromosphere, and contains emission
-from the \ion{C}{4} 1548\AA{} line, as well as UV continuum. Both data sets
-are obtained at a cadence of 24 seconds, with a spatial resolution of $\sim$0.6
-arcseconds per pixel.
-
-\mynote{09 October 2018 - From current state of article (Phase 1):}
-The data used to analyze this flare is provided by
-AIA \citep{Lemen2012},
-one of the instruments on board
-SDO \citep{Pesnell2012}.
-AIA obtains full disk images throughout the solar atmosphere using narrow band
-filters centered on 10 different wavelengths, two of which provide measurements
-of thermal UV emission from the chromosphere.
-The 1700\AA{} channel mostly contains
-continuum emission from the temperature minimum, and the
-1600\AA{} channel covers both continuum emission and the
-\ion{C}{4} spectral line in the upper photosphere and transition region.
-Both channels have a cadence of 24 seconds and
-spatial size scale of 0.6 arcseconds per pixel.
-
-\subparagraph{The Helioseismic and Magnetic Imager (HMI)}
-
-The Helioseismic and Magnetic Imager (HMI)
-is one of three instruments on board
-the \textit{Solar Dynamics Observatory (SDO)}. It obtains four types of
-filtergrams around the \ion{Fe}{1} line at 6173\AA{}. These filtergrams are
-in the form of dopplergrams, vector magnetograms, line-of-sight magnetograms,
-and continuum intensity images \citep{hmi}.
+%------------------------------
+% Probably take this out later, as it's the proposal, not the final dissertation.
 
 For this project, wavelet analysis and
 Fourier techniques will be applied to the
@@ -188,19 +141,19 @@ this was a good flare to use to test my potential methods.
 
 
 \clearpage
-\begin{figure}\centering
+%\begin{figure}\centering
     %\includegraphics[width=0.5\textwidth]{aia1600quiet.pdf}
     %\epsscale{1.2}
-    \plottwo{aia1600quiet.pdf}{aia1700quiet.pdf}
-    \caption{Spatial distribution of 3-minute power (top row)
-    and 5-minute power (bottom row) for
-    AIA 1600\AA{} (left column) and AIA 1700\AA{} (right column)
-    from 00:00 to 01:44 on 15 February 2011.
-    The black contours outline the approximate location of the umbra
-    and penumbra using HMI continuum data in the center of the time
-    series used to generate the power maps.
-    \label{quiet}}
-\end{figure}
+    %\plottwo{aia1600quiet.pdf}{aia1700quiet.pdf}
+    %\caption{Spatial distribution of 3-minute power (top row)
+    %and 5-minute power (bottom row) for
+    %AIA 1600\AA{} (left column) and AIA 1700\AA{} (right column)
+    %from 00:00 to 01:44 on 15 February 2011.
+    %The black contours outline the approximate location of the umbra
+    %and penumbra using HMI continuum data in the center of the time
+    %series used to generate the power maps.
+    %\label{quiet}}
+%\end{figure}
 
 \paragraph{05 October 2018 - single page summary to send to Professor James}
 This was a test of my methods on non-flaring data to see if the

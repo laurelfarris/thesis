@@ -1,11 +1,36 @@
 \section{Phase 1}
 
 
-\mynote[Sun Dec  2 05:56:22 MST 2018]
-{This is what \textit{mynote} looks like.}
 
 %% Observations {---
 % ---}
+
+\subsection{Flare(s)}
+
+\mynote{Flare on 2011 February 15 took place ``close to disk center''.
+How close is ``close''? What are the difficulties in analyzing target close
+to the solar limb? Opacity issues?}
+
+
+The 2011 February 15 X2.2 flare
+occurred in NOAA active region (AR) 11158
+close to disk center
+during solar cycle 24 (SOL2011-02-15T01:56).
+The AR was composed of a quadrupole:
+two sunspot pairs (four sunspots total).
+The X-flare occurred in a delta-spot composed of
+the leading spot of the southern pair and
+the trailing spot of the northern pair.
+It started at 01:44UT, peaked at 01:56UT, and ended at 02:06UT,
+as determined by the soft X-ray flux from the
+\textit{Geostationary Operational Environmental Satellite}
+(\textit{GOES}-15; \cite{Viereck2007}).
+The impulsive phase lasted about 10 minutes.
+Data covering 5 hours centered on this flare were used for the analysis.
+This data includes a C-class flare that occurred between 00:30 and 00:45 UT
+on 15 February 2011.
+
+
 
 \begin{figure*}[htb!]\centering
     \includegraphics[draft=false,width=1.0\textwidth]{images.pdf}
@@ -17,20 +42,31 @@
         and the bottom panels show the region used for analysis in this study.
         \label{images}}
 \end{figure*}
+\begin{figure}[htb!]\centering
+    \includegraphics[draft=false,width=0.5\textwidth]{hmi_label_sunspots_20190124.pdf}
+    \caption{
+        HMI LOS magnetogram.
+        White and black contours outline positive (+300 Gauss)
+        and negative (-300 Gauss) polarities, respectively.
+        The two sunspots in the northern pair are labeled AR\_1a (leading sunspot)
+        and AR\_1b (trailing sunspot).
+        The two sunspots in the southern pair are labeled AR\_2a (leading sunspot)
+        and AR\_2b (trailing sunspot).
+        \label{label}}
+\end{figure}
+
 
 \clearpage
 \begin{figure*}[htb!]\centering
     \includegraphics[draft=false,width=1.0\textwidth]{lc.pdf}\\
     \includegraphics[draft=false,width=1.0\textwidth]{lc_log_20181128.pdf}\\
-    \includegraphics[draft=false,width=1.0\textwidth]{lc_goes.pdf}
+    \includegraphics[draft=false,width=1.0\textwidth]{lc_goes_20190124.pdf}
     \caption{%
         Top: Light curves of the
         UV continuum emission from AIA 1600\AA{} (blue curve) and
         AIA 1700\AA{} (red curve),
         integrated over the flare region in AR 11158.
         Middle: Same as top, but scaled as log(flux).
-        %Bottom: Light curves from top panel normalized between 0.0 and 1.0,
-        %overlaid with flux from the \textit{GOES} 1-8\AA{} channel.
         Bottom: Light curves from \textit{GOES-15}
         channels 1-8\AA{} (black curve) and 0.5-4\AA{} (pink curve),
         scaled as log(flux) to enable visibility of the increases
@@ -68,6 +104,64 @@
         low frequencies.
     \label{detrended}}
 \end{figure}
+
+Figure~\ref{lc} shows light curves for the full 5-hour time series
+from 00:00 to 04:59 on 2011-February-15.
+The top panel shows both AIA channels.
+The bottom panel shows both SXR channels from \textit{GOES-15} at
+1-8\AA{} (black curve) and 0.5-4\AA{} (pink curve).
+%overlaid and similarly scaled for comparison.
+A small C-flare occurred before the X-flare between 00:30 and 00:45 UT, and
+two small events occurred after the X-flare,
+between 03:00 and 03:15, and between 04:25 and 04:45.
+
+\begin{figure*}[htb!]\centering
+    \includegraphics[draft=false,width=1.0\textwidth]{images.pdf}
+    \caption{
+        Images of active region 11158 in AIA 1600\AA{} (left panels),
+        AIA 1700\AA{} (middle panels), and HMI LOS magnetogram (right panels),
+        scaled to $\pm300$ Gauss.
+        The top panels show the full disk,
+        and the bottom panels show the region used for analysis in this study.
+        \label{images}}
+\end{figure*}
+
+
+Pre-flare images of the full disk are shown in Figure~\ref{images},
+along with a 300x198 arcsecond subset of the data centered on AR 11158.
+{This subset was extracted and aligned by cross correlation}
+\citep{McAteer2003,McAteer2004}.
+Images were scaled to improve contrast using the
+\textit{aia\_intscale.pro} routine from \textit{sswidl}.
+The magnetic configuration of the quadrupole is clear in the HMI magnetograms.
+The northern pair will be designated as AR\_1
+and the southern pair will be designated as AR\_2.
+Sunspots in the northern pair will be designated as AR\_1a (positive polarity)
+and AR\_1b (negative polarity).
+Sunspots in the southern pair will be designated as AR\_2a (positive polarity)
+and AR\_2b (negative polarity).
+
+Both AIA channels saturated ($\geq\!15000$ counts) in the center
+during the peak of the X-class flare, and a few pixels also saturated
+during the smaller events before and after.
+Affected pixels were {all} contained within the
+300x198 arcsecond {subset of data}
+throughout the duration of the time series.
+Four images from the 1700\AA{} channel on AIA were missing, between
+the images with start times at
+00:59:53.12,
+01:59:29.12,
+02:59:05.12, and
+03:58:41.12, and the following images, each with start times
+48 seconds after the previous image.
+Since the gaps in data were separated by an hour,
+it was reasonable to approximate {missing images}
+by averaging the two adjacent images.
+% end of text copied from Article1 (28 January 2019)
+%
+%
+%
+
 
 
 %% Data Prep/reduction {---
