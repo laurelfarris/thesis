@@ -56,15 +56,6 @@ stop
 
 
 start:
-@color
-
-
-p = plot2( alog10(A[0].map[281,179,z_ind]), color=color[0] )
-p = plot2( alog10(A[0].map[281,166,z_ind]), /overplot, color=color[1] )
-p = plot2( alog10(A[0].map[231,180,z_ind]), /overplot, color=color[2] )
-p = plot2( alog10(A[0].map[206,180,z_ind]), /overplot, color=color[3] )
-
-stop
 
 
 ;----------

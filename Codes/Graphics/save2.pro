@@ -41,10 +41,10 @@ pro SAVE2, filename, $
     ; while fls ne "" ; i = i + 1 ; filename = basename + '_' + strtrim(i,1)
     ; keep appending _1, _2, etc. until no other file matches
 
-    w = GetWindows(/current)
-    dims = w.dimensions/dpi
-    width = dims[0]
-    height = dims[1]
+    win = GetWindows(/current)
+    dims = win.dimensions/dpi
+    wx = dims[0]
+    wy = dims[1]
 
 
     ; Add timestamp to figure
@@ -56,13 +56,13 @@ pro SAVE2, filename, $
 ;        ty = height / 2.0
 ;        alignment = 0.0
 
-        tx = width - 0.1
-        ty = 0.1
+        tx = wx - 0.25
+        ty = 0.25
         alignment = 1.0
 
-        print, tx
-        print, ty
-        print, dpi
+;        print, tx
+;        print, ty
+;        print, dpi
 
         creation_time = text( $
             tx*dpi, ty*dpi, $
@@ -88,9 +88,9 @@ pro SAVE2, filename, $
 
     new_filename = path + filename + '_' + year + month + day + '.pdf'
 
-    w.save, new_filename, $
-        page_size=[width,height], $
-        width=width, height=height, _EXTRA=e
+    win.save, new_filename, $
+        page_size=[wx,wy], $
+        width=wx, height=wy, _EXTRA=e
     print, ''
     print, 'Saved file '
     print, '  ', new_filename

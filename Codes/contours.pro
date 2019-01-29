@@ -18,21 +18,19 @@
 
 function GET_CONTOUR_DATA, time, channel=channel
 
+    ;- Get contour data from HMI B_LOS ('mag') or HMI continuum ('cont').
+    ;- input desired date_obs (hh:mm). Either single time or array, e.g.
+    ;-    c_data = GET_HMI( time[zz+(dz/2)], channel='mag' )
+
     ;- 20 November 2018
     ;- "saturates at +/- 1500 Mx cm^{-1}" -Schrijver2011
 
     ;- 17 December
-    ;- Generalizing "get_hmi" to just "get_data", even though it's still just using HMI.
-    ;- All this does is return an HMI image with date_obs close to input time.
-    ;- If hmi_prep routine was run, wouldn't even need this, except the part that
-    ;-   extracts the IND for HMI, since cadence is different from AIA, can't use
-    ;-   same z-indices.
+    ;- Returns an HMI image with date_obs close to input time.
+    ;- If hmi_prep routine was run, wouldn't need to restore data,
+    ;-  but do need to extract IND for HMI - since cadence is different from AIA
+    ;-  (can't use same z-indices).
 
-
-    ;- Older comments:
-    ;- Get contour data from HMI B_LOS ('mag') or HMI continuum ('cont').
-    ;- input desired date_obs (hh:mm). Either single time or array, e.g.
-    ;-    c_data = GET_HMI( time[zz+(dz/2)], channel='mag' )
 
     ;- TO DO:
     ;-   Write to only run once (currently calling this every time the graphic
@@ -70,8 +68,8 @@ function CONTOURS, c_data, target=target, channel=channel
 
     if channel eq 'cont' then begin
         ;- Define continuum contours relative to average in quiet sun (lower right corner).
-        data_avg = mean(c_data[350:450,50:150])
         ;- Outer edges of [penumbra, umbra]
+        data_avg = mean(c_data[350:450,50:150])
         c_value = [0.9*data_avg, 0.6*data_avg]
         c_color = ['red','red']
         c_thick = 1.0
@@ -81,46 +79,15 @@ function CONTOURS, c_data, target=target, channel=channel
     if channel eq 'mag' then begin
         ;- min/max values used by Schrijver2011... don't know why.
         c_value = [-300, 300]
-        c_color = ['black', 'white']
         ;c_value = [-1000, -300, 300, 1000]
         ;c_value = [ -reverse(c_value), c_value ]
         ;c_thick = [1.0, 2.0, 2.0, 1.0]
+        c_color = ['black', 'white']
         ;c_color = ['black', 'black', 'white', 'white']
         rgb_table = 0 ; black --> white
         name = 'B$_{LOS} \pm 300$'
         ;title = 'B$_{LOS} \pm 300$'
     endif
-
-;- Make structures instead, though would have to change the way c_data
-;-  is retrieved.
-
-    ;- Define continuum contours relative to average in quiet sun (lower right corner).
-    ;- Outer edges of [penumbra, umbra]
-    data_avg = mean(c_data[350:450,50:150])
-
-    magnetic_field = { $
-        channel : 'cont', $
-        c_value : [0.9*data_avg, 0.6*data_avg], $
-        c_color : ['red','red'], $
-        c_thick : 1.0, $
-        name : 'umbra and penumbra boundaries' }
-
-
-    continuum = { $
-        channel : 'mag', $
-        c_value : [-300, 300], $
-        c_color : ['black', 'white'], $
-        ;c_value : [-1000, -300, 300, 1000]
-        ;c_value : [ -reverse(c_value), c_value ]
-        ;c_thick : [1.0, 2.0, 2.0, 1.0]
-        ;c_color : ['black', 'black', 'white', 'white']
-        rgb_table : 0, $ ; black --> white
-        ;title : 'B$_{LOS} \pm 300$'
-        name : 'B$_{LOS} \pm 300$' }
-
-    ;- Return structures to main level, and then create graphic in a different routine?
-    ;- Might make more sense to combine get_contour_data with the code above making
-    ;- the structures (or using the 'if' statements). I dunno.
 
 
     for ii = 0, nn-1 do begin
@@ -136,7 +103,6 @@ function CONTOURS, c_data, target=target, channel=channel
             title = title, $
             name = name )
     endfor
-
     return, contourr
 end
 
@@ -153,10 +119,9 @@ end
 ;----------------------------------------------------------------------------------
 
 ;-  READ ME!!!!!!!!!!
-;- In current form, image_powermaps.pro needs to be run BEFORE contours.
-;- dz and time are both defined there, and objarr "im" is returned to ML.
-;- Then contours.pro (current file) overlays contours on existing image.
-;-  (This is not ideal, but no time to make better subroutines right now.)
+;- In current form, image must exist BEFORE running this code.
+;-  Also need to define time, zz, and dz
+;-  (image_powermaps.pro does all of this).
 
 ;- Name of FILE must match name of subroutine called from command line
 ;-  (otherwise things get messy real quick),
@@ -168,7 +133,8 @@ end
 ;- IDL> .run image_powermaps
 ;-  generate image object 'im'
 
-;- 2. Get contour data
+;- 2. Get contour data by reading header from fits files and restoring .sav
+;-     file for data.
 if n_elements(c_data) eq 0 then $
     c_data = GET_CONTOUR_DATA( time[zz+(dz/2)], channel='mag' )
 ;- NOTE: get_hmi.pro uses time to get closest hmi date_obs,

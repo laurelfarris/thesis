@@ -40,17 +40,18 @@ function WRAP_GET_POSITION, $
 	right=right, $
 	top=top, $
     bottom=bottom, $
-    ;width=width, $
-    ;height=height, $
+    width=width, $
+    height=height, $
     xgap=xgap, $
     ygap=ygap, $
     wx=wx, $
-    ;wy=wy, $
+    wy=wy, $
     aspect_ratio=aspect_ratio
 
 
     common defaults
 
+    
     ;- Get dimensions of current window
     ;-   Should this go here or in wrapper??
 ;    dim = (GetWindows(/current)).dimensions / dpi
@@ -68,19 +69,27 @@ function WRAP_GET_POSITION, $
     ;-   to determine width of each plot.
     ;- If a_r NOT set, then fill the window space with plots,
     ;-   or set to 1.0 by default.
-    width = (wx - ( left + right + (cols-1)*xgap )) / cols
-    if keyword_set(aspect_ratio) then $
-        height = width / aspect_ratio $
-    else $
-        height = width ;- aka, =1 by default
+
+
+    ;- 28 January 2019 - back to too many keywords, just to make this routine
+    ;-   work again (i.e. user sets width and height in addition to x/y gaps).
+    ;width = (wx - ( left + right + (cols-1)*xgap )) / cols
+
+
+    ;- Setting height like this should only be used for plotting, not images:
+    ;if keyword_set(aspect_ratio) then $
+    ;    height = width / aspect_ratio $
+    ;else $
+    ;    height = width ;- aka, =1 by default
         ;height = (wy - ( top + bottom + (cols-1)*xgap )) / cols
+
 
     ;- Set window height (wy) using graphic layout and dimensions.
     ;- NOTE:  not actually creating window here, just using wx and wy
     ;-   to determine position values.
     ;-  --> plot3 routine should take care of this.
 
-    wy = (rows*height) + (rows-1)*ygap + top + bottom
+    ;wy = (rows*height) + (rows-1)*ygap + top + bottom
 
 
     ;-----------------------------------------------------------------------------------
@@ -104,6 +113,10 @@ function WRAP_GET_POSITION, $
     j = coords[1]
     ;-----------------------------------------------------------------------------------
 
+
+    ;- NOTE: wy is used to position first graphic relative to TOP of page
+    ;-   rather than botoom. wx is not used at all.
+
     x1 = left + i*(width + xgap)
     x2 = x1 + width
 
@@ -126,13 +139,13 @@ function WRAP_GET_POSITION, $
     ;- In fact, this should only be called once for each panel, not
     ;- when overplot is set, and certainly shouldn't have to determine
     ;- window dimensions more than once...
-    struc = { $
-        position : [ x1, y1, x2, y2 ], $
-        dimensions : [wx, wy] }
-        ;wx : wx, wy : wy }
-        
 
-    ;return, struc
+;    struc = { $
+;        position : [ x1, y1, x2, y2 ], $
+;        dimensions : [wx, wy] }
+;        wx : wx, wy : wy }
+;    return, struc
+        
     return, position
 end
 
@@ -143,34 +156,58 @@ function GET_POSITION, layout=layout, _EXTRA = e
     common defaults
 
     ;- Get dimensions of current window
-;    dim = (GetWindows(/current)).dimensions / dpi
+    dim = (GetWindows(/current)).dimensions / dpi
 ;    wx = float(dim[0])
-;    wy = float(dim[1])
+    wy = float(dim[1])
 
 
     top    = 0.25  ;- Needs space for GRAPHIC title (if set...)
     bottom = 0.50  ;- Needs space for xtitle AND x tick labels
+
+
     ygap   = top+bottom  ;- space between panels with space for
     ;- xtitle and ticks for top panel, and title of panel underneath,
     ;- except in cases where only the top of graphics have a title.
+    ;- So ... Only if both top and bottom axes are labeled.
+    ;- Should this really be the default?
+    ;- Also, if user doesn't set ygap but they do set top and/or bottom,
+    ;- then ygap is defined using the wrong values...
+
+
+    width = 2.0
+    height = 2.0
     
     ;- margin space needed for ytitle/ticklabels
     ;-   depends on numerical value of ydata.
     xgap   = 0.75  ;-
     left   = 0.75  ;-
     right  = 0.10  ;-  Depends on whether ax[3] is labeled
+    ;- 28 January 2019
+    ;- probably don't need "right" or "bottom", since "left", "width", and "xgap"
+    ;-  will already leave behind a set amount of white space
+    ;-  (whatever is remaining on the page), or maybe the image will fall off
+    ;-  the edge if one of those is too high...
+    ;- In fact, they're not even in use anymore, only in commented code.
+    ;-  Actually just realized, you could set the margins only and NOT
+    ;-  the width or height if you just wanted to fill the width or height
+    ;- of the page as much as possible,
+    ;-  and didn't care about the figure dimensions.
+    ;- Also, this may matter more
+    ;- for plots... doing images right now, so doesn't seem as obvious.
+
 
     ;- NOTE: no default value for aspect_ratio because
     ;- don't want this kw set for images, only plots.
+    ;- 
 
     wx = 8.0
 
     position = WRAP_GET_POSITION( $
         layout = layout, $
         wx = wx, $
-        ;wy = wy, $
-        ;width = 2.0, $
-        ;height = 2.0, $
+        wy = wy, $
+        width = width, $
+        height = height, $
         left = left, $
         right = right, $
         bottom = bottom, $

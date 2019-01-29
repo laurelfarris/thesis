@@ -37,6 +37,7 @@ function POLYGON2, $
         [x1, x2, x2, x1 ], $
         [y1, y1, y2, y2 ], $
         data = 1, $
+        target=target, $
         ;fill_transparency = 100, $
         fill_background = 0, $
         linestyle=0, $

@@ -33,3 +33,20 @@ pro mypath, result
     ; Looks like there are no repeats, assuming I set this up correctly.
 
 end
+
+
+;- Mon Jan 28 08:07:31 MST 2019
+;- Cleaning up:
+;-   copied the lines below from "my_own_path.pro", and deleted that file.
+
+fls = file_search( 'Modules/*.pro' )
+print, fls
+
+foreach subroutine, fls do begin
+
+    resolve_routine, subroutine
+
+endforeach
+
+
+end
