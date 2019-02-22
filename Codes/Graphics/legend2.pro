@@ -78,13 +78,26 @@ function LEGEND2, $
     ; horizontal_alignment = 'Right'|'Center'|'Left'
     ; vertical_alignment = 'Top'|'Center'|'Bottom'
 
+
+    ;- hor. space between line and text
+    ;-  (default = 0.04)
+    horizontal_spacing = 0.05
+
+    ;- ver. space between items in list
+    ;-  (default = 0.03)
+    vertical_spacing = 0.02
+
+
+
+
     leg = legend( $
         target=target, $
         position = [lx,ly]*dpi, $
         ;/relative, $
         /device, $
         font_size = fontsize, $
-        horizontal_spacing = 0.05, $
+        horizontal_spacing = horizontal_spacing, $
+        vertical_spacing = vertical_spacing, $
         horizontal_alignment = horizontal_alignment, $
         vertical_alignment = vertical_alignment, $
         linestyle = 6, $

@@ -4,23 +4,27 @@
 
 color = [ $
     'blue', $
-    ;'medium blue', $
     'green', $
-    ;'dark green', $
+    'goldenrod', $
     'red', $
-    ;'firebrick', $
-    'orange', $
     'purple', $
+    'lime green', $
+    'orange', $
+    'magenta', $ 
     'dark cyan', $
+    'sienna', $
+    'deep sky blue', $
+    'dark orchid', $
+
+    'dark orange', $
+    'hot pink', $
+    'dark gray', $
+    'medium blue', $
+    'dark green', $
+    'firebrick', $
+    'dark slate gray', $
     'indian red', $
     'dark olive green', $
-    'dark orange', $
-    'dark orchid', $
-    'lime green', $
-    'deep sky blue', $
-    'sienna', $
-    'dim gray', $
-    'hot pink', $
     '' ]
 
 

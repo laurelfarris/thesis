@@ -3,40 +3,36 @@
 \contentsline {section}{Introduction}{}{section*.1}
 \contentsline {paragraph}{``Overview'' from proposal:}{}{section*.1}
 \contentsline {paragraph}{single\_page\_freewriting.gdoc}{}{Item.7}
-\contentsline {section}{The Big Picture}{}{Item.13}
 \contentsline {section}{The solar chromosphere}{}{Item.13}
 \contentsline {subsection}{Magnetic field, structure, and the \textit {plasma-$\beta $}}{}{Item.13}
 \contentsline {section}{3-minute oscillations}{}{equation.1}
-\contentsline {subsection}{History of the 3-minute oscillations}{}{equation.1}
-\contentsline {subsection}{Interpretation of 3mOs as slow, propagating MA waves}{}{equation.1}
-\contentsline {subsection}{Where/how 3mOs are generated}{}{equation.3}
-\contentsline {section}{Cutoff frequency}{}{equation.3}
-\contentsline {subsection}{`Natural' frequency of the chromosphere}{}{equation.3}
-\contentsline {subsection}{Definition and derivation}{}{equation.3}
-\contentsline {subsection}{Physical background for the cutoff frequency}{}{equation.11}
-\contentsline {section}{Physics background}{}{equation.17}
-\contentsline {subsection}{Waves}{}{equation.17}
-\contentsline {subsection}{Coronal seismology}{}{equation.17}
-\contentsline {paragraph}{Ideal MHD}{}{equation.17}
-\contentsline {paragraph}{Characteristic speeds}{}{equation.17}
-\contentsline {subsubsection}{Kink waves}{}{Item.16}
-\contentsline {paragraph}{Speed}{}{Item.16}
-\contentsline {paragraph}{Period}{}{Item.16}
-\contentsline {subsection}{Thermal and non-thermal energy}{}{Item.16}
-\contentsline {section}{Flares}{}{equation.18}
-\contentsline {paragraph}{Rocket analogy}{}{equation.18}
-\contentsline {subsection}{Flare evolution}{}{equation.18}
-\contentsline {subsubsection}{Quasi-periodic pulsations}{}{equation.18}
-\contentsline {section}{Literature Review}{}{equation.18}
-\contentsline {section}{Methodology}{}{equation.18}
-\contentsline {subsection}{Data/Observations}{}{equation.18}
-\contentsline {subsubsection}{Flare(s)}{}{equation.18}
-\contentsline {subsubsection}{The Solar Dynamics Observatory (SDO)}{}{equation.18}
-\contentsline {paragraph}{The Atmospheric Imaging Assembly (AIA)}{}{equation.18}
-\contentsline {paragraph}{The Helioseismic and Magnetic Imager (HMI)}{}{equation.18}
-\contentsline {subsection}{Data reduction/prep}{}{figure.3}
-\contentsline {subsubsection}{The Interface Region Imaging Spectrograph (IRIS)}{}{figure.3}
-\contentsline {subsection}{Beginning of project - HMI continuum (pre-proposal)}{}{Item.20}
-\contentsline {subsection}{Quiet sun}{}{Item.20}
-\contentsline {paragraph}{05 October 2018 - single page summary to send to Professor James}{}{Item.20}
-\contentsline {section}{Phase 1}{}{Item.20}
+\contentsline {subsection}{Observations in intensity and velocity}{}{equation.1}
+\contentsline {subsection}{Location relative to chromospheric network and active regions}{}{equation.1}
+\contentsline {subsection}{Origin of the 3mOs}{}{equation.1}
+\contentsline {subsubsection}{Slow, propagating magnetoacoustic waves from the photosphere}{}{equation.3}
+\contentsline {subsubsection}{Response of chromosphere at the cutoff frequency}{}{equation.3}
+\contentsline {section}{The acoustic cutoff frequency}{}{equation.3}
+\contentsline {subsection}{Derivation of the cutoff frequency}{}{equation.3}
+\contentsline {section}{Flares}{}{equation.17}
+\contentsline {paragraph}{Rocket analogy}{}{equation.17}
+\contentsline {subsection}{Flare evolution}{}{equation.17}
+\contentsline {subsubsection}{Quasi-periodic pulsations (QPPs)}{}{equation.17}
+\contentsline {subsection}{Flare classes}{}{Item.15}
+\contentsline {section}{Literature Review}{}{Item.15}
+\contentsline {section}{The Solar Dynamics Observatory (SDO)}{}{Item.15}
+\contentsline {subsection}{The Atmospheric Imaging Assembly (AIA)}{}{Item.15}
+\contentsline {paragraph}{Ambiguity in formation height}{}{Item.15}
+\contentsline {subsection}{The Helioseismic and Magnetic Imager (HMI)}{}{Item.15}
+\contentsline {section}{Enhanced chromospheric 3-minute oscillatory power associated with the 2011-February-15 X2.2 flare}{}{Item.15}
+\contentsline {subsection}{Introduction}{}{Item.15}
+\contentsline {subsection}{Observations and data reduction}{}{Item.15}
+\contentsline {subsection}{Analysis}{}{figure.6}
+\contentsline {subsection}{Results and discussion}{}{figure.6}
+\contentsline {section}{Physics background}{}{figure.13}
+\contentsline {subsection}{Waves}{}{figure.13}
+\contentsline {subsection}{Coronal seismology}{}{figure.13}
+\contentsline {paragraph}{Ideal MHD}{}{figure.13}
+\contentsline {paragraph}{Characteristic speeds}{}{figure.13}
+\contentsline {subsubsection}{Kink waves}{}{Item.18}
+\contentsline {paragraph}{Speed}{}{Item.18}
+\contentsline {paragraph}{Period}{}{Item.18}

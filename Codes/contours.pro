@@ -16,6 +16,10 @@
 
 
 
+;- 30 January 2019
+;- Added x and y arguments. May cause trouble...
+
+
 function GET_CONTOUR_DATA, time, channel=channel
 
     ;- Get contour data from HMI B_LOS ('mag') or HMI continuum ('cont').
@@ -47,7 +51,10 @@ function GET_CONTOUR_DATA, time, channel=channel
 
     ;- Added strmid to input time in case it's stil the full string.
     ;-  If it's not, strmid won't do anything, so doesn't hurt.
-    ind = (where( hmi_time eq strmid(time,0,5) ))[0]
+    ind1 = (where( hmi_time eq strmid(time[0],0,5) ))[0]
+    ind2 = (where( hmi_time eq strmid(time[-1],0,5) ))[0]
+
+    ind = [ind1:ind2]
 
     ;- Returns "cube" [750, 500, 398], already centered on AR
     restore, '/solarstorm/laurel07/hmi_' + channel + '.sav'
@@ -56,15 +63,25 @@ function GET_CONTOUR_DATA, time, channel=channel
     hmi = CROP_DATA( cube, offset=[-15,0] )
 
     c_data = hmi[*,*,ind]
+
+    c_data = mean(c_data, dimension=3)
+
     return, c_data
 end
 
 
-function CONTOURS, c_data, target=target, channel=channel
+function CONTOURS, c_data, x, y, target=target, channel=channel, $
+    _EXTRA = e
+
+
 
     sz = size(c_data, /dimensions)
     if n_elements(sz) eq 2 then nn = 1 else nn = sz[2]
     contourr = objarr(nn)
+
+
+    if n_elements(x) eq 0 then x = indgen(sz[0])
+    if n_elements(y) eq 0 then y = indgen(sz[1])
 
     if channel eq 'cont' then begin
         ;- Define continuum contours relative to average in quiet sun (lower right corner).
@@ -93,7 +110,7 @@ function CONTOURS, c_data, target=target, channel=channel
     for ii = 0, nn-1 do begin
         ;contourr[ii] = CONTOUR( $
         contourr[ii] = CONTOUR2( $
-            c_data, $
+            c_data, x, y, $
             overplot=target, $
             c_value=c_value, $
             c_thick=1.0, $
@@ -101,7 +118,8 @@ function CONTOURS, c_data, target=target, channel=channel
             c_linestyle='-', $
             c_label_show=0, $
             title = title, $
-            name = name )
+            name = name, $
+            _EXTRA = e )
     endfor
     return, contourr
 end

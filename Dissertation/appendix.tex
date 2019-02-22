@@ -1,4 +1,186 @@
-\appendix
+%\appendix
+
+
+
+
+%% --- Moved "physics background" here from background.tex
+%%  (Wed Feb 13 03:02:53 MST 2019) --- %%
+
+
+
+%% Physics background: waves and coronal seismology {---
+
+
+
+\clearpage
+\section{Physics background}
+
+\subsection{Waves}
+
+1D:
+\[
+    \frac{\partial^{2}\psi}{\partial x^{2}}
+    - \frac{1}{v^{2}}\frac{\partial^{2}\psi}{\partial t^{2}}
+    = 0
+    \]
+
+3D:
+\[
+    \frac{\partial^{2}\psi}{\partial x^{2}} \rightarrow
+    \nabla^{2}\psi
+    \]
+
+
+propagation speed $v$:
+\[
+    v = \sqrt{ \frac{F_{r}}{\rho}}
+    \]
+$F_{r}$ = restoring ``force'';
+$\rho$ = mass ``density''
+
+Get solutions to wave equation by specifying:
+\begin{itemize}
+    \item ICs - prescribe amplitude and phase
+    \item BCs - solutions are standing waves, or harmonics
+\end{itemize}
+
+
+\[
+    \left( \nabla^{2} - \frac{1}{c^{2}} \frac{\partial^{2}}{\partial t^{2}} \right)
+    \psi\left( \vec{r},t \right)
+    = 0
+    \]
+
+\subsection{Coronal seismology}\label{cs}
+
+\paragraph{Ideal MHD}\label{idealMHD}
+Conditions of ``ideal MHD'' involve timescales between collision that are much
+smaller than those of other processes, allowing the particles to take a
+Maxwellian distribution. They describe the evolution of the plasma densities
+(mass, energy, etc.) over time. Under conditions of ideal MHD, plasma acts as a
+perfect conductor, and is completely frozen-in to the magnetic field lines.
+
+The equations of ideal MHD are shown in Table~ref\{tab:idealMHD\}.
+\\input{table\_idealMHD}
+
+Figure~ref\{disp\} shows the location of the different MHD modes relative to
+characteristic speeds both external to and inside a cylindrical volume of
+plasma.
+
+\paragraph{Characteristic speeds}
+Relations between the (internal and external)
+characteristic speeds (Alfv\'en, sound, and tube speeds)
+determine properties of MHD modes guided by the tube.
+
+\begin{enumerate}
+    \item Sound speed: $C_{s} = \sqrt{\frac{\gamma p_{0}}{\rho_{0}}}
+            \approx 166 T_{o}^{1/2}$ m s$^{-1}$ = 200 km s$^{-1}$
+
+            (\emph{All} sound speeds $\approx \sqrt{ \frac{ED}{\rho_{I}} } $ ),
+            where $\rho_{I}$ = inertial mass density.
+
+            ED of magnetosphere = $\frac{B^{2}}{2\mu_{0}} $
+            = $\frac{P}{\rho} $
+
+            $C_{s} = \sqrt{ \frac{P\gamma}{\rho}  } $
+
+    \item Alfv\'en speed = ``speed at which hydrodynamic waves can be propagated
+    in a magnetically dominated plasma.''
+        \mynote[07/17/17 15:21]{Source?}
+
+        $C_{A} = \frac{B_{0}}{\sqrt{\mu_{0}\rho_{0}}}$
+        \[
+            V_{A} = 2.18\times10^{12}\frac{B_o}{\sqrt{n_o}}
+            \textrm{m}\ \textrm{s}^{-1} = 3000 \textrm{km}\ \textrm{s}^{-1}
+            \]
+        (B$_{o} \sim$ 100 G; n$_{o}$ $\sim$ 10$^{16}$ m$^{-3}$)
+    \item Tube/Cusp speed:
+        $C_{T} = C_{s}C_{A}/\left(C_{A}^{2} + C_{s}^{2}\right)^{1/2}$
+        = combination of sound and Alfv\'en speeds
+\end{enumerate}
+Audible hearing limit: $C_{s}$ = 20 Hz. In space, $\nu \approx 10^{-7}$ Hz.
+
+
+%The behavior of linear perturbations of the form
+%\[
+%    \delta P_{tot} \left( r \right)
+%    \textrm{exp} \left[ i \left( k_{z}z + m\phi - \omega t \left) \right]
+%    \]
+%is governed by  the following system of first order differential equations and
+%algebraic equations:
+%\[
+%    D\frac{\mathrm{d}}{\mathrm{d}r} \left( r\xi_{r} \right)
+%    = \left( C_{A}^{2} + C_{s}^{2})\ldots
+%    \]
+
+\subsubsection{Kink waves}
+
+\paragraph{Speed}
+In the long wavelength limit, the phase speed of all but sausage fast modes
+(see below) tends to the so-called kink speed, which corresponds to the density
+weighed average Alfv\'en speed.
+Phase speed for kink waves is equal to this kink speed, $c_{k}$:
+\[
+    v_{ph}
+    = c_{k}
+    = \sqrt{\frac{\rho_{o}V^{2}_{Ao}+\rho_{e}V^{2}_{Ae}} {\rho_o+\rho_e}}
+    \approx V_{A}\sqrt{\frac{2}{1 + \frac{\rho_{e}}{\rho_{o}}}}
+    \]
+in the low-$\beta$ plasma.
+
+Frequency:
+\[
+    w_{K} = \sqrt{ \frac{2k_{z}B^{2}}{\mu(\rho_{i}+\rho_{e})}  }
+    \]
+Slab phase speed:
+\[
+    V_{A_{e}}
+    \]
+Tube kink speed:
+\[
+    c_{K} = \frac{B_{i}^{2} + B_{e}^{2}}{\sqrt{\mu(\rho_{i}+\rho_{e})}}
+    \]
+(mean Alfv\'enic speed). Slab (or tube) is moved laterally; little variation in
+cross-sec, density, or intensity.
+
+\paragraph{Period}
+\[
+    P = \frac{2\ell}{V_A}\sqrt{\frac{1+\rho_e/\rho_o}{2}}
+    \]
+where $\lambda=2\ell$ ($\ell$ is the loop length).
+Typically, $\ell \approx 60-600$ Mm in the corona.
+
+Period of global kink mode:
+\[
+    P = \frac{2\ell}{c_{K}}
+    \]
+where $P \approx $ few seconds - minutes
+
+\newpage
+\subsection{Thermal and non-thermal energy}
+Thermal energy is radiated by matter in \textit{thermal equilibrium}
+The extreme ends of the spectrum (radio and HXR) are dominated by
+radiation from non-thermal particles in the early stages of flare
+energy release, but the intermediate regimes (visible, EUV, and SXR)
+are dominated by radiation from thermal particles during the decay
+period, over longer timescales.
+Figure~\\ref{fig:nt} shows a comparison
+between the two types of energy across the electromagnetic spectrum.
+Non-thermal particles are revealed by observed energies that, if
+caused by thermal particles, would indicate temperatures far higher
+than observed, according to
+\begin{equation}
+    E_{thermal} = \frac{3}{2}k_{B}T
+\end{equation}
+where $k_{B} = 1.38 \times 10^{-16}$ = Boltzmann's constant in erg
+K$^{-1}$, $T$ = temperature in Kelvin, and $ E_{thermal} $ = thermal
+energy in erg. The distinction between thermal and non-thermal
+particles is important when diagnosing observations. They result from
+different processes and provide clues to the conditions in their
+environment.
+% ---}
+
+
 \section{Normalization of Power Spectrum}
 
 Figure~\ref{norm_vs_not} shows power spectra for each AIA channel

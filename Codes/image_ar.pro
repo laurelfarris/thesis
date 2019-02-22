@@ -79,8 +79,8 @@ function GET_IMAGE_DATA
     Y = (indgen(sz[1]) - index.crpix2) * index.cdelt2
     time = strmid(index.date_obs, 11, 11)
     hmi_BLOS = { $
-        ;data : data, $
-        data : data<300>(-300), $
+        data : data, $
+        ;data : data<300>(-300), $
         X : X, $
         Y : Y, $
         extra : { title : 'HMI B$_{LOS}$ ' + time + ' UT'} }
@@ -142,6 +142,14 @@ function GET_IMAGE_DATA
         aia1700:aia1700, $
         ;hmi_cont:hmi_cont, $
         hmi_BLOS:hmi_BLOS }
+
+    print, ''
+    help, S
+    print, ''
+    print, 'type ".c" to return structure to main level'
+    print, ''
+    stop
+
     return, S
 end
 
@@ -186,7 +194,7 @@ pro IMAGE_STRUCTURE, S
     wx = 8.0
     wy = 5.5
     dw
-    win = window( dimensions=[wx,wy]*dpi, buffer=1 )
+    win = window( dimensions=[wx,wy]*dpi, buffer=0, location=[700,0] )
 
 
     ; Need to speed this part up a little bit...
@@ -245,6 +253,8 @@ pro IMAGE_STRUCTURE, S
         endfor
     endfor
 
+    stop
+
     resolve_routine, 'save2', /either
     file = 'color_images'
     save2, file;, /add_timestamp
@@ -269,16 +279,94 @@ pro IMAGE_STRUCTURE, S
 end
 
 
+pro IMAGE_AR_ONLY, S
+;- 12 February 2019
 
-;- Return 2D full disk data and other info in structure S.
+    common defaults
+
+    ; Center of AR* --> lower left corner of AR
+    ;   *according to green book (page 50, February 2)
+    x0 = 2375 + 24
+    y0 = 1660
+    xl = x0 - 250
+    yl = y0 - 165
+
+    imdata = [ $
+        [[ crop_data( S.(0).data,  center=[x0,y0]) ]], $
+        [[ crop_data( S.(1).data,  center=[x0,y0]) ]], $
+        [[ crop_data( S.(2).data,  center=[x0,y0]) ]] ]
+    XX = (S.(0).X)[xl:xl+500-1]
+    YY = (S.(0).Y)[yl:yl+330-1]
+
+    title = strarr(n_tags(S))
+    for ii = 0, n_tags(S)-1 do title[ii] = S.(ii).extra.title
+
+    resolve_routine, 'image3', /either
+    im = image3( $
+        imdata, XX, YY, buffer=0, $
+        title=title, $
+        xtitle='X (arcseconds)', ytitle='Y (arcseconds)', $
+        top=0.25, $
+        bottom=0.5, $
+        ygap=0.65, $
+        left=0.75, $
+        right=0.75, $
+        wx=3.75, $
+        rows=3, cols=1 )
+
+    for ii = 0, 1 do im[ii].rgb_table = S.(ii).extra.rgb_table
+
+
+    ;- HMI Contours:
+    contourr = CONTOUR2( $
+        imdata[*,*,2], $
+        XX, YY, $
+        ;overplot=im[2], $
+        c_value=[-300, 300], $
+        c_thick=0.1, $
+        c_color=['black', 'white'], $
+        name = ['-300 G', '+300 G'] )
+
+
+    ;- Label each of the four sunspots
+    ;- (same coords as in subregions.pro, and hmi_spectra.pro)
+
+    center = [ $
+        [390, 225], $
+        [170, 220], $
+        [245, 105], $
+        [ 20,  75] ]
+    nn = (size(center, /dimensions))[1]
+
+    label = [ 'AR_1p', 'AR_1n', 'AR_2p', 'AR_2n' ]
+    color = [ 'white', 'black', 'white', 'black' ]
+
+    sunspot = objarr(nn)
+    cdelt = 0.65
+    resolve_routine, 'text2', /either
+    for ii = 0, nn-1 do begin
+
+        sunspot[ii] = TEXT2( $
+            center[0,ii]*cdelt + XX[0], $
+            center[1,ii]*cdelt + yy[0], $
+            label[ii], $
+            target=im[2], $
+            /data, $
+            color = color[ii] )
+    endfor
+end
+
+
+;- Create graphic STRUCTURE containing 2D full disk data and other info
 ;S = GET_IMAGE_DATA()
-;print, ''
-;help, S
-;print, ''
+
+;- procedure to create the graphic.
+;IMAGE_STRUCTURE, S
+
+IMAGE_AR_ONLY, S
 ;stop
 
-;- Use procedure to create the graphic.
-IMAGE_STRUCTURE, S
+save2, 'images';, /add_timestamp, idl_code='image_ar'
 
 
 end

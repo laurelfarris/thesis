@@ -2,6 +2,9 @@
 ;- 17 December 2018
 ;- Mess of code at the bottom messing with power maps and saturation masks.
 
+;- SINGLE image of powermaps.
+;-   image_bda_powermaps.pro creates ARRAY of images.
+
 ;- 18 October 2018
 function BDA_POWERMAPS, $
     map, $

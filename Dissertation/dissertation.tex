@@ -134,13 +134,15 @@
 
 % ---}
 
-\includeonly{
-    introduction,
-    background,
-    literature,
-    methodology,
-    phase1
-}
+%\includeonly{
+%    introduction,
+%    background,
+%    literature,
+%    methodology,
+%    sdo,
+%    phase1,
+    %appendix,
+%}
 
 % Hyperlinks % {---
 \usepackage{hyperref}
@@ -188,7 +190,7 @@
 %% Table of contents % {---
 \newpage
 \setlength{\parskip}{0.5ex}
-\setcounter{tocdepth}{3}
+%\setcounter{tocdepth}{3}
 %\renewcommand\contentsname{}
 \tableofcontents
 
@@ -231,28 +233,29 @@
 % ---}
 
 
-{\color{red}\textbf{
-    NOTE: Text from `paper\_messy.pdf'
-    has been copied through end of first section.
-    Might be worth printing it out and deleting the file,
-    to avoid confusion.
-}}
-
 \include{introduction}
-
 \include{background}
-
 \include{literature}
 
-\include{methodology}
+\include{sdo}
+\include{alignment}
+%\include{saturation}
+
+
+
+\include{phase1}
+
+%% aka "phase 1"
 
 %\section{Part 1: The 2011 February 15 X2.2 flare}
 % First paper here, with necessary modifications
-\include{phase1}
 
 %\section{Part 2: IRIS}
 
 %\section{Part 3: Multiflare}
+
+
+\include{appendix}
 
 
 %\clearpage

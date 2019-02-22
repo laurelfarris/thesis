@@ -27,37 +27,39 @@ function TEXT2, tx, ty, str, _EXTRA=e
 
     common defaults
 
-        text_object = TEXT( $
-            tx, ty, $
-            str, $
-            ;target=graphic
-            ;/data, $
-            ;/normal, $
-            ;/relative, $
-            ;/device, $
-            ;alignment=1.0, $
-                ;- Horizontal alignment = 0.0|0.5|1.0 --> left (default)|center|right
-            ;vertical_alignment=1.0, $
-                ;- Vertical alignment = 0.0|0.5|1.0 --> bottom (default)|center|top
-            ;  COLOR
-            ;  FONT_COLOR
-            ;  FILL_BACKGROUND=0|1,
-            ;  FILL_COLOR=
-            ;font_style = 'Bold', $  0,1,2,3 = normal,bold,italic,bold italic
-            ;font_name = ''
-            font_size=fontsize, $
-            ;  baseline=,
-            ;  updir=
-            ;  CLIP=1, ;; ignored unless /data is set
-            ;  NAME=graphic_name,
-            ;  ONGLASS,
-            ;  ORIENTATION=angle, ;; counter-clockwise
-            ;  POSITION,  --> ? First arg? or its own keyword?
-            ;  STRING,  --> ?
-            ;  WINDOW
-            ;  TRANSPARENCY=0 ;; % transparency
-            ;  hide, $
-            _EXTRA=e )
+    text_object = TEXT( $
+        tx, ty, $
+        str, $
+        ;target=graphic
+        ;/data, $
+        ;/normal, $
+        ;/relative, $
+        ;/device, $
+        ;alignment=1.0, $
+            ;- Horizontal alignment = 0.0|0.5|1.0
+            ;-  = left|center|right
+        ;vertical_alignment=1.0, $
+            ;- Vertical alignment = 0.0|0.5|1.0
+            ;-  = bottom|center|top
+        ;  COLOR
+        ;  FONT_COLOR
+        ;  FILL_BACKGROUND=0|1,
+        ;  FILL_COLOR=
+        ;font_style = 'Bold', $  0,1,2,3 = normal,bold,italic,bold italic
+        ;font_name = ''
+        font_size=fontsize, $
+        ;  baseline=,
+        ;  updir=
+        ;  CLIP=1, ;; ignored unless /data is set
+        ;  NAME=graphic_name,
+        ;  ONGLASS,
+        ;  ORIENTATION=angle, ;; counter-clockwise
+        ;  POSITION,  --> ? First arg? or its own keyword?
+        ;  STRING,  --> ?
+        ;  WINDOW
+        ;  TRANSPARENCY=0 ;; % transparency
+        ;  hide, $
+        _EXTRA=e )
 
         return, text_object
 end

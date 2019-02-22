@@ -1,0 +1,90 @@
+\begin{figure*}[htb!]\centering
+    \includegraphics[draft=false,width=0.48\textwidth]{aia1600big_image.pdf}
+    \includegraphics[draft=false,width=0.48\textwidth]{aia1700big_image.pdf}\\
+    \includegraphics[draft=false,width=0.48\textwidth]{aia1600big_map.pdf}
+    \includegraphics[draft=false,width=0.48\textwidth]{aia1700big_map.pdf}
+    \caption{%
+        Top row:
+        Post-flare images, shown as a composite product over
+        the time range shown, overlaid with contours showing the approximate
+        location of the $B_{LOS}$ at $\pm$300 Gauss.
+        Bottom rows: Spatial distribution of 3-minute power, obtained
+        by applying a pixel-by-pixel Fourier transform over the images
+        included in the top row.
+        The left column shows results from AIA 1600\AA{}, and
+        the right column shows results from AIA 1700\AA{}.
+        White and black contours represent positive and negative polarity,
+        respectively.
+    \label{contours}}
+\end{figure*}
+
+\begin{figure*}[htb!]\centering
+    \includegraphics[draft=false,width=0.9\textwidth]{aia1600before_20181204.pdf}
+    \includegraphics[draft=false,width=0.9\textwidth]{aia1700before_20181204.pdf}
+    \caption{%
+        Spatial distribution of 3-minute power before the X-class flare,
+        in log scale to bridge large contrasts.
+        Locations whose time segment included saturated pixels were set to zero.
+        \label{before}}
+\end{figure*}
+
+\begin{figure*}[htb!]\centering
+    \includegraphics[draft=false,width=0.9\textwidth]{aia1600during_20181204.pdf}
+    \includegraphics[draft=false,width=0.9\textwidth]{aia1700during_20181204.pdf}
+    \caption{%
+        Spatial distribution of 3-minute power during the X-class flare,
+        in log scale to bridge large contrasts.
+        Locations whose time segment included saturated pixels were set to zero.
+        \label{during}}
+\end{figure*}
+
+\begin{figure*}[htb!]\centering
+    \includegraphics[draft=false,width=0.9\textwidth]{aia1600after_20181204.pdf}
+    \includegraphics[draft=false,width=0.9\textwidth]{aia1700after_20181204.pdf}
+    \caption{%
+        Spatial distribution of 3-minute power after the X-class flare,
+        in log scale to bridge large contrasts.
+        Locations whose time segment included saturated pixels were set to zero.
+        \label{after}}
+\end{figure*}
+
+
+
+
+\begin{figure*}[htb!]\centering
+    \includegraphics[draft=false,width=1.00\textwidth]{time-3minpower_flux.pdf}
+    \includegraphics[draft=false,width=1.00\textwidth]{time-3minpower_maps.pdf}
+    \caption{%
+        Temporal evolution of the 3-minute power $P(t)$ in
+        AIA 1600\AA{} (green curve) and AIA 1700\AA{} (purple curve).
+        Top: $P(t)$ obtained by applying a Fourier transform to the
+        integrated flux from AR 11158.
+        Bottom: $P(t)$ per unsaturated pixel, obtained by summing over power maps.
+        Each point in time
+        %represents the sum (in x and y) of each power map and
+        is plotted as a function of the center
+        of the time segment over which the Fourier transform was applied to
+        obtain the power map over which the point was summed.
+        %The axis labeled $T = 64$ is scaled to show the
+        %length of each time segment relative to the full time series.
+        The vertical dashed lines mark the \textit{GOES} start, peak, and end
+        times of the flare at 01:44, 01:56, and 02:06 UT, respectively.
+        \label{power_vs_time}}
+\end{figure*}
+
+\begin{figure*}[htb!]\centering
+    \includegraphics[draft=false,width=0.9\textwidth]{wa.pdf}
+    \caption{
+        Time-frequency power plots from AIA 1600\AA{} (top panel) and AIA
+        1700\AA{} (bottom panel), obtained by applying a Fourier transform to
+        integrated emission from NOAA AR 11158 in discrete time increments of
+        64 frames ($\sim$25.6 minutes) each. The dashed horizontal line marks the
+        central frequency $\nu_{c}$ at $\sim$5.6 mHz, corresponding to a period
+        of 3 minutes. The dotted horizontal lines on either side of $\nu_{c}$
+        mark the edges of the frequency bandpass $\Delta\nu$ = 1 mHz. The
+        vertical lines mark the flare, start, peak, and end times as determined
+        by \textit{GOES}. The power is scaled logarithmically and over the same
+        range in both channels.
+        \label{wa}}
+\end{figure*}
+

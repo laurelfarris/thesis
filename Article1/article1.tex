@@ -18,6 +18,7 @@
 %\pagestyle{fancy} % header/footer stuff won't show up without this.
 
 
+\usepackage{comment}
 
 \usepackage{printlen}
 
@@ -30,7 +31,8 @@
 
 \usepackage{graphicx}
 \graphicspath{
-    {$HOME/Figures/}, %--> TEMPORARY! Don't forget to delete this when vim is fixed!
+    {$HOME/Figures/}, %--> TEMPORARY!
+            % Don't forget to delete this when vim is fixed!
     {$HOME/Dropbox/Figures/},
     {$HOME/Dropbox/Figures/Temp/},
     {$HOME/Dropbox/Figures/Lightcurves/}
@@ -107,17 +109,17 @@
 \section{Observations and data reduction}\label{data}
 \input{data}
 
-\clearpage
 \section{Analysis}\label{analysis}
 \input{analysis}
 
 \clearpage
-\section{Results}\label{results}
+%\section{Results}\label{results}
+\section{Results and discussion}\label{results}
 \input{results}
 
-\clearpage
-\section{Discussion}\label{discussion}
-\input{discussion}
+%\clearpage
+%\section{Discussion}\label{discussion}
+%\input{discussion}
 
 \clearpage
 \section{Conclusions}\label{conclusions}

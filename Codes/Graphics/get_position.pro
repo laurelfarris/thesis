@@ -165,13 +165,18 @@ function GET_POSITION, layout=layout, _EXTRA = e
     bottom = 0.50  ;- Needs space for xtitle AND x tick labels
 
 
-    ygap   = top+bottom  ;- space between panels with space for
+    ;ygap   = top+bottom  ;- space between panels with space for
     ;- xtitle and ticks for top panel, and title of panel underneath,
     ;- except in cases where only the top of graphics have a title.
     ;- So ... Only if both top and bottom axes are labeled.
     ;- Should this really be the default?
     ;- Also, if user doesn't set ygap but they do set top and/or bottom,
     ;- then ygap is defined using the wrong values...
+    ;-
+    ;- 12 February 2019
+    ;- ygap shouldn't be defined here anyway... sometimes I want top
+    ;- and bottom labled, but want minimal, if any space between panels...
+    ygap   = 0.75  ;- matching to default xgap for now..
 
 
     width = 2.0

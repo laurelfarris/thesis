@@ -2,14 +2,16 @@
 ;- Programmer:          Laurel Farris
 
 
-function contour2, data, _EXTRA=e
+function contour2, data, x, y, _EXTRA=e
 
     common defaults
 
+
+
     c = contour( $
         data, $
+        x, y, $
         overplot=1, $
-        ;x, y, $
         ;n_levels=2, $ ; ignored by c_values
         ;c_value = [c1,c2], $
         c_thick = 0.5, $

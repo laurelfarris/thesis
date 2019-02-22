@@ -1,12 +1,32 @@
-; Last modified:    06 April 2018
-; Programmer:       Laurel Farris
-; Description:      subroutines with custom default configurations
+;+
+;- LAST MODIFIED:
+;-   Fri Feb  8 12:23:50 MST 2019
+;-
+;- PURPOSE:
+;-   Use IDL's SAVE method on current window to save graphic as pdf
+;-   with date appended in the form "_yyyymmdd".
+;-
+;- INPUT:
+;-   "filename" (NOTE: do not include extension; this routine will do that)
+;-
+;- KEYWORDS:
+;-   CONFIRM_REPLACE
+;-   ADD_TIMESTAMP - Uses IDL's TEXT function to add date and filename to
+;-      bottom of page
+;-   IDL_CODE - name of code that generated the figure. If set, will be added
+;-      to bottom of page along with date and filename. (NOTE: ignored if
+;-      ADD_TIMESTAMP is not set).
+;-
+;- OUTPUT:
+;-
+;- TO DO:
 
 ; _EXTRA is for keywords in call to IDL's text function.
 
 pro SAVE2, filename, $
     confirm_replace=confirm_replace, $
     add_timestamp=add_timestamp, $
+    idl_code=idl_code, $
     _EXTRA=e
 
     ; Confirm saving to file
@@ -47,35 +67,6 @@ pro SAVE2, filename, $
     wy = dims[1]
 
 
-    ; Add timestamp to figure
-    if keyword_set(add_timestamp) then begin
-
-        ;- NOTE: width and height are currently in INCHES.
-
-;        tx = width - 0.2
-;        ty = height / 2.0
-;        alignment = 0.0
-
-        tx = wx - 0.25
-        ty = 0.25
-        alignment = 1.0
-
-;        print, tx
-;        print, ty
-;        print, dpi
-
-        creation_time = text( $
-            tx*dpi, ty*dpi, $
-            systime(), $
-            /device, $
-            alignment = alignment, $
-            ;baseline=[0.0,1.0,0.0], $
-            ;updir=[-1.0,0.0,0.0], $
-            color='grey', $
-            font_size=8 )
-    endif
-
-
     CALDAT, systime(/julian), $
       month, day, year, hour, minute, second
 
@@ -86,11 +77,41 @@ pro SAVE2, filename, $
     if strlen(month) eq 1 then month = '0' + month
     if strlen(day) eq 1 then day = '0' + day
 
-    new_filename = path + filename + '_' + year + month + day + '.pdf'
+    new_filename = filename + '_' + year + month + day + '.pdf'
 
-    win.save, new_filename, $
+    ; Add timestamp to figure
+    if keyword_set(add_timestamp) then begin
+
+        if not keyword_set(idl_code) then idl_code = ''
+
+        ;- NOTE: width and height are currently in INCHES.
+
+        edge_offset = 0.25
+
+        tx = [edge_offset, wx/2., wx-edge_offset]
+        ty = edge_offset
+        alignment = [0.0, 0.5, 1.0]
+
+        text_string = $
+            [ new_filename, idl_code, systime() ]
+
+        for ii = 0, 2 do begin
+            creation_time = text( $
+                tx[ii]*dpi, ty*dpi, $
+                text_string[ii], $
+                /device, $
+                alignment = alignment[ii], $
+                ;baseline=[0.0,1.0,0.0], $
+                ;updir=[-1.0,0.0,0.0], $
+                color='grey', $
+                font_size=8 )
+        endfor
+    endif
+
+    win.SAVE, path + new_filename, $
         page_size=[wx,wy], $
         width=wx, height=wy, _EXTRA=e
+
     print, ''
     print, 'Saved file '
     print, '  ', new_filename

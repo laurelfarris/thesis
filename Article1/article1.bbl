@@ -47,6 +47,10 @@
 {Inglis}, A.~R., {Ireland}, J., \& {Dominique}, M. 2015, \apj, 798, 108,
   \dodoi{10.1088/0004-637X/798/2/108}
 
+\bibitem[{{Inglis} \& {Nakariakov}(2009)}]{Inglis2009}
+{Inglis}, A.~R., \& {Nakariakov}, V.~M. 2009, \aap, 493, 259,
+  \dodoi{10.1051/0004-6361:200810473}
+
 \bibitem[{{Jackiewicz} \& {Balasubramaniam}(2013)}]{Jackiewicz2013}
 {Jackiewicz}, J., \& {Balasubramaniam}, K.~S. 2013, \apj, 765, 15,
   \dodoi{10.1088/0004-637X/765/1/15}
@@ -84,16 +88,11 @@
 \bibitem[{{Milligan} {et~al.}(2017){Milligan}, {Fleck}, {Ireland}, {Fletcher},
   \& {Dennis}}]{Milligan2017}
 {Milligan}, R.~O., {Fleck}, B., {Ireland}, J., {Fletcher}, L., \& {Dennis},
-  B.~R. 2017, ArXiv e-prints.
-\newblock \doarXiv{1709.09037}
+  B.~R. 2017, \apjl, 848, L8, \dodoi{10.3847/2041-8213/aa8f3a}
 
 \bibitem[{{Monsue} {et~al.}(2016){Monsue}, {Hill}, \& {Stassun}}]{Monsue2016}
 {Monsue}, T., {Hill}, F., \& {Stassun}, K.~G. 2016, \aj, 152, 81,
   \dodoi{10.3847/0004-6256/152/4/81}
-
-\bibitem[{{Nakariakov} \& {Melnikov}(2009)}]{Nakariakov2009}
-{Nakariakov}, V.~M., \& {Melnikov}, V.~F. 2009, \ssr, 149, 119,
-  \dodoi{10.1007/s11214-009-9536-3}
 
 \bibitem[{{Pesnell} {et~al.}(2012){Pesnell}, {Thompson}, \&
   {Chamberlin}}]{Pesnell2012}

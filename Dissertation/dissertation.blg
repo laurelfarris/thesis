@@ -11,11 +11,13 @@ White space in argument---line 28 of file background.aux
  :                       Bogdan2006 p. 323}
 I'm skipping whatever remains of this command
 A level-1 auxiliary file: literature.aux
-A level-1 auxiliary file: methodology.aux
+A level-1 auxiliary file: sdo.aux
+A level-1 auxiliary file: alignment.aux
 A level-1 auxiliary file: phase1.aux
+A level-1 auxiliary file: appendix.aux
 The style file: aasjournal.bst
 Database file #1: library.bib.bib
-Repeated entry---line 3350 of file library.bib.bib
+Repeated entry---line 3059 of file library.bib.bib
  : @article{OShea2002
  :                   ,
 I'm skipping whatever remains of this entry
@@ -33,7 +35,7 @@ Warning--empty journal in Stangalini2011
 Warning--empty journal in Viereck2007
 You've used 49 entries,
             3166 wiz_defined-function locations,
-            1068 strings with 21236 characters,
+            1070 strings with 21253 characters,
 and the built_in function-call counts, 22603 in all, are:
 = -- 1836
 > -- 1807

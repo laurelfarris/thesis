@@ -18,7 +18,6 @@ endfor
 stop
 
 
-start:;----------------------------------------------------------------------------------
 ;- where do AIA channels start to increase?
 ;xtemp = [0:225]
 ;xtemp = [250:375]
@@ -44,6 +43,8 @@ plt = BATCH_PLOT( $
     sym_size = 0.3, $
     symbol='Circle') 
 
+
+
 resolve_routine, 'shift_ydata', /either
 delt = [ $
     min(ytemp[*,0]), min(ytemp[*,1]) - 0.08*max(ytemp[*,1]) ]
@@ -54,7 +55,7 @@ LABEL_TIME, plt, time=A.time
 
 ax = plt[0].axes
 
-;d = goes()
+d = goes()
 ax[0].title = 'Start Time (' + d.utbase + ' UT)'
 
 ax[2].title = 'Index'
@@ -68,6 +69,7 @@ stop
 
 
 
+start:;----------------------------------------------------------------------------------
 
 file = 'lc'
 
@@ -83,15 +85,16 @@ resolve_routine, 'batch_plot', /either
 plt = BATCH_PLOT(  $
     xdata, ydata, $
     xrange=[0,748], $
-    thick=[1.0, 1.0], $
+    thick=[0.5, 0.8], $
     xtickinterval=xtickinterval, $
     ;ylog = 1, $
     color=A.color, $
     name=A.name, $
     buffer=0 )
 
+
 resolve_routine, 'label_time', /either
-LABEL_TIME, plt, time=A.time, jd=A.jd
+LABEL_TIME, plt, time=A.time;, jd=A.jd
 
 resolve_routine, 'shift_ydata', /either
 SHIFT_YDATA, plt
@@ -100,7 +103,7 @@ resolve_routine, 'oplot_flare_lines', /either
 OPLOT_FLARE_LINES, plt, t_obs=A[0].time, jd=A.jd, thick=1.0
 
 resolve_routine, 'legend2', /either
-leg = LEGEND2( target=plt, /upperleft )
+leg = LEGEND2( target=plt, /upperleft, sample_width=0.25 )
 
 ax = plt[0].axes
 ax[1].title = ytitle[0]
@@ -120,10 +123,11 @@ ax[3].minor = 3
 ;- 14 December 2018
 ;- Color axes to match data (assuming yshift has been applied)
 ax[1].text_color = A[0].color
-ax[3].color = A[1].color
-print, 'How to colored axes look??'
-print, 'ax[1] set color, ax[3] set text_color'
-stop
+;ax[3].color = A[1].color
+ax[3].text_color = A[1].color
+;print, 'How do colored axes look??'
+;print, 'ax[1] set color, ax[3] set text_color'
+; 17 February 2019 - going with text_color
 
 
 ; Single lines creating each object that can easily be commented.
@@ -135,26 +139,31 @@ stop
 ;- Mark BDA times on LC.
 
 time = strmid(A[0].time,0,5)
-bda_times = ['01:00', '01:45', '02:30', '03:15']
+;bda_times = ['01:00', '01:45', '02:30', '03:15']
+bda_times = ['01:44', '02:30']
 nn = n_elements(bda_times)
 ind = intarr(nn)
 for ii = 0, nn-1 do $
     ind[ii] = (where( time eq bda_times[ii] ))[0]
 
 
-vert = objarr(nn)
-for ii = 0, nn-1 do begin
-    vert[ii] = plot( $
-        [ind[ii], ind[ii]], $
-        plt[0].yrange, $
-        /overplot, $
-        thick=1.0, $
-        color='light gray', $
-        ystyle=1 )
-    vert[ii].Order, /send_to_back
+yrange=plt[0].yrange
+shaded = plot( [ind[0], ind[1]], [yrange[0], yrange[0]], /overplot, $
+    /fill_background, fill_color='white smoke', fill_level=yrange[1] )
+shaded.Order, /send_to_back
 
-endfor
+;vert = objarr(nn)
+;for ii = 0, nn-1 do begin
+;    vert[ii] = plot( $
+;        [ind[ii], ind[ii]], $
+;        plt[0].yrange, $
+;        /overplot, $
+;        thick=1.0, $
+;        color='light gray', $
+;        ystyle=1 )
+;    vert[ii].Order, /send_to_back
+;endfor
 
-;save2, file
+save2, file
 
 end

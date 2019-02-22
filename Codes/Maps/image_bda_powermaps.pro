@@ -56,6 +56,8 @@ cols = 3
 for cc = 0, 1 do begin
 
     channel = A[cc].channel
+    ;-   only place this is used is to define filename...
+
     exptime=A[cc].exptime
     time = strmid(A[cc].time,0,5)
 

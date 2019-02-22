@@ -1,4 +1,7 @@
-\section{The Big Picture}
+\section{The solar chromosphere}
+
+%% Chromosphere, in general {---
+
 
 
 \myheading{The flaring chromosphere}
@@ -15,9 +18,8 @@ conversion.% Yes this does work to keep mynote on same line in pdf :)
 Not sure if I was working on how to word something in paper/dissertation, or
 just testing myself to see if I know the point of my own research.}
 
-%% Chromosphere, in general {---
-\clearpage
-\section{The solar chromosphere}
+
+
 
 To study the chromospheric response to flares, it is necessary
 to first understand the structure and dynamics of the chromosphere
@@ -139,13 +141,20 @@ thin layer of plasma that separates the chromosphere from the overlying corona.
 The temperature gradient in the solar atmosphere above the base of the
 photosphere is shown in
 Figure~\\ref{fig:solar\_atm}.
+
+
+
+\subsection{Challenges in observing the chromosphere}
+
+
+
+
 % ---}
 
 %% 3-minute oscillations {---
 \clearpage
 \section{3-minute oscillations}
 
-\subsection{History of the 3-minute oscillations}
 \mynote{
     When were 3mOs first observed and why? What was the motivation
     behind the research article that produced the first results?
@@ -201,8 +210,11 @@ $\rightarrow$
 Leibacher \& Stein (1981))
 
 
+\subsection{Observations in intensity and velocity}
+\subsection{Location relative to chromospheric network and active regions}
 
-\subsection{Interpretation of 3mOs as slow, propagating MA waves}
+
+\subsection{Origin of the 3mOs}
 
 Both the origin of the 3-minute oscillations and the reason for their
 persistence remain unclear.
@@ -372,9 +384,13 @@ How high do they propagate? This question was posed by Reznikova et al. (2012).
 
 
 
-\subsection{Where/how 3mOs are generated}
+
 
 There are two dominating theories of where the 3mOs originate.
+
+
+\subsubsection{Slow, propagating magnetoacoustic waves from the photosphere}
+
 One is that they are generated below the chromosphere and
 propagate upward. The dominant peak at 3 minutes is explained by
 the acoustic cutoff frequency in the chromosphere, which is around
@@ -387,6 +403,9 @@ propagating, therefore lower frequencies (longer periods) are not
 observed at those heights.
 \mynote{
     What heights? Where does $\omega_{0}$ reach a maximum?}
+
+
+\subsubsection{Response of chromosphere at the cutoff frequency}
 
 The second theory regarding the origination of 3-minute oscillations
 is that the acoustic cutoff frequency is the frequency at which the
@@ -450,7 +469,7 @@ event attributed to a plume-like feature above the umbra of a sunspot.
 
 %% Cutoff frequency {---
 \newpage
-\section{Cutoff frequency}
+\section{The acoustic cutoff frequency}
 In the interior of the sun, acoustic waves have frequencies higher than the
 cutoff, so it is of less importance there. In the solar atmosphere, however,
 the cutoff plays an important role in the behavior of waves and oscillatory
@@ -509,7 +528,6 @@ Waves with a frequency lower than the cutoff will:
     \item strongly damp out
 \end{itemize}
 
-\subsection{`Natural' frequency of the chromosphere}
 
 \mynote{What is the `natural frequency', and what is the significance
 of the chromosphere oscillating at its natural frequency
@@ -519,7 +537,7 @@ disturbance, but never stated why this is significant or the implications
 for bigger picture science.}
 
 \clearpage
-\subsection{Definition and derivation}
+\subsection{Derivation of the cutoff frequency}
 
 The cutoff frequency defines the minimum frequency a wave must have in order to
 propagate through a medium.
@@ -612,7 +630,12 @@ period oscillates.
 %waves''. Dispersion relation determines decline in velocity predicted
 %by the \emph{imaginary} part of the wave number.
 
-\subsection{Physical background for the cutoff frequency}
+%%\subsection{Physical background for the cutoff frequency}
+
+\mynote[Mon Feb 18 17:15:24 MST 2019]{%
+I assume the following is very similar to the above text, but don't feel like
+looking at it closely right now\ldots}
+
 The cutoff frequency of a medium is determined by local macro parameters,
 such as pressure and density. Waves that oscillate with a frequency higher
 than this will propagate through the medium, whereas waves with a frequency
@@ -687,176 +710,8 @@ such as composition, temperature, and pressure scale height.
 % ---}
 
 
-%% Physics background: waves and coronal seismology {---
-\clearpage
-\section{Physics background}
-
-\subsection{Waves}
-
-1D:
-\[
-    \frac{\partial^{2}\psi}{\partial x^{2}}
-    - \frac{1}{v^{2}}\frac{\partial^{2}\psi}{\partial t^{2}}
-    = 0
-    \]
-
-3D:
-\[
-    \frac{\partial^{2}\psi}{\partial x^{2}} \rightarrow
-    \nabla^{2}\psi
-    \]
-
-
-propagation speed $v$:
-\[
-    v = \sqrt{ \frac{F_{r}}{\rho}}
-    \]
-$F_{r}$ = restoring ``force'';
-$\rho$ = mass ``density''
-
-Get solutions to wave equation by specifying:
-\begin{itemize}
-    \item ICs - prescribe amplitude and phase
-    \item BCs - solutions are standing waves, or harmonics
-\end{itemize}
-
-
-\[
-    \left( \nabla^{2} - \frac{1}{c^{2}} \frac{\partial^{2}}{\partial t^{2}} \right)
-    \psi\left( \vec{r},t \right)
-    = 0
-    \]
-
-\subsection{Coronal seismology}\label{cs}
-
-\paragraph{Ideal MHD}\label{idealMHD}
-Conditions of ``ideal MHD'' involve timescales between collision that are much
-smaller than those of other processes, allowing the particles to take a
-Maxwellian distribution. They describe the evolution of the plasma densities
-(mass, energy, etc.) over time. Under conditions of ideal MHD, plasma acts as a
-perfect conductor, and is completely frozen-in to the magnetic field lines.
-
-The equations of ideal MHD are shown in Table~ref\{tab:idealMHD\}.
-\\input{table\_idealMHD}
-
-Figure~ref\{disp\} shows the location of the different MHD modes relative to
-characteristic speeds both external to and inside a cylindrical volume of
-plasma.
-
-\paragraph{Characteristic speeds}
-Relations between the (internal and external)
-characteristic speeds (Alfv\'en, sound, and tube speeds)
-determine properties of MHD modes guided by the tube.
-
-\begin{enumerate}
-    \item Sound speed: $C_{s} = \sqrt{\frac{\gamma p_{0}}{\rho_{0}}}
-            \approx 166 T_{o}^{1/2}$ m s$^{-1}$ = 200 km s$^{-1}$
-
-            (\emph{All} sound speeds $\approx \sqrt{ \frac{ED}{\rho_{I}} } $ ),
-            where $\rho_{I}$ = inertial mass density.
-
-            ED of magnetosphere = $\frac{B^{2}}{2\mu_{0}} $
-            = $\frac{P}{\rho} $
-
-            $C_{s} = \sqrt{ \frac{P\gamma}{\rho}  } $
-
-    \item Alfv\'en speed = ``speed at which hydrodynamic waves can be propagated
-    in a magnetically dominated plasma.''
-        \mynote[07/17/17 15:21]{Source?}
-
-        $C_{A} = \frac{B_{0}}{\sqrt{\mu_{0}\rho_{0}}}$
-        \[
-            V_{A} = 2.18\times10^{12}\frac{B_o}{\sqrt{n_o}}
-            \textrm{m}\ \textrm{s}^{-1} = 3000 \textrm{km}\ \textrm{s}^{-1}
-            \]
-        (B$_{o} \sim$ 100 G; n$_{o}$ $\sim$ 10$^{16}$ m$^{-3}$)
-    \item Tube/Cusp speed:
-        $C_{T} = C_{s}C_{A}/\left(C_{A}^{2} + C_{s}^{2}\right)^{1/2}$
-        = combination of sound and Alfv\'en speeds
-\end{enumerate}
-Audible hearing limit: $C_{s}$ = 20 Hz. In space, $\nu \approx 10^{-7}$ Hz.
-
-
-%The behavior of linear perturbations of the form
-%\[
-%    \delta P_{tot} \left( r \right)
-%    \textrm{exp} \left[ i \left( k_{z}z + m\phi - \omega t \left) \right]
-%    \]
-%is governed by  the following system of first order differential equations and
-%algebraic equations:
-%\[
-%    D\frac{\mathrm{d}}{\mathrm{d}r} \left( r\xi_{r} \right)
-%    = \left( C_{A}^{2} + C_{s}^{2})\ldots
-%    \]
-
-\subsubsection{Kink waves}
-
-\paragraph{Speed}
-In the long wavelength limit, the phase speed of all but sausage fast modes
-(see below) tends to the so-called kink speed, which corresponds to the density
-weighed average Alfv\'en speed.
-Phase speed for kink waves is equal to this kink speed, $c_{k}$:
-\[
-    v_{ph}
-    = c_{k}
-    = \sqrt{\frac{\rho_{o}V^{2}_{Ao}+\rho_{e}V^{2}_{Ae}} {\rho_o+\rho_e}}
-    \approx V_{A}\sqrt{\frac{2}{1 + \frac{\rho_{e}}{\rho_{o}}}}
-    \]
-in the low-$\beta$ plasma.
-
-Frequency:
-\[
-    w_{K} = \sqrt{ \frac{2k_{z}B^{2}}{\mu(\rho_{i}+\rho_{e})}  }
-    \]
-Slab phase speed:
-\[
-    V_{A_{e}}
-    \]
-Tube kink speed:
-\[
-    c_{K} = \frac{B_{i}^{2} + B_{e}^{2}}{\sqrt{\mu(\rho_{i}+\rho_{e})}}
-    \]
-(mean Alfv\'enic speed). Slab (or tube) is moved laterally; little variation in
-cross-sec, density, or intensity.
-
-\paragraph{Period}
-\[
-    P = \frac{2\ell}{V_A}\sqrt{\frac{1+\rho_e/\rho_o}{2}}
-    \]
-where $\lambda=2\ell$ ($\ell$ is the loop length).
-Typically, $\ell \approx 60-600$ Mm in the corona.
-
-Period of global kink mode:
-\[
-    P = \frac{2\ell}{c_{K}}
-    \]
-where $P \approx $ few seconds - minutes
-
-\newpage
-\subsection{Thermal and non-thermal energy}
-Thermal energy is radiated by matter in \textit{thermal equilibrium}
-The extreme ends of the spectrum (radio and HXR) are dominated by
-radiation from non-thermal particles in the early stages of flare
-energy release, but the intermediate regimes (visible, EUV, and SXR)
-are dominated by radiation from thermal particles during the decay
-period, over longer timescales.
-Figure~\\ref{fig:nt} shows a comparison
-between the two types of energy across the electromagnetic spectrum.
-Non-thermal particles are revealed by observed energies that, if
-caused by thermal particles, would indicate temperatures far higher
-than observed, according to
-\begin{equation}
-    E_{thermal} = \frac{3}{2}k_{B}T
-\end{equation}
-where $k_{B} = 1.38 \times 10^{-16}$ = Boltzmann's constant in erg
-K$^{-1}$, $T$ = temperature in Kelvin, and $ E_{thermal} $ = thermal
-energy in erg. The distinction between thermal and non-thermal
-particles is important when diagnosing observations. They result from
-different processes and provide clues to the conditions in their
-environment.
-% ---}
-
-
+% Wed Feb 13 03:58:54 MST 2019
+%   Moved "Physics background" to appendix.tex.
 
 
 %% Flares {---
@@ -1115,7 +970,7 @@ the so-called ``flare ribbons''. These are the footpoints of newly
 connected field lines, and are one of the primary observable features
 of flares. This stage typically lasts $\sim$30 minutes.
 
-\subsubsection{Quasi-periodic pulsations}
+\subsubsection{Quasi-periodic pulsations (QPPs)}
 
 \mynote[18 October 2018]{
     So I've been reluctant to discuss the following issue because I don't
@@ -1145,25 +1000,73 @@ are temporal fluctuations known as quasi-periodic pulsations (QPPs),
 with periods ranging from $\sim$1 second to several minutes.
 They have been observed during all three flare phases
 in all wavelength bands.
+(See \cite{VanDoorsselaere2016} for a recent review.)
+
+
+Since they are clearly connected to the flare process,
 QPPs are considered to be an intrinsic
 property of flares, thereby providing a direct probe into the
-reconnection site and the affected regions beyond \citep{Inglis2015}.
-Constraining the mechanisms that generate QPPs is an ongoing investigation.
-There are two leading theories.
-One is that they are a signature of the energy release
-process, i.e. the rate at which magnetic field lines are reconnected
-and accelerate non-thermal particles. The other is that they are MHD
-oscillations induced in the plasma by the magnetic reconnection, or
-possibly by the same trigger that induced magnetic reconnection
-\citep{Nakariakov2009}.
-These can produce similar observational signatures
-\citep{Brosius2016},
-adding to the difficulty in identifying which is the cause (if not both).
+reconnection site and the affected regions beyond.
+QPPs are ``directly linked to the properties of the flare reocnnection
+region and flare acceleration sites'' \citep{Inglis2015},
+so a lot can be learned about flares by studying these.
+
+
+\mynote[18 February 2019]{Copied from E-note. I think this was in my proposal,
+but probably took it out.}
+There is no strict definition for this kind of pattern, but it is generally
+described, as quoted from \cite{Inglis2015}, as
+``variations in the flux from a flare\ldots as a function of time,
+which appear to include periodic components with characteristic timescales
+ranging from one second up to several minutes.''
+
+
+Constraining the physical mechanism(s) responsible for the
+generation of QPPs is an ongoing investigation.
+There are two leading theories that describe them as signatures of one of two
+things:
+\begin{enumerate}
+    \item the energy release process (MR),
+        i.e. the rate at which magnetic field lines are reconnected
+        and accelerate non-thermal particles.
+        This is often referred to as a ``load/unload'' mechanism.
+    \item MHD oscillations induced in the ambient plasma by
+        \begin{itemize}
+            \item the magnetic reconnection itself, which would give the resulting
+                QPPs the same ``built-in'' periodicity as the reconnection rate.
+            \item the same trigger responsible for inducing magnetic reconnection
+                in the first place \citep{Nakariakov2009}.
+        \end{itemize}
+        Theoretically, MHD oscillations would be induced in post-flare loops,
+        due to the nature of these types of oscillations in the vicinity of a
+        magnetic field.
+\end{enumerate}
+
+Each of the above mechanisms can produce similar observational signatures,
+adding to the difficulty in identifying which is the cause, if not both
+\citep{Brosius2016}.
+
+
 Their small periodicities can also make them difficult to extract from the main
 lightcurve \citep{VanDoorsselaere2016}.
+\mynote[Mon Feb 18 03:15-ish MST 2019]{%
+Modulation depth? I think that has more to do with the amplitude than
+the period. Maybe it's because flare timescales are close to QPP periods,
+so everything gets mushed together and it's more difficult to extract any one
+individual signal.}
+Sometimes these periodicies can be on the order of a few seconds, making
+them difficult to probe with current available instrumental cadence.
+\mynote[Mon Feb 18 03:37:31 MST 2019]{Oh.}
+
 
 % Observations of QPPs in thermal emission during flares
-Currently, there are few studies of QPPs in the lower atmosphere during flares.
+Currently, there are few studies of QPPs in thermal emission.
+Non-thermal emission in HXR and microwave bands has a higher modulation depth,
+particularly during the impulsive phase of flares, when the global emission level
+increases substantially
+\citep{Hayes2016}.
+
+
 \citep{Brosius2016} studied emission from the \ion{C}{1} line, and found
 a period of $\sim$170 seconds. They
 attributed this periodicity to the rate of injection of

@@ -26,6 +26,8 @@ pro PLOT_PT, power, dz, time, $
     sz = size(power,/dimensions)
     xdata = [ [indgen(sz[0])], [indgen(sz[0])] ] + (dz/2)
 
+    color = ['green', 'purple']
+
     resolve_routine, 'batch_plot', /either
     dw
     plt = BATCH_PLOT( $
@@ -33,7 +35,7 @@ pro PLOT_PT, power, dz, time, $
         xrange=[0,748], $
         xtickinterval = 75, $
         ytitle='3-minute power', $
-        color=['green', 'purple'], $
+        color=color, $
         wy = 3.0, $  ; --> still a kw for batch_plot, which is NOT the same thing as plot3.
         buffer = 0, $
         _EXTRA = e )
@@ -72,5 +74,15 @@ pro PLOT_PT, power, dz, time, $
 
     ;- May need to keep these at bottom of code, right before saving,
     ;- if intermediate steps cause ax[3] to disappear again.
+
+
+
+    ;- Wed Feb 20 07:53:53 MST 2019
+    ;- Color axes to match data (from plot_lc.pro):
+    ;- Actually had to add a line up top to define a string array
+    ;-   for variable "color" because this isn't main level, and also
+    ;-   because P(t) plots use different colors than A.color.
+    ax[1].text_color = color[0]
+    ax[3].text_color = color[1]
 
 end

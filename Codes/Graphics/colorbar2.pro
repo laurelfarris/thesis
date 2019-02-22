@@ -82,8 +82,8 @@ function colorbar2, target=target, _EXTRA=e
     cbar = COLORBAR( $
         target = target[0], $
         orientation = 1, $ ; 0 --> horizontal
-        ;tickformat = '(F0.1)', $
-        tickformat='(I0)', $
+        tickformat = '(F0.1)', $
+        ;tickformat='(I0)', $
         /device, $
         position = position, $
         textpos = 1, $ ; 1 --> right/above colorbar
