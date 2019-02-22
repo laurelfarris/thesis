@@ -1,4 +1,4 @@
-This is pdfTeXk, Version 3.141592-1.40.3 (Web2C 7.5.6) (format=pdflatex 2015.11.14)  22 FEB 2019 07:41
+This is pdfTeXk, Version 3.141592-1.40.3 (Web2C 7.5.6) (format=pdflatex 2015.11.14)  22 FEB 2019 07:50
 entering extended mode
  %&-line parsing enabled.
 **article1
@@ -497,16 +497,16 @@ File: omscmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10> not available
 (Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 126.
-) [2] (./data.tex
-<$HOME/Figures/lc_20190218.pdf, id=91, 578.16pt x 216.81pt>
+) (./data.tex
+<$HOME/Figures/lc_20190218.pdf, id=76, 578.16pt x 216.81pt>
 File: $HOME/Figures/lc_20190218.pdf Graphic file (type pdf)
 
 <use $HOME/Figures/lc_20190218.pdf>
-<$HOME/Figures/lc_goes_20190124.pdf, id=92, 578.16pt x 252.945pt>
+<$HOME/Figures/lc_goes_20190124.pdf, id=77, 578.16pt x 252.945pt>
 File: $HOME/Figures/lc_goes_20190124.pdf Graphic file (type pdf)
 
 <use $HOME/Figures/lc_goes_20190124.pdf>
-<$HOME/Figures/images_20190212.pdf, id=94, 271.0125pt x 469.755pt>
+<$HOME/Figures/images_20190212.pdf, id=79, 271.0125pt x 469.755pt>
 File: $HOME/Figures/images_20190212.pdf Graphic file (type pdf)
 
 <use $HOME/Figures/images_20190212.pdf>
@@ -514,76 +514,67 @@ Overfull \hbox (14.29219pt too wide) in paragraph at lines 94--95
  [][] 
  []
 
-) (./analysis.tex [3]) [4 </home/users/laurel07/Figures/lc_20190218.pdf> </home
-/users/laurel07/Figures/lc_goes_20190124.pdf>]
+) [2] (./analysis.tex [3 </home/users/laurel07/Figures/lc_20190218.pdf> </home/
+users/laurel07/Figures/lc_goes_20190124.pdf>]
 
-LaTeX Warning: A float is stuck (cannot be placed) on input line 117.
+LaTeX Warning: A float is stuck (cannot be placed) on input line 30.
+
+
+LaTeX Warning: A float is stuck (cannot be placed) on input line 30.
 
 
 Class revtex4-1 Warning: Deferred float stuck during \clearpage processing.
 
-[5 </home/users/laurel07/Figures/images_20190212.pdf>] (./results.tex
-<$HOME/Figures/before_20190221.pdf, id=167, 578.16pt x 348.55219pt>
+) (./results.tex [4 </home/users/laurel07/Figures/images_20190212.pdf>]
+<$HOME/Figures/before_20190221.pdf, id=166, 578.16pt x 348.55219pt>
 File: $HOME/Figures/before_20190221.pdf Graphic file (type pdf)
 
 <use $HOME/Figures/before_20190221.pdf>
-<$HOME/Figures/during_20190221.pdf, id=171, 578.16pt x 348.55219pt>
+<$HOME/Figures/during_20190221.pdf, id=170, 578.16pt x 348.55219pt>
 File: $HOME/Figures/during_20190221.pdf Graphic file (type pdf)
 
-<use $HOME/Figures/during_20190221.pdf> [6]
-Overfull \vbox (3.98247pt too high) has occurred while \output is active []
-
-
-Overfull \vbox (3.98247pt too high) has occurred while \output is active []
-
-
-[7 </home/users/laurel07/Figures/before_20190221.pdf> </home/users/laurel07/Fig
-ures/during_20190221.pdf>]
-<$HOME/Figures/after_20190221.pdf, id=234, 578.16pt x 348.55219pt>
+<use $HOME/Figures/during_20190221.pdf>
+<$HOME/Figures/after_20190221.pdf, id=177, 578.16pt x 348.55219pt>
 File: $HOME/Figures/after_20190221.pdf Graphic file (type pdf)
 
-<use $HOME/Figures/after_20190221.pdf> (./wa.tex
-<$HOME/Dropbox/Figures/wa.pdf, id=237, 542.025pt x 650.43pt>
+<use $HOME/Figures/after_20190221.pdf> [5]
+Overfull \vbox (3.98247pt too high) has occurred while \output is active []
+
+
+(./wa.tex
+Overfull \vbox (3.98247pt too high) has occurred while \output is active []
+
+
+[6 </home/users/laurel07/Figures/before_20190221.pdf> </home/users/laurel07/Fig
+ures/during_20190221.pdf>]
+<$HOME/Dropbox/Figures/wa.pdf, id=234, 542.025pt x 650.43pt>
 File: $HOME/Dropbox/Figures/wa.pdf Graphic file (type pdf)
 
 <use $HOME/Dropbox/Figures/wa.pdf>) (./pt.tex
-<$HOME/Dropbox/Figures/time-3minpower_maps.pdf, id=240, 578.16pt x 216.81pt>
+<$HOME/Dropbox/Figures/time-3minpower_maps.pdf, id=237, 578.16pt x 216.81pt>
 File: $HOME/Dropbox/Figures/time-3minpower_maps.pdf Graphic file (type pdf)
 
-<use $HOME/Dropbox/Figures/time-3minpower_maps.pdf>)) [8] [9 </home/users/laure
-l07/Figures/after_20190221.pdf>]
-
-LaTeX Warning: A float is stuck (cannot be placed) on input line 125.
-
-
-Class revtex4-1 Warning: Deferred float stuck during \clearpage processing.
-
-[10 </home/users/laurel07/Dropbox/Figures/wa.pdf>]
-
-LaTeX Warning: A float is stuck (cannot be placed) on input line 125.
-
-
-Class revtex4-1 Warning: Deferred float stuck during \clearpage processing.
-
-[11 </home/users/laurel07/Dropbox/Figures/time-3minpower_maps.pdf>]
+<use $HOME/Dropbox/Figures/time-3minpower_maps.pdf>) [7 </home/users/laurel07/F
+igures/after_20190221.pdf>]) [8 </home/users/laurel07/Dropbox/Figures/wa.pdf>]
 (./conclusions.tex
 Underfull \hbox (badness 1009) in paragraph at lines 12--14
 []\OT1/cmr/m/n/10 Variation in en-hance-ment lo-ca-tion through-out
  []
 
-) (./article1.bbl [12])
+) (./article1.bbl [9 </home/users/laurel07/Dropbox/Figures/time-3minpower_maps.
+pdf>])
 
 Package natbib Warning: There were undefined citations.
 
-[13] (./article1.aux) ) 
+[10] (./article1.aux) ) 
 Here is how much of TeX's memory you used:
- 7140 strings out of 256214
- 91779 string characters out of 1916999
- 220263 words of memory out of 1500000
- 10229 multiletter control sequences out of 10000+200000
+ 7136 strings out of 256214
+ 91747 string characters out of 1916999
+ 214299 words of memory out of 1500000
+ 10228 multiletter control sequences out of 10000+200000
  14725 words of font info for 58 fonts, out of 1200000 for 2000
  645 hyphenation exceptions out of 8191
- 32i,7n,37p,1049b,375s stack positions out of 5000i,500n,6000p,200000b,15000s
+ 32i,7n,37p,1049b,489s stack positions out of 5000i,500n,6000p,200000b,15000s
 </usr/share/texmf/fonts/type1/bluesky/cm/cmbx10.pfb></us
 r/share/texmf/fonts/type1/bluesky/cm/cmbx8.pfb></usr/share/texmf/fonts/type1/bl
 uesky/cm/cmbx9.pfb></usr/share/texmf/fonts/type1/bluesky/cm/cmcsc10.pfb></usr/s
@@ -598,9 +589,9 @@ type1/bluesky/cm/cmr9.pfb></usr/share/texmf/fonts/type1/bluesky/cm/cmsy10.pfb><
 /bluesky/cm/cmsy9.pfb></usr/share/texmf/fonts/type1/bluesky/cm/cmti10.pfb></usr
 /share/texmf/fonts/type1/bluesky/cm/cmti8.pfb></usr/share/texmf/fonts/type1/blu
 esky/cm/cmti9.pfb>
-Output written on article1.pdf (13 pages, 4095195 bytes).
+Output written on article1.pdf (10 pages, 4093512 bytes).
 PDF statistics:
- 424 PDF objects out of 1000 (max. 8388607)
- 62 named destinations out of 1000 (max. 131072)
+ 410 PDF objects out of 1000 (max. 8388607)
+ 59 named destinations out of 1000 (max. 131072)
  57 words of extra memory for PDF output out of 10000 (max. 10000000)
 
