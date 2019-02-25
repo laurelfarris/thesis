@@ -146,6 +146,7 @@ Figure~\\ref{fig:solar\_atm}.
 
 \subsection{Challenges in observing the chromosphere}
 
+Here are some challenges.
 
 
 
@@ -154,6 +155,10 @@ Figure~\\ref{fig:solar\_atm}.
 %% 3-minute oscillations {---
 \clearpage
 \section{3-minute oscillations}
+
+
+
+\subsection{History of 3mOs}
 
 \mynote{
     When were 3mOs first observed and why? What was the motivation
@@ -210,11 +215,23 @@ $\rightarrow$
 Leibacher \& Stein (1981))
 
 
-\subsection{Observations in intensity and velocity}
-\subsection{Location relative to chromospheric network and active regions}
+\subsection{Observations of 3mOs}
+
+\subsubsection{Intensity vs Velocity}
+\subsubsection{Location in chromosphere: (x/y)}
+
+\paragraph{Network/Internetwork}
+
+\paragraph{Active Regions}
+\subparagraph{Umbra}
+\subparagraph{Penumbra}
 
 
-\subsection{Origin of the 3mOs}
+\subsubsection{Location in chromosphere: height (z)}
+
+
+
+\subsection{Physical mechanism that generates the 3mOs}
 
 Both the origin of the 3-minute oscillations and the reason for their
 persistence remain unclear.
@@ -229,15 +246,13 @@ $\lesssim$ the local sound speed.
 Many other authors have contributed to the
 current interpretation as slow propagating SMA waves.
 Similar results were found by
-\cite{
-    Brynildsen1999b,
-    Brynildsen2002,
-    Brynildsen2004,
-    Maltby1999,
-    OShea2002,
-    DeMoortel2000,
-    Reznikova2012
-}
+\cite{Brynildsen2004, Maltby1999,
+DeMoortel2000}
+
+    %OShea2002,
+    %Brynildsen1999b,
+    %Brynildsen2002,
+    %Reznikova2012
 
 
 \begin{itemize}
@@ -405,7 +420,8 @@ observed at those heights.
     What heights? Where does $\omega_{0}$ reach a maximum?}
 
 
-\subsubsection{Response of chromosphere at the cutoff frequency}
+\subsubsection{%
+    Natural response of chromosphere at the acoustic cutoff frequency}
 
 The second theory regarding the origination of 3-minute oscillations
 is that the acoustic cutoff frequency is the frequency at which the
@@ -467,698 +483,14 @@ event attributed to a plume-like feature above the umbra of a sunspot.
 
 % ---}
 
-%% Cutoff frequency {---
-\newpage
-\section{The acoustic cutoff frequency}
-In the interior of the sun, acoustic waves have frequencies higher than the
-cutoff, so it is of less importance there. In the solar atmosphere, however,
-the cutoff plays an important role in the behavior of waves and oscillatory
-phenomena.
-The cutoff peaks in the chromosphere, at a value of about 5.5 mHz,
-or roughly three minutes. This is also the dominant frequency of the
-oscillations observed everywhere at all times in the chromosphere.
-
-If waves with frequencies lower than the cutoff are unable to propagate
-at a certain height, then one would expect to see a continuously high power
-spectrum at frequencies higher than this, and then a drop to zero at
-frequencies lower than this. However, what we see is a peak at the cutoff,
-but the power drops again for higher frequencies.
-
-\mynote{Where are the higher frequencies?}
-
-This may be because waves at higher frequencies simply aren't generated
-in the first place.
-
-\mynote{If the cutoff frequency didn't exist, how would power at lower
-frequencies compare to the 3-minute power? Higher or lower? Or do these
-waves even exist to begin with?}
-
-\mynote{What types of waves are generated in the atmosphere, and why?}
-
-Figure~\\ref{fig:Stangalini2011} shows power maps from
-\cite{Stangalini2011} illustrating the power distribution of the
-3-minute oscillations at the photospheric Fe~6173~\AA{} line and the
-chromospheric Ca~8542~\AA{} line. Also shown is the power distribution
-of the 5-minute oscillations. The 5-minute period has been attributed
-to the global pulsations of the sun due to pressure modes
-(\textit{p}-modes) in the interior. The image shows the suppression of
-the 5-minute period in the umbra of sunspots, the opposite of the
-3-minute behavior in the chromosphere above sunspots. It is commonly
-observed in the photosphere that the 5-minute power above sunspot
-umbrae is \emph{reduced} compared to the quiet sun by a factor of 2-5,
-though it is still the dominant frequency
-\citep{Felipe2010, Bogdan2006}.
-\cite{Reznikova2012} also observed lowering of the cutoff frequency
-due to inclination of magnetic field lines.
-The presence of the 5-minute oscillations in the diffuse magnetic regions
-surrounding the umbra is likely caused by the decrease in effective
-cutoff frequency due to the inclination of the magnetic field. Waves
-that are generated in the lower atmosphere propagate upward until
-their frequency no longer exceeds the local cutoff frequency and they
-are reflected \citep{DeMoortel2000, Brynildsen1999}. The cutoff
-frequency at the base of the chromosphere is $\sim$5.5 mHz, or roughly
-3 minutes, which agrees with the acoustic cutoff period of a gas with
-the composition and pressure scale height of the upper photosphere
-\citep{Kalkofen1994}.
-
-Waves with a frequency lower than the cutoff will:
-\begin{itemize}
-    \item be reflected back down
-    \item shock and dissipate
-    \item strongly damp out
-\end{itemize}
-
-
-\mynote{What is the `natural frequency', and what is the significance
-of the chromosphere oscillating at its natural frequency
-(as opposed to\ldots)? Milligan paper presented evidence supporting that
-the chromosphere oscillates at its natural frequency in response to a
-disturbance, but never stated why this is significant or the implications
-for bigger picture science.}
-
-\clearpage
-\subsection{Derivation of the cutoff frequency}
-
-The cutoff frequency defines the minimum frequency a wave must have in order to
-propagate through a medium.
-It is an intrinsic property of the medium,
-determined by local macro parameters, such as pressure and density.
-As these properties vary throughout the interior of the sun and its atmosphere,
-the cutoff frequency itself is an indirect function of height.
-
-\mynote{Plot of cutoff frequency with height goes here.}
-
-Acoustic waves obey the Klein Gordon equation:
-\begin{equation}
-    \frac{\partial^{2}u}{\partial t^{2}}
-    - \left( c_{s}^{2} \right)
-    \frac{\partial^{2}u}{\partial z^{2}}
-    + \Omega^{2}u
-    = 0
-\end{equation}
-
-where
-$u$ = velocity amplitude,
-$t$ = time,
-$c_{s}$ = local sound speed,
-$z$ = height above the photosphere, and
-where $\Omega = 2\pi\nu_{ac}$
-is the cutoff frequency in radians per second
-($\nu_{ac}$ = cutoff frequency in oscillations per second),
-
-
-The solution for $u$ is of the form:
-
-\begin{equation}
-    u = u_{0}e^{i\left( k_{z}z - \omega t \right)}
-\end{equation}
-
-where $\omega = 2 \pi f$ is the oscillation frequency of the wave
-in radians s$^{-1}$ ($f$ = frequency in Hz), and $k_{z} = 2\pi/\lambda$
-is the wavenumber in the $z$-direction.
-Using this solution, we eventually get:
-\begin{equation}
-    c_{s}^{2} k^{2} = \omega^{2} - \Omega^{2}
-\end{equation}
-If $\omega < \Omega$, then $k^{2} < 0$ and $k$ is imaginary.
-In this case, the wave cannot propagate and standing oscillations are
-observed.
-
-\begin{equation}
-    \Omega = \frac{c_{s}}{2H}
-\end{equation}
-$H$ = scale height.
-
-\begin{align}
-    \Omega &= \frac{c_{s}}{2H} = 2\pi\nu_{ac}\\
-    \nu_{ac} &= \frac{c_{s}}{4 \pi H}\\
-    \nu_{ac} &= \sqrt{ \frac{\gamma k T }{ 16 \pi^{2} H^{2} \mu m_{amu} } }
-\end{align}
-
-where $c_{s}$ is given by:
-\begin{equation}
-    c_{s} = \sqrt{ \frac{ \gamma P }{ \rho }}
-    = \sqrt{ \frac{ \gamma k T }{ \mu m_{amu} }}
-\end{equation}
-
-Setting $\gamma$ to $5/3$, $\mu = 1.2$, $H = 150$ km,
-and $ T = 4200 $ K (the approximate temperature minimum),
-the acoustic cutoff frequency $\nu_{ac}$ comes out to roughly
-5.6 mHz, the frequency at which the 3-minute chromospheric
-period oscillates.
-
-
-%% ???
-%The non-isothermal region where a compressive acoustic disturbance
-%is propagating along the magnetic field in direction $\hat{k}$.
-%Umbral $\vec{B} \overrightarrow{B}$ aligned with
-%$\vec{g}$, so $H_{||} \rightarrow$ `true'\mynote{??} $H_{P}$.
-%\[
-%    k_{||}^{2} = \frac{\omega^{2}}{c^{2}} - \frac{1}{4H_{||}^{2}}
-%    \]
-%where $\omega = 2\pi\nu$ and $H = H_{P}$, the pressure scale height.
-%(Cally 2001; Crouch \& Cally 2003).
-%Waves propagate if $k_{||}^{2} \geq 0 ( \omega \geq c/2H_{||} )$,
-%threshold = acoustic cutoff frequency.
-%$\Omega = \Omega(z)$ = max value of 5.2 - 5.5 mHz
-%(3.21 - 3.03 minutes) with $T_{min}$\mynote{
-%    (Fig 2. of Cally et al. 1994)}
-%3-minute oscillations at the high frequency tail of photospheric
-%oscillations. Conservation of wave energy: amp of velocity osc.
-%$\propto 1/\sqrt{\rho}$ for waves with frequency greater than the
-%cutoff. For freq less than cutoff, ``osc do not give rise to prop.
-%waves''. Dispersion relation determines decline in velocity predicted
-%by the \emph{imaginary} part of the wave number.
-
-%%\subsection{Physical background for the cutoff frequency}
-
-\mynote[Mon Feb 18 17:15:24 MST 2019]{%
-I assume the following is very similar to the above text, but don't feel like
-looking at it closely right now\ldots}
-
-The cutoff frequency of a medium is determined by local macro parameters,
-such as pressure and density. Waves that oscillate with a frequency higher
-than this will propagate through the medium, whereas waves with a frequency
-lower than the cutoff will shock and dissipate. Acoustic waves obey the
-Klein Gordon equation:
-\begin{equation}
-    \frac{\partial^{2}u}{\partial t^{2}} - \left( c_{s}^{2} \right)
-    \frac{\partial^{2}u}{\partial z^{2}} + \Omega^{2}u = 0
-\end{equation}
-where $\Omega = c_{s}/2H_{P}$ is the cutoff frequency
-($c_{s}$ is the local sound speed and
-$H_{P}$ = $ kT / \mu g $ is the pressure scale height),
-$t$ is time, $z$ is height
-above the photosphere, and $u$ is the velocity amplitude.
-The solution for $u$ is of the form:
-\begin{equation}
-    u = u_{0}e^{i\left( k_{z}z - \omega t \right)}
-\end{equation}
-where $\omega = 2 \pi \nu_{ac}$ is the oscillation frequency of the wave
-in radians s$^{-1}$ ($\nu_{ac}$ = acoustic wave frequency in Hz),
-and $k_{z} = 2\pi/\lambda$
-is the wavenumber in the $z$-direction.
-Using this solution yields:
-\begin{equation}
-    c_{s}^{2} k^{2} = \omega^{2} - \Omega^{2}
-\end{equation}
-If $\omega < \Omega$, then $k^{2} < 0$ and $k$ is imaginary.
-In this case, the wave cannot propagate and standing oscillations are
-observed.
-\begin{align}
-    2\pi\nu_{ac} &= \frac{c_{s}}{2H_{P}} = \Omega \\
-    \nu_{ac} &= \frac{c_{s}}{4 \pi H_{P}}
-    = \sqrt{ \frac{\gamma k T }{ 16 \pi^{2} H_{P}^{2} \mu m_{amu} } }
-\end{align}
-where $c_{s}$ is given by:
-\begin{equation}
-    c_{s}
-    = \sqrt{ \frac{ \gamma P }{ \rho }}
-    = \sqrt{ \frac{ \gamma k T }{ \mu m_{amu} }}\\
-\end{equation}
-Setting $\gamma = 5/3$, $\mu = 1.2$ amu, $H_{P} = 150$ km,
-and $ T = T_{min} \approx 4200$~K,
-the acoustic cutoff frequency $\nu_{ac}$ comes out to roughly
-5.5 mHz, which corresponds to $\sim$3 minutes.
-
-
-%% ???
-%The non-isothermal region where a compressive acoustic disturbance
-%is propagating along the magnetic field in direction $\hat{k}$.
-%Umbral $\vec{B} \overrightarrow{B}$ aligned with
-%$\vec{g}$, so $H_{||} \rightarrow$ `true'\mynote{??} $H_{P}$.
-%\[
-%    k_{||}^{2} = \frac{\omega^{2}}{c^{2}} - \frac{1}{4H_{||}^{2}}
-%    \]
-%where $\omega = 2\pi\nu$ and $H = H_{P}$, the pressure scale height.
-%(Cally 2001; Crouch \& Cally 2003).
-%Waves propagate if $k_{||}^{2} \geq 0 ( \omega \geq c/2H_{||} )$,
-%threshold = acoustic cutoff frequency.
-%$\Omega = \Omega(z)$ = max value of 5.2 - 5.5 mHz
-%(3.21 - 3.03 minutes) with $T_{min}$\mynote{
-%    (Fig 2. of Cally et al. 1994)}
-%3-minute oscillations at the high frequency tail of photospheric
-%oscillations. Conservation of wave energy: amp of velocity osc.
-%$\propto 1/\sqrt{\rho}$ for waves with frequency greater than the
-%cutoff. For freq less than cutoff, ``osc do not give rise to prop.
-%waves''. Dispersion relation determines decline in velocity predicted
-%by the \emph{imaginary} part of the wave number.
-
-The numerical value of the cutoff
-frequency depends on physical parameters of the ambient environment,
-such as composition, temperature, and pressure scale height.
-% ---}
 
 
 % Wed Feb 13 03:58:54 MST 2019
 %   Moved "Physics background" to appendix.tex.
+%
+%
+%
 
 
-%% Flares {---
 \newpage
-
-\section{Flares}
-
-\mynote{Sun Nov 18 18:17:21 MST 2018}{
-    Do charged particles travel
-    along magnetic field lines via the Lorentz force?
-    Is particle beam composed of both electrons and ions, or just electrons?
-    Are ions only visible in gamma rays? Do they hit the chromosphere?
-}
-
-\paragraph{Rocket analogy}
-The episodic, rapid release of magnetic energy in the solar atmosphere
-associated with flares, CMEs, and SEP events has the potential to wipe us out.
-Thus the field of space weather emerged and is devoted to understanding and
-preparing for these events. Much like a rocket booster, this outward burst of
-energy needs something to push against, and the same acceleration occurs in the
-opposite direction: down toward the lower layers of the atmosphere. Most
-research has focused on the rocket: the energy and material released outward
-into space. However, it is impossible to understand how the rocket works
-without studying what it left behind, how it got there, and how the energy may
-have been converted through the various stages to its final form.
-
-\subsection{Flare evolution}
-
-Need to know general evolution of a flare, particularly the role of the
-chromosphere as we currently understand it.
-This is necessary in order
-to interpret the results from before, during, and after a flare;
-provides some context for what is physically happening.
-
-An understanding of the physical processes that take place
-during solar flares
-\mynote[18 October 2018]{
-    (when they happen, where they happen, the various structures involved,
-    static physical conditions such as temperature, density, and composition,
-    how much and why those values then change, etc.)}
-is crucial if one desires to characterize the role played by the
-relatively cool, thin atmospheric layer known as the chromosphere.
-These stages, as described by the standard model,
-provide vital context for the questions proposed, and then
-investigated for this dissertation,
-particularly the temporal behavior
-of the chromospheric 3-minute oscillations before, during, and after flares.
-
-%Figure~\ref{fig:flare_emission} shows the typical pattern of several bandpasses throughout the duration of a flare.
-The development and evolution
-of the various dynamical phenomena that ultimately
-%lead to the burst of emission known as a solar flare
-result in a solar flare
-takes place throughout the solar atmosphere
-in three primary stages:
-precursor, impulsive, and gradual.
-Each of these are characterized by specific observations that are interpreted
-in the context of energy storage, release, and dissipation.
-The official time at which the event transitions from one stage to the next
-is determined by the SXR emission from the \textit{GOES} satellite.
-GOES has two photometers that observe wavelength ranges
-1-8\AA{} (1.5-10 keV) and 0.5-4\AA{}.
-
-\mynote[18 October 2018]{
-    Energy range for 0.5-4\AA{}? Need source!}
-
-%(similar to the X-ray curve in Figure~\ref{fig:flare_emission})
-These points in time are
-characterized by the initial increase, peak, and final return
-to background levels of the observed SXR flux.
-The times at which these features are observed in the
-lightcurves of other wavelength regimes in the EM spectrum
-tend to deviate from the \textit{GOES} times
-since different processes in the course of flare development
-produce different types of emission during different stages.
-
-Both the SXR and H$\alpha$ curves are observed to peak twice.
-a sharp increase at the onset (the impulsive phase),
-followed by a slower, smoother climb and subsequent decay (the gradual phase).
-Each phase is characterized by specific observations that are interpreted in
-the context of energy storage, release, conversion, and dissipation. These
-stages are important in understanding the role of the chromosphere, and provide
-the basis for the proposed investigation into the temporal localization of the
-chromospheric 3-minute oscillations.
-
-Our current understanding of flares involves their development and evolution
-throughout the entire solar atmosphere. This is broken down into three main
-phases: the precursor, impulsive, and decay phases. Each of these are
-characterized by specific observations that are interpreted in the context of
-energy storage, release, and dissipation. These stages are important in
-understanding the role of the chromosphere, and will provide the basis for the
-proposed investigation into the temporal of the excitation of the chromospheric
-3-minute oscillations.
-
-\textbf{Pre-flare: the zero-th stage}\quad
-According to the standard flare model \mynote{(source!)},
-the phenomenon we observe as a flare is the result of the rapid
-release of magnetic energy after
-days of slowing building to critical levels in the corona.
-
-\cite{Woods2017} investigated the pre-flare stages of
-the March 29 flare in 2014
-with IRIS and \textit{Hinode}/EIS.
-\mynote[18 October 2018]{\ldots And?}
-
-\mynote[18 October 2018]{
-    The following cute story was copied from Evernote, though
-    probably came from proposal originally:}
-
-Our journey begins during the ``pre-flare'' stage, during which magnetic energy
-builds to critical levels.
-This takes place over timescales from several days up to a few weeks.
-\cite{Woods2017}
-conducted a study to constrain the trigger mechanism
-of flares, for which there are several possibilities. They found plasma flows
-with velocities on the order of several hundred km s$^{-1}$.
-This is a key time period for space weather prediction.
-
-
-\mynote[Thu Oct 18 14:58:21 EDT 2018]{
-    Testing \texttt{:r! date} to insert current date. Works!
-    Although I'd prefer a different format\ldots}
-
-
-\textbf{Precursor: the first stage}\quad
-There are several possible mechanisms that could be responsible for triggering
-the release of the stored magnetic energy (see Woods et al. (2017) for an
-example).
-
-The precursor phase, sometimes known as the pre-eruptive stage,
-begins when the release of magnetic energy is triggered.
-This stage typically lasts $\sim$3 minutes.
-The eruption starts slowly, as
-the energy leaks slowly and the
-highly sheared magnetic field loses
-stability and begins to rearrange itself.
-The magnetic
-structure surrounding prominence evolves through series of force-free
-equilibria until it loses equilibrium and goes unstable.
-The plasma around the magnetic reconnection site heats up,
-and is observed as a
-slow increase in soft X-ray (SXR) and UV emission from active regions.
-
-A sudden increases in speed occurs,
-most likely because the onset of magnetic
-reconnection releases field lines that were holding the prominence down,
-and cut it loose, hence the
-``activation of the prominence'' (T-H and Emslie book).
-
-
-This onset is important (e.g. SXR and UV before ``cataclysmic onset of impulsive
-phase''). The magnetic field becomes unstable, starts to readjust. The emergence
-of new flux is now a thing. Prominence activation (Martin and Ramsey 1972) and
-heating of plasma (Poland et al. 1982; Hernandez et al. 1986; Klein et al.
-1987; Machado et al. 1988a\ldots from T-H \& Emslie chapter 6?).
-
-\textbf{Impulsive: the second stage}\quad
-
-Once the magnetic configuration loses stability, an eruption occurs and stage
-two, the impulsive stage, begins. This stage only lasts for a minute or less.
-Magnetic reconnection begins, whose rapid onset is thought to be the cause of
-the sudden drop in evolutionary timescales from the precursor to the impulsive
-stage. There is a sudden release of energy that is then converted into various
-forms, including kinetic energy of accelerating particles, thermal energy that
-heats the plasma, bulk acceleration of fluid, and enhanced radiation fields.
-Intense radio, HXR, and gamma rays are emitted in the form of intense, rapidly
-fluctuating bursts. The jump in emission after it increased slowly during the
-precursor phase is thought to be caused by the rapid onset of MR. This process
-releases the prominence previously held down by the magnetic field. The
-prominence is the matter that is ejected outward in the form of a CME.
-\cite{Priest2017}
-distinguish two phases of magnetic reconnection. The first
-takes place during the impulsive phase, along the loop arcade, and is called
-``zipper reconnection''.
-
-Once the magnetic configuration loses stability, an eruption occurs
-and stage two, the \textbf{impulsive} stage, begins. The onset of
-magnetic reconnection releases field lines previously holding the
-prominence down \citep{Priest2017}, and energy starts to be released
-at a much faster rate.
-Some of this energy is converted to kinetic energy of
-non-thermal particles, which are then accelerated down until they hit the
-chromosphere and inject the plasma with an impulsive burst of high energy
-(E $\gtrsim$ 10 keV).
-Energy is then lost to radiation in the form of
-intense, rapidly fluctuating bursts of radio, hard X-ray (HXR),
-and gamma rays.
-The HXR Bremsstrahlung radiation at the loop footpoints is indicative
-of energization of non-thermal particles, and this is
-where the initial heating of the chromospheric plasma takes place
-\citep{Hoyng1981, Fletcher2013b}.
-
-This entire process takes less than a minute.
-Many of the processes that take place during the impulsive phase
-are inferred from the response of the surrounding plasma,
-but cannot be observed directly due to the extremely short timescales
-over which they occur.
-
-\myheading{NT particle acceleration}
-Magnetic energy released via magnetic reconnection is converted to
-kinetic energy of charged particles that are accelerated downward
-with energies exceeding 1 MeV.
-
-After being injected into the denser plasma of the chromosphere,
-the interaction between NT electrons and the ambient particles causes
-the emission of Bremsstrahlung HXR radiation.
-This emission appears as ribbon-like features along the footpoints
-of the reconnected loops as they contract down into the lower atmosphere.
-
-Chromospheric evaporation also occurs during this time.
-After the plasma is heated, some of the excess energy is shed by
-radiation or thermal conduction, but if these mechanisms are not enough
-to return the plasma to thermal equilibrium, the high gas pressure causes
-the plasma to rise up into the post-flare loops.
-Explosive evaporation occurs when the upward force is accompanied by
-an equal and opposite force in the opposite direction.
-This is revealed by the presence of redshifts in emission lines in
-addition to blueshifts. The downward movement of plasma is then
-referred to as chromospheric ``condensation''.
-Velocities of plasma movement via explosive evaporation can be
-$\gtrsim$100 km s$^{-1}$, and $F_{\ell} > 10^{10}$ erg s$^{-1}$ cm$^{-2}$.
-
-Gentle evaporation refers to
-when the continuous, lower energy input from thermal conduction
-pushes plasma up the loops (evaporation), but not down (no condensation),
-so only blueshifts are observed.
-This process continues as long as a temperature gradient exists.
-Velocities of plasma movement via gentle evaporation are
-$\gtrsim$10 km s$^{-1}$, and $F_{\ell} < 10^{10}$ erg s$^{-1}$ cm$^{-2}$.
-
-Explosive can turn into gentle if conductive flux out of explosively heated
-plasma becomes comparable to energy flux in the electron beam:
-\[
-    F_{cond} \approx F_{NTe^{-}s}; \quad T \gtrsim 1 - \gtrsim 10s
-\]
-
-
-
-\textbf{Gradual: the third and final stage}\quad
-Once all the magnetic energy has been released and dissipated,
-non-thermal particles are no longer being accelerated downward,
-to drive chromospheric evaporation, and
-the gradual stage has begun.
-There remains a strong temperature gradient between the hot flare loops and
-the surrounding, cooler chromospheric plasma.
-Some of the energy that
-was not lost to radiation continues to heat the plasma via thermal
-conduction, which continues to drive evaporation of plasma upward
-through post-flare loops \citep{Battaglia2015}, though more slowly
-than during the impulsive phase. This final phase is characterized by
-a gradual buildup and decay of SXR emission from evaporation of hot
-post-flare loops. The loops continue to evolve by cooling and
-draining, and eventually retreat back down and become visible in
-H$\alpha$ \citep{Hudson2007}. This emission reveals the morphology of
-the so-called ``flare ribbons''. These are the footpoints of newly
-connected field lines, and are one of the primary observable features
-of flares. This stage typically lasts $\sim$30 minutes.
-
-\subsubsection{Quasi-periodic pulsations (QPPs)}
-
-\mynote[18 October 2018]{
-    So I've been reluctant to discuss the following issue because I don't
-    actually know much about it, just that a few authors have quoted these words:
-    ``There have been few studies of QPPs in thermal emission.''
-    However, just found a paper from {} that explains this, which is helpful
-    not only because it provides me with an supplementary description,
-    but it's another source, so I'm not just quoting Milligan's paper over
-    and over.
-}
-
-\mynote[18 October 2018]{
-    Why do we care about QPPs? This needs to be clear to the
-    reader/listener right away.
-}
-
-Thermal emission from the lower atmosphere during flares
-provides a potentially useful
-way to probe the chromospheric dynamics and extract
-information about the transportation and conversion of energy in this
-region.
-
-\mynote{Brief description of what QPPs are}
-
-Embedded within the global shape of flare emission
-are temporal fluctuations known as quasi-periodic pulsations (QPPs),
-with periods ranging from $\sim$1 second to several minutes.
-They have been observed during all three flare phases
-in all wavelength bands.
-(See \cite{VanDoorsselaere2016} for a recent review.)
-
-
-Since they are clearly connected to the flare process,
-QPPs are considered to be an intrinsic
-property of flares, thereby providing a direct probe into the
-reconnection site and the affected regions beyond.
-QPPs are ``directly linked to the properties of the flare reocnnection
-region and flare acceleration sites'' \citep{Inglis2015},
-so a lot can be learned about flares by studying these.
-
-
-\mynote[18 February 2019]{Copied from E-note. I think this was in my proposal,
-but probably took it out.}
-There is no strict definition for this kind of pattern, but it is generally
-described, as quoted from \cite{Inglis2015}, as
-``variations in the flux from a flare\ldots as a function of time,
-which appear to include periodic components with characteristic timescales
-ranging from one second up to several minutes.''
-
-
-Constraining the physical mechanism(s) responsible for the
-generation of QPPs is an ongoing investigation.
-There are two leading theories that describe them as signatures of one of two
-things:
-\begin{enumerate}
-    \item the energy release process (MR),
-        i.e. the rate at which magnetic field lines are reconnected
-        and accelerate non-thermal particles.
-        This is often referred to as a ``load/unload'' mechanism.
-    \item MHD oscillations induced in the ambient plasma by
-        \begin{itemize}
-            \item the magnetic reconnection itself, which would give the resulting
-                QPPs the same ``built-in'' periodicity as the reconnection rate.
-            \item the same trigger responsible for inducing magnetic reconnection
-                in the first place \citep{Nakariakov2009}.
-        \end{itemize}
-        Theoretically, MHD oscillations would be induced in post-flare loops,
-        due to the nature of these types of oscillations in the vicinity of a
-        magnetic field.
-\end{enumerate}
-
-Each of the above mechanisms can produce similar observational signatures,
-adding to the difficulty in identifying which is the cause, if not both
-\citep{Brosius2016}.
-
-
-Their small periodicities can also make them difficult to extract from the main
-lightcurve \citep{VanDoorsselaere2016}.
-\mynote[Mon Feb 18 03:15-ish MST 2019]{%
-Modulation depth? I think that has more to do with the amplitude than
-the period. Maybe it's because flare timescales are close to QPP periods,
-so everything gets mushed together and it's more difficult to extract any one
-individual signal.}
-Sometimes these periodicies can be on the order of a few seconds, making
-them difficult to probe with current available instrumental cadence.
-\mynote[Mon Feb 18 03:37:31 MST 2019]{Oh.}
-
-
-% Observations of QPPs in thermal emission during flares
-Currently, there are few studies of QPPs in thermal emission.
-Non-thermal emission in HXR and microwave bands has a higher modulation depth,
-particularly during the impulsive phase of flares, when the global emission level
-increases substantially
-\citep{Hayes2016}.
-
-
-\citep{Brosius2016} studied emission from the \ion{C}{1} line, and found
-a period of $\sim$170 seconds. They
-attributed this periodicity to the rate of injection of
-non-thermal electrons.
-Further investigation of QPPs in thermal emission was carried out by
-\cite{Milligan2017}, who found enhancements of the 3-minute oscillations
-in Lyman continuum and Lyman-$\alpha$ line emission.
-However, no signature of a 3-minute oscillation was found in
-the X-ray data generated by the flare, indicating
-that the chromospheric response was not a
-reflection of the rate of energy input.
-These findings supported the idea that the chromosphere naturally
-responds at its cutoff frequency, regardless of the periodicity of the
-energy injection rate.
-This result did not support the conclusion from
-\cite{Sych2009}, who
-proposed that the 3-minute waves leaked from sunspots into the upper
-atmosphere by propagating along magnetic field lines, and triggered
-the magnetic reconnection and subsequent energy release and particle
-acceleration.
-
-
-To investigate the transfer of energy during flares, \cite{Monsue2016}
-conducted a pilot study of the spatial and temporal flare response of acoustic
-oscillations in H$\alpha$ emission.
-They were able to preserve both the two-dimensional spatial information
-and the temporal information in the original data
-with the power and frequency of the output of the Fourier transforms
-by incorporating a technique called ``frequency-filtered amplitude movies''
-from \cite{Jackiewicz2013}.
-They reported a suppression of frequencies
-between 1 and 8 mHz during the main phase, and an enhancement of frequencies
-between 1 and 2 mHz before and after the flare. They suggested that the
-suppression of lower frequencies could be evidence of the conversion of energy
-from acoustic to thermal, and that the pre-flare enhancement may have been
-indicative of an instability in the chromosphere.
-In the conclusion of this study, they encouraged
-the further investigation of
-earlier time frames before the flare precursor, along with the
-inclusion of additional cases to increase the statistical significance of the
-findings.
-
-% Temporal dependence of QPPs (flare phases). Science question - Time!!!
-% Move this to methodology?
-\cite{Hayes2016} examined oscillations during
-both the impulsive and decay phase of an X-class flare, and considered
-a combination of possible mechanisms for producing QPPs, where the
-impulsive phase involved rapid injections from non-thermal particle
-acceleration and subsequent heating of the surrounding plasma, while
-thermal signatures persisted throughout the decay phase.
-Propagating slow magnetoacoustic waves, such as the chromospheric
-3-minute oscillations, show characteristic quasi-periodic patterns.
-Several recent papers discuss the relationship between QPPs and
-chromospheric oscillations.
-
-
-
-% Move this to methodology?
-The observations were acquired using
-Lyman continuum data from \textit{SDO}/EVE,
-Lyman-$\alpha$ line emission from \textit{GOES}/EUVS,
-1600\AA{} and 1700\AA{} continuum from \textit{SDO}/AIA, and
-HXR emission from \textit{RHESSI}.
-EVE observes the sun as a star, with disk-integrated data.
-Figure~\ref{fig:Milligan2017} shows their
-results from the analysis on AIA data.
-
-
-\subsection{Flare classes}
-
-Flare are classified according to their peak
-soft x-ray flux (1-8\AA{}), as
-measured at Earth from the \textit{GOES} satellite.
-The classes are as follows:
-\begin{description}
-    \item [A] 10$^{−4}$ < F < 10$^{−3}$
-    \item [B] 10$^{−3}$ < F < 10$^{−2}$
-    \item [C] 10$^{−2}$ < F < 10$^{−1}$
-    \item [M] 10$^{−1}$ < F < 1
-    \item [X] 1 < F < 10
-\end{description}
-where F = flux (erg s$^{-1}$ cm$^{−2}$).
-These are further subdivided from 1 through 9.
-This is a linear relationship so, for example, an X2 flare is twice as powerful
-as an X1 flare.
-
-Typical flare temperatures are 10$^{7}$ K.
-Emission lines at these temperatures are blueshifted, while those at
-chromospheric or TR temperatures are redshifted
-\citep{Brosius2016}.
-Typical energies are around 10$^{27}−10^{32}$ erg.
-The energy for the largest flares (i.e. of class > X10) has
-been capped at a few $\times 10^{32}$ erg.
-
-% ---}
+\input{flares}

@@ -1,8 +1,8 @@
-dissertation: dissertation.tex
-	pdflatex dissertation
-	bibtex dissertation
-	pdflatex dissertation
-	pdflatex dissertation
+likeatree: Dissertation.tex
+	pdflatex Dissertation
+	bibtex Dissertation
+	pdflatex Dissertation
+	pdflatex Dissertation
 
 log: log.tex
 	pdflatex log

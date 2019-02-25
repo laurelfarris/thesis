@@ -1,9 +1,0 @@
-
-\subsection{Damping behavior of 3-minute oscillations}
-
-3mOs are interpreted as slow, propagating magnetoacoustic waves,
-which have a characteristic excitation mechanism and damping rate,
-depending on the local plasma conditions where they originate.
-
-The timescales over which the oscillatory power is expected to change
-depends on the nature of the oscillations themselves.

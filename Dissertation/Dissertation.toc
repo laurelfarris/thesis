@@ -1,0 +1,43 @@
+\tocdepth@munge 
+\tocdepth@restore 
+\contentsline {section}{Introduction}{1}{section*.1}
+\contentsline {paragraph}{``Overview'' from proposal:}{1}{section*.1}
+\contentsline {paragraph}{single\_page\_freewriting.gdoc}{3}{Item.7}
+\contentsline {section}{The solar chromosphere}{5}{Item.13}
+\contentsline {subsection}{Magnetic field, structure, and the \textit {plasma-$\beta $}}{6}{Item.13}
+\contentsline {subsection}{Challenges in observing the chromosphere}{7}{equation.1}
+\contentsline {section}{3-minute oscillations}{8}{equation.1}
+\contentsline {subsection}{History of 3mOs}{8}{equation.1}
+\contentsline {subsection}{Observations of 3mOs}{9}{equation.1}
+\contentsline {subsubsection}{Intensity vs Velocity}{9}{equation.1}
+\contentsline {subsubsection}{Location in chromosphere: (x/y)}{9}{equation.1}
+\contentsline {paragraph}{Network/Internetwork}{9}{equation.1}
+\contentsline {paragraph}{Active Regions}{9}{equation.1}
+\contentsline {subparagraph}{Umbra}{9}{equation.1}
+\contentsline {subparagraph}{Penumbra}{9}{equation.1}
+\contentsline {subsubsection}{Location in chromosphere: height (z)}{9}{equation.1}
+\contentsline {subsection}{Physical mechanism that generates the 3mOs}{9}{equation.1}
+\contentsline {subsubsection}{Slow, propagating magnetoacoustic waves from the photosphere}{11}{equation.3}
+\contentsline {subsubsection}{Natural response of chromosphere at the acoustic cutoff frequency}{12}{equation.3}
+\contentsline {section}{The flaring chromosphere}{14}{equation.3}
+\contentsline {paragraph}{Rocket analogy}{14}{equation.3}
+\contentsline {subsection}{Flare emission and evolution}{14}{equation.3}
+\contentsline {section}{The Solar Dynamics Observatory (SDO)}{19}{equation.3}
+\contentsline {subsection}{The Atmospheric Imaging Assembly (AIA)}{19}{equation.3}
+\contentsline {paragraph}{Ambiguity in formation height}{19}{equation.3}
+\contentsline {subsection}{The Helioseismic and Magnetic Imager (HMI)}{19}{equation.3}
+\contentsline {section}{Enhanced chromospheric 3-minute oscillatory power associated with the 2011-February-15 X2.2 flare}{21}{equation.3}
+\contentsline {subsection}{Introduction}{21}{equation.3}
+\contentsline {subsection}{Observations and data reduction}{21}{equation.3}
+\contentsline {subsection}{Analysis}{26}{figure.6}
+\contentsline {subsection}{Results and discussion}{26}{figure.6}
+\contentsline {section}{Appendix: Physics background}{35}{figure.13}
+\contentsline {subsection}{Waves}{35}{figure.13}
+\contentsline {subsection}{The acoustic cutoff frequency}{36}{figure.13}
+\contentsline {subsubsection}{Derivation of the cutoff frequency}{38}{figure.13}
+\contentsline {subsection}{Coronal seismology}{40}{equation.17}
+\contentsline {paragraph}{Ideal MHD}{40}{equation.17}
+\contentsline {paragraph}{Characteristic speeds}{40}{equation.17}
+\contentsline {subsubsection}{Kink waves}{41}{Item.16}
+\contentsline {paragraph}{Speed}{41}{Item.16}
+\contentsline {paragraph}{Period}{41}{Item.16}

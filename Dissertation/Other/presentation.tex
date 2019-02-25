@@ -1,0 +1,137 @@
+\documentclass[notes]{beamer}
+\usepackage[T1]{fontenc} % Enables use of \textit in frame titles
+\usepackage{libertine}
+\renewcommand*\familydefault{\sfdefault} % Only if the base font is to be sans serif
+
+\setbeamerfont{headline}{size=\footnotesize} % ?
+\usepackage{ragged2e}
+\usepackage{textpos} % absolute positioning of text
+\usepackage{multirow} % Tables: text in one cell can span multiple rows
+\usepackage{booktabs} % Something to do with tables...
+
+\graphicspath{{/Users/laurel/Dropbox/Figures/}}
+\usepackage{hyperref}
+\hypersetup{ colorlinks = true, linkcolor = black, }
+
+\definecolor{green}{rgb}{0.0, 0.5, 0.0}
+\definecolor{cadetblue}{rgb}{0.37, 0.62, 0.63}
+\definecolor{fuch}{rgb}{0.57, 0.36, 0.51}
+
+\setbeamerfont{frametitle}{size=\LARGE,series=\bfseries}
+\setbeamerfont{framesubtitle}{size=\large,series=\itshape}
+\setbeamerfont{normal text}{size=\tiny}
+
+\setbeamercolor{frametitle}{fg=cadetblue!80!black}
+\setbeamercolor{framesubtitle}{fg=cadetblue!70!black}
+\setbeamercolor{background canvas}{bg=white}
+\setbeamercolor{normal text}{fg=black}
+\setbeamercolor{title}{fg=black}
+\setbeamercolor{block title}{fg=cadetblue!70!black}
+\setbeamercolor{itemize item}{fg=cadetblue!70!black}
+\setbeamercolor{itemize subitem}{fg=cadetblue!50!black}
+\setbeamercolor{enumerate item}{fg=cadetblue!70!black}
+\setbeamercolor{enumerate subitem}{fg=cadetblue!50!black}
+\setbeamercolor{description item}{fg=cadetblue!70!black}
+\setbeamercolor{description subitem}{fg=cadetblue!50!black}
+
+% Number slides
+\setbeamertemplate{footline}{%% Put slide numbers at bottom right corner
+    \raisebox{5pt}{\makebox[\paperwidth]{\hfill\makebox[10pt]{%
+    \scriptsize\insertframenumber}}}}
+\setbeamercolor{footline}{fg=gray}
+\setbeamertemplate{itemize items}{$\circ$}
+
+\setbeamertemplate{navigation symbols}{}% Empty to get rid of defaults
+
+% Table of contents: outline slide inserted at every occurrence of \section{...}
+\AtBeginSection[]{
+  \begin{frame}<beamer>  % <...> ??
+      \frametitle{Outline}
+      \tableofcontents[currentsection]
+  \end{frame}
+}
+
+\newcommand{\myrule}{
+    \begin{center}{\color{cadetblue}\rule{\textwidth}{0.3mm}}\end{center}}
+
+
+
+
+\begin{document}%--------------------------------------------------------------------------------------
+
+\begin{frame}{}% Title slide
+
+    \myrule
+
+    \begin{minipage}{0.65\textwidth}
+        \begin{flushleft}
+            \fontsize{14}{16}\selectfont\textbf{\input{title}}
+        \end{flushleft}
+    \end{minipage}\hfill%
+    \begin{minipage}{0.30\textwidth}
+        \begin{columns}
+            \column{0.01\textwidth}
+            {\color{cadetblue!80!black}\line(0,1) {80}}
+            \column{0.99\textwidth}
+            {\large\textbf{Laurel Farris}}\\
+            \vspace{0.25cm}
+            Department of Astronomy\\
+            \vspace{0.25cm}
+            New Mexico State University\\
+        \end{columns}
+    \end{minipage}
+
+    \myrule
+
+    \hfill
+    {\large\textbf{Spring 2020}}
+\end{frame}
+
+\section{Introduction}
+\begin{frame}{Introduction}{Summary of main points}
+\end{frame}
+
+\begin{frame}{Background}{}
+\end{frame}
+
+\begin{frame}{Literature}{}
+\end{frame}
+
+\section{Observations \& Analysis}
+\begin{frame}{Data}{}
+\end{frame}
+
+\begin{frame}{Methods}{}
+\end{frame}
+
+\section{Results}
+\begin{frame}{Results}{}
+\end{frame}
+
+\begin{frame}{Conclusions}{}
+\end{frame}
+
+\begin{frame}{Acknowledgments}
+    \setbeamertemplate{itemize items}{}
+    \begin{block}{Collaborators}
+        \begin{itemize}%[label={}]
+            \item \textbf{Dr. R. T. James McAteer} - Advisor (NMSU)
+            \item Dr. Jack Ireland (GSFC)
+        \end{itemize}
+    \end{block}
+    \begin{block}{Funding}
+    \end{block}
+\end{frame}
+
+\begin{frame}{}{}
+    \begin{minipage}{0.5\textwidth}
+    \end{minipage}%
+    \begin{minipage}{0.5\textwidth}
+    \end{minipage}
+    \note{
+        \begin{itemize}
+            \item Notes go here
+        \end{itemize}}
+\end{frame}
+
+\end{document}

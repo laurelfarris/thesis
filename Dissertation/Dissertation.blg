@@ -1,0 +1,69 @@
+This is BibTeX, Version 0.99c (Web2C 7.5.6)
+The top-level auxiliary file: Dissertation.aux
+A level-1 auxiliary file: introduction.aux
+A level-1 auxiliary file: background.aux
+White space in argument---line 32 of file background.aux
+ : \citation{Felipe2010;
+ :                       Bogdan2006 p. 323}
+I'm skipping whatever remains of this command
+A level-1 auxiliary file: methods.aux
+A level-1 auxiliary file: phase1.aux
+A level-1 auxiliary file: appendix.aux
+The style file: aasjournal.bst
+Database file #1: library.bib.bib
+Repeated entry---line 3059 of file library.bib.bib
+ : @article{OShea2002
+ :                   ,
+I'm skipping whatever remains of this entry
+Warning--I didn't find a database entry for "hmi"
+Reallocated wiz_functions (elt_size=4) to 6000 items from 3000.
+Warning--no book title in Brynildsen2004
+`booktitle' is a missing field, not a string, for entry Brynildsen2004
+while executing---line 3561 of file aasjournal.bst
+Warning--empty journal in Jensen1963
+Warning--empty journal in Orrall1966
+Warning--empty journal in OShea2002
+Warning--empty journal in Stangalini2011
+Warning--empty journal in Viereck2007
+You've used 42 entries,
+            3166 wiz_defined-function locations,
+            1002 strings with 18949 characters,
+and the built_in function-call counts, 19425 in all, are:
+= -- 1555
+> -- 1579
+< -- 17
++ -- 526
+- -- 566
+* -- 1785
+:= -- 3636
+add.period$ -- 45
+call.type$ -- 42
+change.case$ -- 236
+chr.to.int$ -- 41
+cite$ -- 48
+duplicate$ -- 700
+empty$ -- 1112
+format.name$ -- 627
+if$ -- 3848
+int.to.chr$ -- 2
+int.to.str$ -- 0
+missing$ -- 41
+newline$ -- 137
+num.names$ -- 168
+pop$ -- 276
+preamble$ -- 1
+purify$ -- 236
+quote$ -- 0
+skip$ -- 554
+stack$ -- 0
+substring$ -- 653
+swap$ -- 2
+text.length$ -- 0
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 378
+warning$ -- 6
+while$ -- 156
+width$ -- 0
+write$ -- 452
+(There were 3 error messages)
