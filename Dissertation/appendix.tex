@@ -17,7 +17,6 @@
 %%
 
 
-\clearpage
 \section{Appendix: Physics background}
 %%{---
 
@@ -73,25 +72,33 @@ Get solutions to wave equation by specifying:
 %%-----------------------
 
 
-%\input{coronalSeismology}
-
 \subsection{Coronal seismology}\label{cs}
 
-\paragraph{Ideal MHD}\label{idealMHD}
+\subsubsection{Ideal MHD}\label{idealMHD}
+
+\mynote{See BB p. 46}
+
 Conditions of ``ideal MHD'' involve timescales between collision that are much
 smaller than those of other processes, allowing the particles to take a
 Maxwellian distribution. They describe the evolution of the plasma densities
 (mass, energy, etc.) over time. Under conditions of ideal MHD, plasma acts as a
 perfect conductor, and is completely frozen-in to the magnetic field lines.
 
-The equations of ideal MHD are shown in Table~ref\{tab:idealMHD\}.
-\\input{table\_idealMHD}
+The equations of ideal MHD are shown in
+%Table~ref\{tab:idealMHD\}.
+Table~\ref{tab:idealMHD}.
+
+\input{table_idealMHD}
+
+
+
+
 
 Figure~ref\{disp\} shows the location of the different MHD modes relative to
 characteristic speeds both external to and inside a cylindrical volume of
 plasma.
 
-\paragraph{Characteristic speeds}
+\subsubsection{Characteristic speeds}
 Relations between the (internal and external)
 characteristic speeds (Alfv\'en, sound, and tube speeds)
 determine properties of MHD modes guided by the tube.
@@ -180,8 +187,39 @@ Period of global kink mode:
     \]
 where $P \approx $ few seconds - minutes
 
-\newpage
+
+\subsubsection{Slow magnetoacoustic waves}
+
+
+
+Like standard acoustic waves, magnetoacoustic waves are longitudinal,
+compressible, and anisotropic waves in a magnetized plasma.
+They perturb the plasma density, allowing intensity variations to be
+observed.
+They also perturb the parallel component of the magnetic field
+\mynote{
+    or velocity?}.
+MA waves exist as either slow or fast MA waves, both of which can be either
+standing or propagating.
+Slow magnetoacoustic waves tend to damp out
+quickly (after 1-3 oscillations) due to energy losses from
+radiation/thermal conduction.
+They travel sub-sonically; their
+speed (phase velocity) is lower than the local sound speed.
+They are polarized perpendicular to the magnetic field.
+They are observed
+\mynote{
+    at least in the corona}
+via both intensity variations (in EUV lines) and Doppler shifts.
+(See \cite{Nakariakov2005} for a general review of MHD waves and coronal
+seismology).
+Speed close to sound speed
+allows interpretation of slow, propagating MA waves.
+
+
+
 \subsection{Thermal and non-thermal energy}
+
 Thermal energy is radiated by matter in \textit{thermal equilibrium}
 The extreme ends of the spectrum (radio and HXR) are dominated by
 radiation from non-thermal particles in the early stages of flare
@@ -202,24 +240,26 @@ energy in erg. The distinction between thermal and non-thermal
 particles is important when diagnosing observations. They result from
 different processes and provide clues to the conditions in their
 environment.
-% ---}
 
 
-\section{Normalization of Power Spectrum}
+\subsection{Normalization of Power Spectrum}
 
-Figure~\ref{norm_vs_not} shows power spectra for each AIA channel
+Figure
+%~\ref{norm_vs_not}
+shows power spectra for each AIA channel
 during the X-class flare and during the pre-flare period.
 These were calculated with and without normalizing to see which
 method was best for the type of analysis utilized in this work.
 
-\begin{figure*}\centering
-    \includegraphics[draft=false,width=0.8\textwidth]{norm_vs_not.pdf}
-    \caption{Fourier power spectrum for quiet vs. flaring times,
-    comparing calculations without normalizing (left panels) to
-    those with normalizing (right panels) for both AIA 1600\AA{}
-    (top) and AIA 1700\AA{} (bottom).
-    All spectra were obtained by applying a Fourier transform
-    to the integrated emission from AR 11158.
-    \label{norm_vs_not}}
-\end{figure*}
+%\begin{figure*}\centering
+%    \includegraphics[draft=false,width=0.8\textwidth]{norm_vs_not.pdf}
+%    \caption{Fourier power spectrum for quiet vs. flaring times,
+%    comparing calculations without normalizing (left panels) to
+%    those with normalizing (right panels) for both AIA 1600\AA{}
+%    (top) and AIA 1700\AA{} (bottom).
+%    All spectra were obtained by applying a Fourier transform
+%    to the integrated emission from AR 11158.
+%    \label{norm_vs_not}}
+%\end{figure*}
 
+% ---}

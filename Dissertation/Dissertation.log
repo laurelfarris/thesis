@@ -1,4 +1,4 @@
-This is pdfTeXk, Version 3.141592-1.40.3 (Web2C 7.5.6) (format=pdflatex 2015.11.14)  25 FEB 2019 05:14
+This is pdfTeXk, Version 3.141592-1.40.3 (Web2C 7.5.6) (format=pdflatex 2015.11.14)  25 FEB 2019 21:00
 entering extended mode
  %&-line parsing enabled.
 **Dissertation
@@ -443,21 +443,45 @@ LaTeX Font Info:    Redeclaring font encoding OMS on input line 568.
 LaTeX Info: Redefining \[ on input line 2666.
 LaTeX Info: Redefining \] on input line 2667.
 )
+(/usr/share/texmf/tex/latex/mh/mathtools.sty
+Package: mathtools 2004/10/10 v1.01a mathematical typesetting tools (MH)
+
+(/usr/share/texmf/tex/latex/tools/calc.sty
+Package: calc 2005/08/06 v4.2 Infix arithmetic (KKT,FJ)
+\calc@Acount=\count156
+\calc@Bcount=\count157
+\calc@Adimen=\dimen138
+\calc@Bdimen=\dimen139
+\calc@Askip=\skip79
+\calc@Bskip=\skip80
+LaTeX Info: Redefining \setlength on input line 75.
+LaTeX Info: Redefining \addtolength on input line 76.
+\calc@Ccount=\count158
+\calc@Cskip=\skip81
+)
+(/usr/share/texmf/tex/latex/mh/mhsetup.sty
+Package: mhsetup 2004/10/10 v1.0b programming setup (MH)
+)
+\g_MT_multlinerow_int=\count159
+\l_MT_multwidth_dim=\dimen140
+)
 (/usr/share/texmf/tex/latex/titlesec/titlesec.sty
 Package: titlesec 2005/01/22 v2.6 Sectioning titles
 \ttl@box=\box60
-\beforetitleunit=\skip79
-\aftertitleunit=\skip80
-\ttl@plus=\dimen138
-\ttl@minus=\dimen139
-\titlewidth=\dimen140
-\titlewidthlast=\dimen141
-\titlewidthfirst=\dimen142
+\beforetitleunit=\skip82
+\aftertitleunit=\skip83
+\ttl@plus=\dimen141
+\ttl@minus=\dimen142
+\titlewidth=\dimen143
+\titlewidthlast=\dimen144
+\titlewidthfirst=\dimen145
 )
+\c@paranum=\count160
+
 (/usr/share/texmf/tex/latex/enumitem/enumitem.sty
 Package: enumitem 2005/05/12 v1.1 Customized lists
-\labelindent=\skip81
-\enit@outerparindent=\dimen143
+\labelindent=\skip84
+\enit@outerparindent=\dimen146
 )
 (/usr/share/texmf/tex/latex/comment/comment.sty
 \CommentStream=\write4
@@ -476,14 +500,14 @@ Package: pgf 2006/10/11 v1.10 (rcs-revision 1.7)
 (/usr/share/texmf/tex/latex/pgf/systemlayer/pgfsys.sty
 (/usr/share/texmf/tex/generic/pgf/systemlayer/pgfsys.code.tex
 Package: pgfsys 2006/10/16 v1.10 (rcs-revision 1.19)
-\pgf@x=\dimen144
-\pgf@y=\dimen145
-\pgf@xa=\dimen146
-\pgf@ya=\dimen147
-\pgf@xb=\dimen148
-\pgf@yb=\dimen149
-\pgf@xc=\dimen150
-\pgf@yc=\dimen151
+\pgf@x=\dimen147
+\pgf@y=\dimen148
+\pgf@xa=\dimen149
+\pgf@ya=\dimen150
+\pgf@xb=\dimen151
+\pgf@yb=\dimen152
+\pgf@xc=\dimen153
+\pgf@yc=\dimen154
 
 (/usr/share/texmf/tex/generic/pgf/systemlayer/pgf.cfg
 File: pgf.cfg 2006/10/11  (rcs-revision 1.2)
@@ -507,56 +531,56 @@ Package: pgfcore 2006/10/11 v1.10 (rcs-revision 1.4)
 
 (/usr/share/texmf/tex/generic/pgf/basiclayer/pgfcoremath.code.tex
 File: pgfcoremath.code.tex 2006/10/15  (rcs-revision 1.3)
-\c@pgf@counta=\count156
-\c@pgf@countb=\count157
-\c@pgf@countc=\count158
-\c@pgf@countd=\count159
+\c@pgf@counta=\count161
+\c@pgf@countb=\count162
+\c@pgf@countc=\count163
+\c@pgf@countd=\count164
 )
 (/usr/share/texmf/tex/generic/pgf/basiclayer/pgfcorepoints.code.tex
 File: pgfcorepoints.code.tex 2006/10/16  (rcs-revision 1.7)
-\pgf@picminx=\dimen152
-\pgf@picmaxx=\dimen153
-\pgf@picminy=\dimen154
-\pgf@picmaxy=\dimen155
-\pgf@pathminx=\dimen156
-\pgf@pathmaxx=\dimen157
-\pgf@pathminy=\dimen158
-\pgf@pathmaxy=\dimen159
-\pgf@tempdim=\dimen160
-\c@pgf@tempcount=\count160
-\pgf@xx=\dimen161
-\pgf@xy=\dimen162
-\pgf@yx=\dimen163
-\pgf@yy=\dimen164
-\pgf@zx=\dimen165
-\pgf@zy=\dimen166
+\pgf@picminx=\dimen155
+\pgf@picmaxx=\dimen156
+\pgf@picminy=\dimen157
+\pgf@picmaxy=\dimen158
+\pgf@pathminx=\dimen159
+\pgf@pathmaxx=\dimen160
+\pgf@pathminy=\dimen161
+\pgf@pathmaxy=\dimen162
+\pgf@tempdim=\dimen163
+\c@pgf@tempcount=\count165
+\pgf@xx=\dimen164
+\pgf@xy=\dimen165
+\pgf@yx=\dimen166
+\pgf@yy=\dimen167
+\pgf@zx=\dimen168
+\pgf@zy=\dimen169
 )
 (/usr/share/texmf/tex/generic/pgf/basiclayer/pgfcorepathconstruct.code.tex
 File: pgfcorepathconstruct.code.tex 2006/10/16  (rcs-revision 1.6)
-\pgf@path@lastx=\dimen167
-\pgf@path@lasty=\dimen168
+\pgf@path@lastx=\dimen170
+\pgf@path@lasty=\dimen171
 )
 (/usr/share/texmf/tex/generic/pgf/basiclayer/pgfcorepathusage.code.tex
 File: pgfcorepathusage.code.tex 2006/10/16  (rcs-revision 1.7)
-\pgf@shorten@end@additional=\dimen169
-\pgf@shorten@start@additional=\dimen170
+\pgf@shorten@end@additional=\dimen172
+\pgf@shorten@start@additional=\dimen173
 )
 (/usr/share/texmf/tex/generic/pgf/basiclayer/pgfcorescopes.code.tex
 File: pgfcorescopes.code.tex 2006/10/23  (rcs-revision 1.20)
 \pgfpic=\box61
 \pgf@hbox=\box62
 \pgf@layerbox@main=\box63
-\pgf@picture@serial@count=\count161
+\pgf@picture@serial@count=\count166
 )
 (/usr/share/texmf/tex/generic/pgf/basiclayer/pgfcoregraphicstate.code.tex
 File: pgfcoregraphicstate.code.tex 2006/10/16  (rcs-revision 1.6)
-\pgflinewidth=\dimen171
+\pgflinewidth=\dimen174
 )
 (/usr/share/texmf/tex/generic/pgf/basiclayer/pgfcoretransformations.code.tex
 File: pgfcoretransformations.code.tex 2006/10/11  (rcs-revision 1.4)
-\pgf@pt@x=\dimen172
-\pgf@pt@y=\dimen173
-\pgf@pt@temp=\dimen174
+\pgf@pt@x=\dimen175
+\pgf@pt@y=\dimen176
+\pgf@pt@temp=\dimen177
 )
 (/usr/share/texmf/tex/generic/pgf/basiclayer/pgfcorequick.code.tex
 File: pgfcorequick.code.tex 2006/10/11  (rcs-revision 1.2)
@@ -572,8 +596,8 @@ File: pgfcorearrows.code.tex 2006/10/16  (rcs-revision 1.6)
 )
 (/usr/share/texmf/tex/generic/pgf/basiclayer/pgfcoreshade.code.tex
 File: pgfcoreshade.code.tex 2006/10/16  (rcs-revision 1.7)
-\pgf@max=\dimen175
-\pgf@sys@shading@range@num=\count162
+\pgf@max=\dimen178
+\pgf@sys@shading@range@num=\count167
 )))
 (/usr/share/texmf/tex/latex/pgf/basiclayer/pgfbaseshapes.sty
 (/usr/share/texmf/tex/generic/pgf/basiclayer/pgfbaseshapes.code.tex
@@ -596,8 +620,8 @@ Package: pgfbaselayers 2006/10/16 v1.10 (rcs-revision 1.5)
 (/usr/share/texmf/tex/latex/pgf/basiclayer/pgfbasesnakes.sty
 (/usr/share/texmf/tex/generic/pgf/basiclayer/pgfbasesnakes.code.tex
 Package: pgfbasesnakes 2006/10/16 v1.10 (rcs-revision 1.10)
-\pgfsnakeremainingdistance=\dimen176
-\pgfsnakecompleteddistance=\dimen177
+\pgfsnakeremainingdistance=\dimen179
+\pgfsnakecompleteddistance=\dimen180
 ))
 (/usr/share/texmf/tex/latex/pgf/basiclayer/pgfbasepatterns.sty
 (/usr/share/texmf/tex/generic/pgf/basiclayer/pgfbasepatterns.code.tex
@@ -605,34 +629,21 @@ Package: pgfbasepatterns 2006/10/16 v1.10 (rcs-revision 1.9)
 ))
 (/usr/share/texmf/tex/latex/pgf/compatibility/pgfcomp-version-0-65.sty
 Package: pgfcomp-version-0-65 2006/10/11 v1.10 (rcs-revision 1.4)
-\pgf@nodesepstart=\dimen178
-\pgf@nodesepend=\dimen179
+\pgf@nodesepstart=\dimen181
+\pgf@nodesepend=\dimen182
 ))
-(/usr/share/texmf/tex/latex/tools/calc.sty
-Package: calc 2005/08/06 v4.2 Infix arithmetic (KKT,FJ)
-\calc@Acount=\count163
-\calc@Bcount=\count164
-\calc@Adimen=\dimen180
-\calc@Bdimen=\dimen181
-\calc@Askip=\skip82
-\calc@Bskip=\skip83
-LaTeX Info: Redefining \setlength on input line 75.
-LaTeX Info: Redefining \addtolength on input line 76.
-\calc@Ccount=\count165
-\calc@Cskip=\skip84
-)
 (/usr/share/texmf/tex/latex/pgf/utilities/pgffor.sty
 (/usr/share/texmf/tex/generic/pgf/utilities/pgffor.code.tex
 Package: pgffor 2006/10/16 v1.10 (rcs-revision 1.5)
-\pgffor@iter=\dimen182
-\pgffor@skip=\dimen183
+\pgffor@iter=\dimen183
+\pgffor@skip=\dimen184
 ))
 (/usr/share/texmf/tex/latex/xkeyval/xkeyval.sty
 Package: xkeyval 2006/11/18 v2.5f package option processing (HA)
 
 (/usr/share/texmf/tex/latex/xkeyval/xkeyval.tex
 \XKV@toks=\toks30
-\XKV@depth=\count166
+\XKV@depth=\count168
 File: xkeyval.tex 2006/11/18 v2.5f key=value parser (HA)
 ))
 (/usr/share/texmf/tex/generic/pgf/frontendlayer/tikz.code.tex
@@ -640,88 +651,79 @@ Package: tikz 2006/10/17 v1.10 (rcs-revision 1.68)
 
 (/usr/share/texmf/tex/generic/pgf/libraries/pgflibraryplothandlers.code.tex
 File: pgflibraryplothandlers.code.tex 2006/10/16 v1.10 (rcs-revision 1.8)
-\pgf@plot@mark@count=\count167
-\pgfplotmarksize=\dimen184
+\pgf@plot@mark@count=\count169
+\pgfplotmarksize=\dimen185
 )
-\tikz@lastx=\dimen185
-\tikz@lasty=\dimen186
-\tikz@lastxsaved=\dimen187
-\tikz@lastysaved=\dimen188
-\tikzleveldistance=\dimen189
-\tikzsiblingdistance=\dimen190
+\tikz@lastx=\dimen186
+\tikz@lasty=\dimen187
+\tikz@lastxsaved=\dimen188
+\tikz@lastysaved=\dimen189
+\tikzleveldistance=\dimen190
+\tikzsiblingdistance=\dimen191
 \tikz@figbox=\box65
 \tikz@tempbox=\box66
-\tikztreelevel=\count168
-\tikznumberofchildren=\count169
-\tikznumberofcurrentchild=\count170
-\tikz@fig@count=\count171
-\tikz@expandcount=\count172
+\tikztreelevel=\count170
+\tikznumberofchildren=\count171
+\tikznumberofcurrentchild=\count172
+\tikz@fig@count=\count173
+\tikz@expandcount=\count174
 
 (/usr/share/texmf/tex/generic/pgf/libraries/pgflibrarytikztopaths.code.tex
 File: pgflibrarytikztopaths.code.tex 2006/10/16 v1.10 (rcs-revision 1.5)
 )))
 (/usr/share/texmf/tex/latex/marginnote/marginnote.sty
 Package: marginnote 2006/10/26 v1.1 non floating margin notes for LaTeX
-\c@mn@abspage=\count173
+\c@mn@abspage=\count175
 )
-Package hyperref Info: Option `colorlinks' set `true' on input line 159.
+Package hyperref Info: Option `colorlinks' set `true' on input line 170.
 Class revtex4-1 Info: Unrecognized array package. Please update this document c
-lass! (Proceeding with fingers crossed.) on input line 163.
-Class revtex4-1 Info: Repairing hyperref 6.75r \href on input line 163.
+lass! (Proceeding with fingers crossed.) on input line 174.
+Class revtex4-1 Info: Repairing hyperref 6.75r \href on input line 174.
 Class revtex4-1 Info: Patching unrecognized longtable package. (Proceeding with
- fingers crossed) on input line 163.
-Class revtex4-1 Info: Robustifying \LaTeX's \boldmath command on input line 163
+ fingers crossed) on input line 174.
+Class revtex4-1 Info: Robustifying \LaTeX's \boldmath command on input line 174
 .
-Class revtex4-1 Info: cite was not loaded (OK!) on input line 163.
-Class revtex4-1 Info: mcite was not loaded (OK!) on input line 163.
-Class revtex4-1 Info: multicol was not loaded (OK!) on input line 163.
+Class revtex4-1 Info: cite was not loaded (OK!) on input line 174.
+Class revtex4-1 Info: mcite was not loaded (OK!) on input line 174.
+Class revtex4-1 Info: multicol was not loaded (OK!) on input line 174.
  (./Dissertation.aux
-(./introduction.aux) (./background.aux) (./methods.aux) (./phase1.aux)
-(./appendix.aux))
+(./introduction.aux) (./background.aux) (./methods.aux) (./phase1.aux
+
+LaTeX Warning: Label `lc' multiply defined.
+
+) (./appendix.aux))
 \openout1 = `Dissertation.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 163.
-LaTeX Font Info:    ... okay on input line 163.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 163.
-LaTeX Font Info:    ... okay on input line 163.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 163.
-LaTeX Font Info:    ... okay on input line 163.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 163.
-LaTeX Font Info:    ... okay on input line 163.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 163.
-LaTeX Font Info:    ... okay on input line 163.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 163.
-LaTeX Font Info:    ... okay on input line 163.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 163.
-LaTeX Font Info:    ... okay on input line 163.
-Package hyperref Info: Link coloring ON on input line 163.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 174.
+LaTeX Font Info:    ... okay on input line 174.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 174.
+LaTeX Font Info:    ... okay on input line 174.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 174.
+LaTeX Font Info:    ... okay on input line 174.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 174.
+LaTeX Font Info:    ... okay on input line 174.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 174.
+LaTeX Font Info:    ... okay on input line 174.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 174.
+LaTeX Font Info:    ... okay on input line 174.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 174.
+LaTeX Font Info:    ... okay on input line 174.
+Package hyperref Info: Link coloring ON on input line 174.
  (/usr/share/texmf/tex/latex/hyperref/nameref.sty
 Package: nameref 2006/12/27 v2.28 Cross-referencing by name of section
 
 (/usr/share/texmf/tex/latex/oberdiek/refcount.sty
 Package: refcount 2006/02/20 v3.0 Data extraction from references (HO)
 )
-\c@section@level=\count174
+\c@section@level=\count176
 )
-LaTeX Info: Redefining \ref on input line 163.
-LaTeX Info: Redefining \pageref on input line 163.
-LaTeX Info: Redefining \selectfont on input line 163.
+LaTeX Info: Redefining \ref on input line 174.
+LaTeX Info: Redefining \pageref on input line 174.
+LaTeX Info: Redefining \selectfont on input line 174.
 Package marginnote Info: \pdfoutput not 0 and \pdflastxpos available.
 (marginnote)             Extended possition detection mode activated.
  (./title.tex)
 (./abstract.tex) [1{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
-
-LaTeX Font Warning: Font shape `T1/cmr/m/n' in size <16> not available
-(Font)              size <17.28> substituted on input line 199.
-
-
-LaTeX Font Warning: Font shape `T1/cmr/bx/n' in size <16> not available
-(Font)              size <17.28> substituted on input line 199.
-
-
-LaTeX Font Warning: Font shape `T1/cmr/bx/sc' in size <16> not available
-(Font)              size <17.28> substituted on input line 199.
-
 (./Dissertation.toc
 LaTeX Font Info:    Try loading font information for U+lasy on input line 7.
  (/usr/share/texmf/tex/latex/base/ulasy.fd
@@ -736,357 +738,210 @@ LaTeX Font Info:    Try loading font information for U+msb on input line 7.
 
 (/usr/share/texmf/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2002/01/19 v2.2g AMS font definitions
-))
+) [2])
 \tf@toc=\write6
 \openout6 = `Dissertation.toc'.
 
- [2]
-\openout2 = `introduction.aux'.
-
- (./introduction.tex
-
-Package hyperref Warning: No destination for bookmark of \addcontentsline,
-(hyperref)                destination is added on input line 1.
-
-pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has 
-been already used, duplicate ignored
-<to be read again> 
-                   \relax 
-l.56     \item \textbf
-                      {Apply the techniques from the previous two phases to ...
-[1]pdfTeX warning (ext4): destination with the same identifier (name{page.2}) h
-as been already used, duplicate ignored
-<to be read again> 
-                   \relax 
-l.88 
-      [2]
-LaTeX Font Info:    Try loading font information for T1+cmss on input line 92.
- (/usr/share/texmf/tex/latex/base/t1cmss.fd
-File: t1cmss.fd 1999/05/25 v2.5h Standard LaTeX font definitions
-)
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 107.
-
-
-(/usr/share/texmf/tex/latex/base/omscmr.fd
-File: omscmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
-)
-LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <12> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 107.
- [3]) [4]
-\openout2 = `background.aux'.
-
- (./background.tex
-Package marginnote Info: Margin note 7.1 is on absolute page 7
-(marginnote)              on input line 7.
-Package marginnote Info: xpos seams to be 5920357sp,
-(marginnote)             \marginnoterightadjust ignored on input line 7.
- [5]
-
-LaTeX Font Warning: Font shape `T1/cmr/m/n' in size <13> not available
-(Font)              size <12> substituted on input line 68.
-
-
-LaTeX Font Warning: Font shape `T1/cmr/bx/n' in size <13> not available
-(Font)              size <12> substituted on input line 68.
-
-
-LaTeX Font Warning: Font shape `T1/cmr/bx/it' in size <13> not available
-(Font)              size <12> substituted on input line 68.
-
-LaTeX Font Info:    Calculating math sizes for size <13> on input line 68.
-
-LaTeX Font Warning: Font shape `OT1/cmr/m/n' in size <13> not available
-(Font)              size <12> substituted on input line 68.
-
-
-LaTeX Font Warning: Font shape `OT1/cmr/m/n' in size <6.5> not available
-(Font)              size <6> substituted on input line 68.
-
-
-LaTeX Font Warning: Font shape `OML/cmm/m/it' in size <13> not available
-(Font)              size <12> substituted on input line 68.
-
-
-LaTeX Font Warning: Font shape `OML/cmm/m/it' in size <6.5> not available
-(Font)              size <6> substituted on input line 68.
-
-
-LaTeX Font Warning: Font shape `OMS/cmsy/m/n' in size <13> not available
-(Font)              size <12> substituted on input line 68.
-
-
-LaTeX Font Warning: Font shape `OMS/cmsy/m/n' in size <6.5> not available
-(Font)              size <6> substituted on input line 68.
-
-
-LaTeX Font Warning: Font shape `OMX/cmex/m/n' in size <13> not available
-(Font)              size <12> substituted on input line 68.
-
-
-LaTeX Font Warning: Font shape `U/lasy/m/n' in size <13> not available
-(Font)              size <12> substituted on input line 68.
-
-
-LaTeX Font Warning: Font shape `U/lasy/m/n' in size <6.5> not available
-(Font)              size <6> substituted on input line 68.
-
-
-LaTeX Font Warning: Font shape `U/msa/m/n' in size <13> not available
-(Font)              size <12> substituted on input line 68.
-
-
-LaTeX Font Warning: Font shape `U/msa/m/n' in size <6.5> not available
-(Font)              size <6> substituted on input line 68.
-
-
-LaTeX Font Warning: Font shape `U/msb/m/n' in size <13> not available
-(Font)              size <12> substituted on input line 68.
-
-
-LaTeX Font Warning: Font shape `U/msb/m/n' in size <6.5> not available
-(Font)              size <6> substituted on input line 68.
-
-[6] [7]
-Package marginnote Info: Margin note 10.1 is on absolute page 10
-(marginnote)              on input line 207.
-Package marginnote Info: xpos seams to be 5920357sp,
-(marginnote)             \marginnoteleftadjust ignored on input line 207.
- [8] [9]
-Package marginnote Info: Margin note 12.1 is on absolute page 12
-(marginnote)              on input line 286.
-Package marginnote Info: xpos seams to be 5920357sp,
-(marginnote)             \marginnoteleftadjust ignored on input line 286.
-
-
-Package natbib Warning: Citation `Felipe2010; Bogdan2006 p. 323' on page 10 und
-efined on input line 304.
-
-Package marginnote Info: Margin note 12.2 is on absolute page 13
-(marginnote)              on input line 351.
-Package marginnote Info: xpos seams to be 5920357sp,
-(marginnote)             \marginnoterightadjust ignored on input line 351.
-[10] [11]
-Underfull \vbox (badness 2717) detected at line 481
- []
-
-[12] (./flares.tex [13] [14] [15]
-LaTeX Font Info:    Try loading font information for T1+cmtt on input line 131.
-
- (/usr/share/texmf/tex/latex/base/t1cmtt.fd
-File: t1cmtt.fd 1999/05/25 v2.5h Standard LaTeX font definitions
-)
-[16]
-Package marginnote Info: Margin note 19.1 is on absolute page 19
-(marginnote)              on input line 208.
-Package marginnote Info: xpos seams to be 5920357sp,
-(marginnote)             \marginnoterightadjust ignored on input line 208.
- [17]
-Missing character: There is no â in font cmr8!
-Missing character: There is no ˆ in font cmr8!
-Missing character: There is no ’ in font cmr8!
-Missing character: There is no â in font cmr8!
-Missing character: There is no ˆ in font cmr8!
-Missing character: There is no ’ in font cmr8!
-Missing character: There is no â in font cmr8!
-Missing character: There is no ˆ in font cmr8!
-Missing character: There is no ’ in font cmr8!
-Missing character: There is no â in font cmr8!
-Missing character: There is no ˆ in font cmr8!
-Missing character: There is no ’ in font cmr8!
-Missing character: There is no â in font cmr8!
-Missing character: There is no ˆ in font cmr8!
-Missing character: There is no ’ in font cmr8!
-Missing character: There is no â in font cmr8!
-Missing character: There is no ˆ in font cmr8!
-Missing character: There is no ’ in font cmr8!
-Missing character: There is no â in font cmr8!
-Missing character: There is no ˆ in font cmr8!
-Missing character: There is no ’ in font cmr8!
-Missing character: There is no â in font cmr8!
-Missing character: There is no ˆ in font cmr8!
-Missing character: There is no ’ in font cmr8!
-Missing character: There is no â in font cmr12!
-Missing character: There is no ˆ in font cmr12!
-Missing character: There is no ’ in font cmr12!
-)) [18
-\@writefile{toc}{\contentsline {subsection}{Flare classes}{18}{equation.3}}
-]
-\openout2 = `methods.aux'.
-
- (./methods.tex (./sdo.tex
-
-Package natbib Warning: Citation `hmi' on page 19 undefined on input line 60.
-
-[19])) [20
-\@writefile{toc}{\contentsline {section}{Data reduction and analysis}{20}{equat
-ion.3}}
-\@writefile{toc}{\contentsline {subsection}{Alignment}{20}{equation.3}}
-\@writefile{toc}{\contentsline {subsection}{Saturation}{20}{equation.3}}
-\@writefile{toc}{\contentsline {subsection}{Analysis methods}{20}{equation.3}}
-]
+ [3]
 \openout2 = `phase1.aux'.
 
  (./phase1.tex
-<$HOME/Dropbox/Figures/images.pdf, id=307, 578.16pt x 361.35pt>
-File: $HOME/Dropbox/Figures/images.pdf Graphic file (type pdf)
 
-<use $HOME/Dropbox/Figures/images.pdf>
-File: $HOME/Dropbox/Figures/images.pdf Graphic file (type pdf)
- <use $HOME/Dropbox/Figures/images.pdf>
-<$HOME/Figures/hmi_label_sunspots_20190124.pdf, id=308, 328.22626pt x 226.59656
+LaTeX Font Warning: Font shape `T1/cmr/m/n' in size <16> not available
+(Font)              size <17.28> substituted on input line 11.
+
+
+LaTeX Font Warning: Font shape `T1/cmr/bx/n' in size <16> not available
+(Font)              size <17.28> substituted on input line 11.
+
+
+LaTeX Font Warning: Font shape `T1/cmr/bx/sc' in size <16> not available
+(Font)              size <17.28> substituted on input line 11.
+
+(../Article1/title.tex)
+
+Package hyperref Warning: No destination for bookmark of \addcontentsline,
+(hyperref)                destination is added on input line 15.
+
+(../Article1/introduction.tex
+
+Package natbib Warning: Citation `Kosovichev2007' on page 19 undefined on input
+ line 43.
+
+[19]
+
+LaTeX Warning: Reference `data' on page 20 undefined on input line 126.
+
+
+LaTeX Warning: Reference `results' on page 20 undefined on input line 127.
+
+
+LaTeX Warning: Reference `conclusions' on page 20 undefined on input line 128.
+
+) [20] [21] (../Article1/data.tex
+<$HOME/Figures/lc_20190218.pdf, id=160, 578.16pt x 216.81pt>
+File: $HOME/Figures/lc_20190218.pdf Graphic file (type pdf)
+
+<use $HOME/Figures/lc_20190218.pdf>
+<$HOME/Figures/lc_goes_20190124.pdf, id=161, 578.16pt x 252.945pt>
+File: $HOME/Figures/lc_goes_20190124.pdf Graphic file (type pdf)
+
+<use $HOME/Figures/lc_goes_20190124.pdf>
+<$HOME/Figures/images_20190212.pdf, id=163, 271.0125pt x 469.755pt>
+File: $HOME/Figures/images_20190212.pdf Graphic file (type pdf)
+
+<use $HOME/Figures/images_20190212.pdf> [22])
+<$HOME/Figures/hmi_label_sunspots_20190124.pdf, id=180, 328.22626pt x 226.59656
 pt>
 File: $HOME/Figures/hmi_label_sunspots_20190124.pdf Graphic file (type pdf)
- <use $HOME/Figures/hmi_label_sunspots_20190124.pdf>
-<$HOME/Dropbox/Figures/lc.pdf, id=309, 578.16pt x 216.81pt>
+ <use $HOME/Figures/hmi_label_sunspots_20190124.pdf> [23 </home/users/laurel07/
+Figures/lc_20190218.pdf> </home/users/laurel07/Figures/lc_goes_20190124.pdf>] <
+$HOME/Dropbox/Figures/lc.pdf, id=200, 578.16pt x 216.81pt>
 File: $HOME/Dropbox/Figures/lc.pdf Graphic file (type pdf)
 
 <use $HOME/Dropbox/Figures/lc.pdf>
-<$HOME/Dropbox/Figures/Lightcurves/lc_log_20181128.pdf, id=310, 578.16pt x 216.
+<$HOME/Dropbox/Figures/Lightcurves/lc_log_20181128.pdf, id=201, 578.16pt x 216.
 81pt>
 File: $HOME/Dropbox/Figures/Lightcurves/lc_log_20181128.pdf Graphic file (type 
 pdf)
  <use $HOME/Dropbox/Figures/Lightcurves/lc_log_20181128.pdf>
-<$HOME/Figures/lc_goes_20190124.pdf, id=311, 578.16pt x 252.945pt>
 File: $HOME/Figures/lc_goes_20190124.pdf Graphic file (type pdf)
 
-<use $HOME/Figures/lc_goes_20190124.pdf> [21] [22 </home/users/laurel07/Dropbox
-/Figures/images.pdf>] [23 </home/users/laurel07/Figures/hmi_label_sunspots_2019
-0124.pdf>]
-<$HOME/Dropbox/Figures/Lightcurves/detrendedLC_20181202.pdf, id=351, 578.16pt x
+<use $HOME/Figures/lc_goes_20190124.pdf> [24 </home/users/laurel07/Figures/imag
+es_20190212.pdf>] [25 </home/users/laurel07/Figures/hmi_label_sunspots_20190124
+.pdf>]
+<$HOME/Dropbox/Figures/Lightcurves/detrendedLC_20181202.pdf, id=225, 578.16pt x
  180.675pt>
 File: $HOME/Dropbox/Figures/Lightcurves/detrendedLC_20181202.pdf Graphic file (
 type pdf)
  <use $HOME/Dropbox/Figures/Lightcurves/detrendedLC_20181202.pdf>
-[24 </home/users/laurel07/Dropbox/Figures/lc.pdf> </home/users/laurel07/Dropbox
-/Figures/Lightcurves/lc_log_20181128.pdf> </home/users/laurel07/Figures/lc_goes
-_20190124.pdf>]
-<$HOME/Dropbox/Figures/detrended_20181201.pdf, id=371, 578.16pt x 216.81pt>
+[26 </home/users/laurel07/Dropbox/Figures/lc.pdf> </home/users/laurel07/Dropbox
+/Figures/Lightcurves/lc_log_20181128.pdf>]
+LaTeX Font Info:    Try loading font information for T1+cmss on input line 77.
+
+(/usr/share/texmf/tex/latex/base/t1cmss.fd
+File: t1cmss.fd 1999/05/25 v2.5h Standard LaTeX font definitions
+)
+<$HOME/Dropbox/Figures/detrended_20181201.pdf, id=238, 578.16pt x 216.81pt>
 File: $HOME/Dropbox/Figures/detrended_20181201.pdf Graphic file (type pdf)
 
-<use $HOME/Dropbox/Figures/detrended_20181201.pdf> [25 </home/users/laurel07/Dr
-opbox/Figures/Lightcurves/detrendedLC_20181202.pdf> </home/users/laurel07/Dropb
-ox/Figures/detrended_20181201.pdf>]
-<$HOME/Dropbox/Figures/aia1600maps_before.pdf, id=389, 578.16pt x 246.1697pt>
+<use $HOME/Dropbox/Figures/detrended_20181201.pdf> (./table_bda.tex) [27 </home
+/users/laurel07/Dropbox/Figures/Lightcurves/detrendedLC_20181202.pdf> </home/us
+ers/laurel07/Dropbox/Figures/detrended_20181201.pdf>] [28]
+(../Article1/analysis.tex) [29] [30]
+<$HOME/Dropbox/Figures/aia1600maps_before.pdf, id=286, 578.16pt x 246.1697pt>
 File: $HOME/Dropbox/Figures/aia1600maps_before.pdf Graphic file (type pdf)
 
 <use $HOME/Dropbox/Figures/aia1600maps_before.pdf>
-<$HOME/Dropbox/Figures/aia1700maps_before.pdf, id=390, 578.16pt x 246.1697pt>
+<$HOME/Dropbox/Figures/aia1700maps_before.pdf, id=287, 578.16pt x 246.1697pt>
 File: $HOME/Dropbox/Figures/aia1700maps_before.pdf Graphic file (type pdf)
 
 <use $HOME/Dropbox/Figures/aia1700maps_before.pdf>
-<$HOME/Dropbox/Figures/lc_before.pdf, id=391, 578.16pt x 198.7425pt>
+<$HOME/Dropbox/Figures/lc_before.pdf, id=288, 578.16pt x 198.7425pt>
 File: $HOME/Dropbox/Figures/lc_before.pdf Graphic file (type pdf)
 
 <use $HOME/Dropbox/Figures/lc_before.pdf>
-<$HOME/Dropbox/Figures/aia1600maps_during.pdf, id=394, 578.16pt x 246.1697pt>
+<$HOME/Dropbox/Figures/aia1600maps_during.pdf, id=291, 578.16pt x 246.1697pt>
 File: $HOME/Dropbox/Figures/aia1600maps_during.pdf Graphic file (type pdf)
 
 <use $HOME/Dropbox/Figures/aia1600maps_during.pdf>
-<$HOME/Dropbox/Figures/aia1700maps_during.pdf, id=395, 578.16pt x 246.1697pt>
+<$HOME/Dropbox/Figures/aia1700maps_during.pdf, id=292, 578.16pt x 246.1697pt>
 File: $HOME/Dropbox/Figures/aia1700maps_during.pdf Graphic file (type pdf)
 
 <use $HOME/Dropbox/Figures/aia1700maps_during.pdf>
-<$HOME/Dropbox/Figures/lc_during.pdf, id=396, 578.16pt x 198.7425pt>
+<$HOME/Dropbox/Figures/lc_during.pdf, id=293, 578.16pt x 198.7425pt>
 File: $HOME/Dropbox/Figures/lc_during.pdf Graphic file (type pdf)
 
 <use $HOME/Dropbox/Figures/lc_during.pdf>
-<$HOME/Dropbox/Figures/aia1600maps_after1.pdf, id=397, 578.16pt x 246.1697pt>
+<$HOME/Dropbox/Figures/aia1600maps_after1.pdf, id=294, 578.16pt x 246.1697pt>
 File: $HOME/Dropbox/Figures/aia1600maps_after1.pdf Graphic file (type pdf)
 
 <use $HOME/Dropbox/Figures/aia1600maps_after1.pdf>
-<$HOME/Dropbox/Figures/aia1700maps_after1.pdf, id=398, 578.16pt x 246.1697pt>
+<$HOME/Dropbox/Figures/aia1700maps_after1.pdf, id=295, 578.16pt x 246.1697pt>
 File: $HOME/Dropbox/Figures/aia1700maps_after1.pdf Graphic file (type pdf)
 
 <use $HOME/Dropbox/Figures/aia1700maps_after1.pdf>
-<$HOME/Dropbox/Figures/lc_after1.pdf, id=399, 578.16pt x 198.7425pt>
+<$HOME/Dropbox/Figures/lc_after1.pdf, id=296, 578.16pt x 198.7425pt>
 File: $HOME/Dropbox/Figures/lc_after1.pdf Graphic file (type pdf)
 
 <use $HOME/Dropbox/Figures/lc_after1.pdf>
-<$HOME/Dropbox/Figures/aia1600maps_after2.pdf, id=400, 578.16pt x 246.1697pt>
+<$HOME/Dropbox/Figures/aia1600maps_after2.pdf, id=297, 578.16pt x 246.1697pt>
 File: $HOME/Dropbox/Figures/aia1600maps_after2.pdf Graphic file (type pdf)
 
 <use $HOME/Dropbox/Figures/aia1600maps_after2.pdf>
-<$HOME/Dropbox/Figures/aia1700maps_after2.pdf, id=401, 578.16pt x 246.1697pt>
+<$HOME/Dropbox/Figures/aia1700maps_after2.pdf, id=298, 578.16pt x 246.1697pt>
 File: $HOME/Dropbox/Figures/aia1700maps_after2.pdf Graphic file (type pdf)
 
 <use $HOME/Dropbox/Figures/aia1700maps_after2.pdf>
-<$HOME/Dropbox/Figures/lc_after2.pdf, id=402, 578.16pt x 198.7425pt>
+<$HOME/Dropbox/Figures/lc_after2.pdf, id=299, 578.16pt x 198.7425pt>
 File: $HOME/Dropbox/Figures/lc_after2.pdf Graphic file (type pdf)
 
 <use $HOME/Dropbox/Figures/lc_after2.pdf>
-<$HOME/Dropbox/Figures/aia1600big_image.pdf, id=403, 289.08pt x 224.33812pt>
+<$HOME/Dropbox/Figures/aia1600big_image.pdf, id=300, 289.08pt x 224.33812pt>
 File: $HOME/Dropbox/Figures/aia1600big_image.pdf Graphic file (type pdf)
 
 <use $HOME/Dropbox/Figures/aia1600big_image.pdf>
-<$HOME/Dropbox/Figures/aia1700big_image.pdf, id=404, 289.08pt x 224.33812pt>
+<$HOME/Dropbox/Figures/aia1700big_image.pdf, id=301, 289.08pt x 224.33812pt>
 File: $HOME/Dropbox/Figures/aia1700big_image.pdf Graphic file (type pdf)
 
 <use $HOME/Dropbox/Figures/aia1700big_image.pdf>
-<$HOME/Dropbox/Figures/aia1600big_map.pdf, id=405, 289.08pt x 224.33812pt>
+<$HOME/Dropbox/Figures/aia1600big_map.pdf, id=302, 289.08pt x 224.33812pt>
 File: $HOME/Dropbox/Figures/aia1600big_map.pdf Graphic file (type pdf)
 
 <use $HOME/Dropbox/Figures/aia1600big_map.pdf>
-<$HOME/Dropbox/Figures/aia1700big_map.pdf, id=406, 289.08pt x 224.33812pt>
+<$HOME/Dropbox/Figures/aia1700big_map.pdf, id=303, 289.08pt x 224.33812pt>
 File: $HOME/Dropbox/Figures/aia1700big_map.pdf Graphic file (type pdf)
 
 <use $HOME/Dropbox/Figures/aia1700big_map.pdf>
-<$HOME/Dropbox/Figures/wa.pdf, id=407, 542.025pt x 650.43pt>
+<$HOME/Dropbox/Figures/wa.pdf, id=304, 542.025pt x 650.43pt>
 File: $HOME/Dropbox/Figures/wa.pdf Graphic file (type pdf)
 
 <use $HOME/Dropbox/Figures/wa.pdf>
-<$HOME/Dropbox/Figures/time-3minpower_flux.pdf, id=408, 578.16pt x 216.81pt>
+<$HOME/Dropbox/Figures/time-3minpower_flux.pdf, id=305, 578.16pt x 216.81pt>
 File: $HOME/Dropbox/Figures/time-3minpower_flux.pdf Graphic file (type pdf)
 
 <use $HOME/Dropbox/Figures/time-3minpower_flux.pdf>
-<$HOME/Dropbox/Figures/time-3minpower_maps.pdf, id=409, 578.16pt x 216.81pt>
+<$HOME/Dropbox/Figures/time-3minpower_maps.pdf, id=306, 578.16pt x 216.81pt>
 File: $HOME/Dropbox/Figures/time-3minpower_maps.pdf Graphic file (type pdf)
 
 <use $HOME/Dropbox/Figures/time-3minpower_maps.pdf>
-<$HOME/Dropbox/Figures/preflare.pdf, id=410, 433.62pt x 316.18124pt>
+<$HOME/Dropbox/Figures/preflare.pdf, id=307, 433.62pt x 316.18124pt>
 File: $HOME/Dropbox/Figures/preflare.pdf Graphic file (type pdf)
 
 <use $HOME/Dropbox/Figures/preflare.pdf>
-<$HOME/Dropbox/Figures/postflare.pdf, id=411, 433.62pt x 370.38374pt>
+<$HOME/Dropbox/Figures/postflare.pdf, id=308, 433.62pt x 370.38374pt>
 File: $HOME/Dropbox/Figures/postflare.pdf Graphic file (type pdf)
 
-<use $HOME/Dropbox/Figures/postflare.pdf> [26] [27 </home/users/laurel07/Dropbo
-x/Figures/aia1600maps_before.pdf> </home/users/laurel07/Dropbox/Figures/aia1700
-maps_before.pdf> </home/users/laurel07/Dropbox/Figures/lc_before.pdf>] [28 </ho
-me/users/laurel07/Dropbox/Figures/aia1600maps_during.pdf> </home/users/laurel07
-/Dropbox/Figures/aia1700maps_during.pdf> </home/users/laurel07/Dropbox/Figures/
-lc_during.pdf>] [29 </home/users/laurel07/Dropbox/Figures/aia1600maps_after1.pd
-f> </home/users/laurel07/Dropbox/Figures/aia1700maps_after1.pdf> </home/users/l
-aurel07/Dropbox/Figures/lc_after1.pdf>] [30 </home/users/laurel07/Dropbox/Figur
-es/aia1600maps_after2.pdf> </home/users/laurel07/Dropbox/Figures/aia1700maps_af
-ter2.pdf> </home/users/laurel07/Dropbox/Figures/lc_after2.pdf>] [31 </home/user
-s/laurel07/Dropbox/Figures/aia1600big_image.pdf> </home/users/laurel07/Dropbox/
-Figures/aia1700big_image.pdf> </home/users/laurel07/Dropbox/Figures/aia1600big_
-map.pdf> </home/users/laurel07/Dropbox/Figures/aia1700big_map.pdf>] [32 </home/
-users/laurel07/Dropbox/Figures/wa.pdf>] [33 </home/users/laurel07/Dropbox/Figur
-es/time-3minpower_flux.pdf> </home/users/laurel07/Dropbox/Figures/time-3minpowe
-r_maps.pdf>]) [34
-\@writefile{toc}{\contentsline {subsection}{Conclusions}{34}{figure.13}}
- </home/users/laurel07/Dropbox/Figures/preflare.pdf> </home/users/laurel07/Drop
-box/Figures/postflare.pdf>]
-\openout2 = `appendix.aux'.
-
- (./appendix.tex (./cutoff.tex [35] [36] [37]
-[38]) [39] [40] [41]
-
-LaTeX Warning: Reference `norm_vs_not' on page 42 undefined on input line 210.
-
-<$HOME/Dropbox/Figures/norm_vs_not.pdf, id=749, 542.025pt x 578.16pt>
-File: $HOME/Dropbox/Figures/norm_vs_not.pdf Graphic file (type pdf)
-
-<use $HOME/Dropbox/Figures/norm_vs_not.pdf>) [42
-\@writefile{toc}{\contentsline {subsection}{Thermal and non-thermal energy}{42}
-{Item.16}}
-\@writefile{toc}{\contentsline {section}{Normalization of Power Spectrum}{42}{e
-quation.18}}
-] [43
-\newlabel{norm_vs_not}{{14}{43}{\thesection \relax \relax }{figure.14}{}}
- </home/users/laurel07/Dropbox/Figures/norm_vs_not.pdf>] (./Dissertation.bbl
-[44]) [45]
+<use $HOME/Dropbox/Figures/postflare.pdf> [31 </home/users/laurel07/Dropbox/Fig
+ures/aia1600maps_before.pdf> </home/users/laurel07/Dropbox/Figures/aia1700maps_
+before.pdf> </home/users/laurel07/Dropbox/Figures/lc_before.pdf>] [32 </home/us
+ers/laurel07/Dropbox/Figures/aia1600maps_during.pdf> </home/users/laurel07/Drop
+box/Figures/aia1700maps_during.pdf> </home/users/laurel07/Dropbox/Figures/lc_du
+ring.pdf>] [33 </home/users/laurel07/Dropbox/Figures/aia1600maps_after1.pdf> </
+home/users/laurel07/Dropbox/Figures/aia1700maps_after1.pdf> </home/users/laurel
+07/Dropbox/Figures/lc_after1.pdf>] [34 </home/users/laurel07/Dropbox/Figures/ai
+a1600maps_after2.pdf> </home/users/laurel07/Dropbox/Figures/aia1700maps_after2.
+pdf> </home/users/laurel07/Dropbox/Figures/lc_after2.pdf>] [35 </home/users/lau
+rel07/Dropbox/Figures/aia1600big_image.pdf> </home/users/laurel07/Dropbox/Figur
+es/aia1700big_image.pdf> </home/users/laurel07/Dropbox/Figures/aia1600big_map.p
+df> </home/users/laurel07/Dropbox/Figures/aia1700big_map.pdf>] [36 </home/users
+/laurel07/Dropbox/Figures/wa.pdf>] [37 </home/users/laurel07/Dropbox/Figures/ti
+me-3minpower_flux.pdf> </home/users/laurel07/Dropbox/Figures/time-3minpower_map
+s.pdf>] [38 </home/users/laurel07/Dropbox/Figures/preflare.pdf> </home/users/la
+urel07/Dropbox/Figures/postflare.pdf>] (../Article1/conclusions.tex)) [39
+\@writefile{toc}{\contentsline {section}{Conclusions}{39}{figure.13}}
+] (./Dissertation.bblpdfTeX warning (ext4): destination with the same identifie
+r (name{page.27}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.175 ...m[{Priest \& Longcope(2017)}]{Priest2017}
+                                                   [27])pdfTeX warning (ext4): 
+destination with the same identifier (name{page.28}) has been already used, dup
+licate ignored
+<to be read again> 
+                   \relax 
+l.280 
+       [28]
 
 Package natbib Warning: There were undefined citations.
 
@@ -1099,44 +954,126 @@ LaTeX Font Warning: Size substitutions with differences
 
 LaTeX Warning: There were undefined references.
 
+
+LaTeX Warning: There were multiply-defined labels.
+
  ) 
 Here is how much of TeX's memory you used:
- 10928 strings out of 256214
- 160472 string characters out of 1916999
- 286738 words of memory out of 1500000
- 13707 multiletter control sequences out of 10000+200000
- 28006 words of font info for 72 fonts, out of 1200000 for 2000
+ 11163 strings out of 256214
+ 164825 string characters out of 1916999
+ 294679 words of memory out of 1500000
+ 13965 multiletter control sequences out of 10000+200000
+ 24266 words of font info for 61 fonts, out of 1200000 for 2000
  645 hyphenation exceptions out of 8191
- 45i,10n,38p,2104b,553s stack positions out of 5000i,500n,6000p,200000b,15000s
- </home/users/laurel07/.texlive2007/texmf-var/fonts/pk/ljfour/jknappen/ec/ecb
-x1095.600pk> </home/users/laurel07/.texlive2007/texmf-var/fonts/pk/ljfour/jknap
-pen/ec/ectt1095.600pk> </home/users/laurel07/.texlive2007/texmf-var/fonts/pk/lj
-four/jknappen/ec/ecrm1095.600pk> </home/users/laurel07/.texlive2007/texmf-var/f
-onts/pk/ljfour/jknappen/ec/ecti1095.600pk> </home/users/laurel07/.texlive2007/t
-exmf-var/fonts/pk/ljfour/jknappen/ec/ecsx1095.600pk> </home/users/laurel07/.tex
-live2007/texmf-var/fonts/pk/ljfour/jknappen/ec/ecsi1000.600pk> </home/users/lau
-rel07/.texlive2007/texmf-var/fonts/pk/ljfour/jknappen/ec/ecss1095.600pk> </home
-/users/laurel07/.texlive2007/texmf-var/fonts/pk/ljfour/jknappen/ec/ecbi1200.600
-pk> </home/users/laurel07/.texlive2007/texmf-var/fonts/pk/ljfour/jknappen/ec/ec
-bx1200.600pk> </home/users/laurel07/.texlive2007/texmf-var/fonts/pk/ljfour/jkna
-ppen/ec/ecti1200.600pk> </home/users/laurel07/.texlive2007/texmf-var/fonts/pk/l
-jfour/jknappen/ec/ecxc1728.600pk> </home/users/laurel07/.texlive2007/texmf-var/
-fonts/pk/ljfour/jknappen/ec/ecrm1200.600pk> </home/users/laurel07/.texlive2007/
-texmf-var/fonts/pk/ljfour/jknappen/ec/ecrm1440.600pk> </home/users/laurel07/.te
-xlive2007/texmf-var/fonts/pk/ljfour/jknappen/ec/ecrm1728.600pk> </home/users/la
-urel07/.texlive2007/texmf-var/fonts/pk/ljfour/jknappen/ec/eccc2074.600pk></usr/
-share/texmf/fonts/type1/bluesky/cm/cmex10.pfb></usr/share/texmf/fonts/type1/blu
-esky/cm/cmmi10.pfb></usr/share/texmf/fonts/type1/bluesky/cm/cmmi12.pfb></usr/sh
-are/texmf/fonts/type1/bluesky/cm/cmmi6.pfb></usr/share/texmf/fonts/type1/bluesk
-y/cm/cmmi8.pfb></usr/share/texmf/fonts/type1/bluesky/cm/cmr10.pfb></usr/share/t
-exmf/fonts/type1/bluesky/cm/cmr12.pfb></usr/share/texmf/fonts/type1/bluesky/cm/
-cmr6.pfb></usr/share/texmf/fonts/type1/bluesky/cm/cmr8.pfb></usr/share/texmf/fo
-nts/type1/bluesky/cm/cmsy10.pfb></usr/share/texmf/fonts/type1/bluesky/cm/cmsy6.
-pfb></usr/share/texmf/fonts/type1/bluesky/cm/cmsy8.pfb></usr/share/texmf/fonts/
-type1/bluesky/ams/msam10.pfb>
-Output written on Dissertation.pdf (47 pages, 13912528 bytes).
+ 45i,11n,38p,2104b,551s stack positions out of 5000i,500n,6000p,200000b,15000s
+pdfTeX warning (dest): name{subsubsection.7.3.3} has been referenced but does
+ not exist, replaced by a fixed one
+
+pdfTeX warning (dest): name{subsubsection.7.3.2} has been referenced but does n
+ot exist, replaced by a fixed one
+
+pdfTeX warning (dest): name{subsubsection.7.3.1} has been referenced but does n
+ot exist, replaced by a fixed one
+
+pdfTeX warning (dest): name{subsection.7.3} has been referenced but does not ex
+ist, replaced by a fixed one
+
+pdfTeX warning (dest): name{subsubsection.7.2.1} has been referenced but does n
+ot exist, replaced by a fixed one
+
+pdfTeX warning (dest): name{subsection.7.2} has been referenced but does not ex
+ist, replaced by a fixed one
+
+pdfTeX warning (dest): name{subsection.7.1} has been referenced but does not ex
+ist, replaced by a fixed one
+
+pdfTeX warning (dest): name{section.7} has been referenced but does not exist, 
+replaced by a fixed one
+
+pdfTeX warning (dest): name{subsection.5.2} has been referenced but does not ex
+ist, replaced by a fixed one
+
+pdfTeX warning (dest): name{subsection.5.1} has been referenced but does not ex
+ist, replaced by a fixed one
+
+pdfTeX warning (dest): name{section.5} has been referenced but does not exist, 
+replaced by a fixed one
+
+pdfTeX warning (dest): name{subsection.4.1} has been referenced but does not ex
+ist, replaced by a fixed one
+
+pdfTeX warning (dest): name{section.4} has been referenced but does not exist, 
+replaced by a fixed one
+
+pdfTeX warning (dest): name{subsubsection.3.3.2} has been referenced but does n
+ot exist, replaced by a fixed one
+
+pdfTeX warning (dest): name{subsubsection.3.3.1} has been referenced but does n
+ot exist, replaced by a fixed one
+
+pdfTeX warning (dest): name{subsection.3.3} has been referenced but does not ex
+ist, replaced by a fixed one
+
+pdfTeX warning (dest): name{subsubsection.3.2.3} has been referenced but does n
+ot exist, replaced by a fixed one
+
+pdfTeX warning (dest): name{subsubsection.3.2.2} has been referenced but does n
+ot exist, replaced by a fixed one
+
+pdfTeX warning (dest): name{subsubsection.3.2.1} has been referenced but does n
+ot exist, replaced by a fixed one
+
+pdfTeX warning (dest): name{subsection.3.2} has been referenced but does not ex
+ist, replaced by a fixed one
+
+pdfTeX warning (dest): name{subsection.3.1} has been referenced but does not ex
+ist, replaced by a fixed one
+
+pdfTeX warning (dest): name{section.3} has been referenced but does not exist, 
+replaced by a fixed one
+
+pdfTeX warning (dest): name{subsubsection.2.2.2} has been referenced but does n
+ot exist, replaced by a fixed one
+
+pdfTeX warning (dest): name{subsubsection.2.2.1} has been referenced but does n
+ot exist, replaced by a fixed one
+
+pdfTeX warning (dest): name{subsection.2.2} has been referenced but does not ex
+ist, replaced by a fixed one
+
+pdfTeX warning (dest): name{subsection.2.1} has been referenced but does not ex
+ist, replaced by a fixed one
+
+pdfTeX warning (dest): name{section.2} has been referenced but does not exist, 
+replaced by a fixed one
+
+pdfTeX warning (dest): name{section.1} has been referenced but does not exist, 
+replaced by a fixed one
+
+ </home/users/laurel07/.texlive2007/texmf-var/fonts/pk/ljfour/jknappen/ec/ecsi1
+000.600pk> </home/users/laurel07/.texlive2007/texmf-var/fonts/pk/ljfour/jknappe
+n/ec/ecss1095.600pk> </home/users/laurel07/.texlive2007/texmf-var/fonts/pk/ljfo
+ur/jknappen/ec/ecti1095.600pk> </home/users/laurel07/.texlive2007/texmf-var/fon
+ts/pk/ljfour/jknappen/ec/ecbx1095.600pk> </home/users/laurel07/.texlive2007/tex
+mf-var/fonts/pk/ljfour/jknappen/ec/ecrm1095.600pk> </home/users/laurel07/.texli
+ve2007/texmf-var/fonts/pk/ljfour/jknappen/ec/ecbx1200.600pk> </home/users/laure
+l07/.texlive2007/texmf-var/fonts/pk/ljfour/jknappen/ec/ecxc1728.600pk> </home/u
+sers/laurel07/.texlive2007/texmf-var/fonts/pk/ljfour/jknappen/ec/ecti1200.600pk
+> </home/users/laurel07/.texlive2007/texmf-var/fonts/pk/ljfour/jknappen/ec/ecxc
+1440.600pk> </home/users/laurel07/.texlive2007/texmf-var/fonts/pk/ljfour/jknapp
+en/ec/ecrm1200.600pk> </home/users/laurel07/.texlive2007/texmf-var/fonts/pk/ljf
+our/jknappen/ec/ecrm1440.600pk> </home/users/laurel07/.texlive2007/texmf-var/fo
+nts/pk/ljfour/jknappen/ec/ecrm1728.600pk> </home/users/laurel07/.texlive2007/te
+xmf-var/fonts/pk/ljfour/jknappen/ec/eccc2074.600pk></usr/share/texmf/fonts/type
+1/bluesky/cm/cmmi10.pfb></usr/share/texmf/fonts/type1/bluesky/cm/cmmi12.pfb></u
+sr/share/texmf/fonts/type1/bluesky/cm/cmmi6.pfb></usr/share/texmf/fonts/type1/b
+luesky/cm/cmmi8.pfb></usr/share/texmf/fonts/type1/bluesky/cm/cmr10.pfb></usr/sh
+are/texmf/fonts/type1/bluesky/cm/cmr12.pfb></usr/share/texmf/fonts/type1/bluesk
+y/cm/cmr8.pfb></usr/share/texmf/fonts/type1/bluesky/cm/cmsy10.pfb></usr/share/t
+exmf/fonts/type1/bluesky/cm/cmsy8.pfb>
+Output written on Dissertation.pdf (26 pages, 11537381 bytes).
 PDF statistics:
- 1872 PDF objects out of 2073 (max. 8388607)
- 137 named destinations out of 1000 (max. 131072)
+ 1121 PDF objects out of 1200 (max. 8388607)
+ 123 named destinations out of 1000 (max. 131072)
  162 words of extra memory for PDF output out of 10000 (max. 10000000)
 

@@ -1,43 +1,44 @@
 \tocdepth@munge 
 \tocdepth@restore 
-\contentsline {section}{Introduction}{1}{section*.1}
-\contentsline {paragraph}{``Overview'' from proposal:}{1}{section*.1}
+\contentsline {section}{\numberline {1}Introduction}{1}{section.1}
+\contentsline {paragraph}{``Overview'' from proposal:}{1}{section.1}
 \contentsline {paragraph}{single\_page\_freewriting.gdoc}{3}{Item.7}
-\contentsline {section}{The solar chromosphere}{5}{Item.13}
-\contentsline {subsection}{Magnetic field, structure, and the \textit {plasma-$\beta $}}{6}{Item.13}
-\contentsline {subsection}{Challenges in observing the chromosphere}{7}{equation.1}
-\contentsline {section}{3-minute oscillations}{8}{equation.1}
-\contentsline {subsection}{History of 3mOs}{8}{equation.1}
-\contentsline {subsection}{Observations of 3mOs}{9}{equation.1}
-\contentsline {subsubsection}{Intensity vs Velocity}{9}{equation.1}
-\contentsline {subsubsection}{Location in chromosphere: (x/y)}{9}{equation.1}
-\contentsline {paragraph}{Network/Internetwork}{9}{equation.1}
-\contentsline {paragraph}{Active Regions}{9}{equation.1}
-\contentsline {subparagraph}{Umbra}{9}{equation.1}
-\contentsline {subparagraph}{Penumbra}{9}{equation.1}
-\contentsline {subsubsection}{Location in chromosphere: height (z)}{9}{equation.1}
-\contentsline {subsection}{Physical mechanism that generates the 3mOs}{9}{equation.1}
-\contentsline {subsubsection}{Slow, propagating magnetoacoustic waves from the photosphere}{11}{equation.3}
-\contentsline {subsubsection}{Natural response of chromosphere at the acoustic cutoff frequency}{12}{equation.3}
-\contentsline {section}{The flaring chromosphere}{14}{equation.3}
-\contentsline {paragraph}{Rocket analogy}{14}{equation.3}
-\contentsline {subsection}{Flare emission and evolution}{14}{equation.3}
-\contentsline {section}{The Solar Dynamics Observatory (SDO)}{19}{equation.3}
-\contentsline {subsection}{The Atmospheric Imaging Assembly (AIA)}{19}{equation.3}
-\contentsline {paragraph}{Ambiguity in formation height}{19}{equation.3}
-\contentsline {subsection}{The Helioseismic and Magnetic Imager (HMI)}{19}{equation.3}
-\contentsline {section}{Enhanced chromospheric 3-minute oscillatory power associated with the 2011-February-15 X2.2 flare}{21}{equation.3}
-\contentsline {subsection}{Introduction}{21}{equation.3}
-\contentsline {subsection}{Observations and data reduction}{21}{equation.3}
-\contentsline {subsection}{Analysis}{26}{figure.6}
-\contentsline {subsection}{Results and discussion}{26}{figure.6}
-\contentsline {section}{Appendix: Physics background}{35}{figure.13}
-\contentsline {subsection}{Waves}{35}{figure.13}
-\contentsline {subsection}{The acoustic cutoff frequency}{36}{figure.13}
-\contentsline {subsubsection}{Derivation of the cutoff frequency}{38}{figure.13}
-\contentsline {subsection}{Coronal seismology}{40}{equation.17}
-\contentsline {paragraph}{Ideal MHD}{40}{equation.17}
-\contentsline {paragraph}{Characteristic speeds}{40}{equation.17}
-\contentsline {subsubsection}{Kink waves}{41}{Item.16}
-\contentsline {paragraph}{Speed}{41}{Item.16}
-\contentsline {paragraph}{Period}{41}{Item.16}
+\contentsline {section}{\numberline {2}The solar chromosphere}{5}{section.2}
+\contentsline {subsection}{\numberline {2.1}Magnetic field, structure, and the \textit {plasma-$\beta $}}{6}{subsection.2.1}
+\contentsline {subsection}{\numberline {2.2}Observing the chromosphere}{7}{subsection.2.2}
+\contentsline {subsubsection}{\numberline {2.2.1}Characteristic spectral lines/emission}{7}{subsubsection.2.2.1}
+\contentsline {subsubsection}{\numberline {2.2.2}Challenges}{7}{subsubsection.2.2.2}
+\contentsline {section}{\numberline {3}3-minute oscillations}{8}{section.3}
+\contentsline {subsection}{\numberline {3.1}History of 3mOs}{8}{subsection.3.1}
+\contentsline {subsection}{\numberline {3.2}Observations of 3mOs}{9}{subsection.3.2}
+\contentsline {subsubsection}{\numberline {3.2.1}Intensity vs Velocity}{9}{subsubsection.3.2.1}
+\contentsline {subsubsection}{\numberline {3.2.2}Location in chromosphere: (x/y)}{9}{subsubsection.3.2.2}
+\contentsline {paragraph}{Network/Internetwork}{9}{subsubsection.3.2.2}
+\contentsline {paragraph}{Active Regions}{9}{subsubsection.3.2.2}
+\contentsline {subparagraph}{Umbra}{9}{subsubsection.3.2.2}
+\contentsline {subparagraph}{Penumbra}{9}{subsubsection.3.2.2}
+\contentsline {subsubsection}{\numberline {3.2.3}Location in chromosphere: height (z)}{9}{subsubsection.3.2.3}
+\contentsline {subsection}{\numberline {3.3}Physical mechanism that generates the 3mOs}{9}{subsection.3.3}
+\contentsline {subsubsection}{\numberline {3.3.1}Slow, propagating magnetoacoustic waves from the photosphere}{11}{subsubsection.3.3.1}
+\contentsline {subsubsection}{\numberline {3.3.2}Natural response of chromosphere at the acoustic cutoff frequency}{12}{subsubsection.3.3.2}
+\contentsline {section}{\numberline {4}The flaring chromosphere}{13}{section.4}
+\contentsline {paragraph}{Rocket analogy}{13}{section.4}
+\contentsline {subsection}{\numberline {4.1}Flare emission and evolution}{13}{subsection.4.1}
+\contentsline {section}{\numberline {5}The Solar Dynamics Observatory (SDO)}{18}{section.5}
+\contentsline {subsection}{\numberline {5.1}The Atmospheric Imaging Assembly (AIA)}{18}{subsection.5.1}
+\contentsline {paragraph}{Ambiguity in formation height}{18}{subsection.5.1}
+\contentsline {subsection}{\numberline {5.2}The Helioseismic and Magnetic Imager (HMI)}{18}{subsection.5.2}
+\contentsline {section}{Introduction}{19}{section*.1}
+\contentsline {section}{Observations and data reduction}{22}{section*.1}
+\contentsline {section}{Analysis}{29}{table.6.1}
+\contentsline {section}{Results and discussion}{31}{table.6.1}
+\contentsline {section}{\numberline {7}Appendix: Physics background}{21}{section.7}
+\contentsline {subsection}{\numberline {7.1}Waves}{21}{subsection.7.1}
+\contentsline {subsection}{\numberline {7.2}The acoustic cutoff frequency}{21}{subsection.7.2}
+\contentsline {subsubsection}{\numberline {7.2.1}Derivation of the cutoff frequency}{22}{subsubsection.7.2.1}
+\contentsline {subsection}{\numberline {7.3}Coronal seismology}{24}{subsection.7.3}
+\contentsline {subsubsection}{\numberline {7.3.1}Ideal MHD}{24}{subsubsection.7.3.1}
+\contentsline {subsubsection}{\numberline {7.3.2}Characteristic speeds}{25}{subsubsection.7.3.2}
+\contentsline {subsubsection}{\numberline {7.3.3}Kink waves}{26}{subsubsection.7.3.3}
+\contentsline {paragraph}{Speed}{26}{subsubsection.7.3.3}
+\contentsline {paragraph}{Period}{26}{subsubsection.7.3.3}

@@ -12,6 +12,8 @@
 \usepackage{amsmath} % needed for use of \cfrac
 \usepackage{xcolor}
 
+\usepackage{mathtools}
+
 \usepackage{natbib}
 \bibliographystyle{aasjournal}
 % ---}
@@ -40,9 +42,9 @@
 %\titleformat{<command>}
 %   [<shape>]{<format>}{<label>}{<sep>}{<before-code>}[<after-code>]
 \titleformat{\section}
-    {\fontsize{16}{14}\selectfont\centering\bfseries\scshape}{\thesection.}{1em}{}
+    {\fontsize{14}{12}\selectfont\centering\bfseries\scshape}{\thesection.}{1em}{}
 \titleformat{\subsection}
-    {\fontsize{13}{15}\selectfont\centering\bfseries}{\thesubsection.}{1em}{}
+    {\fontsize{12}{14}\selectfont\centering\bfseries}{\thesubsection.}{1em}{}
 \titleformat{\subsubsection}
     {\centering\bfseries\itshape}{\thesubsubsection.}{1em}{}
 \titleformat{\paragraph}
@@ -53,14 +55,15 @@
     %[\vspace{-1.0em}]
     [\vspace{0.5\parskip}]
 
-%\newcounter{paranum} % Counter for paragraphs
-%\titleformat{\paragraph}
-%    {\centering\itshape}
-%    {\thesubsubsection.\refstepcounter{paranum}\theparanum.}{1em}{\vspace{-1.0em}}
-%\titleformat{\subparagraph}
-%    {\centering\itshape}
-%    {}{1em}{\vspace{-1.0em}}
-\setcounter{secnumdepth}{0}
+\newcounter{paranum} % Counter for paragraphs
+\titleformat{\paragraph}
+    {\centering\itshape}
+    {\thesubsubsection.\refstepcounter{paranum}\theparanum.}{1em}{\vspace{-1.0em}}
+\titleformat{\subparagraph}
+    {\centering\itshape}
+    {}{1em}{\vspace{-1.0em}}
+\setcounter{secnumdepth}{0} % -- No numbering section titles
+%\setcounter{secnumdepth}{3}
 % ---}
 
 % Lists % {---
@@ -86,7 +89,7 @@
 \definecolor{purple}{rgb}{0.44, 0.16, 0.39}
 \definecolor{blue}{rgb}{0.16, 0.32, 0.75}
 \definecolor{green}{rgb}{0.0, 0.42, 0.24}
-% Add this back later
+
 \usepackage{comment}
 %\includecomment{mycomment}
 %\excludecomment{mycomment}
@@ -128,8 +131,16 @@
     {\small\sffamily\textcolor{blue}{#2}}
     {\footnotesize\sffamily\color{gray}\textit{#1}}
 }
+% Version from article1.tex:
+%\newcommand{\mynote}[1]{
+%    {\sffamily\small\color{red}#1}
+%}
 
 \newcommand{\mytask}[2][date]{{\small\sffamily\textcolor{bred}{$\Box$ \Square #1}}}
+
+\newcommand{\correction}[1]{
+    \textcolor{blue!60!black}{#1}
+}
 
 
 % ---}
@@ -141,11 +152,11 @@
 
 %% Preserves full TOC, page #s, etc.
 \includeonly{
-    introduction,
-    background,
-    methods,
+    %introduction,
+    %background,
+    %methods,
     phase1,
-    appendix
+    %appendix
 }
 
 % Hyperlinks % {---
@@ -215,8 +226,7 @@
 \setlength{\marginparsep}{0.30in}
 
 \pagenumbering{arabic}
-%\pagenumbering{gobble}
-% Why did I remove page numbers?
+%\pagenumbering{gobble} % Why did I remove page numbers?
 
 % ---}
 %% Background for margin notes  {---
