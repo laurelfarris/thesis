@@ -2,24 +2,13 @@
 \expandafter\ifx\csname natexlab\endcsname\relax\def\natexlab#1{#1}\fi
 \providecommand{\url}[1]{\href{#1}{#1}}
 \providecommand{\dodoi}[1]{doi:~\href{http://doi.org/#1}{\nolinkurl{#1}}}
-\providecommand{\doeprint}[1]{\href{http://ascl.net/#1}{\nolinkurl{http://ascl%
-.net/#1}}}
-\providecommand{\doarXiv}[1]{\href{https://arxiv.org/abs/#1}{\nolinkurl{https:%
-//arxiv.org/abs/#1}}}
-
-\bibitem[{Awasthi {et~al.}(2018)Awasthi, Rudawy, Falewicz, Berlicki, \&
-  Liu}]{Awasthi2018}
-Awasthi, A.~K., Rudawy, P., Falewicz, R., Berlicki, A., \& Liu, R. 2018.
-\newblock \doarXiv{1804.02632}
+\providecommand{\doeprint}[1]{\href{http://ascl.net/#1}{\nolinkurl{http://ascl.net/#1}}}
+\providecommand{\doarXiv}[1]{\href{https://arxiv.org/abs/#1}{\nolinkurl{https://arxiv.org/abs/#1}}}
 
 \bibitem[{Battaglia {et~al.}(2015)Battaglia, Kleint, Krucker, \&
   Graham}]{Battaglia2015}
 Battaglia, M., Kleint, L., Krucker, S., \& Graham, D. 2015, Astrophys. J., 813,
   113, \dodoi{10.1088/0004-637X/813/2/113}
-
-\bibitem[{Beckers \& Schultz(1972)}]{Beckers1972}
-Beckers, J.~M., \& Schultz, R.~B. 1972, Sol. Phys., 27, 61,
-  \dodoi{10.1007/BF00151770}
 
 \bibitem[{Beckers \& Tallant(1969)}]{Beckers1969}
 Beckers, J.~M., \& Tallant, P.~E. 1969, Sol. Phys., 7, 351,
@@ -34,10 +23,6 @@ Boerner, P., Edwards, C., Lemen, J., {et~al.} 2012, Sol. Dyn. Obs., 9781461436,
 \bibitem[{Bogdan \& Judge(2006)}]{Bogdan2006}
 Bogdan, T.~J., \& Judge, P.~G. 2006, Philos. Trans. R. Soc., 364, 313,
   \dodoi{10.1098/rsta.2005.1701}
-
-\bibitem[{Brosius \& Daw(2015)}]{Brosius2015}
-Brosius, J.~W., \& Daw, A.~N. 2015, Astrophys. J., 810,
-  \dodoi{10.1088/0004-637X/810/1/45}
 
 \bibitem[{Brosius {et~al.}(2016)Brosius, Daw, \& Inglis}]{Brosius2016}
 Brosius, J.~W., Daw, A.~N., \& Inglis, A.~R. 2016, Astrophys. J., 830, 101,
@@ -61,20 +46,6 @@ Chae, J., \& Goode, P.~R. 2015, Astrophys. J., 808, 118,
   Walsh}]{DeMoortel2000}
 {De Moortel}, I., Ireland, J., \& Walsh, R. 2000, Astron. Astrophys., 355, L23,
   \dodoi{10.1063/1.1324943}
-
-\bibitem[{{De Pontieu} {et~al.}(2014){De Pontieu}, Title, Lemen, Kushner, Akin,
-  Allard, Berger, Boerner, Cheung, Chou, Drake, Duncan, Freeland, Heyman,
-  Hoffman, Hurlburt, Lindgren, Mathur, Rehse, Sabolish, Seguin, Schrijver,
-  Tarbell, W{\"{u}}lser, Wolfson, Yanari, Mudge, Nguyen-Phuc, Timmons, van
-  Bezooijen, Weingrod, Brookner, Butcher, Dougherty, Eder, Knagenhjelm, Larsen,
-  Mansir, Phan, Boyle, Cheimets, DeLuca, Golub, Gates, Hertz, McKillop, Park,
-  Perry, Podgorski, Reeves, Saar, Testa, Tian, Weber, Dunn, Eccles, Jaeggli,
-  Kankelborg, Mashburn, Pust, Springer, Carvalho, Kleint, Marmie, Mazmanian,
-  Pereira, Sawyer, Strong, Worden, Carlsson, Hansteen, Leenaarts, Wiesmann,
-  Aloise, Chu, Bush, Scherrer, Brekke, Martinez-Sykora, Lites, McIntosh,
-  Uitenbroek, Okamoto, Gummin, Auker, Jerram, Pool, \& Waltham}]{DePontieu2014}
-{De Pontieu}, B., Title, A.~M., Lemen, J.~R., {et~al.} 2014, Sol. Phys., 289,
-  2733, \dodoi{10.1007/s11207-014-0485-y}
 
 \bibitem[{Felipe {et~al.}(2010)Felipe, Khomenko, \& Collados}]{Felipe2010}
 Felipe, T., Khomenko, E., \& Collados, M. 2010, Astrophys. J., 719, 357,
@@ -100,14 +71,6 @@ Hoyng, P., Duijveman, A., Machado, M.~E., {et~al.} 1981, Astrophys. J. Lett.,
 Hudson, H. 2007, Phys. Chromospheric Plasmas, 368, 365.
 \newblock \doarXiv{0704.0823}
 
-\bibitem[{Inglis {et~al.}(2015)Inglis, Ireland, \& Dominique}]{Inglis2015}
-Inglis, A.~R., Ireland, J., \& Dominique, M. 2015, Astrophys. J., 798, 108,
-  \dodoi{10.1088/0004-637X/798/2/108}
-
-\bibitem[{Jackiewicz \& Balasubramaniam(2013)}]{Jackiewicz2013}
-Jackiewicz, J., \& Balasubramaniam, K.~S. 2013, Astrophys. J., 765, 15,
-  \dodoi{10.1088/0004-637X/765/1/15}
-
 \bibitem[{Jensen \& Orrall(1963)}]{Jensen1963}
 Jensen, \& Orrall, F.~Q. 1963
 
@@ -117,10 +80,6 @@ Judge, P. 2006, Sol. MHD Theory Obs. A High Spat. Resolut. Perspect., 354, 259.
 
 \bibitem[{Kalkofen(1994)}]{Kalkofen1994}
 Kalkofen, W. P. G. S.~M. 1994, Astron. Astrophys., 284, 976
-
-\bibitem[{Kumar \& Ravindra(2006)}]{Kumar2006}
-Kumar, B., \& Ravindra, B. 2006, J. Astrophys. Astron., 27, 425,
-  \dodoi{10.1007/BF02709368}
 
 \bibitem[{Kwak {et~al.}(2016)Kwak, Chae, Song, Kim, Lim, \&
   Madjarska}]{Kwak2016}
@@ -153,14 +112,6 @@ McAteer, R. T.~J., Gallagher, P.~T., Williams, D.~R., {et~al.} 2003, Astrophys.
   Dennis}]{Milligan2017}
 Milligan, R.~O., Fleck, B., Ireland, J., Fletcher, L., \& Dennis, B.~R. 2017,
   Astrophys. J., 848, L8, \dodoi{10.3847/2041-8213/aa8f3a}
-
-\bibitem[{Monsue {et~al.}(2016)Monsue, Hill, \& Stassun}]{Monsue2016}
-Monsue, T., Hill, F., \& Stassun, K.~G. 2016, Astron. J., 152, 81,
-  \dodoi{10.3847/0004-6256/152/4/81}
-
-\bibitem[{Nakariakov \& Verwichte(2005)}]{Nakariakov2005}
-Nakariakov, V.~M., \& Verwichte, E. 2005, Living Rev. Sol. Phys, 2,
-  \dodoi{10.12942/lrsp-2005-3}
 
 \bibitem[{Orrall(1966)}]{Orrall1966}
 Orrall, F.~Q. 1966, 917
@@ -240,30 +191,12 @@ Sutmann, G., \& Ulmschneider, P. 1995{\natexlab{a}}, Astron. Astrophys., 294,
 \bibitem[{Sutmann \& Ulmschneider(1995{\natexlab{b}})}]{Sutmann1995b}
 ---. 1995{\natexlab{b}}, Astron. Astrophys., 294, 241
 
-\bibitem[{Sych {et~al.}(2009)Sych, Nakariakov, Karlicky, Anfinogentov, \&
-  Anfinogentov}]{Sych2009}
-Sych, R., Nakariakov, V.~M., Karlicky, M., Anfinogentov, S., \& Anfinogentov,
-  S. 2009, Astron. Astrophys., 505, 791, \dodoi{10.1051/0004-6361/200912132}
-
 \bibitem[{Tian {et~al.}(2014)Tian, DeLuca, Reeves, McKillop, {De Pontieu},
   Mart{\'{i}}nez-Sykora, Carlsson, Hansteen, Kleint, Cheung, Golub, Saar,
   Testa, Weber, Lemen, Title, Boerner, Hurlburt, Tarbell, Wuelser, Kankelborg,
   Jaeggli, \& McIntosh}]{Tian2014}
 Tian, H., DeLuca, E., Reeves, K.~K., {et~al.} 2014, Astrophys. J., 786, 137,
   \dodoi{10.1088/0004-637X/786/2/137}
-
-\bibitem[{Torrence \& Compo(1998)}]{Torrence1998}
-Torrence, \& Compo. 1998, Bull. Am. Meteorol. Soc., 79, 61
-
-\bibitem[{Tripathy {et~al.}(2018)Tripathy, Jain, Kholikov, Hill, Rajaguru, \&
-  Cally}]{Tripathy2018}
-Tripathy, S.~C., Jain, K., Kholikov, S., {et~al.} 2018, Adv. Sp. Res., 61, 691,
-  \dodoi{10.1016/j.asr.2017.10.033}
-
-\bibitem[{Viereck {et~al.}(2007)Viereck, Hanser, Wise, Guha, Jones, McMullin,
-  Plunket, Strickland, \& Evans}]{Viereck2007}
-Viereck, R., Hanser, F., Wise, J., {et~al.} 2007, 66890K,
-  \dodoi{10.1117/12.734886}
 
 \bibitem[{Wittmann(1969)}]{Wittmann1969}
 Wittmann, A. 1969, Sol. Phys., 7, 366, \dodoi{10.1007/BF00146141}

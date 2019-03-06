@@ -1,0 +1,13 @@
+\clearpage
+\section{Alignment}
+
+Due to the global rotation of the sun, as well as smaller shifts caused
+by instrumental effects, there are shifts in x and y between
+images in a time series data cube.
+
+To correct this,
+the subset of data was extracted and aligned by cross correlation
+\citep{McAteer2003, McAteer2004}.
+The associated routines provided sub-pixel accuracies.
+This allowed a Fourier transform to be applied to a single pixel
+at $(x_{i}, y_{i})$, which was how we obtained power maps for analysis.

@@ -1,18 +1,23 @@
+\clearpage
 \section{The Solar Dynamics Observatory (SDO)}
 
 \subsection{The Atmospheric Imaging Assembly (AIA)}
 
-The Atmospheric Imaging Assembly (AIA; \cite{Lemen2012}) on board the
+The Atmospheric Imaging Assembly (AIA; \cite{Lemen2012, Boerner2012})
+on board the
 \textit{Solar Dynamics Observatory} (SDO; \cite{Pesnell2012})
 obtains full disk images throughout the solar atmosphere,
 using narrow band filters centered on 10 different wavelengths.
+It primarily collects EUV emission that originates in the corona.
+In addition it obtains thermal UV continuum data in
+two bandpasses centered on 1600\AA{} and 1700\AA{}.
 Two of these channels provide measurements of
 thermal UV emission from the chromosphere.
-The 1700\AA{} channel mostly contains continuum emission from the
-temperature minimum, and
-the 1600\AA{} channel covers
-both continuum emission and the \ion{C}{4} spectral line in the upper
-photosphere and transition region.
+AIA 1700\AA{} samples the
+lower atmosphere around $T = 10^{3.7}$ K, close to $T_{min}$.
+AIA 1600\AA{}
+samples the transition region and upper chromosphere, and contains emission
+from the \ion{C}{4} 1548\AA{} spectral emission line, as well as UV continuum.
 Both UV channels have a cadence of
 24 seconds and spatial size scale of 0.6 arcseconds per pixel.
 
@@ -21,56 +26,40 @@ on the frequency of interest.
 
 \paragraph{Ambiguity in formation height}
 
+\input{table_aia}
 
-\mynote{From propopsal:}
-The Atmospheric Imaging Assembly (AIA) \citep{Lemen2012, Boerner2012}
-on board \textit{SDO} primarily collects EUV emission
-that originates in the corona.
-In addition it obtains thermal UV continuum data in
-two bandpasses centered on 1600\AA{} and 1700\AA{}. AIA 1700\AA{} samples the
-lower atmosphere around $T = 10^{3.7}$ K, close to $T_{min}$. AIA 1600\AA{}
-samples the transition region and upper chromosphere, and contains emission
-from the \ion{C}{4} 1548\AA{} line, as well as UV continuum. Both data sets
-are obtained at a cadence of 24 seconds, with a spatial resolution of $\sim$0.6
-arcseconds per pixel.
+Table~\ref{table_aia} gives the standard values for the
+formation temperatures and primary source of emission for each
+of the UV channels on AIA.
+However, due to the difficulties in observing the chromosphere
+(described in the chromosphere background section),
+there is a certain ambiguity in the formation height of the emission
+in these channels, especially during flares.
 
-\mynote{09 October 2018 - From current state of article (Phase 1):}
-The data used to analyze this flare is provided by
-AIA \citep{Lemen2012},
-one of the instruments on board
-SDO \citep{Pesnell2012}.
-AIA obtains full disk images throughout the solar atmosphere using narrow band
-filters centered on 10 different wavelengths, two of which provide measurements
-of thermal UV emission from the chromosphere.
-The 1700\AA{} channel mostly contains
-continuum emission from the temperature minimum, and the
-1600\AA{} channel covers both continuum emission and the
-\ion{C}{4} spectral line in the upper photosphere and transition region.
-Both channels have a cadence of 24 seconds and
-spatial size scale of 0.6 arcseconds per pixel.
 
 
 \subsection{The Helioseismic and Magnetic Imager (HMI)}
 
-The Helioseismic and Magnetic Imager (HMI)
-is one of three instruments on board
-the \textit{Solar Dynamics Observatory (SDO)}. It obtains four types of
-filtergrams around the \ion{Fe}{1} line at 6173\AA{}. These filtergrams are
-in the form of dopplergrams, vector magnetograms, line-of-sight magnetograms,
-and continuum intensity images \citep{hmi}.
-
-
-Data from
-the Helioseismic and Magnetic Imager (HMI; \cite{Scherrer2012}),
-also on board \textit{SDO}, is used to study potential
-correlations between magnetic field strength and oscillatory
-behavior in the chromosphere.
-HMI obtains full disk data in the form of
+The Helioseismic and Magnetic Imager (HMI; \cite{Scherrer2012}),
+is another instrument on board
+the \textit{Solar Dynamics Observatory (SDO)}.
+HMI obtains full disk data in the form of four types of filtergrams:
 line-of-sight magnetograms, vector magnetograms,
-Doppler velocity, and continuum intensity,
-measured at the \ion{Fe}{1} absorption line at 6173\AA{}
+Doppler velocity, and continuum intensity images.
+Each of these filtergrams is
+measured around the \ion{Fe}{1} absorption line at 6173\AA{}
 with a passband width of 0.076\AA{}.
 Each data product has a cadence of 45 seconds (with the exception
 of the vector magnetograms, at 135 seconds),
 and {spatial size scale} of 0.5 arcseconds per pixel
 \citep{Schou2012}.
+
+Data from HMI is
+used along with data from AIA for several reasons.
+One is to provide context for the magnetic field configuration in the
+photospheric counterpart, which sunspots are part of a pair, what
+the polarity of each sunspot is, etc.
+This data is also
+used to study potential
+correlations between magnetic field strength and oscillatory
+behavior in the chromosphere.

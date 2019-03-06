@@ -1,0 +1,40 @@
+
+\clearpage
+
+
+\section{Data reduction}
+
+\subsection{aia\_prep.pro}
+
+The standard IDL routine \textit{aia\_prep.pro} was applied to all data.
+This routine applies corrections such as
+alignment of the solar axes with the horizontal/vertical image axes,
+(which removes what is referred to as the ``roll angle''),
+and co-alignment between all AIA channels.
+When applied (rather counter-intuitively)
+to HMI data, this routine rescales it to the same spatial resolution as AIA.
+It also rotates HMI data 180 degrees, since the initial orientation
+of the images is upside down.
+
+
+
+
+\subsection{Alignment}
+
+Due to the global rotation of the sun, as well as smaller shifts caused
+by instrumental effects, there are shifts in x and y between
+images in a time series data cube.
+
+To correct this,
+the subset of data was extracted and aligned by cross correlation
+\citep{McAteer2003, McAteer2004}.
+The associated routines provided sub-pixel accuracies.
+This allowed a Fourier transform to be applied to a single pixel
+at $(x_{i}, y_{i})$, which was how we obtained power maps for analysis.
+
+
+
+\subsection{Saturation}
+
+
+AIA data saturated during the X-class flare.

@@ -22,6 +22,7 @@
 \usepackage{graphicx}
 \graphicspath{
     {$HOME/Figures/}
+    {$HOME/Dropbox/Figures/Temp/}
     {$HOME/Dropbox/Figures/}
     %{$HOME/Dropbox/Figures/Thesis_project/}
     {$HOME/Dropbox/Figures/Literature/}
@@ -148,15 +149,14 @@
 %
 %
 
-
+% Test
 
 %% Preserves full TOC, page #s, etc.
 \includeonly{
-    %introduction,
-    %background,
-    %methods,
-    phase1,
-    %appendix
+    introduction,
+    background,
+    %phase1,
+    appendix
 }
 
 % Hyperlinks % {---
@@ -248,27 +248,22 @@
 % ---}
 
 
-\include{introduction}
+\input{introduction}
 
-\include{background}
+\input{chromosphere}
 
-\include{methods}
+\input{flares}
 
-\include{phase1}
-
-
-%\section{Part 1: The 2011 February 15 X2.2 flare}
-% First paper here, with necessary modifications
-
-%\section{Part 2: IRIS}
-
-%\section{Part 3: Multiflare}
+%% "Methodology"
+%\include{methods}
+\input{sdo}
+\input{reduction}
+%\input{phase1}
+%\input{appendix}
 
 
-\include{appendix}
 
-
-%\clearpage
+\clearpage
 %\newgeometry{left=1.00in, right=1.00in, top=1.0in, bottom=1.0in}
 %\addcontentsline{toc}{section}{References}
 %\setlength{\parskip}{0pt}
@@ -276,6 +271,8 @@
 %\setlength{\parskip}{0.5ex}
 %\bibliography{reffile}
 %\bibliography{../Notes/library.bib}
+%
+
 \bibliography{library.bib}
 
 \end{document}
