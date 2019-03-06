@@ -20,11 +20,11 @@
 
 ;- Start/End times, in UT
 
-tstart='2011/02/11 01:36:00'
-tend='2011/02/11 02:00:00' 
+;tstart='2011/02/11 01:36:00'
+;tend='2011/02/11 02:00:00' 
 
-tstart = '2011/02/15 00:00:00'
-tend =   '2011/02/15 04:59:59'
+;tstart = '2011/02/15 00:00:00'
+;tend =   '2011/02/15 04:59:59'
 ;tend =   '2011/02/15 00:02:00'
 
 ;; For FT examples on 5-minute oscillations (28 Sep 2017)
@@ -32,6 +32,9 @@ tend =   '2011/02/15 04:59:59'
 ;tend =   '2011/02/14 02:00:00'
 
 
+;- 06 March 2019 -- search for new flare
+tstart='2013/12/28 12:42:00'
+tend  ='2013/12/28 12:52:00' 
 
 
 
@@ -55,15 +58,15 @@ tend =   '2011/02/15 04:59:59'
 ;dat211  = vso_search(tstart,tend, instr='aia',sample=sample,wave='211')
 ;dat304  = vso_search(tstart,tend, instr='aia',sample=sample,wave='304')
 ;dat335  = vso_search(tstart,tend, instr='aia',sample=sample,wave='335')
-;dat1600 = vso_search( tstart, tend, instr='aia', sample=sample, wave='1600')
-;dat1700 = vso_search( tstart, tend, instr='aia', sample=sample, wave='1700')
+dat1600 = vso_search( tstart, tend, instr='aia', sample=sample, wave='1600')
+dat1700 = vso_search( tstart, tend, instr='aia', sample=sample, wave='1700')
 
 
 ;datHMI=VSO_SEARCH(tstart,tend, instr='hmi')
 ;datHMI = VSO_SEARCH(tstart, tend, instr='hmi', physobs='intensity')
-datHMIlosV = VSO_SEARCH(tstart, tend, instr='hmi', physobs='LOS_velocity') 
-datHMIlosB = VSO_SEARCH(tstart, tend, instr='hmi', physobs='LOS_magnetic_field') 
-datHMIvectorB = VSO_SEARCH(tstart, tend, instr='hmi', physobs='VECTOR_MAGNETIC_FIELD') 
+;datHMIlosV = VSO_SEARCH(tstart, tend, instr='hmi', physobs='LOS_velocity') 
+;datHMIlosB = VSO_SEARCH(tstart, tend, instr='hmi', physobs='LOS_magnetic_field') 
+;datHMIvectorB = VSO_SEARCH(tstart, tend, instr='hmi', physobs='VECTOR_MAGNETIC_FIELD') 
 
 
 ;- Return a structure for each bandpass
@@ -83,8 +86,8 @@ stop
 
 
 
-;dir='/solarstorm/laurel07/Data/AIA/'
-dir='/solarstorm/laurel07/Data/HMI/'
+dir='/solarstorm/laurel07/Data/AIA/'
+;dir='/solarstorm/laurel07/Data/HMI/'
 
 
 ;status94 = VSO_GET(dat94, /force, out_dir=dir)
@@ -94,11 +97,11 @@ dir='/solarstorm/laurel07/Data/HMI/'
 ;status211 = VSO_GET(dat211, /force, out_dir=dir)
 ;status304 = VSO_GET(dat304, /force, out_dir=dir)
 ;status335 = VSO_GET(dat335, /force, out_dir=dir)
-;status1600 = VSO_GET(dat1600, /force, out_dir=dir)
+status1600 = VSO_GET(dat1600, /force, out_dir=dir)
 ;status1700 = VSO_GET(dat1700, /force, out_dir=dir)
 
-statusHMIlosV=VSO_GET(datHMIlosV,/force,out_dir=dir)
-statusHMIlosB=VSO_GET(datHMIlosB,/force,out_dir=dir)
-statusHMIvectorB=VSO_GET(datHMIvectorB,/force,out_dir=dir)
+;statusHMIlosV=VSO_GET(datHMIlosV,/force,out_dir=dir)
+;statusHMIlosB=VSO_GET(datHMIlosB,/force,out_dir=dir)
+;statusHMIvectorB=VSO_GET(datHMIvectorB,/force,out_dir=dir)
 
 end

@@ -26,6 +26,7 @@ function image2, data, x, y,  _EXTRA=e
         ytickfont_size = fontsize, $
         xtickfont_size = fontsize, $
         axis_style = 2, $
+           ;axis_style = ... what are the other options?
         xtickdir = 0, $
         ytickdir = 0, $
         xticklen = 0.02, $

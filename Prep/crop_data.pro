@@ -76,15 +76,26 @@ function CROP_DATA, data, $
 
     if n_elements(sz) gt 2 then begin
 
-
         ;if not keyword_set(z_ind) then z_ind = [0:sz[2]-1]
         ;if z_ind eq !NULL then z_ind = [0:sz[2]-1]
-        if z_ind eq !NULL then z_ind = indgen(sz[2])
+        if z_ind eq !NULL then begin
+            z_ind = indgen(sz[2])
+            print, z_ind
+        endif
+
 
         if n_elements(sz) eq 3 then $
             cube = data[ x1:x2, y1:y2, z_ind ]
         if n_elements(sz) eq 4 then $
             cube = data[ x1:x2, y1:y2, z_ind, * ]
+    endif
+
+    ;- 06 March 2019  (Test code!)
+    if n_elements(sz) lt 2 then begin
+        print, ''
+        print, '--> data is not a 2D array.'
+        print, ''
+        return, 0
     endif
 
     ;sz = size( cube, /dimensions )
