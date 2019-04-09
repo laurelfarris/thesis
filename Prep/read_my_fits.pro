@@ -35,7 +35,7 @@
 
 
 
-pro READ_MY_FITS, index, data, $
+pro READ_MY_FITS, index, data, fls, $
     instr=instr, $
     channel=channel, $
     ind=ind, $

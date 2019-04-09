@@ -40,7 +40,7 @@ function PREP, inst, channel, cadence, _EXTRA=e
     return, struc
 end
 
-function aia_prep, channel
+function my_aia_prep, channel
 
     ; Have PREP call this one, instead of the other way around.
     ; This should be able to be called by itself.
@@ -85,8 +85,8 @@ end
 ;resolve_routine, 'read_my_fits'
 
 
-;aia1600 = aia_prep('1600')
-;aia1700 = aia_prep('1700')
+;aia1600 = my_aia_prep('1600')
+;aia1700 = my_aia_prep('1700')
 stop
 
 ;hmi = prep('hmi', 'cont', hmiContindex, 45., name='HMI cont')

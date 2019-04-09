@@ -6,32 +6,39 @@
 
 
 goto, start
-start:;-------------------------------------------------------------------------------
 
-;tstart = '2013/12/28 12:42:00'
-;tend   = '2013/12/28 12:52:00'
 
 
 resolve_routine, 'read_my_fits', /either
-READ_MY_FITS, index, data, $
+READ_MY_FITS, old_indices, old_data, $
     nodata=0, $
     instr='aia', $
     channel=1600, $
     prepped=0, $
-    ind = [10:15], $
+    ;ind = [10:15], $
     files = '*2013*.fits'
-
-print, index.date_obs
-;- 12:47:28.12
-
-
 stop
 
+
+AIA_PREP, old_indices, old_data, $
+    index, data, $
+    out_dir="/solarstorm/laurel07/Data/AIA_prepped/", $
+    /do_write_fits
+stop
+
+
+help, index
+help, data
+stop
+
+start:;-------------------------------------------------------------------------------
 ct = AIA_COLORS( wave=1600 )
 
-r = 600
-dimensions = [r, r]
-center=[1700,1650]
+xx = 525
+yy = 400
+dimensions = [xx, yy]
+center=[1675,1600]
+
 
 ;- NOTE: 500x330 dimensions are HARD-CODED in crop_data routine!
 ;-         Possibly set as "defaults" using some hacky if statements...
@@ -41,15 +48,17 @@ center=[1700,1650]
 resolve_routine, 'crop_data', /either
 imdata = AIA_INTSCALE( $
     CROP_DATA( $
-        data, $
-        ;z_ind=z_ind, $
+        data[*,*,200], $
+        ;z_ind=z_ind, $ z_ind vs. 3rd data dimension... ?
         center=center, dimensions=dimensions ), $
-    wave=1600, exptime=index[0].exptime )
-
-@image_quick
+    wave=1600, exptime=index[200].exptime )
 
 
-save2, 'new_flare'
+im = image2( imdata, /buffer, rgb_table=ct )
+;@image_quick
+
+
+save2, 'sol2013_aia1600'
 
 
 
