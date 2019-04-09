@@ -50,5 +50,7 @@ save2, 'new_flare'
 
 ;- NEXT:
 ;-   Lightcurves!
+;-   (NOTE: If alignment hasn't been done yet,
+;-         need to use big enough box to contain AR throughout time.)
 
 end

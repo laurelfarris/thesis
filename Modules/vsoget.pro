@@ -33,8 +33,11 @@
 
 
 ;- 06 March 2019 -- search for new flare
-tstart='2013/12/28 12:42:00'
-tend  ='2013/12/28 12:52:00' 
+;tstart='2013/12/28 12:42:00'
+;tend  ='2013/12/28 12:52:00' 
+;- quiet sun to test codes and look for expected osc. behavior NOT during flares
+tstart='2013/12/28 10:30:00'
+tend  ='2013/12/28 12:59:59' 
 
 
 
@@ -58,7 +61,7 @@ tend  ='2013/12/28 12:52:00'
 ;dat211  = vso_search(tstart,tend, instr='aia',sample=sample,wave='211')
 ;dat304  = vso_search(tstart,tend, instr='aia',sample=sample,wave='304')
 ;dat335  = vso_search(tstart,tend, instr='aia',sample=sample,wave='335')
-dat1600 = vso_search( tstart, tend, instr='aia', sample=sample, wave='1600')
+;dat1600 = vso_search( tstart, tend, instr='aia', sample=sample, wave='1600')
 dat1700 = vso_search( tstart, tend, instr='aia', sample=sample, wave='1700')
 
 
@@ -68,13 +71,9 @@ dat1700 = vso_search( tstart, tend, instr='aia', sample=sample, wave='1700')
 ;datHMIlosB = VSO_SEARCH(tstart, tend, instr='hmi', physobs='LOS_magnetic_field') 
 ;datHMIvectorB = VSO_SEARCH(tstart, tend, instr='hmi', physobs='VECTOR_MAGNETIC_FIELD') 
 
-
 ;- Return a structure for each bandpass
 
-
-
 stop
-
 
 
 ;- Download data:
@@ -97,8 +96,8 @@ dir='/solarstorm/laurel07/Data/AIA/'
 ;status211 = VSO_GET(dat211, /force, out_dir=dir)
 ;status304 = VSO_GET(dat304, /force, out_dir=dir)
 ;status335 = VSO_GET(dat335, /force, out_dir=dir)
-status1600 = VSO_GET(dat1600, /force, out_dir=dir)
-;status1700 = VSO_GET(dat1700, /force, out_dir=dir)
+;status1600 = VSO_GET(dat1600, /force, out_dir=dir)
+status1700 = VSO_GET(dat1700, /force, out_dir=dir)
 
 ;statusHMIlosV=VSO_GET(datHMIlosV,/force,out_dir=dir)
 ;statusHMIlosB=VSO_GET(datHMIlosB,/force,out_dir=dir)
