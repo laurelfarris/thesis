@@ -13,6 +13,9 @@
 ;-    HMI image cropped to 500x330, to be used in CONTOUR arg.
 ;- TO DO:
 ;-    Make sure contour2.pro works... haven't tested this yet.
+;-    Give this routine a new, more intuitive name (too close to CONTOURS2.pro)
+;-
+;-
 
 
 
