@@ -1,4 +1,4 @@
-;- 08 April 2019
+;- 06 March 2019
 
 ;- Peak time 12:47
 ;- Class C3.0
@@ -6,26 +6,21 @@
 
 
 goto, start
-start:;-------------------------------------------------------------------------------
 
 ;tstart = '2013/12/28 12:42:00'
 ;tend   = '2013/12/28 12:52:00'
 
 
 resolve_routine, 'read_my_fits', /either
-READ_MY_FITS, index, data, $
-    nodata=0, $
-    instr='aia', $
-    channel=1600, $
-    prepped=0, $
-    ind = [10:15], $
+READ_MY_FITS, index, data, nodata=0, $
+    instr='aia', channel=1600, prepped=0, $
+    ;ind = [10:15], $
     files = '*2013*.fits'
 
 print, index.date_obs
 ;- 12:47:28.12
 
-
-stop
+start:;-------------------------------------------------------------------------------
 
 ct = AIA_COLORS( wave=1600 )
 
