@@ -80,7 +80,7 @@ function CROP_DATA, data, $
         ;if z_ind eq !NULL then z_ind = [0:sz[2]-1]
         if z_ind eq !NULL then begin
             z_ind = indgen(sz[2])
-            print, z_ind
+            ;print, z_ind  ; ... why? (12 April 2019)
         endif
 
 
