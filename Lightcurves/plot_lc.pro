@@ -1,6 +1,17 @@
-
-
-; Last modified:    28 November 2018
+;+
+;- LAST MODIFIED:
+;-   28 November 2018
+;-
+;- PURPOSE:
+;-
+;- INPUT:
+;-
+;- KEYWORDS:
+;-
+;- OUTPUT:
+;-
+;- TO DO:
+;-
 
 goto, start
 
@@ -41,7 +52,7 @@ plt = BATCH_PLOT( $
     top    = 2.5, $
     bottom = 2.5, $
     sym_size = 0.3, $
-    symbol='Circle') 
+    symbol='Circle')
 
 
 
@@ -99,8 +110,12 @@ LABEL_TIME, plt, time=A.time;, jd=A.jd
 resolve_routine, 'shift_ydata', /either
 SHIFT_YDATA, plt
 
+;- 17 April 2019
+;-  oplot_flare_lines.pro does not appear to be using jd...
+;-   unless plot_lc.pro is also outdated, I'm not sure what's going on here.
 resolve_routine, 'oplot_flare_lines', /either
 OPLOT_FLARE_LINES, plt, t_obs=A[0].time, jd=A.jd, thick=1.0
+
 
 resolve_routine, 'legend2', /either
 leg = LEGEND2( target=plt, /upperleft, sample_width=0.25 )

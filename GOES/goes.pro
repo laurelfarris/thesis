@@ -47,7 +47,28 @@
     ;YES_BSUB INT 1                ; 0/1 means background wasn't / was subtracted
 ; set using, e.g. a->set, kw=value
 
-function GOES
+
+
+;------------------------------------------------------------------------------------
+;-
+;- LAST MODIFIED:
+;-
+;- PURPOSE:
+;-
+;- INPUT:
+;-
+;- KEYWORDS:
+;-   tstart = 'dd-Mon-yyyy hh:mm:ss'
+;-   tend   = 'dd-Mon-yyyy hh:mm:ss'  (same form as tstart...)
+;-   sat    = 'goesN' where N = 15 by default.
+;-
+;- OUTPUT:
+;-
+;- TO DO:
+;-
+
+
+function GOES, tstart=tstart, tend=tend, sat=sat
 
     ;TVLCT, 255, 255, 255, 254
     ;TVLCT, 0, 0, 0, 253
@@ -57,12 +78,16 @@ function GOES
     !P.Color = '000000'x
     !P.Background = 'ffffff'x
 
-    ; GOES satellite
-    sat = 'goes15'
+    ; GOES satellite preference (15 is the latest, at the time of writing).
+    if not keyword_set(sat) then sat = 'goes15'
 
-    ; My times
-    tstart = '15-Feb-2011 00:00:03'
-    tend   = '15-Feb-2011 04:59:59'
+    ;- User specified start and end times.
+    if not keyword_set(tstart) then tstart = '15-Feb-2011 00:00:03'
+    if not keyword_set(tend)   then tend   = '15-Feb-2011 04:59:59'
+
+    ; My times for BDA coverage of the 2011 February 15 flare
+    ;tstart = '15-Feb-2011 00:00:03'
+    ;tend   = '15-Feb-2011 04:59:59'
 
     ; times covered in Milligan2017 (to start)
     ;tstart = '15-Feb-2011 01:40:00'
@@ -119,5 +144,9 @@ end
 
 
 d = goes()
+
+;- Alternative variable name I commonly use.
+;-   I really need to be more consistent...
+;gdata = GOES()
 
 end

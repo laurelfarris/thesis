@@ -9,31 +9,26 @@
 ;-   NOTE: call sequence very similar to READ_SDO routine from sswidl.
 ;-
 ;- ARGUMENTS:
-;-   index, data 
+;-   index, data, fls  (all are OUTPUT)
 ;-
 ;- KEYWORDS:
-;-   Set 'prepped' to read data processed with aia_prep.pro
-;-   Set 'ind' to array of indices if don't want to read all files.
-;-   Set nodata kw to read headers only
-;-   Set list_only to show filenames without reading fits files
+;-   instr, channel
+;-     HMI: instr='hmi', channel = 'dop', 'cont', 'mag'
+;-     AIA: instr='aia', channel = '1600', '1700', '304'
+;-   ind -- array of indices if don't want to read all files.
+;-   nodata -- set to read headers only
+;-   prepped -- set to READ fits files processed to level 1.5 with aia_prep.pro
+;-    files=files
 ;-
 ;- OUTPUT:
 ;-   index (and data, if nodata=0), just like READ_SDO
 ;-
-;- TO DO (in descending order of priority):
-;-   Need option to specify subset of AIA data, esp. if all in one directory.
-;-    --> Added kw "files" to take care of this for now.
-;-   Option to read UNprepped data from HMI
+;- TO DO:
+;-   [] Instead of setting "ind" kw, add option to set start/end times.
+;-        User is more likely to know what time range to read around flare peak,
+;-         though may use "ind" to get just the first hour of data... I dunno.
+;-   [] Option to read UNprepped data from HMI
 ;-
-;-
-
-
-
-
-; For HMI, instr='hmi', channel = 'dop', 'cont', or 'mag'
-; For AIA, instr='aia', channel = '1600' or '1700'
-
-
 
 pro READ_MY_FITS, index, data, fls, $
     instr=instr, $
@@ -41,8 +36,9 @@ pro READ_MY_FITS, index, data, fls, $
     ind=ind, $
     nodata=nodata, $
     prepped=prepped, $
-    files=files
-
+    year=year, $
+    month=month, $
+    day=day, $
 
 
     ; Convert channel to string if not already.
@@ -51,13 +47,20 @@ pro READ_MY_FITS, index, data, fls, $
         channel = strtrim(channel,1)
     endif
 
+    ;- Is the above statement converting channel to string necessary?
+    ;-   Or does STRTRIM function take care of this?
+    instr = strtrim(instr, 1)
+    channel = strtrim(channel, 1)
+    year = strtrim(year, 1)
+    month = strtrim(month, 1)
+    day = strtrim(day, 1)
+
     ; 28 June 2017
     ; Want prepped=1 by default, now that I've aligned all prepped data.
     ;if not keyword_set(prepped) then prepped = 1
 
 
     ;- Set up variables
-
 
     print, '--------------------------------------------'
     case instr of
@@ -66,19 +69,23 @@ pro READ_MY_FITS, index, data, fls, $
         if keyword_set(prepped) then begin
             print, 'NOTE: Reading PREPPED data.'
             path = '/solarstorm/laurel07/Data/AIA_prepped/'
-            ;path = '/home/users/laurel07/Data/AIA_prepped/'
 
-            ;- User inputs files as kw (for now)
             ;files = 'AIA20110215_*_'  +  channel  +  '*.fits'
+
+            ;files = 'AIA' + year + month + day '_' + '125918' + '_' + channel + '.fits'
+            files = 'AIA' + year + month + day '_*_' + channel + '.fits'
+                ;-   '*' to read data at all obs times from specified date.
 
         endif else begin
             print, 'NOTE: Reading UNPREPPED data.'
             path = '/solarstorm/laurel07/Data/AIA/'
-
             ;files = '*aia*' + channel + '*2011-02-15*.fits'
-
+            files = $
+                instr + '.lev1.' + channel + 'A_' + $
+                year + '-' + month + '-' + day + $
+                'T' + '*Z.image_lev1.fits'
         endelse
-        end
+        end ;- end of 'aia' instr
 
     'hmi': begin
         print, 'NOTE: Reading PREPPED data from HMI.'
@@ -88,7 +95,7 @@ pro READ_MY_FITS, index, data, fls, $
         ;files = '*_45s*' + channel + '*.fits'
         files = '*_' + channel + '*.fits'
         end
-    end
+    end ;- end of "case" statements
 
 
 

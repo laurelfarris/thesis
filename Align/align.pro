@@ -4,9 +4,11 @@
 ;
 ; PURPOSE:    For data cubes that need more attention than
 ;              running align_cube3.pro a few times...
-
 ;
-; Alignment steps (in general):       
+; SUBROUTINES:  alignoffset.pro
+;               shift_sub.pro
+;
+; Alignment steps (in general):
 ;   1. read data
 ;   2. image center and locate center coords (x0, y0)
 ;   3. crop data to size 750x500 relative to center
@@ -142,7 +144,7 @@ pro CALCULATE_SHIFTS, cube, ref, shifts
 
     sz = size(cube, /dimensions)
     shifts = fltarr( 2, sz[2] )
-     
+
     for i = 0, sz[2]-1 do begin
         offset = ALIGNOFFSET( cube[*,*,i], ref )
         shifts[*,i] = -offset
@@ -361,7 +363,7 @@ stop
 
 ; Save data with same dimensions as used to align,
 ;    then crop to 500x330 for each session.
-; Center coords aren't always consistent, and 
+; Center coords aren't always consistent, and
 ;    don't want to lose all this work!
 
 cube = aligned_cube_2
