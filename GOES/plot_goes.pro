@@ -16,7 +16,7 @@
 ;-    Didn't really change any of the fundamentals of the code,
 ;-      just copied content from file "plot_goes.pro" (subroutine and ML code)
 ;-      into this file (plot_goes_2.pro) to declutter and de-confuse.
-;-    Also renamed to PLOT_MY_GOES to more easily tell my routines apart
+;-    Also renamed to PLOT_GOES to more easily tell my routines apart
 ;-      from ones I downloaded.
 ;-    Original file was deleted, and probably don't need to keep the subroutine
 ;-    in here, but of course I'm reluctant to permanently delete codes...
@@ -26,7 +26,7 @@
 ;-    but names have since been modified.
 
 
-pro PLOT_MY_GOES_old, A, gdata
+pro PLOT_GOES_old, A, gdata
     ;- Originally wrote this as a procedure, with structure A as an input arg,
     ;-    then apparently gave up on that...
 
@@ -107,11 +107,11 @@ pro PLOT_MY_GOES_old, A, gdata
     ;save2, 'test.pdf'
 end
 
-;- ML code used for PLOT_MY_GOES procedure:
+;- ML code used for PLOT_GOES procedure:
 ;!P.Color = '000000'x
 ;!P.Background = 'ffffff'x
 ;gdata = GOES()
-;PLOT_MY_GOES_old, A, gdata
+;PLOT_GOES_old, A, gdata
 ;xdata = gdata.tarray
 ;ydata = gdata.ydata
 ;ytitle = gdata.utbase
@@ -120,11 +120,12 @@ end
 ;plt = plot2( xdata, ydata[*,0], /current, ylog=ylog )
 ;-
 ;-
-;- PLOT_MY_GOES_2 function is most current version --> use that one.
+;- PLOT_GOES function (not procedure)
+;-   is most current version --> use that one.
 ;-
 
 
-function PLOT_MY_GOES, gdata
+function PLOT_GOES, gdata
 
     if n_elements(gdata) eq 0 then gdata = GOES()
     ;- If this routine hits an error further down, gdata might not
@@ -200,7 +201,6 @@ function PLOT_MY_GOES, gdata
 end
 
 goto, start
-start:;----------------------------------------------------------------------------
 
 ;- GOES() contains commented lines from website explaining keywords and such.
 ;- Creates object, sets parameters (defaults are for the 2011-Feb-15 flare), and
@@ -208,14 +208,27 @@ start:;-------------------------------------------------------------------------
 ;-    (see goes.pro for details).
 gdata = GOES()
 
+
+start:;----------------------------------------------------------------------------
+
+;- 20 April 2019
+;-  Multiple flares now... need to specify date/times.
+tstart = '28-Dec-2013 10:00:00'
+tend   = '28-Dec-2013 13:59:59'
+gdata = GOES( tstart=tstart, tend=tend )
+
+stop
+
 ;- UTPLOT procedure:
 ;-   set /SAV kw to save system variables: !x.tickv and !x.tickname
-;-   (used for xtickvalues and xtickname in PLOT_MY_GOES routine above).
+;-   (used for xtickvalues and xtickname in PLOT_GOES routine above).
 UTPLOT, gdata.tarray, gdata.ydata[*,0], gdata.utbase, /sav
 ;oplot, gdata.tarray, gdata.ydata[*,1], color='FF0000'X
 ;- --> oplot the other GOES channel.
+stop
 
-plt = PLOT_MY_GOES_2(gdata)
+plt = PLOT_GOES(gdata)
+stop
 
 resolve_routine, 'oplot_flare_lines', /either
     ;-  currently residing in '../Lightcurves/'

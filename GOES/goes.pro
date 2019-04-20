@@ -70,6 +70,7 @@
 
 function GOES, tstart=tstart, tend=tend, sat=sat
 
+
     ;TVLCT, 255, 255, 255, 254
     ;TVLCT, 0, 0, 0, 253
     ;!P.Color = 253
@@ -101,10 +102,13 @@ function GOES, tstart=tstart, tend=tend, sat=sat
     ;a->plot, charsize=1.5
 
     ; Show current parameter values
-    ;a->help
+    a->help
+
 
     ;-- extract data and derived quantities into a structure
     data = a->getdata(/struct)
+    ;- PROBLEM: nothing is being returned here.
+    ;-  "No GOES/Yohkoh data available for specfied times"...
 
     ;xst0 = data.utbase
     ;ex2int, anytim2ex(xst0), xst_msod, xst_ds79
@@ -121,7 +125,7 @@ function GOES, tstart=tstart, tend=tend, sat=sat
     ;oplot, data.ydata[*,1];, linestyle=2
 
     ; set parameters and plot at the same time:
-    a->plot, tstart=tstart, tend=tend, sat=sat
+;    a->plot, tstart=tstart, tend=tend, sat=sat
 ;    print, a[0].title
 ;    print, a[0].xtitle
 ;    print, a[0].ytitle
@@ -138,12 +142,14 @@ function GOES, tstart=tstart, tend=tend, sat=sat
     ;TOGGLE, /landscape, filename='goes.ps'
     ;a->plot, xcharsize=1.25, ycharsize=1.25
     ;TOGGLE
+
     return, data
 
 end
 
 
 d = goes()
+help, d
 
 ;- Alternative variable name I commonly use.
 ;-   I really need to be more consistent...

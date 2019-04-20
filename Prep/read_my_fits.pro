@@ -38,7 +38,7 @@ pro READ_MY_FITS, index, data, fls, $
     prepped=prepped, $
     year=year, $
     month=month, $
-    day=day, $
+    day=day
 
 
     ; Convert channel to string if not already.
@@ -67,17 +67,18 @@ pro READ_MY_FITS, index, data, fls, $
 
     'aia': begin
         if keyword_set(prepped) then begin
-            print, 'NOTE: Reading PREPPED data.'
+            print, 'NOTE: Reading PREPPED data from AIA.'
             path = '/solarstorm/laurel07/Data/AIA_prepped/'
 
             ;files = 'AIA20110215_*_'  +  channel  +  '*.fits'
 
             ;files = 'AIA' + year + month + day '_' + '125918' + '_' + channel + '.fits'
-            files = 'AIA' + year + month + day '_*_' + channel + '.fits'
+            files = 'AIA' + year + month + day + '_*_' + channel + '.fits'
+
                 ;-   '*' to read data at all obs times from specified date.
 
         endif else begin
-            print, 'NOTE: Reading UNPREPPED data.'
+            print, 'NOTE: Reading UNPREPPED data from AIA.'
             path = '/solarstorm/laurel07/Data/AIA/'
             ;files = '*aia*' + channel + '*2011-02-15*.fits'
             files = $
@@ -87,13 +88,28 @@ pro READ_MY_FITS, index, data, fls, $
         endelse
         end ;- end of 'aia' instr
 
+
+
     'hmi': begin
-        print, 'NOTE: Reading PREPPED data from HMI.'
-        print, '(currently no option to read unprepped HMI data...'
-        ;path = '/solarstorm/laurel07/Data/HMI/'
-        path = '/solarstorm/laurel07/Data/HMI_prepped/'
-        ;files = '*_45s*' + channel + '*.fits'
-        files = '*_' + channel + '*.fits'
+        if keyword_set(prepped) then begin
+            print, 'NOTE: Reading PREPPED data from HMI.'
+            path = '/solarstorm/laurel07/Data/HMI_prepped/'
+
+        endif else begin
+            print, 'NOTE: Reading UNPREPPED data from HMI.'
+            ;print, '(currently no option to read unprepped HMI data...'
+            path = '/solarstorm/laurel07/Data/HMI/'
+
+            ;files = '*_45s*' + channel + '*.fits'
+            ;files = '*_' + channel + '*.fits'
+
+            files = $
+                'hmi.m_45s.' + year + '.' + month + '.' + day + '*' + $
+                'TAI.magnetogram.fits'
+              ;- NOTE: This is specific to magnetograms! Needs to be generalized.
+
+
+        endelse
         end
     end ;- end of "case" statements
 
@@ -104,7 +120,7 @@ pro READ_MY_FITS, index, data, fls, $
     fls = file_search( path + files )
     if N_elements(ind) ne 0 then fls = fls[ind]
 
-    print, n_elements(fls), ' file(s) returned.'
+    print, n_elements(fls), ' file(s) returned, in variable "fls".'
     print, 'Type .c to read files, or RETALL to return to main level.'
     stop
 
