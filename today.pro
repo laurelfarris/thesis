@@ -88,6 +88,8 @@ READ_MY_FITS, old_indices, old_data, fls, $
 help, fls
 ;-  What else to do here?
 
+stop
+
 
 ;-- § Run aia_prep.pro (after using read_my_fits on lev1.0 data)
 ;-      One channel at a time!
@@ -104,5 +106,74 @@ AIA_PREP, old_indices, old_data, $
     index, data, $
     /do_write_fits, $
     outdir=outdir
+
+stop
+
+;- § Read PREPPED fits files
+
+resolve_routine, 'read_my_fits', /either
+READ_MY_FITS, index, data, fls, $
+    instr=instr, $
+    channel=channel, $
+    nodata=0, $
+    prepped=1, $
+    year=year, $
+    month=month, $
+    day=day
+
+;- TEST: check n_elements(fls) and TIME portion of each filename.
+
+
+;- § Crop to subset centered on AR,
+;-     padded with extra pixels on all four sides (mostly in x-direction)
+
+sz = size(data, /dimensions)
+
+;- Index of image in center of time series.
+;-  Use this image to determine center coords since it will be the
+;-  reference image for alignment.
+z_ref = sz[2]/2
+
+center = [1675, 1600]
+dimensions = [800, 500]
+  ;- "Pad" dimensions with extra pixels to prepare for alignment
+
+
+resolve_routine, 'crop_data', /either
+cube = CROP_DATA( $
+    data, $
+    center=center, $
+    dimensions=dimensions )
+;- NOTE: if kw "dimensions" isn't set, defaults to [500,330] in crop_data.pro
+
+AIA_LCT, wave=fix(channel), /load
+xstepper, cube
+
+stop
+
+
+;- § Align prepped data
+
+ref = cube[*,*,z_ref]
+ALIGN_CUBE3, cube, ref, $
+    ;quiet=quiet, $
+    shifts=shifts
+
+;- Save shifts.
+
+;- Plot shifts.
+
+;- Check that images don't jump around.
+xstepper, cube
+
+;- Run ALIGN_CUBE3 until shifts stop decreasing from one run to the next.
+
+
+
+;- Save cube to .sav files, including extra "padding" pixels.
+save, cube, instr + channel + '_' + 'aligned.sav'
+;-    May need to add something indicated which FLARE this is...
+;-    Or create a different directory for each flare.
+
 
 end

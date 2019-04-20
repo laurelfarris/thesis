@@ -13,7 +13,7 @@
 ; without header information (like when I have access to .sav files,
 ; but not the fits files, where index is always extracted.
 
-;- To do: make a separate routine for reading in maps and power vs. time.
+;- TO DO: make a separate routine for reading in maps and power vs. time.
 ;         Also need a different name for power vs. time.
 ;         --> Google this, may be an actual analysis method with a real name.
 

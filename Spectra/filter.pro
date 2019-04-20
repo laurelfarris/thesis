@@ -1,3 +1,5 @@
+;- See comp book p. 99-103
+;-  and Enotes -- "Detrending | FFT filter", "light curves - detrended"
 
 ;- Thu Nov 29 08:12:03 MST 2018
 
