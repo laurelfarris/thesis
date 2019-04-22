@@ -164,16 +164,16 @@ function BATCH_PLOT, $
         xdata, ydata, $
         wx = 8.0, $
         wy = 3.0, $
+        left = 1.00, $
+        right = 1.10, $
+        bottom = 0.5, $
+        top = 0.2, $
+        buffer = 1, $
         ;overplot = 0, $
         name = name, $
         color = color, $
         linestyle = linestyle, $
         thick = thick, $
-        buffer = 1, $
-        left = 1.00, $
-        right = 1.10, $
-        bottom = 0.5, $
-        top = 0.2, $
         _EXTRA = e )
 
     return, plt

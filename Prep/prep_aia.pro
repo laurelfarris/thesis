@@ -1,11 +1,17 @@
 ;-
 ;- LAST MODIFIED:
-;-   Thu Dec 20 06:33:23 MST 2018
+;-   21 April 2019
+;-     Now that the "multi-flare" phase of my research has begun,
+;-     added (string) arguments 'year', 'month', and 'day'
 ;-
 ;- PURPOSE:
 ;-   Read AIA headers and restore .sav files (data)
 ;- INPUT:
 ;- KEYWORDS:
+;-   inst - even though this routine is for aia only, may figure out how
+;-          to combine multiple instruments in one routine, so leaving as
+;-          general as possible
+;-
 ;- OUTPUT:
 ;- TO DO:
 
@@ -19,81 +25,104 @@
 
 
 
-
-
-; nodata does the same thing as in read_sdo
-
-
-function POWER_IN_STRUC, struc
-
-
-    ;power_flux = GET_POWER( $
-    ;    struc.flux, cadence=struc.cadence, channel=struc.channel, data=struc.data)
-    ;struc = create_struct( struc, 'power_flux', power_flux )
-
-;    power_maps = GET_POWER_FROM_MAPS( $
-;        struc.data, struc.channel, threshold=10000, dz=64)
-;    struc = create_struct( struc, 'power_maps', power_maps )
-
-    return, struc
-end
-
-
-function PREP_AIA, index, cube, cadence=cadence, inst=inst, channel=channel, $
+function PREP_AIA, index, cube, $
+    ;year, month, day, $
+    cadence=cadence, $
+    inst=inst, $
+    channel=channel, $
     ind=ind
 
-    ; Read headers
+
+    ;- Unprepped filename:
+    ;-  aia.lev1.channelA_yyyy-mm-ddThh_mm_ss.ssZ.image_lev1.fits
+    ;- Prepped filename:
+    ;-  AIAyyyymmdd_hhmmss_channel.fits
+
+
+
+    ;- Parameters specific to individual flare
+    @parameters
+
+    ;- Read headers only from Prepped fits files, return as variable "index"
     if n_elements(index) eq 0 then begin
         resolve_routine, 'read_my_fits'
         READ_MY_FITS, index, $
             inst=inst, $
             channel=channel, $
             nodata=1, $
-            prepped=1
-
-            ; 23 Sep 2018
-            ; set prepped to 1 - don't know why it wasn't already
-
+            prepped=1, $
+            year=year, $
+            month=month, $
+            day=day
     endif
+    print, ''
     print, 'Reading header for level ', $
         strtrim(index[0].lvl_num,1), ' data.'
+    print, ''
 
-    ; Restore data (in variable "cube", with pixel dimensions [750,500,749]),
-    ;   interpolate to get missing data and corresponding timestamp,
-    ;   then crop data to pixel dimensions [500,330,*].
-    ; Reasons if statement doesn't work here:
-    ;   Also get time and jd, which are needed for structure
+    ;- Restore data in variable "cube", with pixel dimensions:
+    ;- 2011-02-15
+    ;-   AIA 1600 [750,500,745]
+    ;-   AIA 1700 [750,500,749]
+    ;- 2013-12-28
+    ;-   AIA 1600 [1000,800,596]
+    ;-   AIA 1700 [1000,800,594]
+
+
     ;if n_elements(cube) eq 0 then begin
+      ;- Originally written to skip restoring cube from .sav file if this
+      ;-  routine had already been run, to save time.
+      ;-  Unfortunately, can't skip this step because
+      ;-  the variables 'time' and 'jd' are generated in the same code
+      ;-  that crops and interpolates cube.
+      ;-  Maybe those should be two separate routines... not top priority right now.
 
-    if (inst eq 'aia') then restore, $
-        '/solarstorm/laurel07/aia' + channel + 'aligned.sav'
+    path = '/solarstorm/laurel07/' + year + month + day + '/'
+    restore, path + inst + channel + 'aligned.sav'
 
+    help, cube ; --> INT [1000, 800, 596]  (AIA 1600, 2013 flare)
 
     time = strmid(index.date_obs,11,11)
     jd = GET_JD( index.date_obs + 'Z' )
 
+    ;- interpolate to get missing data and corresponding timestamp
     LINEAR_INTERP, cube, jd, cadence, time
-    ;help, cube
-    cube = crop_data(cube)
-    ;help, cube
+    ;help, cube ; --> FLOAT [1000, 800, 600]  (AIA 1600, 2013 flare)
+
+    ;- NOTE: original center coords should NOT be used for cropped data.
+    ;-  (will be "out of range"). This keyword is more useful when starting with
+    ;-  full disk, or zooming in on ROIs within AR.
+    ;- If not provided, crop_data.pro computes center using provided dimensions,
+    ;-   which is what we want here.
+    ;- If dimensions are not provided, default = [500,330,*] (2011 flare dimensions).
+    cube = CROP_DATA(cube, dimensions=dimensions)
+    ;help, cube ; --> FLOAT [dim[0], dim[1], 600]  (AIA 1600, 2013 flare)
     ;cube = fix( round( cube ) )
 
     ;- Correct for exposure time (standard data reduction)
+    ;-  Does this apply to HMI as well?
     exptime = index[0].exptime
     ;print, 'Exposure time = ', strtrim(exptime,1), ' seconds.'
     cube = cube/exptime
+    ;- exptime is type DOUBLE, so now cube is too...
+    ;help, cube ; --> DOUBLE [dim[0], dim[1], 600]  (AIA 1600, 2013 flare)
 
     sz = size( cube, /dimensions )
 
-    ; X/Y coordinates of AR, converted from pixels to arcseconds
-    x1 = 2150
-    y1 = 1485
-    X = ( (indgen(sz[0]) + x1) - index.crpix1 ) * index.cdelt1
-    Y = ( (indgen(sz[1]) + y1) - index.crpix2 ) * index.cdelt2
+    ;x1 = 2150
+    ;y1 = 1485
     ; NOTE: Hard coded coords of lower left corner;
     ;   can't automatically generate these values unless I somehow
     ;    save them when aligning or prepping the data.
+    ;- UPDATE: Run @parameters to read in all values specific to desired flare
+    ;-  (make sure the proper lines are commented first).
 
+    ; X/Y coordinates of AR, converted from pixels to arcseconds
+;    X = ( (indgen(sz[0]) + x1) - index.crpix1 ) * index.cdelt1
+;    Y = ( (indgen(sz[1]) + y1) - index.crpix2 ) * index.cdelt2
+
+    X = ( (indgen(sz[0]) + x1) - index[0].crpix1 ) * index[0].cdelt1
+    Y = ( (indgen(sz[1]) + y1) - index[0].crpix2 ) * index[0].cdelt2
 
     ;- Calculate total flux over AR
     ;cube = float(cube)
@@ -106,12 +135,10 @@ function PREP_AIA, index, cube, cadence=cadence, inst=inst, channel=channel, $
 
     name = 'AIA ' + channel + '$\AA$'
 
-
     ;- 14 Decemer 2018
     ;map = fltarr( sz[0], sz[1], 686 )
     map = make_array( sz[0], sz[1], 686, /float, /nozero )
     ;- Not sure if /nozero helps free up memory, but worth a shot.
-
 
     ;- MEMORY - Is this making copies of everything?
     struc = { $
@@ -144,33 +171,49 @@ end
 goto, start
 start:;---------------------------------------------------------------------------------------------
 
-; A = replicate( struc, 2 )
-; ... potentially useful?
+;- Alternative ways to create structure array:
 
-; need to re-read data, but not headers... commented in subroutine for now.
+;- 1.
+;- Define individual structure for each channel, use to create 'A',
+;-  then set = 0 to clear memory.
+aia1600 = PREP_AIA( aia1600index, aia1600data, cadence=24., inst='aia', channel='1600' )
+aia1700 = PREP_AIA( aia1700index, aia1700data, cadence=24., inst='aia', channel='1700' )
+;aia1600.color = 'dark orange'
+;aia1700.color = 'dark cyan'
+A = [ aia1600, aia1700 ]
 
+;aia1600 = !NULL
+;aia1700 = !NULL
+;- or
+;delvar, aia1600
+;delvar, aia1700
+;-  Read up on exactly what DELVAR does.
 
-A = []
-A = [A, PREP_AIA( aia1600index, aia1600data, cadence=24., inst='aia', channel='1600' ) ]
-A = [A, PREP_AIA( aia1700index, aia1700data, cadence=24., inst='aia', channel='1700' ) ]
+;- 2.
+;- initialize 'A' as a !NULL variable, 
+;A = []
+;A = [A, PREP_AIA( aia1600index, aia1600data, cadence=24., inst='aia', channel='1600' ) ]
+;A = [A, PREP_AIA( aia1700index, aia1700data, cadence=24., inst='aia', channel='1700' ) ]
+
+;---
 
 print, 'NOTE: aia1600index, aia1600data, aia1700index, and aia1700data'
 print, '         still exist at ML. '
-
 
 ;A[0].color = 'dark orange'
 ;A[1].color = 'dark cyan'
 A[0].color = 'blue'
 A[1].color = 'red'
 
-;aia1600 = PREP( aia1600index, aia1600data, cadence=24., inst='aia', channel='1600' )
-;aia1700 = PREP( aia1700index, aia1700data, cadence=24., inst='aia', channel='1700' )
-;aia1600.color = 'dark orange'
-;aia1700.color = 'dark cyan'
-;A = [ aia1600, aia1700 ]
 
+;- Create different routine for doing this. Leave comment here directing user
+;-  to this routine to avoid confusion.
+print, ''
 print, '   Type ".CONTINUE" to restore power maps.'
+print, ''
 stop
+help, A[0].data
+help, A[1].data
 
 @restore_maps
 
@@ -189,6 +232,14 @@ restore, '../power_from_maps.sav'
 
 ;A[0].power_maps = aia1600power_from_maps
 ;A[1].power_maps = aia1700power_from_maps
+
+;------------------------------------------------------------------------------------
+
+; A = replicate( struc, 2 )
+; ... potentially useful?
+; need to re-read data, but not headers... commented in subroutine for now.
+
+;------------------------------------------------------------------------------------
 
 ;- 23 September 2018
 A[0].data = A[0].data > 0

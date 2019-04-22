@@ -76,8 +76,8 @@ function GOES, tstart=tstart, tend=tend, sat=sat
     ;!P.Color = 253
     ;!P.Background = 254
 
-    !P.Color = '000000'x
-    !P.Background = 'ffffff'x
+;    !P.Color = '000000'x
+;    !P.Background = 'ffffff'x
 
     ; GOES satellite preference (15 is the latest, at the time of writing).
     if not keyword_set(sat) then sat = 'goes15'

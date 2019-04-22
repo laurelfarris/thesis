@@ -13,17 +13,18 @@
 ;-    I am the world's worst commenter.
 ;-
 ;- KEYWORDS:
-;-   t_obs  -- string array of observation times from index.t_obs
-;-       ... or is it just one value? plot_lc.pro set t_obs = index[0].t_obs
-;-           I'm very confused on what I was trying to do here.
+;-   t_obs  -- string array of observation times from A[0].t_obs
+;-     where A[0] is AIA 1600 -- same values are used for both channels
+;-     (Tried using JD to be more scientifially correct, but too much
+;-      of a pain, and the values are close enough for plotting light curves.
 ;-   shaded -- set to shade the portion of the plot contained within vert lines.
 ;-   goes   -- set if plotting data from GOES, not AIA (corrects for cadence).
 ;-   send_to_back -- set to plot vertical lines behind all others.
 ;-      Uses the IDL method for graphic objects.
 ;-   date = 'dd-Mon-yyyy '   -->  don't forget the last space!
-;-   tstart = 'hh:mm:ss'
-;-   tpeak =  'hh:mm:ss'
-;-   tend =   'hh:mm:ss'
+;-   gstart = 'hh:mm:ss'
+;-   gpeak =  'hh:mm:ss'
+;-   gend =   'hh:mm:ss'
 ;-
 ;- TO DO:
 ;-  [] Test to see if GOES start/peak/end times have to have seven elements.
@@ -31,30 +32,16 @@
 ;-  [] Rewrite hardcoded values for Sep 15, 2011 flare as
 ;-        optional kws, and set hardcoded values as defaults.
 ;-        (I made the same changes in goes.pro... better than nothing)
-;-  [] Replace the individual variables tstart, tend, and tpeak with an array?
+;-  [] Replace the individual variables gstart, gend, and gpeak with an array?
 ;-  [] Go directly from time string to jd and vice versa.
 ;-    Not sure what I meant by this, but jd doesn't even appear in the code...
 ;-      could probably remove it altogether.
 ;-
-;- NOTE:
-;-   Notes on oplot_vertical_lines in comp book p 10 -- might be helpful
-;-
 
 
-pro oplot_vertical_lines
-;pro oplot_horizontal_lines
-;pro oplot_lines
 
-    ;- 20 April 2019
-    ;- From comp book p. 10: musings about user entering 2 arrays
-    ;-  and then this subroutine should figure out whether they're horizontal
-    ;-  or vertical, b/c one arg would be an array and the other would be
-    ;-  just the x or y coord? Not sure actually... never did write a good
-    ;-  routine for general plotting of horizontal and/or vertical lines.
-
-end
-
-pro OPLOT_FLARE_LINES, $
+;pro OPLOT_FLARE_LINES, $
+function OPLOT_FLARE_LINES, $
     plt, $
     t_obs=t_obs, $
     ;jd=jd, $  Not used anywhere in code... only appears in one comment, but
@@ -66,28 +53,31 @@ pro OPLOT_FLARE_LINES, $
     ;yrange=yrange, $   ; ?????
     send_to_back=send_to_back, $
     date=date, $
-    tstart=tstart, $
-    tpeak=tpeak, $
-    tend=tend, $
+    gstart=gstart, $
+    gpeak=gpeak, $
+    gend=gend, $
     _EXTRA=e
 
 
-
-    if not keyword_set(date) then date = '15-Feb-2011 '
-
-    if not keyword_set(tstart) then tstart = '01:44:00'
-    if not keyword_set(tpeak) then tpeak = '01:56:00'
-    if not keyword_set(tend) then tend = '02:06:00'
+;    if not keyword_set(date) then date = '15-Feb-2011 '
+;    if not keyword_set(gstart) then gstart = '01:44:00'
+;    if not keyword_set(gpeak) then gpeak = '01:56:00'
+;    if not keyword_set(gend) then gend = '02:06:00'
     ;- Or manually append the ":00" part?
-    ;-   e.g.: if STRLEN(tstart) ne 8 then tstart = tstart + ':00'
+    ;-   e.g.: if STRLEN(gstart) ne 8 then gstart = gstart + ':00'
 
-    phases = [tstart, tpeak, tend]
+
+    @parameters
+    ;-   21 April 2019
+    ;-     call script "parameters" to set flare-specific variables
+
+    phases = [gstart, gpeak, gend]
 
 
     ;--- GOES ----------------
     if keyword_set(goes) then begin
 
-        flare_times = date + [ tstart, tpeak, tend ]
+        flare_times = date + [ gstart, gpeak, gend ]
         flare_times = date + phases
 
         ;- Each element in the FLARE_TIMES array is a string of the form
@@ -126,9 +116,9 @@ pro OPLOT_FLARE_LINES, $
         ;-   Instead, convert each time from "hh:mm:ss" to "hh:mm".
         ;-   Variables already in the form "hh:mm" won't change.
         flare_times = [ $
-            strmid( tstart, 0, 5 ), $
-            strmid( tpeak, 0, 5 ), $
-            strmid( tend, 0, 5 ) ]
+            strmid( gstart, 0, 5 ), $
+            strmid( gpeak, 0, 5 ), $
+            strmid( gend, 0, 5 ) ]
 
         ;-  For GOES, flare_times is of the form: "15-Feb-2011 00:00:01.725"
         ;-  For  AIA, flare_times is of the form: "15-Feb-2011 00:00"
@@ -136,7 +126,7 @@ pro OPLOT_FLARE_LINES, $
 
         time = strmid( t_obs, 0, 5 )
         ;-   As with start/peak/end times,
-        ;-     variables already in the form "hh:mm" won't change.
+
 
         nn = n_elements(flare_times)
 
@@ -149,9 +139,9 @@ pro OPLOT_FLARE_LINES, $
     endelse
 
     flare_times = [ $
-        strmid( tstart, 0, 5 ), $
-        strmid( tpeak, 0, 5 ), $
-        strmid( tend, 0, 5 ) ]
+        strmid( gstart, 0, 5 ), $
+        strmid( gpeak, 0, 5 ), $
+        strmid( gend, 0, 5 ) ]
     name = flare_times + [ ' UT (start)', ' UT (peak)', ' UT (end)' ]
 
 
@@ -270,5 +260,5 @@ pro OPLOT_FLARE_LINES, $
 
     endif
     plt = [ plt, vert ]
-    ;return, vert
+    return, vert
 end

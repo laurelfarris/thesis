@@ -1,4 +1,8 @@
-
+;---------------------------------------------------------------------------------
+;- 21 April 2019
+;-   This routine is currently outdated!
+;-   Use separate routines prep_aia.pro and prep_hmi.pro for now.
+;---------------------------------------------------------------------------------
 ;-
 ;- LAST MODIFIED: Thu Dec 20 06:33:23 MST 2018
 ;-   Added keyword "ind" to only return a subset of time series.
@@ -39,7 +43,10 @@
 ;-     but not the fits files, where index is always extracted.
 
 
-function PREP, index, cube, cadence=cadence, inst=inst, channel=channel, $
+function PREP, index, cube, $
+    cadence=cadence, $
+	inst=inst, $
+	channel=channel, $
     ind=ind
 
     ; Read headers
@@ -48,7 +55,7 @@ function PREP, index, cube, cadence=cadence, inst=inst, channel=channel, $
         READ_MY_FITS, index, $
             inst=inst, $
             channel=channel, $
-            nodata=1, $ ;- same functionality as sswidl's read_sdo.pro
+            nodata=1, $
             prepped=1
     endif
 
@@ -58,28 +65,22 @@ function PREP, index, cube, cadence=cadence, inst=inst, channel=channel, $
     ;-   HMI [750,500,400] "../hmi_mag.sav"
     ;-   HMI [750,500,398] "../hmi_cont.sav"
 
-    ;- If "cube" has already been restored once, don't repeat this whole process:
-    ;if n_elements(cube) eq 0 then begin
-        ;- Actually this doesn't work... can't skip this step because
-        ;- the same code that crops and interpolates cube also generates
-        ;-   variables 'time' and 'jd', which are needed for structure
-        if (inst eq 'aia') then begin
-            restore, '/solarstorm/laurel07/aia' + channel + 'aligned.sav'
-            name = 'AIA ' + channel + '$\AA$'
-            ;- Standard AIA colors
-            aia_lct, r, g, b, wave=fix(channel);, /load
-            ct = [ [r], [g], [b] ]
-        endif
-        if (inst eq 'hmi') then begin
-            restore, '../hmi_' + channel + '.sav'
-            ;restore, '../' + inst + '_' + channel + '.sav'
-            ; --> still doesn't match aia filenames...
-            if channel eq 'mag' then name = 'HMI B$_{LOS}$'
-            if channel eq 'cont' then name = 'HMI intensity'
-            ;- Does HMI have starndard colors?
-            ct = 0
-        endif
-    ;endif
+    if (inst eq 'aia') then begin
+        restore, '/solarstorm/laurel07/aia' + channel + 'aligned.sav'
+        name = 'AIA ' + channel + '$\AA$'
+        ;- Standard AIA colors
+        aia_lct, r, g, b, wave=fix(channel);, /load
+        ct = [ [r], [g], [b] ]
+    endif
+    if (inst eq 'hmi') then begin
+        restore, '../hmi_' + channel + '.sav'
+        ;restore, '../' + inst + '_' + channel + '.sav'
+        ; --> still doesn't match aia filenames...
+        if channel eq 'mag' then name = 'HMI B$_{LOS}$'
+        if channel eq 'cont' then name = 'HMI intensity'
+        ;- Does HMI have standard colors?
+        ct = 0
+    endif
 
     ;- Interpolate to get missing data and corresponding timestamp.
     time = strmid(index.date_obs,11,11)

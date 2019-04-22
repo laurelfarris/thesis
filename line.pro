@@ -19,6 +19,23 @@
 ;-   As long as code still has access to the plot to put the lines on it...
 
 
+
+pro oplot_vertical_lines
+;pro oplot_horizontal_lines
+;pro oplot_lines
+
+    ;- 20 April 2019
+    ;- From comp book p. 10: musings about user entering 2 arrays
+    ;-  and then this subroutine should figure out whether they're horizontal
+    ;-  or vertical, b/c one arg would be an array and the other would be
+    ;-  just the x or y coord? Not sure actually... never did write a good
+    ;-  routine for general plotting of horizontal and/or vertical lines.
+;- NOTE:
+;-   Notes on oplot_vertical_lines in comp book p 10 -- might be helpful
+;-
+end
+
+
 pro HLINE, $
     plt, $
     yindices, $

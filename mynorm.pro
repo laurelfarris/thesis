@@ -1,3 +1,4 @@
+;- Only works for 1D array!
 function mynorm, arr
 
 

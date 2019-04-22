@@ -120,9 +120,11 @@ pro READ_MY_FITS, index, data, fls, $
     fls = file_search( path + files )
     if N_elements(ind) ne 0 then fls = fls[ind]
 
+    print, ''
     print, n_elements(fls), ' file(s) returned, in variable "fls".'
-    print, 'Type .c to read files, or RETALL to return to main level.'
-    stop
+    print, ''
+    ;print, 'Type .c to read files, or RETALL to return to main level.'
+    ;stop
 
 
     ;- Read fits files

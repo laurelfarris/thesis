@@ -60,9 +60,8 @@ function IMAGE3_wrapper, $
     ;-   Calculate using aspect ratio of data cube.
     width = (wx - ( left + right + (cols-1)*xgap )) / float(cols)
     height = width * float(sz[1])/sz[0]
-    ;print, width
-    ;print, height
-
+;    print, width
+;    print, height
 
     ;- Window height (wy):
     wy = top + bottom + (rows*height) + (rows-1)*ygap
@@ -75,7 +74,8 @@ function IMAGE3_wrapper, $
     else $
         win = window(dimensions=[wx,wy]*dpi, location=[250,0])
 
-    ;print, win.dimensions/dpi
+    print, win.dimensions/dpi
+    stop
 
     im = objarr(nn)
 
@@ -145,7 +145,6 @@ function IMAGE3, data, XX, YY, _EXTRA=e
 
     if n_elements(XX) eq 0 then XX = indgen(sz[0])
     if n_elements(YY) eq 0 then YY = indgen(sz[1])
-
 
 
     im = IMAGE3_wrapper( $

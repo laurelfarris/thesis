@@ -52,6 +52,9 @@ function COMPUTE_POWERMAPS, $
 
     if n_elements(dz) eq 0 then dz = sz[2]
 
+    ;- Set default bandwidth as 1 mHz
+    if not keyword_set(bandwidth) then bandwidth = 0.001
+
     if keyword_set(fcenter) and keyword_set(bandwidth) then begin
         fmin = fcenter - bandwidth/2.
         fmax = fcenter + bandwidth/2.
@@ -129,6 +132,10 @@ function COMPUTE_POWERMAPS, $
 end
 
 
+;- The following routines were written in DC as a way to save bits of
+;-   power maps at a time to avoid losing everything every time the
+;-   ssh connection was lost (which was a lot...).
+;- Can be ignored if working at office.
 pro AIA_MAPS, cube, channel, file, start=start, norm=norm
     ; Generates new map or restores EXISTING map and starts at kw 'start'.
     ; WRITES TO FILE!
@@ -167,7 +174,12 @@ pro AIA_MAPS, cube, channel, file, start=start, norm=norm
         ;   (find better way to do this... later)
         if sz[2] - i LT step then z = [i:sz[2]-1] else z = [i:i+step-1]
 
-        map[*,*,z] = POWER_MAPS( $
+        ;map[*,*,z] = POWER_MAPS( $
+        map[*,*,z] = COMPUTE_POWERMAPS( $
+            ;- 21 April 2019
+            ;- I think power_maps was renamed to compute_powermaps
+            ;-  so it was more obvious what the routine was for.
+            ;-  Same change in the following function.
             cube, cadence, [fmin,fmax], z=z, dz=dz, norm=norm )
 
         save, map, filename=file
@@ -200,7 +212,8 @@ function MAKE_FEW_MAPS, data, time
     for i = 0, N-2 do begin
         i1 = (where( time eq z[i] ))[0]
         i2 = (where( time eq z[i+1] ))[0] - 1
-        map[*,*,i] = power_maps( $
+        ;map[*,*,i] = power_maps( $
+        map[*,*,i] = COMPUTE_POWERMAPS( $
             data[*,*,i1:i2], 24, [fmin,fmax], threshold=10000 )
     endfor
     return, map

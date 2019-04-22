@@ -48,8 +48,12 @@ function GET_POWER_MAPS, $
     z_end = z_start + dz - 1
     t_end = time[z_end]
 
-
     data = A[cc].data[*,*,z_start:z_end]
+    ;- WFT is "z_end" for?
+    ;- could just do the following, and
+    ;-   don't set pointless variables that confuse me later...
+    ;data = A[cc].data[*,*,z_start:z_start+dz-1]
+
     sz = size(data, /dimensions)
 
     fmin = fcenter - (bandwidth/2.)
@@ -63,6 +67,13 @@ function GET_POWER_MAPS, $
     title = strarr(nn)
 
     for ii = 0, nn-1 do begin
+        ;- "z_start" can't have more than one element, otherwise returned result
+        ;-   will be a 3D cube, and fill more than just the "ii-th" index in the
+        ;-  z-dimension of "map"... tho it is for various "fcenter", so z_start
+        ;-   is probably the same every time.
+        ;- compute_powermaps.pro was written to loop through several values of
+        ;-  z_ind, but since wanted to do several values of fcenter, all at the
+        ;- SAME z_ind, had to put compute_powermaps on the inside of a new loop.
         map[*,*,ii] = POWERMAPS( $
             data, A[cc].cadence, $
             fcenter=fcenter[ii], $

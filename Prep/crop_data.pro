@@ -39,12 +39,21 @@ function CROP_DATA, data, $
 
     ; Crop relative to center of input cube by default
     if not keyword_set(center) then begin
-        ; Use these for MISaligned data (aia_####_misaligned.sav)
+
+        ;- Added 15 to coords in each dimension for 2011 flare,
+        ;-   don't remember why. Should have added a comment explaining this...
+        ;x_center = sz[0]/2 + 15
+        ;y_center = sz[1]/2 + 15
+
+        x_center = sz[0]/2
+        y_center = sz[1]/2
+
+        ; Use these for MISaligned data, aia_####_misaligned.sav
+        ; (the above values are for properly aligned data,
+        ;      aia_####_aligned.sav)
         ;x_center = 365
         ;y_center = 410
-        ; Use these for aligned data (aia_####_aligned.sav)
-        x_center = sz[0]/2 + 15
-        y_center = sz[1]/2 + 15
+
     endif else begin
         x_center = center[0]
         y_center = center[1]

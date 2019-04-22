@@ -99,6 +99,7 @@ end
 
 goto, start
 start:
+@parameters ;- 21 April 2019
 
 ;resolve_routine, 'oplot_horizontal_lines', /either
 resolve_routine, 'oplot_flare_lines', /either
@@ -205,7 +206,9 @@ for ii = 0, 1 do begin
     ax = im[ii].axes
     xtickvalues = fix(round(ax[0].tickvalues))
     ax[0].tickname = time[xtickvalues]
-    ax[0].title = 'Start time (UT) on 2011-February-15'
+    ;ax[0].title = 'Start time (UT) on 2011-February-15'
+    ax[0].title = 'Start time (UT) on ' + date
+      ;- 21 April 2019: added @parameters to top of routine
 
     f1 = flower * 1000
     f2 = fcenter * 1000

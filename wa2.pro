@@ -49,6 +49,7 @@ end
 
 goto, start
 start:;---------------------------------------------------------------------------------
+@parameters ;- 21 April 2019
 
 ;- User numbers to change (which is why these lines are up at the top, even
 ;-   though fcenter, flower, and fupper aren't used until much farther down).
@@ -162,7 +163,9 @@ for cc = 0, 1 do begin
     ax = im[cc].axes
     xtickvalues = fix(round(ax[0].tickvalues))
     ax[0].tickname = time[xtickvalues]
-    ax[0].title = 'Start time (UT) on 2011-February-15'
+    ;ax[0].title = 'Start time (UT) on 2011-February-15'
+    ax[0].title = 'Start time (UT) on ' + date
+      ;- 21 April 2019: added @parameters to top of routine
 
     f1 = flower * 1000
     f2 = fcenter * 1000

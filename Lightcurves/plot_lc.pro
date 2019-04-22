@@ -1,8 +1,9 @@
 ;+
 ;- LAST MODIFIED:
-;-   28 November 2018
+;-   21 April 2019
 ;-
 ;- PURPOSE:
+;-   Plot light curves.
 ;-
 ;- INPUT:
 ;-
@@ -15,106 +16,77 @@
 
 goto, start
 
-;- Detour: AIA flare start/end times
-
-
-;- End time: after peak, when flux drops to 0.5*(peak-bg).
-;-    This is how GOES end time is determined, so using the same thing for AIA.
-for cc = 0, 1 do begin
-    bg = mean(A[cc].flux[125:159])
-    flare_end = bg + 0.05*( max(A[cc].flux) - bg )
-    print, (where( A[cc].flux[0:375] ge flare_end ))[-1]
-    ;print, (A[cc].time[where( A[cc].flux[0:375] ge flare_end )])[-1]
-endfor
-stop
-
-
-;- where do AIA channels start to increase?
-;xtemp = [0:225]
-;xtemp = [250:375]
-;xtemp = [450:525]
-xtemp = [630:748]
-ytemp = A.flux[xtemp]; * A[cc].exptime
-xtemp = [ [xtemp], [xtemp] ]
-
-plt = BATCH_PLOT( $
-    xtemp, ytemp, $
-    ;xtickinterval = 5, xminor = 3, $
-    xtickinterval = 25, xminor = 9, $
-    yminor = 9, $
-    color = A.color, $
-    name = A.name, $
-    buffer=0, $
-    wx = 11.0, $
-    wy = 8.5, $
-    left   = 1.25, $
-    right  = 1.25, $
-    top    = 2.5, $
-    bottom = 2.5, $
-    sym_size = 0.3, $
-    symbol='Circle')
-
-
-
-resolve_routine, 'shift_ydata', /either
-delt = [ $
-    min(ytemp[*,0]), min(ytemp[*,1]) - 0.08*max(ytemp[*,1]) ]
-SHIFT_YDATA, plt, delt=delt, ytitle = A.name + ' (DN s$^{-1}$)'
-
-resolve_routine, 'label_time', /either
-LABEL_TIME, plt, time=A.time
-
-ax = plt[0].axes
-
-d = goes()
-ax[0].title = 'Start Time (' + d.utbase + ' UT)'
-
-ax[2].title = 'Index'
-ax[2].minor = 4
-ax[2].showtext = 1
-
-;ax[1].tickname = scinot( ax[1].tickvalues )
-;ax[3].tickname = scinot( ax[3].tickvalues )
-
-stop
-
-
-
 start:;----------------------------------------------------------------------------------
+
+@parameters
 
 file = 'lc'
 
-ydata = A.flux
+;ydata = A.flux
+
+;- sloppy normalizing...
+ydata1 = A[0].flux
+ydata2 = A[1].flux
+ydata1 = ( ydata1 - min(ydata1) )/(max(ydata1)-min(ydata1))
+ydata2 = ( ydata2 - min(ydata2) )/(max(ydata2)-min(ydata2)); + 0.1
+
+ydata = [ [ydata1], [ydata2] ]
+
+n_obs = (size(ydata, /dimensions))[0]
 ;xdata = A.jd
-xdata = [ [indgen(749)], [indgen(749)] ]
+xdata = [ [indgen(n_obs)], [indgen(n_obs)] ]
 ;xtickinterval = A[0].jd[75] - A[0].jd[0]
 xtickinterval = 75
 ytitle=A.name + ' (DN s$^{-1}$)'
+
+;ytickinterval = 0.2
+ymajor = 2
 
 dw
 resolve_routine, 'batch_plot', /either
 plt = BATCH_PLOT(  $
     xdata, ydata, $
-    xrange=[0,748], $
+    ystyle=1, $
+    xrange=[0,n_obs-1], $
     thick=[0.5, 0.8], $
     xtickinterval=xtickinterval, $
+    ;ytickinterval=ytickinterval, $
+    ymajor = ymajor, $
     ;ylog = 1, $
     color=A.color, $
     name=A.name, $
     buffer=0 )
 
 
-resolve_routine, 'label_time', /either
-LABEL_TIME, plt, time=A.time;, jd=A.jd
+increment = (max(ydata1)-min(ydata1))/ymajor
 
-resolve_routine, 'shift_ydata', /either
-SHIFT_YDATA, plt
+ax = plt[0].axes
+;ax[1].tickname = string( [ min(A[0].flux) : max(A[0].flux) : increment ] ) 
+;ax[3].tickname = string( [ min(A[1].flux) : max(A[1].flux) : increment ] ) 
+ax[1].tickname = [ '2.78$\times10^{7}$' , '2.94$\times10^{7}$' ]
+ax[3].tickname = [ '4.96$\times10^{8}$' , '9.08$\times10^{8}$' ]
 
-;- 17 April 2019
-;-  oplot_flare_lines.pro does not appear to be using jd...
-;-   unless plot_lc.pro is also outdated, I'm not sure what's going on here.
+;dy = ytickinterval * (max(A[0].flux)-min(A[0].flux))
+;ax[1].tickname = string( [ min(A[0].flux) : max(A[0].flux) : dy ] )
+;ax[1].tickname = strarr( plot[0].ymajor )
+
+ax[3].showtext = 1
+
+time = strmid( A[0].time, 0, 5 )
+ax[0].tickname = time[ax[0].tickvalues]
+ax[0].title = 'Start time (' + date + ' ' + tstart + ')'
+
+;resolve_routine, 'label_time', /either
+;LABEL_TIME, plt, time=A.time;, jd=A.jd
+
+;resolve_routine, 'shift_ydata', /either
+;SHIFT_YDATA, plt
+
 resolve_routine, 'oplot_flare_lines', /either
-OPLOT_FLARE_LINES, plt, t_obs=A[0].time, jd=A.jd, thick=1.0
+OPLOT_FLARE_LINES, plt, t_obs=A[0].time, thick=1.0;, jd=A.jd
+;-   17 April 2019
+;-    oplot_flare_lines.pro does not appear to be using jd...
+;-     unless plot_lc.pro is also outdated, I'm not sure what's going on here.
 
 
 resolve_routine, 'legend2', /either
@@ -122,15 +94,15 @@ leg = LEGEND2( target=plt, /upperleft, sample_width=0.25 )
 
 ax = plt[0].axes
 ax[1].title = ytitle[0]
-ax[1].tickvalues = [2:8:2]*10.^7
+;ax[1].tickvalues = [2:8:2]*10.^7 ; -- hardcoded, 2011 flare
 ;ax[1].tickname = scinot( ax[1].tickvalues )
 ax[1].minor = 3
 
 
 ax = plt[1].axes
 ax[3].title = ytitle[1]
-ax[3].tickvalues = [2.2:2.8:0.2]*10.^8
-ax[3].tickname = scinot( ax[3].tickvalues )
+;ax[3].tickvalues = [2.2:2.8:0.2]*10.^8 ; -- hardcoded, 2011 flare
+;ax[3].tickname = scinot( ax[3].tickvalues )
 ax[3].minor = 3
 
 
@@ -143,6 +115,10 @@ ax[3].text_color = A[1].color
 ;print, 'How do colored axes look??'
 ;print, 'ax[1] set color, ax[3] set text_color'
 ; 17 February 2019 - going with text_color
+
+stop
+
+
 
 
 ; Single lines creating each object that can easily be commented.
