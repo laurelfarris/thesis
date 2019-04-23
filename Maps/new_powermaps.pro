@@ -11,9 +11,8 @@
 
 goto, start
 
-start:;-----------------------------------------------------------------------------
 
-cc = 0
+cc = 1
 
 fcenter = 1./180
 bandwidth = 0.001
@@ -32,7 +31,6 @@ z_start = [0:sz[2]-dz]
 ;help, n_elements(z_start)
 ;print, n_elements(z_start)
 ;print, 'aia' + A[cc].channel + 'map.sav'
-stop
 
 nn = n_elements(z_start)
 
@@ -44,7 +42,8 @@ map = COMPUTE_POWERMAPS( $
     z_start=z_start, $
     dz=dz )
 
-save, map, 'aia' + A[cc].channel + 'map.sav'
+start:;-----------------------------------------------------------------------------
+save, map, filename = 'aia' + A[cc].channel + 'map.sav'
 
 stop
 ;____________________________________________________________________________________

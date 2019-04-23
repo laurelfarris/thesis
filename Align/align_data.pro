@@ -15,8 +15,9 @@
 ;   3. crop data to size 750x500 relative to center
 ;   4. Align
 ;   5. save to '*aligned.sav' file
-;-
-
+;
+;- 22 April 2019
+;- Is there any benefit to have this in a subroutine?
 
 
 pro ALIGN_DATA, cube, ref, allshifts
@@ -42,4 +43,70 @@ pro ALIGN_DATA, cube, ref, allshifts
     endrep until ( k ge 2 && sdv[k-1] gt sdv[k-2] )
     print, "End:  ", systime()
     print, format='(F0.2, " minutes")', (systime(/seconds)-start_time)/60.
+end
+
+
+@parameters
+
+
+;- § Read PREPPED fits files
+
+resolve_routine, 'read_my_fits', /either
+READ_MY_FITS, index, data, fls, $
+    instr=instr, $
+    channel=channel, $
+    nodata=0, $
+    prepped=1, $
+    year=year, $
+    month=month, $
+    day=day
+
+
+
+;- § Crop to subset centered on AR,
+
+;- Replace dimensions from @parameters with
+;- "padded" dimensions -- extra pixels to prepare for alignment
+dimensions = [1000, 800]
+
+resolve_routine, 'crop_data', /either
+cube = CROP_DATA( $
+    data, $
+    center=center, $
+    dimensions=dimensions )
+;- NOTE: if kw "dimensions" isn't set, defaults to [500,330] in crop_data.pro
+
+
+
+;- § Align prepped, cropped data
+
+;- Use image in center of time series as reference.
+sz = size(data, /dimensions)
+ref = cube[*,*,sz[2]/2]
+
+;- Loop through ALIGN_CUBE3 until stddev stops decreasing
+ALIGN_DATA, cube, ref, shifts
+stop
+
+;- Check values and plot shifts.
+;print, max( all_shifts[0,*,0] )
+;print, max( all_shifts[0,*,5] )
+;plt = plot2( shifts[0,*], color='red' )
+;plt = plot2( shifts[1,*], color='blue', overplot=1 )
+
+
+;- Make sure images don't jump around all willy nilly.
+;xstepper2, cube, channel=channel, scale=0.75
+;stop
+
+
+;- Save cube and shifts to .sav files.
+
+;path = '/solarstorm/laurel07/20131228/'
+path = '/solarstorm/laurel07/' + year + month + day + '/'
+
+save, shifts, filename = path + instr + channel + 'shifts.sav'
+save, cube, filename = path + instr + channel + 'aligned.sav'
+
+
 end

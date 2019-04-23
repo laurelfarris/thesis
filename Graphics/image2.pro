@@ -1,4 +1,6 @@
-;; Last modified:   22 May 2018 19:00:31
+;- Last modified
+;-   22 April 2019
+;-    Added xthick and ythick kws.
 
 
 function image2, data, x, y,  _EXTRA=e
@@ -39,6 +41,8 @@ function image2, data, x, y,  _EXTRA=e
         ysubticklen = 0.5, $
         ;xminor = 5, $
         ;yminor = 5,  $
+        xthick = 0.5, $  ; default = 1
+        ythick = 0.5, $
         _EXTRA = e )
 
     return, im

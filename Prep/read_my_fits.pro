@@ -41,6 +41,9 @@ pro READ_MY_FITS, index, data, fls, $
     day=day
 
 
+
+    start_time = systime()
+
     ; Convert channel to string if not already.
     if not ( typename(channel) eq 'STRING' ) then begin
         ;print, 'Illegal typename for channel.'
@@ -129,6 +132,12 @@ pro READ_MY_FITS, index, data, fls, $
 
     ;- Read fits files
     READ_SDO, fls, index, data, nodata=nodata
+
+    print, ''
+    print, 'start time = ', start_time
+    print, 'end time   = ', systime()
+    print, ''
+
     return
 
 end

@@ -2,8 +2,8 @@
 
 ;- Thu Dec 20 07:25:24 MST 2018
 
-;function aia_colors, wave=wave, load=load, syntax=syntax
-function aia_colors, wave=wave, load=load
+;function aia_colors, wave, load=load, syntax=syntax
+function aia_colors, wave, load=load
 
 ;    if keyword_set(syntax) then begin
 ;        print, ''

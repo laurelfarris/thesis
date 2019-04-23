@@ -35,6 +35,8 @@ gend = '12:59:00' ; don't actually know this yet...
 year = '2013'
 month = '12'
 day = '28'
+
+instr = 'aia'
 center = [1675,1600]
 ;dimensions = [600,500]
 dimensions = [500,330]

@@ -40,8 +40,8 @@ goto, start
 ;tend   = '2013/12/28 13:59:59'
 
 
-tstart = '28-Dec-2013 10:00:00'
-tend   = '28-Dec-2013 13:59:59'
+;tstart = '28-Dec-2013 10:00:00'
+;tend   = '28-Dec-2013 13:59:59'
 
 ;- Ended IDL session after aia_prep completed.
 ;- See if GOES works now, at beginning of fresh session.
