@@ -26,11 +26,12 @@ function LEGEND2, $
     ;print, sample_width
 
 
-
     ;- Set legend position
 
-    xoffset = 0.10
-    yoffset = 0.05
+;    xoffset = 0.10
+;    yoffset = 0.05
+    xoffset = 0.00
+    yoffset = 0.00
 
     ;- upper LEFT corner
     if keyword_set(upperleft) then begin
@@ -87,15 +88,13 @@ function LEGEND2, $
     ;-  (default = 0.03)
     vertical_spacing = 0.02
 
-
-
+    ;print, [lx,ly]
 
     leg = legend( $
         target=target, $
-        position = [lx,ly]*dpi, $
-        ;/relative, $
+        position = [lx,ly], $;*dpi, $
         /device, $
-        font_size = fontsize, $
+        font_size = fontsize-1, $
         horizontal_spacing = horizontal_spacing, $
         vertical_spacing = vertical_spacing, $
         horizontal_alignment = horizontal_alignment, $
@@ -104,7 +103,7 @@ function LEGEND2, $
         shadow = 0, $
         thick = 0.5, $
         transparency = 100, $
-        ;sample_width = sample_width, $
+        ;sample_width = 50./(win.dimensions)[0], $
         auto_text_color = 1, $
         _EXTRA=e )
     return, leg

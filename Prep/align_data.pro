@@ -18,6 +18,12 @@
 ;
 ;- 22 April 2019
 ;- Is there any benefit to have this in a subroutine?
+;-
+;-
+;- TEST: check n_elements(fls) and TIME portion of each filename.
+;-    596 for AIA 1600
+;-    594 for AIA 1700
+;-    1195 for AIA 1700
 
 
 pro ALIGN_DATA, cube, ref, allshifts
@@ -45,43 +51,60 @@ pro ALIGN_DATA, cube, ref, allshifts
     print, format='(F0.2, " minutes")', (systime(/seconds)-start_time)/60.
 end
 
+goto, start
 
 @parameters
+instr='aia'
+channel='304'
 
 
-;- § Read PREPPED fits files
+;--- § Read PREPPED fits files
+
+;- Memory issues: Read subsets of data and crop individually.
+;-   start_ind = [0:nn]
+;-     nn needs to be based on FULL size of fls (no subsets).
+;-   Append each cropped subset to cube.
+;-  Last: comment "ind" again, set nodata=1, and re-read to get full index back.
+;- (Add loop later).
+
+cube = []
+;nodata = 0
+nodata = 1
+;ind = [0:999]
+;ind = [1000:1194]
+ind = [0:1194]
 
 resolve_routine, 'read_my_fits', /either
 READ_MY_FITS, index, data, fls, $
     instr=instr, $
     channel=channel, $
-    nodata=0, $
+    ind=ind, $
+    nodata=nodata, $
     prepped=1, $
     year=year, $
     month=month, $
     day=day
 
+;print, n_elements(fls)
+;print, index[0].wave_str
+;print, index[0].lvl_num
+;print, index[0].date_obs
+;print, index[-1].date_obs
 
 
 ;- § Crop to subset centered on AR,
-
-;- Replace dimensions from @parameters with
-;- "padded" dimensions -- extra pixels to prepare for alignment
-dimensions = [1000, 800]
-
 resolve_routine, 'crop_data', /either
-cube = CROP_DATA( $
+data = CROP_DATA( $
     data, $
     center=center, $
     dimensions=dimensions )
 ;- NOTE: if kw "dimensions" isn't set, defaults to [500,330] in crop_data.pro
 
 
-
-;- § Align prepped, cropped data
+;--- § Align prepped, cropped data
 
 ;- Use image in center of time series as reference.
-sz = size(data, /dimensions)
+sz = size(cube, /dimensions)
 ref = cube[*,*,sz[2]/2]
 
 ;- Loop through ALIGN_CUBE3 until stddev stops decreasing
@@ -96,9 +119,12 @@ stop
 
 
 ;- Make sure images don't jump around all willy nilly.
-;xstepper2, cube, channel=channel, scale=0.75
-;stop
+xstepper2, cube, channel=channel, scale=0.75
+stop
 
+start:;-------------------------------------------------------------------------
+
+channel = '304'
 
 ;- Save cube and shifts to .sav files.
 

@@ -28,6 +28,7 @@
 ;-        User is more likely to know what time range to read around flare peak,
 ;-         though may use "ind" to get just the first hour of data... I dunno.
 ;-   [] Option to read UNprepped data from HMI
+;=   [] Better way to pad channels with leading zeros
 ;-
 
 pro READ_MY_FITS, index, data, fls, $
@@ -54,6 +55,8 @@ pro READ_MY_FITS, index, data, fls, $
     ;-   Or does STRTRIM function take care of this?
     instr = strtrim(instr, 1)
     channel = strtrim(channel, 1)
+
+
     year = strtrim(year, 1)
     month = strtrim(month, 1)
     day = strtrim(day, 1)
@@ -66,34 +69,45 @@ pro READ_MY_FITS, index, data, fls, $
     ;- Set up variables
 
     print, '--------------------------------------------'
-    case instr of
+    ;case instr of
+    case 1 of
 
-    'aia': begin
+    ;'aia': begin
+    (instr eq 'aia') OR (instr eq 'AIA'): begin
         if keyword_set(prepped) then begin
             print, 'NOTE: Reading PREPPED data from AIA.'
-            path = '/solarstorm/laurel07/Data/AIA_prepped/'
+            ;path = '/solarstorm/laurel07/Data/AIA_prepped/'
+            path = '/solarstorm/laurel07/Data/' + strupcase(instr) + '_prepped/'
+
+            ;- Prepped fits files pad channel with leading zeros.
+            if strlen(channel) eq 3 then channel = '0' + channel
+            if strlen(channel) eq 2 then channel = '00' + channel
 
             ;files = 'AIA20110215_*_'  +  channel  +  '*.fits'
 
             ;files = 'AIA' + year + month + day '_' + '125918' + '_' + channel + '.fits'
-            files = 'AIA' + year + month + day + '_*_' + channel + '.fits'
+            ;files = 'AIA' + year + month + day + '_*_' + channel + '.fits'
+            files = strupcase(instr) + year + month + day + '_*_' + channel + '.fits'
 
                 ;-   '*' to read data at all obs times from specified date.
 
         endif else begin
             print, 'NOTE: Reading UNPREPPED data from AIA.'
-            path = '/solarstorm/laurel07/Data/AIA/'
+            ;path = '/solarstorm/laurel07/Data/AIA/'
+            path = '/solarstorm/laurel07/Data/' + strupcase(instr) + '/'
             ;files = '*aia*' + channel + '*2011-02-15*.fits'
             files = $
-                instr + '.lev1.' + channel + 'A_' + $
+                strlowcase(instr) + '.lev1.' + channel + 'A_' + $
                 year + '-' + month + '-' + day + $
                 'T' + '*Z.image_lev1.fits'
         endelse
-        end ;- end of 'aia' instr
+        end ;- end of AIA
 
 
 
-    'hmi': begin
+    ;'hmi': begin
+    (instr eq 'hmi') OR (instr eq 'HMI'): begin
+;- see E-note "SDO/HMI" for filenames
         if keyword_set(prepped) then begin
             print, 'NOTE: Reading PREPPED data from HMI.'
             path = '/solarstorm/laurel07/Data/HMI_prepped/'
@@ -110,10 +124,9 @@ pro READ_MY_FITS, index, data, fls, $
                 'hmi.m_45s.' + year + '.' + month + '.' + day + '*' + $
                 'TAI.magnetogram.fits'
               ;- NOTE: This is specific to magnetograms! Needs to be generalized.
-
-
         endelse
-        end
+        end ;- end of HMI
+
     end ;- end of "case" statements
 
 

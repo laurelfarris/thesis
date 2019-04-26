@@ -2,7 +2,12 @@
 ;
 
 
-function PLOT_SPECTRA, frequency, power, label=label, _EXTRA=e
+function PLOT_SPECTRA, frequency, power, $
+    label=label, $
+    leg=leg, $  ; return legend in kw "leg"
+;    margin=margin, $
+    _EXTRA=e
+
 
     ;win = GetWindows(/current)
     ;if win eq !NULL then $
@@ -18,12 +23,25 @@ function PLOT_SPECTRA, frequency, power, label=label, _EXTRA=e
     ;CALC_FOURIER2, flux, 24, frequency, power, fmax=fmax, fmin=fmin
 
 
+;    if not keyword_set(margin) then begin
+;        left   = 1.00
+;        bottom = 1.00
+;        top    = 1.00
+;        right  = 1.00
+;    endif
+;    margin=[left, bottom, right, top]
+;
     ;- Call general, single-panel plotting routine
     resolve_routine, 'batch_plot', /either
     plt = BATCH_PLOT( $
         frequency, power, $
         xtitle = 'frequency (Hz)', $
         ytitle = 'power', $
+        margin=margin, $
+        left   = 1.00, $
+        bottom = 1.00, $
+        top    = 1.00, $
+        right  = 1.00, $
         _EXTRA=e )
     ;help, plt --> 1 element so far...
 
@@ -39,7 +57,7 @@ function PLOT_SPECTRA, frequency, power, label=label, _EXTRA=e
         vert[ii] = plot2( $
             1./[xx,xx], plt[0].yrange, /overplot, $
             ystyle=1, linestyle=ii+1, thick=0.5, $
-            name=strtrim(period[ii],1) + ' seconds')
+            name=strtrim(period[ii],1) + ' s')
         vert[ii].Order, /send_to_back
     endforeach
     plt = [ plt, vert ]
@@ -63,9 +81,14 @@ function PLOT_SPECTRA, frequency, power, label=label, _EXTRA=e
 
     resolve_routine, 'legend2', /either
     leg = LEGEND2( $
-        sample_width=0.30, $
-        /lowerright, $
-        target=plt )
+        ;sample_width=0.30, $
+        sample_width=0.20, $
+        /upperright, $
+        font_size=8, $
+        target=plt $
+    )
+
+;    leg.position = [0.95, 0.85]
 
     return, plt
 end

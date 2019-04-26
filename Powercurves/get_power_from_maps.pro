@@ -20,10 +20,10 @@
 
 
 goto, start
+start:;----------------------------------------------------------------------------------------
 
 ;- Restore AIA powermaps from .sav files and read into A[0].map and A[1].map.
 @restore_maps
-
 
 
 ;- Thu Jan 24 11:46:02 MST 2019
@@ -84,7 +84,6 @@ map1 = CROP_DATA( A[cc].map, dimensions=[r,r], center=center[*,0] )
 map2 = CROP_DATA( A[cc].map, dimensions=[r,r], center=center[*,1] )
 
 
-start:;----------------------------------------------------------------------------------------
 n_pix = float(r*r) ;- map is FLOAT, so may as well convert n_pix
 
 ;p1 = (total(total(map1,1),1)) / n_pix
@@ -163,7 +162,7 @@ file = 'time-3minpower_maps'
 ;-  the same in _maps as it is in _flux...
 resolve_routine, 'plot_pt', /either
 plot_pt, power, dz, A[0].time, $
-    file=file, $
+    ;file=file, $
     _EXTRA = props
 
 

@@ -1,5 +1,6 @@
 
-; Last modified:    28 November 2018
+;- Last modified:    26 April 2019
+;-   Added symbol kw
 
 ;- 02 November 2018 (from Enote on subroutines):
 ;- Need to be able to call LC routine for any length of time (full data set, small
@@ -37,6 +38,8 @@ function WRAP_BATCH_PLOT, $
     xdata, ydata, $
     wx = wx, $
     wy = wy, $
+    ;margin=margin, $
+    ;-  replace 4 kws with one?
     left = left, $
     right = right, $
     bottom = bottom, $
@@ -46,6 +49,7 @@ function WRAP_BATCH_PLOT, $
     linestyle = linestyle, $
     thick = thick, $
     buffer=buffer, $
+    symbol=symbol, $
     _EXTRA = e
 
 
@@ -89,6 +93,7 @@ function WRAP_BATCH_PLOT, $
 
     plt = objarr(sz[1])
 
+
     for ii = 0, sz[1]-1 do begin
 
         plt[ii] = PLOT2( $
@@ -100,6 +105,7 @@ function WRAP_BATCH_PLOT, $
             ;xtitle = xtitle, $
             ;ytitle = ytitle, $
             color = color[ii], $
+            symbol = symbol[ii], $
             name = name[ii], $
             linestyle = linestyle[ii], $
             thick = thick[ii], $
@@ -145,6 +151,8 @@ function BATCH_PLOT, $
     xdata, ydata, $
     _EXTRA = e
 
+    ;- transpose(xdata) -- in case, e.g. [2,1000] instead of [1000,2]
+
 
     sz = size(ydata, /dimensions)
     ;- If ydata only contains one plot (no oplots):
@@ -160,6 +168,8 @@ function BATCH_PLOT, $
     linestyle = make_array( sz[1], value='-', /string )
     thick = make_array( sz[1], value=0.5, /float )
 
+    symbol = make_array( sz[1], value="None" )
+
     plt = WRAP_BATCH_PLOT( $
         xdata, ydata, $
         wx = 8.0, $
@@ -174,6 +184,7 @@ function BATCH_PLOT, $
         color = color, $
         linestyle = linestyle, $
         thick = thick, $
+        symbol = "None", $
         _EXTRA = e )
 
     return, plt

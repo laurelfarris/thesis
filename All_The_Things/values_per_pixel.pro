@@ -3,6 +3,9 @@
 ; compare results like FTs on integrated emisssion vs. those from
 ; emission per pixel, and the resulting values of power.
 
+;- 25 April 2019
+;- Pretty sure Power goes as Flux^2...
+;-  doubt I'll need this again.
 
 
 

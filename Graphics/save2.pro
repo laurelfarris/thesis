@@ -11,11 +11,11 @@
 ;-
 ;- KEYWORDS:
 ;-   CONFIRM_REPLACE
-;-   ADD_TIMESTAMP - Uses IDL's TEXT function to add date and filename to
+;-   stamp - Uses IDL's TEXT function to add date and filename to
 ;-      bottom of page
 ;-   IDL_CODE - name of code that generated the figure. If set, will be added
 ;-      to bottom of page along with date and filename. (NOTE: ignored if
-;-      ADD_TIMESTAMP is not set).
+;-      stamp is not set).
 ;-
 ;- OUTPUT:
 ;-
@@ -25,7 +25,7 @@
 
 pro SAVE2, filename, $
     confirm_replace=confirm_replace, $
-    add_timestamp=add_timestamp, $
+    stamp=stamp, $
     idl_code=idl_code, $
     _EXTRA=e
 
@@ -80,7 +80,7 @@ pro SAVE2, filename, $
     new_filename = filename + '_' + year + month + day + '.pdf'
 
     ; Add timestamp to figure
-    if keyword_set(add_timestamp) then begin
+    if keyword_set(stamp) then begin
 
         if not keyword_set(idl_code) then idl_code = ''
 

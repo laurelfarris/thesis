@@ -13,7 +13,7 @@
 ;-   Added "ind" keyword to set z-indices if only subset is desired.
 ;-
 
-function PREP_HMI, index, cube, cadence=cadence, inst=inst, channel=channel, $
+function STRUC_HMI, index, cube, cadence=cadence, inst=inst, channel=channel, $
     ind=ind
 
     ; Read headers
@@ -104,14 +104,14 @@ end
 
 ;- MEMORY - Is this making copies of everything?
 
-;hmi_mag = PREP_HMI( hmi_mag_index, hmi_mag_data, cadence=45., inst='hmi', channel='mag' )
-;hmi_cont = PREP_HMI( hmi_cont_index, hmi_cont_data, cadence=45., inst='hmi', channel='cont' )
+;hmi_mag = STRUC_HMI( hmi_mag_index, hmi_mag_data, cadence=45., inst='hmi', channel='mag' )
+;hmi_cont = STRUC_HMI( hmi_cont_index, hmi_cont_data, cadence=45., inst='hmi', channel='cont' )
 
 
 
 H = []
-H = [H, PREP_HMI( hmi_mag_index, hmi_mag_data, cadence=45., inst='hmi', channel='mag' )]
-H = [H, PREP_HMI( hmi_cont_index, hmi_cont_data, cadence=45., inst='hmi', channel='cont' )]
+H = [H, STRUC_HMI( hmi_mag_index, hmi_mag_data, cadence=45., inst='hmi', channel='mag' )]
+H = [H, STRUC_HMI( hmi_cont_index, hmi_cont_data, cadence=45., inst='hmi', channel='cont' )]
 
 
 

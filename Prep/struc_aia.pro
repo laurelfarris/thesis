@@ -8,7 +8,7 @@
 ;-   Read AIA headers and restore .sav files (data)
 ;- INPUT:
 ;- KEYWORDS:
-;-   inst - even though this routine is for aia only, may figure out how
+;-   instr - even though this routine is for aia only, may figure out how
 ;-          to combine multiple instruments in one routine, so leaving as
 ;-          general as possible
 ;-
@@ -25,10 +25,10 @@
 
 
 
-function PREP_AIA, index, cube, $
+function STRUC_AIA, index, cube, $
     ;year, month, day, $
     cadence=cadence, $
-    inst=inst, $
+    instr=instr, $
     channel=channel, $
     ind=ind
 
@@ -47,7 +47,7 @@ function PREP_AIA, index, cube, $
     if n_elements(index) eq 0 then begin
         resolve_routine, 'read_my_fits'
         READ_MY_FITS, index, $
-            inst=inst, $
+            instr=instr, $
             channel=channel, $
             nodata=1, $
             prepped=1, $
@@ -78,7 +78,7 @@ function PREP_AIA, index, cube, $
       ;-  Maybe those should be two separate routines... not top priority right now.
 
     path = '/solarstorm/laurel07/' + year + month + day + '/'
-    restore, path + inst + channel + 'aligned.sav'
+    restore, path + instr + channel + 'aligned.sav'
 
     help, cube ; --> INT [1000, 800, 596]  (AIA 1600, 2013 flare)
 
@@ -171,13 +171,12 @@ end
 goto, start
 start:;---------------------------------------------------------------------------------------------
 
-;- Alternative ways to create structure array:
 
 ;- 1.
 ;- Define individual structure for each channel, use to create 'A',
 ;-  then set = 0 to clear memory.
-aia1600 = PREP_AIA( aia1600index, aia1600data, cadence=24., inst='aia', channel='1600' )
-aia1700 = PREP_AIA( aia1700index, aia1700data, cadence=24., inst='aia', channel='1700' )
+aia1600 = STRUC_AIA( aia1600index, aia1600data, cadence=24., instr='aia', channel='1600' )
+aia1700 = STRUC_AIA( aia1700index, aia1700data, cadence=24., instr='aia', channel='1700' )
 ;aia1600.color = 'dark orange'
 ;aia1700.color = 'dark cyan'
 A = [ aia1600, aia1700 ]
@@ -192,8 +191,8 @@ A = [ aia1600, aia1700 ]
 ;- 2.
 ;- initialize 'A' as a !NULL variable, 
 ;A = []
-;A = [A, PREP_AIA( aia1600index, aia1600data, cadence=24., inst='aia', channel='1600' ) ]
-;A = [A, PREP_AIA( aia1700index, aia1700data, cadence=24., inst='aia', channel='1700' ) ]
+;A = [A, STRUC_AIA( aia1600index, aia1600data, cadence=24., instr='aia', channel='1600' ) ]
+;A = [A, STRUC_AIA( aia1700index, aia1700data, cadence=24., instr='aia', channel='1700' ) ]
 
 ;---
 
@@ -205,6 +204,7 @@ print, '         still exist at ML. '
 A[0].color = 'blue'
 A[1].color = 'red'
 
+stop
 
 ;- Create different routine for doing this. Leave comment here directing user
 ;-  to this routine to avoid confusion.
