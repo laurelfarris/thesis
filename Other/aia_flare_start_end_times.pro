@@ -2,6 +2,9 @@
 ;- LAST MODIFIED:
 ;-   28 November 2018
 ;-
+;- --> big ugly light curves (for reference, not official sciency figures)
+;-
+;-
 ;- Detour (from plot_lc.pro) : AIA flare start/end times
 
 
@@ -41,8 +44,6 @@ plt = BATCH_PLOT( $
     sym_size = 0.3, $
     symbol='Circle')
 
-
-
 resolve_routine, 'shift_ydata', /either
 delt = [ $
     min(ytemp[*,0]), min(ytemp[*,1]) - 0.08*max(ytemp[*,1]) ]
@@ -62,10 +63,5 @@ ax[2].showtext = 1
 
 ;ax[1].tickname = scinot( ax[1].tickvalues )
 ;ax[3].tickname = scinot( ax[3].tickvalues )
-
-stop
-
-
-
 
 end

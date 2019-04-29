@@ -8,7 +8,7 @@
 ;-  case it doesn't matter.
 ;-
 
-
+;- --> see _README.pro -- similar general purpose as this one.
 
 
 ;- Naming convention of fits files for, e.g. AIA 1600\AA{}

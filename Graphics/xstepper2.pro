@@ -1,10 +1,6 @@
-
-
-; Last modified:    13 June 2018
+; Last modified:    29 April 2019
 ; Programmer:       Laurel Farris
 ; Description:      subroutines with custom default configurations
-
-
 
 pro xstepper2, $
     cube, $
@@ -14,7 +10,6 @@ pro xstepper2, $
     _EXTRA=e
 
 
-    sz = float(size( cube, /dimensions ))
 
     if keyword_set(invert_colors) then $
         default_colortable = 54 $
@@ -27,7 +22,7 @@ pro xstepper2, $
     else $
         loadct, default_colortable
 
-
+    sz = size(cube, /dimensions)
 
     mindata = []
     maxdata = []
@@ -35,18 +30,16 @@ pro xstepper2, $
         mindata = [mindata, min(cube[*,*,i])]
         maxdata = [maxdata, max(cube[*,*,i])]
     endfor
-    ;print, max(mindata)
-    ;print, min(maxdata)
-    ;stop
 
-    if not keyword_set(scale) then scale = 1
-    
-    x = 500 * float(scale)
-    y = x * (sz[1]/sz[0])
+    if not keyword_set(scale) then scale = 1.0 else scale = float(scale)
+    xsize = sz[0] * scale
+    ysize = sz[1] * scale
+
+    if not keyword_set(start) then start=0
 
     xstepper, cube>max(mindata)<min(maxdata), $
-        xsize=x, ysize=y, $
+        xsize=xsize, ysize=ysize, $
+        start=start
         _EXTRA=e
-
 
 end

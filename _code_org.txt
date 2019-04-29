@@ -1,3 +1,34 @@
+26 April 2019
+
+Top dir: develop codes, short names,
+
+move "modules" (any well-developed code that gets called often, but rarely
+needs to be edited) to some directory to keep work somewhat clutter-free.
+
+Need quick ref. of routine name, what it does, and calling syntax.
+
+Other/ and Modules/ seem to be used interchangably as codes that don't
+  really go in the other categorized directories.
+
+"Pre-analysis" routines
+    aia_prep
+    alignment
+
+
+WA routines fall under both power spectra and power "curves"
+
+
+Imaging -- difficulties with imaging power maps and intensity "maps" in the
+same loop and/or same structure -- either create two entirely different
+figures and read into latex side by side,
+or create two separate loops.
+ Extra loop may take up more space, but code written like that may be much
+ easier to understand and USE later when I need them!
+
+
+-------------------------------------------------------------------------------------
+
+
 
 Thu Dec 20 08:11:02 MST 2018
 

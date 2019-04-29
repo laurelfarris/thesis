@@ -16,6 +16,18 @@
 ;-   Create new saturation routine (this currently addresses
 ;-      saturation and calculation of total power with time.
 ;-
+;-
+;-
+;-------------------------------------------------------------------------------------
+;-
+;-
+;- From IDL command line, run the following Main Level codes BEFORE
+;-   calling this one.
+
+; IDL> .run image_powermaps
+; IDL> .run contours
+; IDL> .run sub
+; IDL> .run get_power_from_maps
 
 
 

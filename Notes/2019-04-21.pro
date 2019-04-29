@@ -1,7 +1,6 @@
-
-
+;-
 ;- Sun Apr 21 10:27:12 MDT 2019
-
+;-
 
 pro testplot
     xdata = indgen(10) + 2
@@ -30,10 +29,7 @@ pro testplot
 
     ;print, x * result[0,*]
 end
-
 goto, start
-
-
 ;_____________________________________________________________________________________________
 
 ;- Removing first observation for AIA1600 so #elements agrees with AIA1700.
@@ -87,12 +83,10 @@ help, aia1600_shifts
 help, aia1600shifts
 save, aia1600shifts, filename = 'aia1600shifts.sav'
 
-
 ;shifts = total( aia1600_shifts, 3 )
 ;shifts = shifts[*,1:*]
 
 stop
-
 
 cdelt = 0.6
 crpix = 2048.5
