@@ -103,7 +103,7 @@ function STRUC_AIA, index, cube, $
     ;-  Does this apply to HMI as well?
     exptime = index[0].exptime
     ;print, 'Exposure time = ', strtrim(exptime,1), ' seconds.'
-    cube = cube/exptime
+    ;cube = cube/exptime
     ;- exptime is type DOUBLE, so now cube is too...
     ;help, cube ; --> DOUBLE [dim[0], dim[1], 600]  (AIA 1600, 2013 flare)
 
@@ -137,24 +137,24 @@ function STRUC_AIA, index, cube, $
 
     ;- 14 Decemer 2018
     ;map = fltarr( sz[0], sz[1], 686 )
-    map = make_array( sz[0], sz[1], 686, /float, /nozero )
+    ;map = make_array( sz[0], sz[1], 686, /float, /nozero )
     ;- Not sure if /nozero helps free up memory, but worth a shot.
 
     ;- MEMORY - Is this making copies of everything?
     struc = { $
+        channel: channel, $
+        cadence: cadence, $
+        exptime: exptime, $
         data: cube, $
         X: X, $
         Y: Y, $
         flux: flux, $
         time: time, $
         jd: jd, $
-        cadence: cadence, $
-        exptime: exptime, $
         color: '', $
         ct: ct, $
-        channel: channel, $
-        name: name, $
-        map: map $
+        ;map: map, $
+        name: name $
     }
     return, struc
 
@@ -163,16 +163,23 @@ function STRUC_AIA, index, cube, $
         'jd', jd, $
         'time', time, $
         'cadence', cadence )
-;aia = dictionary( 'aia1600', aia1600, 'aia1700', aia1700 )
+    ;aia = dictionary( 'aia1600', aia1600, 'aia1700', aia1700 )
 end
 
 
 
 goto, start
+
 start:;---------------------------------------------------------------------------------------------
 
-
 ;- 1.
+;- initialize 'A' as a !NULL variable, 
+;A = []
+;A = [A, STRUC_AIA( aia1600index, aia1600data, cadence=24., instr='aia', channel='1600' ) ]
+;A = [A, STRUC_AIA( aia1700index, aia1700data, cadence=24., instr='aia', channel='1700' ) ]
+
+
+;- 2.
 ;- Define individual structure for each channel, use to create 'A',
 ;-  then set = 0 to clear memory.
 aia1600 = STRUC_AIA( aia1600index, aia1600data, cadence=24., instr='aia', channel='1600' )
@@ -186,24 +193,23 @@ A = [ aia1600, aia1700 ]
 ;- or
 ;delvar, aia1600
 ;delvar, aia1700
-;-  Read up on exactly what DELVAR does.
-
-;- 2.
-;- initialize 'A' as a !NULL variable, 
-;A = []
-;A = [A, STRUC_AIA( aia1600index, aia1600data, cadence=24., instr='aia', channel='1600' ) ]
-;A = [A, STRUC_AIA( aia1700index, aia1700data, cadence=24., instr='aia', channel='1700' ) ]
-
-;---
-
-print, 'NOTE: aia1600index, aia1600data, aia1700index, and aia1700data'
-print, '         still exist at ML. '
 
 ;A[0].color = 'dark orange'
 ;A[1].color = 'dark cyan'
 A[0].color = 'blue'
 A[1].color = 'red'
 
+
+print, 'NOTE: aia1600index, aia1600data, aia1700index, and aia1700data'
+print, '         still exist at ML. '
+print, 'Type ".c" to undefine redundant variables.'
+
+undefine, aia1600
+undefine, aia1600index
+undefine, aia1600data
+undefine, aia1700
+undefine, aia1700index
+undefine, aia1700data
 stop
 
 ;- Create different routine for doing this. Leave comment here directing user

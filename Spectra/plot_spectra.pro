@@ -1,9 +1,12 @@
 ;- 28 November 2018
 ;
 
+;- To Do
+;-   Option for vertical lines and ax[2] tick labels
+;-    for 120, 180, and 200 seconds
+
 
 function PLOT_SPECTRA, frequency, power, $
-    label=label, $
     leg=leg, $  ; return legend in kw "leg"
 ;    margin=margin, $
     _EXTRA=e
@@ -62,12 +65,11 @@ function PLOT_SPECTRA, frequency, power, $
     endforeach
     plt = [ plt, vert ]
 
-    if keyword_set(label) then begin
-        ax[2].tickvalues = 1./period
-        ax[2].tickname = strtrim( round(1./(ax[2].tickvalues)), 1 )
-        ax[2].title = 'period (seconds)'
-        ax[2].showtext = 1
-    endif
+    ax[2].tickvalues = 1./period
+    ax[2].tickname = strtrim( round(1./(ax[2].tickvalues)), 1 )
+    ax[2].title = 'period (seconds)'
+    ax[2].showtext = 1
+
 
 
     ;- convert frequency units: Hz --> mHz AFTER placing period markers

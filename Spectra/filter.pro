@@ -88,7 +88,8 @@ plt = BATCH_PLOT( $
     wx=wx, wy=wy, $
     yticklen=0.010, $
     stairstep=1, $
-    buffer=1 )
+    buffer=0 )
+
 
 delt = [ min(flux[*,0]), (min(flux[*,1])-1.e7) ]
 resolve_routine, 'shift_ydata', /either
@@ -142,23 +143,29 @@ ax[1].title = A[0].name + ' (DN s$^{-1}$)'
 ax[3].tickinterval = 0.2e8
 ax[3].title = A[1].name + ' (DN s$^{-1}$)'
 
-save2, 'detrendedLC'
-stop
+;save2, 'detrendedLC'
 
 detrended = flux - inverseTransform
+;help, xdata
+;help, detrended
+;stop
 plt3 = BATCH_PLOT( $
-    ind, detrended, $
+    ;ind, $
+    xdata, $   ;- xdata defined above as [ [ind], [ind] ] so dimensions match ydata.
+    detrended, $
     stairstep=1, $
-    ytickvalues=[0], $
-    overplot = 1<cc, $
+    ;ytickvalues=[-1.e6, 0, 1e6], $
+    ytickvalues=[0.0], $
+    ;overplot = 1<cc, $
     title = 'Detrended', $
-    color='dark orange', $
+    ;color=['dark orange', 'blue'], $
+    color=A.color, $
     wx = 8.0, wy=3.0, left = 0.75, right=0.25, $
     ;thick = 2.0, $
-    buffer=1)
+    buffer=0)
 
-hor = plot2( $
-    plt3.xrange, [0.0, 0.0], /overplot, linestyle=[1, '5555'X] )
+;hor = plot2( $
+;    plt3[0].xrange, [0.0, 0.0], /overplot, linestyle=[1, '5555'X] )
 
 ;- Compare results from fourier2 (calc_fourier2) to
 ;-  final forms of freq and power above.

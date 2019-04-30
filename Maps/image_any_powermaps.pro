@@ -30,19 +30,6 @@
 
 
 
-
-;----------------------------------------------------------------------------------
-;+
-;- "The usual"
-
-cc = 0
-time = strmid(A[cc].time,0,5)
-dz = 64
-
-;- nn = n_elements( array of changes from one panel to the next )
-;-   Generally equal to third dimension of image stack, but usually
-;-   predined so it's a shorthand used to PREDEFINE dimemsions...
-
 ;----------------------------------------------------------------------------------
 ;+
 ;- CROP data in xy direction, if desired
@@ -78,6 +65,19 @@ r = 10 ; pixel size
 
 
 
+
+
+;----------------------------------------------------------------------------------
+;+
+;- "The usual"
+
+cc = 0
+time = strmid(A[cc].time,0,5)
+dz = 64
+
+;- nn = n_elements( array of changes from one panel to the next )
+;-   Generally equal to third dimension of image stack, but usually
+;-   predined so it's a shorthand used to PREDEFINE dimemsions...
 
 ;----------------------------------------------------------------------------------
 ;+

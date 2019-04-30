@@ -96,6 +96,7 @@ function WRAP_BATCH_PLOT, $
 
     for ii = 0, sz[1]-1 do begin
 
+
         plt[ii] = PLOT2( $
             xdata[*,ii], ydata[*,ii], $
             /current, $
@@ -184,7 +185,7 @@ function BATCH_PLOT, $
         color = color, $
         linestyle = linestyle, $
         thick = thick, $
-        symbol = "None", $
+        symbol = symbol, $
         _EXTRA = e )
 
     return, plt

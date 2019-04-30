@@ -4,9 +4,6 @@
 ;---------------------------------------------------------------------------------;
 
 
-;- File:  "calc_ft.pro"  -->  standalone subroutine
-
-
 ; TO-DO: issue with freq[1] - freq[0] = resolution if freq only has one value
 ;  20 July 2018 - moved line to calculate resolution BEFORE cropping frequency,
 ;    since spacing should be the same over the entire array (if not, something
@@ -21,78 +18,7 @@
 ; quantity of interest I could think of.
 
 
-function CALC_FT, $
-    flux, $
-    cadence, $
-    fmin=fmin, $
-    fmax=fmax, $
-    norm=norm, $
-    _EXTRA=e
-
-    result = fourier2( flux, cadence, norm=norm )
-    frequency = reform(result[0,*])
-    power = reform(result[1,*])
-    ;print, 'frequency resolution = ', strtrim(1000*resolution,1), ' mHz'
-    resolution = frequency[1] - frequency[0]
-
-    if not keyword_set(fmin) then fmin = frequency[ 0]
-    if not keyword_set(fmax) then fmax = frequency[-1]
-
-    ind = where(frequency ge fmin AND frequency le fmax)
-    frequency = frequency[ind]
-    power = power[ind]
-
-    ;print, 'frequencies (mHz):'
-    ;print, frequency*1000, format='(F0.2)'
-
-    struc = { $
-        frequency : frequency, $
-        bandpass : [fmin,fmax], $
-        bandwidth : fmax - fmin, $
-        resolution : resolution, $
-        power : power, $
-        mean_power : mean(power) $
-        }
-
-    ;help, struc
-    return, struc
-
-    response = ''
-    READ, response, prompt='Plot power spectrum? [y/n] '
-    ;if response eq 'y' then begin
-    ;endif
-end
-
 ;---------------------------------------------------------------------------------;
-pro fourier_struc
-    ;- appears to have been a stand-alone subroutine, with no ML code below.
-
-    ; Last modified:   29 June 2018
-
-    ; Structure of user-input values. Mostly just examples.
-    ; Use short variable/tag names to just feed individual values into routines,
-    ; E.G. plot, ft.flux, xrange=ft.xrange...
-    FT = {$
-        flux: A[0].flux, $
-        norm: 1, $
-        cadence: 24, $
-        fcenter: 1./180, $
-        fwidth: 1./(170) - 1./(190), $
-        fmin: 0.004, $
-        fmax: 0.006, $
-        ;fmin: 1./50, $
-        ;fmax: 1./400, $
-        z_start: [0:200:5], $
-        dz: 64, $
-        time: ['01:30','02:30'], $
-        periods: [120, 180, 200, 300] $
-    }
-    ; NOTE: regarding fwidth,
-     ; period width not constant as frequency resolution,
-     ; but this is based on specific central period, so others don't matter.
-
-end
-;---------------------------------------------------------------------------------
 ;- fourier_test.pro
 ;-
 
@@ -276,36 +202,4 @@ pro fourier_normalization
     print, ( moment(flux) )[1]
 
     ; Only getting equal values if /norm kw is NOT set.
-end
-;---------------------------------------------------------------------------------
-
-pro FT, flux, cadence, frequency, power
-
-    ;- Input flux and cadence.
-    ;- Get frequency and power
-
-    ;- NOTE: Difference between min/max frequency for displaying spectra P(\nu),
-    ;-   vs. extracting just the power over a narrow bandwidth centered around
-    ;-   the central frequency, e.g. used for P(t) plots
-
-    ;- This is 'plot_spectra.pro' after all... so maybe stick to P(\nu)
-    ;- considerations for now.
-
-    result = fourier2( flux, cadence )
-    frequency = reform(result[0,*])
-    power = reform(result[1,*])
-
-    return
-
-
-    ;- bandwidth is more for extracing power centered on a particular frequency
-    fcenter = 1./180
-    bandwidth = 0.001
-    fmin = fcenter - bandwidth/2.
-    fmax = fcenter + bandwidth/2.
-    ;ind = where( frequency ge fmin AND frequency le fmax )
-    ;frequency = frequency[ind]
-    ;power = power[ind]
-
-
 end
