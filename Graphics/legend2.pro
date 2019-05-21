@@ -92,7 +92,7 @@ function LEGEND2, $
 
     leg = legend( $
         target=target, $
-        position = [lx,ly], $;*dpi, $
+        position = [lx,ly]*dpi, $
         /device, $
         font_size = fontsize-1, $
         horizontal_spacing = horizontal_spacing, $
@@ -104,6 +104,7 @@ function LEGEND2, $
         thick = 0.5, $
         transparency = 100, $
         ;sample_width = 50./(win.dimensions)[0], $
+        ;-    = 0.15 (default)
         auto_text_color = 1, $
         _EXTRA=e )
     return, leg

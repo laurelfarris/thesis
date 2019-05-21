@@ -62,13 +62,25 @@ end
 
 goto, start
 
+t1_string = '01:30'
+t2_string = '02:30'
+
 start:;---------------------------------------------------------------------------------
+t1_string = '12:30'
+t2_string = '13:30'
+
+wx = 8.0
+wy = 3.0
+
+
+;------------------------------------------------------------------------------------
+
 
 time = strmid(A[0].time,0,5)
     ; to keep consistent array sizes, plus already know that
     ; the same indices are returned for both channels :)
-t1 = (where(time eq '01:30'))[-1]
-t2 = (where(time eq '02:30'))[0]
+t1 = (where(time eq t1_string))[-1]
+t2 = (where(time eq t2_string))[0]
 ind = [t1:t2]
 flux = A.flux[ind]
 
@@ -76,15 +88,15 @@ flux = A.flux[ind]
 
 ;- Plot original light curves
 xdata = [ [ind], [ind] ]
-wx = 8.0
-wy = 2.5
 dw
 resolve_routine, 'batch_plot', /either
 plt = BATCH_PLOT( $
     xdata, flux, $
     xtickinterval=25, $
-    color=[A[0].color, A[1].color], $
-    name=[A[0].name, A[1].name], $
+    ;color=[A[0].color, A[1].color], $
+    color=A.color, $
+    ;name=[A[0].name, A[1].name], $
+    name=A.name, $
     wx=wx, wy=wy, $
     yticklen=0.010, $
     stairstep=1, $
@@ -129,10 +141,11 @@ plt2 = plot2( $
 endfor
 
 resolve_routine, 'legend2', /either
-leg = legend2( $
+leg = LEGEND2( $
     target=[plt, plt2, hor], $
-    /upperleft, $
-    sample_width=0.13*wy )
+    ;sample_width=0.13*wy, $
+    /upperleft )
+
 
 ax = plt2[0].axes
 ax[0].tickname = time[ax[0].tickvalues]
@@ -143,7 +156,14 @@ ax[1].title = A[0].name + ' (DN s$^{-1}$)'
 ax[3].tickinterval = 0.2e8
 ax[3].title = A[1].name + ' (DN s$^{-1}$)'
 
-;save2, 'detrendedLC'
+;save2, 'detrendedLC' 
+;- bad file name... should START with "lc",
+;-  plus curves aren't actually detrended yet... (10 May 2019)
+
+;save2, 'lc_filter'
+;-  Better file name
+
+dw
 
 detrended = flux - inverseTransform
 ;help, xdata
@@ -160,9 +180,14 @@ plt3 = BATCH_PLOT( $
     title = 'Detrended', $
     ;color=['dark orange', 'blue'], $
     color=A.color, $
-    wx = 8.0, wy=3.0, left = 0.75, right=0.25, $
+    wx=wx, wy=wy, $
+    left = 0.75, right=0.25, $
     ;thick = 2.0, $
     buffer=0)
+
+;save2, 'lc_detrended'
+
+
 
 ;hor = plot2( $
 ;    plt3[0].xrange, [0.0, 0.0], /overplot, linestyle=[1, '5555'X] )

@@ -45,18 +45,23 @@
 
 function PREP, index, cube, $
     cadence=cadence, $
-	inst=inst, $
+	instr=instr, $
 	channel=channel, $
     ind=ind
+
+
+
+    ;- Unprepped filename:
+    ;-  aia.lev1.channelA_yyyy-mm-ddThh_mm_ss.ssZ.image_lev1.fits
+    ;- Prepped filename:
+    ;-  AIAyyyymmdd_hhmmss_channel.fits
+
 
     ; Read headers
     if n_elements(index) eq 0 then begin
         resolve_routine, 'read_my_fits'
-        READ_MY_FITS, index, $
-            inst=inst, $
-            channel=channel, $
-            nodata=1, $
-            prepped=1
+        READ_MY_FITS, index, inst=inst, channel=channel, $
+            nodata=1, prepped=1
     endif
 
     ;- Restore data (in variable "cube", with pixel dimensions:
@@ -65,8 +70,9 @@ function PREP, index, cube, $
     ;-   HMI [750,500,400] "../hmi_mag.sav"
     ;-   HMI [750,500,398] "../hmi_cont.sav"
 
+    path = '/solarstorm/laurel07/' + year + month + day + '/'
     if (inst eq 'aia') then begin
-        restore, '/solarstorm/laurel07/aia' + channel + 'aligned.sav'
+        restore, path + '/aia' + channel + 'aligned.sav'
         name = 'AIA ' + channel + '$\AA$'
         ;- Standard AIA colors
         aia_lct, r, g, b, wave=fix(channel);, /load
@@ -100,6 +106,7 @@ function PREP, index, cube, $
     cube = cube/exptime
 
     sz = size( cube, /dimensions )
+
     ; X/Y coordinates of AR (lower left corner),
     ;    converted from pixels to arcseconds
     ; NOTE: Hard coded coords;

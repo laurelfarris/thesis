@@ -72,6 +72,13 @@ pro READ_MY_FITS, index, data, fls, $
     ;case instr of
     case 1 of
 
+    ;- IRIS
+;    ( strlowcase(instr) eq 'iris' ): begin
+;        end ;- end of IRIS -------------------------------------------
+
+
+
+
     ;'aia': begin
     (instr eq 'aia') OR (instr eq 'AIA'): begin
         if keyword_set(prepped) then begin
@@ -111,6 +118,8 @@ pro READ_MY_FITS, index, data, fls, $
         if keyword_set(prepped) then begin
             print, 'NOTE: Reading PREPPED data from HMI.'
             path = '/solarstorm/laurel07/Data/HMI_prepped/'
+
+            files = strupcase(instr) + year + month + day + '_*_' + channel + '.fits'
 
         endif else begin
             print, 'NOTE: Reading UNPREPPED data from HMI.'

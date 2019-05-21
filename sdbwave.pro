@@ -79,20 +79,15 @@
 ;   	    "    "    "    "  S. Bloomfield for Sac. Peak 2002 data
 ;-
 
-PRO sdbwave2,curve,print=print,pc=pc,title=title,nocon=nocon,delt=delt,$
+PRO sdbwave,curve,print=print,pc=pc,title=title,nocon=nocon,delt=delt,$
     mother=mother,offset=offset,cone=cone,fast=fast,outscale=outscale,$
-    outper=outper,outfreq=outfreq,outtime=outtime, $
-    fig=fig,$
-    color=color, $
-    sigg=sigg, $
-    line_color=line_color, $
-    rgb_table=rgb_table, $
+    outper=outper,outfreq=outfreq,outtime=outtime,color=color,fig=fig,$
     short=short,long=long,ylog=ylog,lthick=lthick,sig_fudge=sig_fudge,$
-    maxper=maxper,conf=conf;, xticksep=xticksep
+    maxper=maxper,conf=conf;xticksep=xticksep
 
 ;check the number of elements in the input time series
 elem=N_ELEMENTS(curve)
-;print,'No. of data-points',elem
+print,'No. of data-points',elem
 ;set the ever-useful angstrom plotting symbol in IDL character specification terms
 ang = '!3!sA!r!u!9 %!3!n'
 
@@ -122,8 +117,8 @@ middle=FIX(middle)
 ;rather than being generic enough to be set at the command line.
 IF NOT KEYWORD_SET(offset) THEN OFFSET=0.
 time=(findgen(elem)*delt)+offset;+(39.46)
-;print,'Min. time',min(time)
-;print,'Max. time',max(time)
+print,'Min. time',min(time)
+print,'Max. time',max(time)
 
 as=curve  	;avoid negative values by taking the modulus of the values only.
 series=as  	;a duplicate of the filtered curve
@@ -139,19 +134,11 @@ IF NOT KEYWORD_SET(lthick) THEN lthick=1.
 ;the interactive part of the routine, pretty self-explanatory
 ;IF NOT KEYWORD_SET(nocon) THEN $
 ;    READ,'Input level of significance, 0 -> 1 (i.e. 0.95 for 95%): ',sigg
-
-;- Automatic default = 0.99, rather than prompting user every time
-;-  (the READ statement above was commented anyway...)
-;-     --Laurel (29 April 2019)
-if not keyword_set(sigg) then sigg=0.99
+sigg=0.99
 
 IF NOT KEYWORD_SET(color) THEN color=1
-;LOADCT,color
+LOADCT,color
 ;GAMMA_CT,0.4
-
-
-
-
 
 ;
 ;========================= PLOT TIME SERIES ===============================
@@ -159,10 +146,7 @@ IF NOT KEYWORD_SET(color) THEN color=1
 ;again, dodge a window call that'd only confuse the PostScript writer.
 IF KEYWORD_SET(print) THEN GOTO, SKIPPING
 
-;- window position
-xpos=400
-
-;WINDOW,30,title='(30) Wavelet Plot',xsize=640,ysize=710, xpos=xpos
+WINDOW,30,title='(30) Wavelet Plot',xsize=640,ysize=710
 ;WSET,30
 ;ERASE
 ;WINDOW,30,title='(30) Wavelet Plot',xsize=800,ysize=640
@@ -170,8 +154,7 @@ xpos=400
 SKIPPING:
 
 ;set up the device co-ordinates for the top (time series) panel
-;pos1 = [0.1,0.80,0.7,0.95]
-pos1 = [0.1,0.75,0.65,0.90]
+pos1 = [0.1,0.80,0.7,0.95]
 
 IF KEYWORD_SET(fig) THEN GOTO, FIG
 ;plot the filtered time series for comparison with the wavelet power transform
@@ -179,59 +162,15 @@ IF KEYWORD_SET(fig) THEN GOTO, FIG
 
 ;s=SIN(2. * !PI * (time+125) / 220.)
 
-
-;PLOT,time,series,yrange=[min(series),max(series)],$
-;xtitle='Time [s]', ytitle='DN',$
-;title=title,xthick=lthick,ythick=lthick,$
-;position=pos1,/NOERASE,xstyle=1,ystyle=1;,$
+PLOT,time,series,yrange=[min(series),max(series)],$
+       xtitle='Time [s]', ytitle='DN',$
+       title=title,xthick=lthick,ythick=lthick,$
+       position=pos1,/NOERASE,xstyle=1,ystyle=1;,$
 ;       xtickinterval=xticksep,xtickformat='(I9)'
+
 ;OPLOT,time,0.09*s,lines=2,color=100
 
-;-----------------------------------------------------------------------------------
-;- Plotting with IDL's plot function, in addition to the procedure
-;-    --Laurel (29 April 2019)
-
-common defaults
-wx = 8.5
-wy = 6.0
-mywin = window( dimensions=[wx,wy]*dpi, location=[xpos+(wx*dpi),0] )
-
-plt_lc = plot2( $
-    time, series, $
-    /current, $
-    ;yrange=[min(series),max(series)], $
-    xstyle=1, $
-    ystyle=0, $
-    ;ystyle=1, $
-    position=pos1, $
-    yticklen=0.01, $
-    color=color, $
-    ;color='blue', $
-    ;color='red', $
-    stairstep=1, $
-    ;ytickformat='(E0.2)', $
-    ;ytickvalues=[min(series), min(series)/2, 0, max(series)/2, max(series)], $
-    ;ytickvalues=[-1.8e7, 0.0, 1.8e7], $
-    ;ytickinterval=1.0e7, $
-    ytickunits="scientific", $
-    ;ytickunits="exponent", $
-    xtitle='Time [s]', ytitle='DN',$
-    title=title $
-) 
-
-ax = plt_lc.axes
-;ax[0].tickunits="Seconds"
-;plt_lc.xtickname = xtickname[plt_lc.xtickvalues]
-mywin = plt_lc.window
-
-;-----------------------------------------------------------------------------------
-
-
 FIG:
-
-
-
-
 
 ;
 ;========================== WAVELET TRANSFORM ==============================
@@ -257,14 +196,14 @@ IF NOT KEYWORD_SET(mother) THEN BEGIN
     param = 6
 END
 
-wave = WAVELET(series,delt,PERIOD=period,SCALE=scale,COI=coi,$
+    wave = WAVELET(series,delt,PERIOD=period,SCALE=scale,COI=coi,$
     SIGNIF=signif,siglvl=sigg,FFT_THEOR=fft_theor,mother=mother)
 
 ;get the number of wavelet scales actually used.
 nscale = N_ELEMENTS(period)
 
-;print,'Min. period is',min(period)
-;print,'Max. period is',max(period)
+print,'Min. period is',min(period)
+print,'Max. period is',max(period)
 
 IF NOT KEYWORD_SET(short) THEN short=min(period)
 IF NOT KEYWORD_SET(long) THEN long=max(period)
@@ -276,11 +215,6 @@ power=abs(wave)^2   	;the power plot from the complex image
 ;power=power*elem/(moment(curve))(1)
 power=power^0.5 	    ;decrease the power so you can actually see what's there
 
-
-
-
-
-
 ;
 ;============================ PLOT THE WAVELET POWER TRANSFORM =====================
 ;
@@ -290,131 +224,52 @@ power=power^0.5 	    ;decrease the power so you can actually see what's there
 ;description in the PostScript language.
 
 	levels=25
-    ;levels=200
 	step=(max(power)-min(power))/levels
 	userlevels=indgen(levels)*step + min(abs(wave)^2)      
 
 ;set the device plotting co-ordinates for the wavelet power spectrum
 IF NOT KEYWORD_SET(fig) THEN begin 
-    ;pos2 = [pos1(0),0.32,pos1(2),0.72]
-    pos2 = [ pos1[0], 0.15, pos1[2], pos1[1]-0.10 ]
+    pos2 = [pos1(0),0.32,pos1(2),0.72]
     wavetitle='b) Morlet wavelet power transform' 
 ENDIF ELSE begin
     pos2 = [pos1(0),0.38,pos1(2),0.92]
     wavetitle='' 
-;    XYOUTS,0.4,0.960,'a) Morlet wavelet power transform',/norm,align=0.5,charsize=1.3
+    XYOUTS,0.4,0.960,'a) Morlet wavelet power transform',/norm,align=0.5,charsize=1.3
 ENDELSE
 
-
-
-;POLYFILL,[pos2(0),pos2(2),pos2(2),pos2(0)],$
-;    [pos2(1),pos2(1),pos2(3),pos2(3)],/norm,color=0
+POLYFILL,[pos2(0),pos2(2),pos2(2),pos2(0)],$
+    [pos2(1),pos2(1),pos2(3),pos2(3)],/norm,color=0
 
 pickpeakperiod,power^2.,maxper,period,perpower
 
-;-
+IF NOT KEYWORD_SET(ylog) THEN begin
 
-;------------------------------------------------------------------------------------
+    CONTOUR,power,time,period,position=pos2, $
+    XSTYLE=1,XTITLE='Time [s]',YTITLE='Period [s]',$
+    TITLE=waveTitle,nLEVELS=25,/FILL,/NOERASE,$
+    ystyle=1,YRANGE=[short,long],xthick=lthick,ythick=lthick,$
+    ;xtickinterval=xticksep,xtickformat='(I9)',$
+    background=0;,ytickinterval=0.002,/over,/normal
+;    horline,(elem-1)*delt/(3*sqrt(2)),line=2,color=255
+    horline,(elem-1)*delt/(4*sqrt(2)),line=2,color=255
 
-;- Plot panel b) "Morlet wavelet power transform"
-;-   period [s] vs. Time [s]
-;- Uses IDL procedure CONTOUR.
+ENDIF ELSE begin
 
-IF NOT KEYWORD_SET(ylog) THEN ytype=0 else ytype=1
+    CONTOUR,power,time,period,position=pos2, $
+    XSTYLE=1,XTITLE='Time [s]',YTITLE='Period [s]',$
+    TITLE=waveTitle,nLEVELS=25,/FILL,/NOERASE,$
+    ystyle=1,YRANGE=[short,long],/ytype,xthick=lthick,ythick=lthick,$
+    ;xtickinterval=xticksep,xtickformat='(I9)',$
+    background=0;,ytickinterval=0.002,/over,/normal
+;    horline,(elem-1)*delt/(3*sqrt(2)),line=2,color=255
+    horline,(elem-1)*delt/(4*sqrt(2)),line=2,color=255
 
-;CONTOUR,power,time,period,position=pos2, $
-;XSTYLE=1,XTITLE='Time [s]',YTITLE='Period [s]',$
-;TITLE=waveTitle,nLEVELS=25,/FILL,/NOERASE,$
-;ystyle=1,YRANGE=[short,long], $
-;ytype=ytype, $
-;xthick=lthick,ythick=lthick,$
-;;xtickinterval=xticksep,xtickformat='(I9)',$
-;background=0;,ytickinterval=0.002,/over,/normal
-;;horline,(elem-1)*delt/(3*sqrt(2)),line=2,color=255
-;;-    horline,(elem-1)*delt/(4*sqrt(2)),line=2,color=255
-;;- "horline" is an "undefined procedure/function"...
-
-
-;-
-mywin.SetCurrent
-cntr = CONTOUR2( $
-    power, time, period, $
-    /current, $
-    position=pos2, $
-    ;/NOERASE,$
-    ;/ytype, $
-    /fill, $
-    n_levels=levels, $
-    overplot=0, $
-    axis_style=2, $
-    rgb_table=rgb_table, $
-    c_label_show=0, $
-;    min_value=1.0e4, $   ; Min/Max over 1600 and 1700...
-;    max_value=1.68e7, $  ;  ... not comparing them, so commenting this for now.
-    xticklen=0.020, $
-    yticklen=0.015, $
-    yminor=0, $
-    ytickvalues=[50, 100, 200, 500, 1000, 2000], $
-    ylog=ylog, $
-    yrange=[long,short], $
-    xstyle=1, ystyle=1, $
-    title=waveTitle, $
-    xtitle='Time [s]', $
-    ytitle='Period [s]' $
-)
-
-;- Color bar for wavelet plot (b)
-;cbar = colorbar( title='power', rgb_table=color, major=5, $
-;    position=[ pos2[2]*1.01, pos2[1], pos2[2]+0.02, pos2[3] ], $
-;    textpos=1, orientation=1 )
-
-;cbar = colorbar2( $
- ;   target=cntr, $
-  ;  rgb_table=color, $
-   ; range=[min(power), max(power)] );, $
-    ;tickinterval = 0.5e7 );, $
-    ;tickvalues=[min(power), max(power)], $
-    ;tickvalues=[1.e6, 1.e7], $
-    ;major=2 )
-    
-
-y_horline = (elem-1)*delt/(4*sqrt(2))
-horline = plot2( $
-    cntr.xrange, $
-    [y_horline, y_horline], $
-    ;/current, axis_style=4, position=pos2, $
-    overplot=cntr, $
-    ;axis_style=1, $
-    linestyle=':', $
-    ;linestyle=[1, '4FF2'X], $
-    color='gray' )
-
-
-;- Horizontal line at 180 seconds (3-minute period):
-cutoff = plot2( $
-    cntr.xrange, $
-    [180, 180], $
-    ;/current, axis_style=4, position=pos2, $
-    overplot=cntr, $
-    ;axis_style=1, $
-    linestyle='__', $
-    ;linestyle=[1, '4FF2'X], $
-    color=line_color )
+ENDELSE
 
 ; mark what frequency the maximum power occurs at at each time
-;for i=0,N_ELEMENTS(maxper)-1 do plots,$
-;    [time(i),time(i)],[maxper(i),maxper(i)],$
-;       psym=-3,color=0
-
-
-;- My version of dominant frequency
-;for ii=0, N_ELEMENTS(maxper)-1 do $
-;    p = plot2( $
-;        [ time[ii],time[ii] ], [ maxper[ii],maxper[ii] ], $
-;        /overplot, symbol='circle', color='black' )
-
-
-
+for i=0,N_ELEMENTS(maxper)-1 do plots,$
+    [time(i),time(i)],[maxper(i),maxper(i)],$
+       psym=-3,color=0
 
 n=n_elements(series)
 
@@ -424,7 +279,6 @@ n=n_elements(series)
 power1 = (ABS(wave))^2
 global_ws = TOTAL(power1,1)/n    ; global wavelet spectrum (GWS)
 norm_global_ws = global_ws/(moment(curve))(1)
-
 
 ;
 ;================= CALCULATE THE GLOBAL SIGNIFICANCE FOR THE GLOBAL WAVELET SPECTRUM ==============
@@ -498,38 +352,9 @@ IF KEYWORD_SET(nocon) then GOTO,NO_CONTOURS
 ;which is set above, but that's easily changeable. The colour set by PC
 ;controls the colour of the significance contours, the COI boundary and the
 ;COI cross-hatching. This is easily changed, too, though.
-
-
-;- contour lines on panel b) with, e.g. "99%" labels
-;CONTOUR, $
-;power/signif, time, period, /OVERPLOT, $
-;LEVEL=1, C_ANNOT=percent, color=pc, $
-;thick=3, C_CHARTHICK=lthick,$
-;xtitle='Time [s]',yrange=[short,long],ystyle=1
-
-;-
-
-
-
-;- outline significance level (e.g. 99%)
-mywin.SetCurrent
-cntr2 = CONTOUR2( $
-    (power/signif), time, period, $
-    ;/current, $
-    ;overplot=cntr, $
-    ;c_label_show=1, $
-    ;c_value=0.95, $
-    c_value=1.0, $
-    ;c_label_objects=['99%'], $
-    ;label_format='(F0.2, "%")', $
-    ;label_format='(F0.2)', $
-    color=line_color, $
-    xtitle='Time [s]', $
-	;yrange=[short, long], $
-	ystyle=1 $
-)
-
-
+CONTOUR,power/signif,time,period,$
+/OVERPLOT,LEVEL=1,C_ANNOT=percent,color=pc,thick=3,C_CHARTHICK=lthick,$
+xtitle='Time [s]',yrange=[short,long],ystyle=1
 
 NO_CONTOURS:
         
@@ -537,20 +362,11 @@ IF KEYWORD_SET(cone) THEN BEGIN
 
     x = [MIN(time),time,MAX(time)]
     y = [MAX(period),coi,MAX(period)]
-
-;    PLOTS,time,coi,COLOR=pc,NOCLIP=0,THICK=lthick	    
-
-    mywin.SetCurrent
-    plt_coi = plot2( time, coi, /overplot, COLOR=line_color )
-
-    ;plt_fill = fill_plot
-
-;    POLYFILL,x,y,ORIEN=+45,SPACING=0.5,COLOR=pc,NOCLIP=0,THICK=lthick
-;    POLYFILL,x,y,ORIEN=-45,SPACING=0.5,COLOR=pc,NOCLIP=0,THICK=lthick
-
-
+    PLOTS,time,coi,COLOR=pc,NOCLIP=0,THICK=lthick	    
+    POLYFILL,x,y,ORIEN=+45,SPACING=0.5,COLOR=pc,NOCLIP=0,THICK=lthick
+    POLYFILL,x,y,ORIEN=-45,SPACING=0.5,COLOR=pc,NOCLIP=0,THICK=lthick
+	    
 END
-
 
 ;print the value of the period at the top of the COI, which is
 ;therefore the highest 'reliable' period.
@@ -560,185 +376,75 @@ print,'Highest credible period is: '+$
 ;
 ;============= PLOT THE GLOBAL WAVELET SPECTRUM AND GLOBAL SIGNIFICANCE LEVEL ==============
 ;
-;pos3 = [0.75,pos2(1),0.95,pos2(3)]
+pos3 = [0.75,pos2(1),0.95,pos2(3)]
 
-;- My positions
-pos3 = [ pos2[2]+0.07, pos2(1), 0.90, pos2(3) ]
-;pos3 = [0.80,pos2(1),0.95,pos2(3)]  ;- make room for colorbar
+IF NOT KEYWORD_SET(ylog) THEN begin
 
+    PLOT,norm_global_ws,period,/NOERASE,POSITION=pos3, $
+        ;XTITLE='Power [DN]',$;,TITLE='c) Global'
+        yrange=[short,long],ystyle=9,thick=lthick,$
+        xrange=[MIN(norm_global_ws),MAX(norm_global_ws)],xstyle=11,$
+        xticks=2,xtickn=[' ',' ',' '],xthick=lthick,ythick=lthick;,xtickformat='(E9.2)'
 
-;- Begin plotting panel c)
+ENDIF ELSE begin
 
-IF NOT KEYWORD_SET(ylog) THEN ytype=0 else ytype=1
+    PLOT,norm_global_ws,period,/NOERASE,POSITION=pos3, $
+        ;XTITLE='Power [DN]',$;,TITLE='c) Global'
+        yrange=[short,long],ystyle=9,/ytype,thick=lthick,$
+        xrange=[MIN(norm_global_ws),MAX(norm_global_ws)],xstyle=11,$
+        xticks=2,xtickn=[' ',' ',' '],xthick=lthick,ythick=lthick;,xtickformat='(E9.2)'
 
-;PLOT,norm_global_ws,period,/NOERASE,POSITION=pos3, $
-;;XTITLE='Power [DN]',$;,TITLE='c) Global'
-;yrange=[short,long], ystyle=9, ytype=ytype, thick=lthick,$
-;xrange=[MIN(norm_global_ws),MAX(norm_global_ws)], $
-;xstyle=11,$ ; 11 = 1+2+8... exact (1) AND extended (2) ???
-;xticks=2, xtickn=[' ',' ',' '], xthick=lthick, ythick=lthick;,xtickformat='(E9.2)'
-
-
-;--- [xyz]style = 0-nice, 1-exact, 2-nice+, 3-exact+
-
-mywin.SetCurrent
-plt_wavelet = PLOT2( $
-    norm_global_ws, period, $
-    /current, $
-    POSITION=pos3, $
-    axis_style=1, $  ; left and bottom only (not a "box" plot)
-    ;XTITLE='Power [DN]',$;,TITLE='c) Global'
-    xrange=[MIN(norm_global_ws),MAX(norm_global_ws)], $
-    xstyle=2,$
-    xmajor=3, $
-    xtickname=[' ',' ',' '], $
-    yrange=[long,short], $
-    ystyle=1, $ ;exact
-    yshowtext=0, $
-    xtitle='power', $
-    ;ytitle='period [s]', $
-    ylog=ylog )
- ;,xtickformat='(E9.2)'
-
+ENDELSE
 
 IF NOT KEYWORD_SET(fig) THEN begin
-;    XYOUTS,0.855,0.780,'c) Fourier and ',/norm,align=0.5,charsize=1.2
-;    XYOUTS,0.855,0.755,'   Global Spectra',/norm,align=0.5,charsize=1.2
+    XYOUTS,0.855,0.780,'c) Fourier and ',/norm,align=0.5,charsize=1.2
+    XYOUTS,0.855,0.755,'   Global Spectra',/norm,align=0.5,charsize=1.2
 ENDIF ELSE begin
-;;    XYOUTS,0.855,0.980,'b) Fourier and ',/norm,align=0.5,charsize=1.2
-;;    XYOUTS,0.855,0.955,'   Global Spectra',/norm,align=0.5,charsize=1.2
-;    XYOUTS,0.85,0.960,'b) Fourier and Global Spectra',/norm,align=0.5,charsize=1.3
+;    XYOUTS,0.855,0.980,'b) Fourier and ',/norm,align=0.5,charsize=1.2
+;    XYOUTS,0.855,0.955,'   Global Spectra',/norm,align=0.5,charsize=1.2
+    XYOUTS,0.85,0.960,'b) Fourier and Global Spectra',/norm,align=0.5,charsize=1.3
 ENDELSE
 
 IF KEYWORD_SET(cone) THEN BEGIN
 
-    ;OPLOT,norm_global_signif,period,LINES=3
-    p = plot2( $
-        norm_global_signif, $
-        period, $
-        LINEStyle='-.', $
-        /overplot )
-    p.Order, /send_to_back
+    OPLOT,norm_global_signif,period,LINES=3
+;	plots,[MIN(global_ws),MAX(global_ws)],$
+;	[max(coi(middle-20:middle+20)),$
+;	max(coi(middle-20:middle+20))],line=1
+;	horline,(elem-1)*delt/(3*sqrt(2)),line=2
+     	horline,(elem-1)*delt/(4*sqrt(2)),line=2
 
-
-    ;- The following was commented in original code:
-    ;	plots,[MIN(global_ws),MAX(global_ws)],$
-    ;	[max(coi(middle-20:middle+20)),$
-    ;	max(coi(middle-20:middle+20))],line=1
-
-
-
-    ;	horline,(elem-1)*delt/(3*sqrt(2)),line=2
-    ;-    	horline,(elem-1)*delt/(4*sqrt(2)),line=2
-        y_horline = (elem-1)*delt/(4*sqrt(2))
-        horline = plot2( $
-            cntr.xrange, $
-            [y_horline, y_horline], $
-            overplot=plt_wavelet, $
-            axis_style=1, $
-            linestyle=':', $
-            color='gray' )
-        horline.Order, /send_to_back
 END
 
 
-
 fser = FOURIER2(curve,delt,/norm)
-pser = 1./(fser[0,*])
-pser = pser  ;- ??
-var_curve=(MOMENT(curve))[1]
+pser = 1./(fser(0,*))
+pser = pser
+var_curve=(MOMENT(curve))(1)
 
-;- fser[0,*] --> frequency, = result[0,*] from fourier2
-;- fser[1,*] --> power,     = result[1,*] from fourier2
+IF NOT KEYWORD_SET(ylog) THEN begin
 
-;print, ''
-;print, min(pser)
-;print, max(pser)
-;print, var_curve
+    AXIS,/xaxis,xrange=[min(fser(1,*)),max(fser(1,*))],$
+    	xticks=2,xstyle=2,/save,xtickinterval=10,xthick=lthick
+    AXIS,/yaxis,yrange=[short,long],/save,/yst,ythick=lthick
 
-IF NOT KEYWORD_SET(ylog) THEN ylog=0
+    oplot,fser(1,*),pser,psym=-1,color=175,thick=lthick
 
-;- Top x-axis, ranges between 0 and 20, with xmajor=3
-;print, [min(fser(1,*)),max(fser(1,*))]
-;AXIS,/xaxis, xrange=[min(fser(1,*)),max(fser(1,*))], xticks=2, xstyle=2, $
-;/save, $ ; save scaling to and from data coordinates established by call to AXIS
-;xtickinterval=10, xthick=lthick
-;AXIS,/yaxis,yrange=[short,long],ylog=ylog,/save,/yst,ythick=lthick
-;oplot,fser(1,*),pser,psym=-1,color=175,thick=lthick
-;level=signif_conf(curve,sigg) * elem / var_curve
-;-verline,level,ylog=ylog,lines=1
+    level=signif_conf(curve,sigg) * elem / var_curve
+    verline,level,lines=1
 
+ENDIF ELSE begin
 
+    AXIS,/xaxis,xrange=[min(fser(1,*)),max(fser(1,*))],$
+    	xticks=2,xstyle=2,/save,xtickinterval=10,xthick=lthick
+    AXIS,/yaxis,yrange=[short,long],/ylog,/save,/yst,ythick=lthick
 
-;aa = min(fser[1,*]) - min(norm_global_signif)
-aa = 0
-bb = ( max(fser[1,*]) - aa ) / max(norm_global_signif)
+    oplot,fser(1,*),pser,psym=-1,color=175,thick=lthick
 
-;- Currently have plt_wavelet at pos3
+    level=signif_conf(curve,sigg) * elem / var_curve
+    verline,level,/ylog,lines=1
 
-
-xrange = [0,20]
-
-plt_spectrum = plot2( $
-    fser[1,*], pser, $
-    /current, $
-    position=pos3, $
-    ;overplot=ax2, $
-    ;xrange=[min(fser(1,*)),max(fser(1,*))], $
-    xrange=xrange, $
-    xstyle=1, $
-    yrange=plt_wavelet.yrange, $
-    ystyle=1, $
-    ylog=ylog, $
-    axis_style=4, $
-    symbol="+", $
-    color='green' )
-
-ax2 = axis2( 'X', $
-    ;location = (plt_wavelet.yrange)[1], $
-    location='top', $
-    ;target=plt_wavelet, $
-    target=plt_spectrum, $
-    ;axis_range=[ min(fser[1,*]), max(fser[1,*])],$
-    ;axis_range=xrange, $
-    ;coord_transform=[0, 20/(  (plt_wavelet.xrange)[1]  )], $
-    ;coord_transform=[aa, bb], $
-    thick = lthick, $
-    tickinterval=10.0, $
-    major=3 )
-
-
-ax3 = axis2( 'Y', log=ylog, $
-    ;location = (plt_wavelet.xrange)[1], $
-    location='right', $
-    target=plt_wavelet, $
-    thick = lthick, $
-    axis_range = [long, short] )
-
-
-;- Yellow plot with "+" symbols -- power vs period as computed from fourier2.pro
-
-
-
-level=signif_conf(curve,sigg) * elem / var_curve
-
-
-;- Doesn't match original plots
-verline = plot2( $
-    [level, level], $
-    plt_spectrum.yrange, $
-    ;overplot=plt_wavelet, $
-    /current, $
-    position=pos3, $
-    axis_style=4, $
-    thick = lthick, $
-    ;linestyle=[1, '4FF2'X], $
-    yrange=[long, short], $
-    linestyle='--', $
-    color='gray' )
-verline.Order, /send_to_back
-
-
+ENDELSE
 
 ;
 ;=================================== PRINT THE MAIN TITLE ==================================
@@ -765,9 +471,9 @@ ENDIF ELSE begin
 ENDELSE
 
 ;plot,time,perpower,yst=3,position=pos4,/noerase,/xst
-;plot,time,conf,yst=1,position=pos4,/noerase,/xst,$
-;    ytitle='Confidence %',title=randomtitle,xthick=lthick,ythick=lthick,$
-;    xtitle='Time [s]',yrange=[min(conf) < ((100*sigg)-2),(max(conf) > ((100*sigg)+2))];,$
+plot,time,conf,yst=1,position=pos4,/noerase,/xst,$
+    ytitle='Confidence %',title=randomtitle,xthick=lthick,ythick=lthick,$
+    xtitle='Time [s]',yrange=[min(conf) < ((100*sigg)-2),(max(conf) > ((100*sigg)+2))];,$
     ;xtickinterval=xticksep,xtickformat='(I9)'
 
 plots,[min(time),max(time)],[linelevel,linelevel],lines=3
@@ -779,9 +485,5 @@ IF (N_ELEMENTS(period) GT 0) THEN outper=period ELSE outper=0
 IF (N_ELEMENTS(f_inver) GT 0) THEN outfreq=f_inver ELSE outfreq=0
 IF (N_ELEMENTS(time) GT 0) THEN outtime=time ELSE outtime=0
 ;end procedure
-
-print, ''
-print, 'End of sdbwave.pro'
-stop
-
+;STOP
 END

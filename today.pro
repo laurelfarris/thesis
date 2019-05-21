@@ -48,7 +48,6 @@ stop
 ;save2, 'newflare_1700maps'
 
 
-
 dw
 p1 = plot2( A[0].flux, color=A[0].color, axis_style=1 )
 ;p2 = plot2( A[1].flux, /overplot, color=A[1].color)
@@ -61,11 +60,24 @@ stop
 ;- NOTE: need to run filter.pro first ( IDL> .run filter )
 ;-   to get detrended signal. Variable "detrended" is input curve for sdbwave2.pro
 
+
 start:;-------------------------------------------------------------------------------
 cc = 0
+
+
+resolve_routine, 'sdbwave', /either
+SDBWAVE, detrended[*,cc], short = 50, long = 2000, $
+    ;/fast, $
+    /cone, ylog=1, delt=A[cc].cadence
+;- Unclear what kw "fast" is for, but skips call to randomwave...
+
+
+stop
+
+
 time = strmid(A[cc].time, 0, 5)
-ti = (where( time eq '01:30' ))[0]
-tf = (where( time eq '02:30' ))[0]
+;ti = (where( time eq '01:30' ))[0]
+;tf = (where( time eq '02:30' ))[0]
 
 dw
 
@@ -74,30 +86,33 @@ resolve_routine, 'axis2', /is_function
 resolve_routine, 'sdbwave2', /either
 
 SDBWAVE2, $
-    ;curve, $  ; 1-D time series (e.g. light curve)
     ;A[cc].flux[ti:tf], $
     detrended[*,cc], $
-    ;short=, long=, ; = min/max period by default
-    short = 50, $
-    long = 2000, $
+    short = 50, long = 2000, $
     ylog=1, $
     ;xtickname = time[ti:tf], $
-    color=20, $  ; rgb_table --> 1
+    ;rgb_table=4, $
+    rgb_table=20, $
+    color=A[cc].color, $
+    lthick = 0.5, $
+    ;line_color='white', $
+    line_color='black', $
     /fast, $ ; don't know what this does, but skips call to randomwave...
     /cone, $
-    delt=A[cc].cadence ;(1*10.), $
-    ;print=print, $
-    ;pc=255, $
-    ;nocon=nocon, $
-    ;mother='morlet', $
-    ;offset=0, $
-    ;title='a) Time series'
-    ;sigg=sigg
+    delt=A[cc].cadence, $ ;(1*10.), $
+    title='a) ' + A[cc].name + ' time series (detrended)'
 
 ;- max value for low-pass filter
 ;- significance (=0.99)
 
-save2, 'aia1600wavelet'
-;save2, 'aia1700wavelet'
+
+
+filename = 'aia' + A[cc].channel + 'wavelet'
+print, ''
+print, filename + '.pdf'
+print, ''
+stop
+;save2, filename, /stamp
+
 
 end

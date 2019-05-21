@@ -13,28 +13,46 @@
 ;-   Added "ind" keyword to set z-indices if only subset is desired.
 ;-
 
-function STRUC_HMI, index, cube, cadence=cadence, inst=inst, channel=channel, $
+function STRUC_HMI, index, cube, $
+    cadence=cadence, instr=instr, channel=channel, $
     ind=ind
+
+
+
+    ;- Parameters specific to individual flare
+    @parameters
+
 
     ; Read headers
     if n_elements(index) eq 0 then begin
         resolve_routine, 'read_my_fits'
         READ_MY_FITS, index, $
-            inst=inst, $
+            instr=instr, $
             channel=channel, $
             nodata=1, $
             prepped=1, $
-            ind=ind
+            ;ind=ind, $
+            year=year, $
+            month=month, $
+            day=day
     endif
 
     print, 'Reading header for level ', $
         strtrim(index[0].lvl_num,1), ' data.'
 
+
+
+
     ; Restore data
     ; "../hmi_mag.sav"  --> variable "cube", dimensions [750,500,400]
     ; "../hmi_cont.sav" --> variable "cube", dimensions [750,500,398]
-    restore, '/solarstorm/laurel07/hmi_' + channel + '.sav'
-    restore, '/solarstorm/laurel07/' + inst + '_' + channel + '.sav'
+;    restore, '/solarstorm/laurel07/hmi_' + channel + '.sav'
+;    restore, '/solarstorm/laurel07/' + instr + '_' + channel + '.sav'
+
+
+    path = '/solarstorm/laurel07/' + year + month + day + '/'
+    restore, path + strlowcase(instr) + '_' + channel + '.sav'
+
 
     ; Interpolate to get missing data and corresponding timestamp,
     ;   then crop data to pixel dimensions [500,330,*].
@@ -99,20 +117,4 @@ function STRUC_HMI, index, cube, cadence=cadence, inst=inst, channel=channel, $
         name: name $
     }
     return, struc
-end
-
-
-;- MEMORY - Is this making copies of everything?
-
-;hmi_mag = STRUC_HMI( hmi_mag_index, hmi_mag_data, cadence=45., inst='hmi', channel='mag' )
-;hmi_cont = STRUC_HMI( hmi_cont_index, hmi_cont_data, cadence=45., inst='hmi', channel='cont' )
-
-
-
-H = []
-H = [H, STRUC_HMI( hmi_mag_index, hmi_mag_data, cadence=45., inst='hmi', channel='mag' )]
-H = [H, STRUC_HMI( hmi_cont_index, hmi_cont_data, cadence=45., inst='hmi', channel='cont' )]
-
-
-
 end

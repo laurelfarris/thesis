@@ -35,6 +35,8 @@ function GET_IMAGE_DATA
 
 
 
+    @parameters
+
 
     ;- date_obs of image(s) to display
     display_time = '01:44'
@@ -69,11 +71,13 @@ function GET_IMAGE_DATA
     channel='mag'
 
     resolve_routine, 'read_my_fits'
-    READ_MY_FITS, index, data, instr=instr, channel=channel, nodata=1, prepped=1 ;ind=[0]
+    READ_MY_FITS, index, data, instr=instr, channel=channel, nodata=1, prepped=1, $ ;ind=[0]
+        year=year, month=month, day=day
     time = strmid(index.date_obs, 11, 5)
     ind = (where( time eq display_time ))[0]
 
-    READ_MY_FITS, index, data, instr=instr, channel=channel, nodata=0, prepped=1, ind=ind
+    READ_MY_FITS, index, data, instr=instr, channel=channel, nodata=0, prepped=1, ind=ind, $
+        year=year, month=month, day=day
     sz = size( data, /dimensions )
     X = (indgen(sz[0]) - index.crpix1) * index.cdelt1
     Y = (indgen(sz[1]) - index.crpix2) * index.cdelt2
@@ -93,11 +97,13 @@ function GET_IMAGE_DATA
     ; AIA 1600
     channel='1600'
 
-    READ_MY_FITS, index, data, instr=instr, channel=channel, nodata=1, prepped=1
+    READ_MY_FITS, index, data, instr=instr, channel=channel, nodata=1, prepped=1, $
+        year=year, month=month, day=day
     time = strmid(index.date_obs, 11, 5)
     ind = (where( time eq display_time ))[0]
 
-    READ_MY_FITS, index, data, instr=instr, channel=channel, nodata=0, ind=ind, prepped=1
+    READ_MY_FITS, index, data, instr=instr, channel=channel, nodata=0, ind=ind, prepped=1, $
+        year=year, month=month, day=day
     ;print, 'Processing level = ', strtrim(index.lvl_num,1), ' for AIA ', channel
     sz = size( data, /dimensions )
     X = (indgen(sz[0]) - index.crpix1) * index.cdelt1
@@ -116,11 +122,13 @@ function GET_IMAGE_DATA
     ; AIA 1700
     channel='1700'
 
-    READ_MY_FITS, index, data, instr=instr, channel=channel, nodata=1, prepped=1
+    READ_MY_FITS, index, data, instr=instr, channel=channel, nodata=1, prepped=1, $
+        year=year, month=month, day=day
     time = strmid(index.date_obs, 11, 5)
     ind = (where( time eq display_time ))[0]
 
-    READ_MY_FITS, index, data, instr=instr, channel=channel, nodata=0, ind=ind, prepped=1
+    READ_MY_FITS, index, data, instr=instr, channel=channel, nodata=0, ind=ind, prepped=1, $
+        year=year, month=month, day=day
     ;print, 'Processing level = ', strtrim(index.lvl_num,1), ' for AIA ', channel
 
     sz = size( data, /dimensions )
@@ -331,11 +339,16 @@ pro IMAGE_AR_ONLY, S
     ;- Label each of the four sunspots
     ;- (same coords as in subregions.pro, and hmi_spectra.pro)
 
+;    center = [ $
+;        [390, 225], $
+;        [170, 220], $
+;        [245, 105], $
+;        [ 20,  75] ]
     center = [ $
-        [390, 225], $
-        [170, 220], $
-        [245, 105], $
-        [ 20,  75] ]
+        [350, 250], $
+        [160, 210], $
+        [200,  90], $
+        [ 10,  75] ]
     nn = (size(center, /dimensions))[1]
 
     label = [ 'AR_1p', 'AR_1n', 'AR_2p', 'AR_2n' ]
@@ -350,6 +363,7 @@ pro IMAGE_AR_ONLY, S
             center[0,ii]*cdelt + XX[0], $
             center[1,ii]*cdelt + yy[0], $
             label[ii], $
+            font_size=fontsize-1, $
             target=im[2], $
             /data, $
             color = color[ii] )
@@ -364,8 +378,8 @@ end
 ;IMAGE_STRUCTURE, S
 
 IMAGE_AR_ONLY, S
-;stop
 
+stop
 save2, 'images';, /add_timestamp, idl_code='image_ar'
 
 
