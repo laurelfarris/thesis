@@ -1,0 +1,99 @@
+13 December 2018
+Trying to figure out why Acrux won't navigate between tmux panes
+while running vim.
+
+
+
+
+
+# Acrux only:
+
+--> /usr/share/vim/vimfiles/ftdetect/stp.vim
+    Sets filetype for *.stp and *.stpm. Harmless.
+
+
+--------------------------------------------------------------------------------------
+--> /usr/share/vim/vimfiles/plugin/cctree.vim
+    This might be mapping ctrl key to other things
+    Doesn't exist when logged into SS.
+    Pretty sure the problem is in this file somewhere.
+    It's related to vim, as found from Google search for "cctree.vim"
+--------------------------------------------------------------------------------------
+
+--> /usr/share/vim/vim74/ftplugin/sh.vim
+    Probably also harmless.
+
+--> /usr/share/vim/vim74/syntax/sh.vim
+    Syntax highlighting.
+
+
+
+# Solarstorm only:
+
+--> /usr/share/vim/vim74/scripts.vim
+    filetypes
+
+--> /usr/share/vim/vim74/ftplugin/conf.vim
+    filetypes
+
+
+--> /usr/share/vim/vim74/syntax/conf.vim
+    syntax highlighting
+
+
+
+# Acrux (24 files):
+/etc/vimrc
+/usr/share/vim/vim74/syntax/syntax.vim
+/usr/share/vim/vim74/syntax/synload.vim
+/usr/share/vim/vim74/syntax/syncolor.vim
+/usr/share/vim/vim74/filetype.vim
+--> /usr/share/vim/vimfiles/ftdetect/stp.vim
+/usr/share/vim/vim74/ftplugin.vim
+~/.vimrc
+~/.dotfiles/custom-configs/all-vimrc.vim
+~/.vim/colors/laurel_colors.vim
+/usr/share/vim/vim74/syntax/nosyntax.vim
+
+--> /usr/share/vim/vimfiles/plugin/cctree.vim
+
+/usr/share/vim/vim74/plugin/getscriptPlugin.vim
+/usr/share/vim/vim74/plugin/gzip.vim
+/usr/share/vim/vim74/plugin/matchparen.vim
+/usr/share/vim/vim74/plugin/netrwPlugin.vim
+/usr/share/vim/vim74/plugin/rrhelper.vim
+/usr/share/vim/vim74/plugin/spellfile.vim
+/usr/share/vim/vim74/plugin/tarPlugin.vim
+/usr/share/vim/vim74/plugin/tohtml.vim
+/usr/share/vim/vim74/plugin/vimballPlugin.vim
+/usr/share/vim/vim74/plugin/zipPlugin.vim
+--> /usr/share/vim/vim74/ftplugin/sh.vim
+--> /usr/share/vim/vim74/syntax/sh.vim
+
+
+
+
+# Solarstorm (23 files):
+/etc/vimrc
+/usr/share/vim/vim74/syntax/syntax.vim
+/usr/share/vim/vim74/syntax/synload.vim
+/usr/share/vim/vim74/syntax/syncolor.vim
+/usr/share/vim/vim74/filetype.vim
+/usr/share/vim/vim74/ftplugin.vim
+~/.vimrc
+~/.dotfiles/custom-configs/all-vimrc.vim
+~/.vim/colors/laurel_colors.vim
+/usr/share/vim/vim74/syntax/nosyntax.vim
+/usr/share/vim/vim74/plugin/getscriptPlugin.vim
+/usr/share/vim/vim74/plugin/gzip.vim
+/usr/share/vim/vim74/plugin/matchparen.vim
+/usr/share/vim/vim74/plugin/netrwPlugin.vim
+/usr/share/vim/vim74/plugin/rrhelper.vim
+/usr/share/vim/vim74/plugin/spellfile.vim
+/usr/share/vim/vim74/plugin/tarPlugin.vim
+/usr/share/vim/vim74/plugin/tohtml.vim
+/usr/share/vim/vim74/plugin/vimballPlugin.vim
+/usr/share/vim/vim74/plugin/zipPlugin.vim
+--> /usr/share/vim/vim74/scripts.vim
+--> /usr/share/vim/vim74/ftplugin/conf.vim
+--> /usr/share/vim/vim74/syntax/conf.vim

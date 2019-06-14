@@ -1,3 +1,50 @@
+;- Thu Nov 29 08:12:03 MST 2018
+
+pro CALC_FOURIER2, flux, cadence, frequency, power, fmax=fmax, fmin=fmin
+
+;- This is mostly for power maps, not spectra:
+;fcenter = 1./180
+;bandwidth = 0.001
+;fmin = fcenter - (bandwidth/2.)
+;fmax = fcenter + (bandwidth/2.)
+
+
+    sz = size( flux, /dimensions )
+    if n_elements(sz) eq 1 then sz = reform(sz, sz[0], 1, /overwrite)
+
+    result = fourier2( indgen(sz[0]), 24 )
+
+    frequency = reform(result[0,*])
+    if not keyword_set(fmin) then fmin = min(frequency)
+    if not keyword_set(fmax) then fmax = max(frequency)
+
+    ind = where(frequency ge fmin and frequency le fmax)
+    frequency = frequency[ind]
+
+    power = fltarr( n_elements(frequency), sz[1] )
+    for ii = 0, sz[1]-1 do begin
+        result = fourier2( flux[*,ii], 24 )
+        power[*,ii] = (reform(result[1,*]))[ind]
+
+        ;frequency = frequency[ind]
+        ;power = power[ind]
+
+    endfor
+end
+
+;- 21 May 2019
+;- The function "calc_fourier2" defined above was coped from a
+;-  routine also called filter.pro, but not the same as function
+;-  defined below... no idea where the above code came from.
+
+;- ML code:
+;CALC_FOURIER2, A[0].flux, 24, frequency, power
+;threshold = 400 ;- Remove variations on timescales less than this? Or greater?
+
+
+;----------------------------------------------------------------------------------
+
+
 ;- See comp book p. 99-103
 ;-  and Enotes -- "Detrending | FFT filter", "light curves - detrended"
 
@@ -156,7 +203,7 @@ ax[1].title = A[0].name + ' (DN s$^{-1}$)'
 ax[3].tickinterval = 0.2e8
 ax[3].title = A[1].name + ' (DN s$^{-1}$)'
 
-;save2, 'detrendedLC' 
+;save2, 'detrendedLC'
 ;- bad file name... should START with "lc",
 ;-  plus curves aren't actually detrended yet... (10 May 2019)
 

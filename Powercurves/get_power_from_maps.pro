@@ -107,7 +107,7 @@ n_pix = float(r*r) ;- map is FLOAT, so may as well convert n_pix
 ;-    over several pixels, not all of which would have saturated at the same time.
 ;-    Didn't think plots showed accurate results).
 ;- --> lots of periodicity in P(t)... is this what Monsue et al. 2016 meant
-;      when they said integrated over slightly larger area improved SNR?
+;      when they said integrating over slightly larger area improved SNR?
 ;p1 = A[cc].map[center[0,0], center[1,0], *]
 ;p2 = A[cc].map[center[0,1], center[1,1], *]
 

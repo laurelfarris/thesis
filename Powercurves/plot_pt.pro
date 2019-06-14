@@ -24,7 +24,11 @@ pro PLOT_PT, power, dz, time, $
 
 
     sz = size(power,/dimensions)
+
     xdata = [ [indgen(sz[0])], [indgen(sz[0])] ] + (dz/2)
+        ;- Is the second arg supposed to used sz[1]? This makes no sense
+        help, xdata
+        stop
 
     color = ['green', 'purple']
 
@@ -32,15 +36,14 @@ pro PLOT_PT, power, dz, time, $
     dw
     plt = BATCH_PLOT( $
         xdata, power, $
-        xrange=[0,748], $
+        ;xrange=[0,748], $
+        xrange=[0,sz[2]+dz-2], $
         xtickinterval = 75, $
         ytitle='3-minute power', $
         color=color, $
         wy = 3.0, $  ; --> still a kw for batch_plot, which is NOT the same thing as plot3.
         buffer = 0, $
         _EXTRA = e )
-
-
 
 
 ;- Maps only --> power_flux doesn't need to be shifted

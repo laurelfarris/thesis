@@ -1,6 +1,6 @@
-;; Last modified:   16 May 2018 22:14:06
-
 ;+
+;- Last modified:   30 April 2019
+;-      Added kw "shifts"
 ;
 ; CREATED       04 April 2018
 ;
@@ -15,7 +15,7 @@
 ;-
 
 
-pro LINEAR_INTERP, array, jd, cadence, time;=time
+pro LINEAR_INTERP, array, jd, cadence, time, shifts=shifts
 
 ; Linear interpolation at coordinates specified by caller.
 ;  Get indices of missing data by subtracting each observation
@@ -39,8 +39,10 @@ pro LINEAR_INTERP, array, jd, cadence, time;=time
     ; Use time to get julian date
     ;jd = get_jd( timestampstring )
 
-    ; convert from fraction of a day to seconds
+    ;- difference in jd from one image to the next -- small fraction of a day.
     dt = jd - shift(jd,1)
+
+    ; convert from days to seconds
     dt = dt * 24 * 3600
 
     ; Exclude first element because of wrapping from SHIFT.
@@ -64,6 +66,7 @@ pro LINEAR_INTERP, array, jd, cadence, time;=time
         ; DESCENDING order to preserve the indices of the missing data.
         descending = (interp_coords[reverse(sort(interp_coords))]);[0:-2]
 
+
         foreach i, descending do begin
             missing_image = ( array[*,*,i-1] + array[*,*,i] ) / 2.
             array = [ $
@@ -73,6 +76,13 @@ pro LINEAR_INTERP, array, jd, cadence, time;=time
             ; Could actually use MEAN here...
             missing_jd = ( jd[i-1] + jd[i] ) / 2.
             jd = [ jd[0:i-1], missing_jd, jd[i:-1] ]
+
+            if keyword_set(shifts) then begin
+                ;- code here to interpolate missing values in shifts
+                ;-   (amount that image would have shifted during alingment
+                ;-   had it been there...)
+            endif
+
         endforeach
 
         ; Convert from float back to integers by rounding.

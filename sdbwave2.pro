@@ -1,92 +1,89 @@
 ;+
 ;NAME:
-;    	SDBWAVE
+;       SDBWAVE
 ;
 ;PURPOSE:
-;   	Calculate and display the wavelet (power) transform of a time series
-;   	(CURVE) with the time series above the plot for comparison with the
-;   	transform, and also show the global wavelet spectrum to the right,
-;   	since it represents the summation of the power transform over time,
-;   	and is therefore analogous to the Fourier transform of the series.
+;       Calculate and display the wavelet (power) transform of a time series
+;       (CURVE) with the time series above the plot for comparison with the
+;       transform, and also show the global wavelet spectrum to the right,
+;       since it represents the summation of the power transform over time,
+;       and is therefore analogous to the Fourier transform of the series.
 ;
 ;CALLING SEQUENCE:
-;   	sdbwave,curve,print=print,pc=pc,title=title,nocon=nocon,delt=delt,$
-;    	    mother=mother,offset=offset
+;       sdbwave,curve,print=print,pc=pc,title=title,nocon=nocon,delt=delt,$
+;           mother=mother,offset=offset
 ;
 ;INPUTS:
-;   	CURVE - a 1-D time series, e.g. a light curve
+;       CURVE - a 1-D time series, e.g. a light curve
 ;
 ;INTERACTIVE INPUTS DURING EXECUTION:
 ;
-;   	The user is first asked for a maximum value for the low-pass filter
-;   	called by WAVE_EXAMPLE. For the SECIS data, an unfiltered time series
-;   	will be analysed by specifying half the data sampling rate of 44.2 Hz
-;   	(i.e. 22.1 Hz).
+;       The user is first asked for a maximum value for the low-pass filter
+;       called by WAVE_EXAMPLE. For the SECIS data, an unfiltered time series
+;       will be analysed by specifying half the data sampling rate of 44.2 Hz
+;       (i.e. 22.1 Hz).
 ;
-;   	The second parameter requested is the significance (confidence)
-;   	level which the WAVELET function will calculate as a set of contours
-;   	in the power transform. Concentrations of power enclosed within these
-;   	contours will be significant to that level. E.g., if the user specifies
-;   	a value of 0.99 (i.e. 99%) then there is a 1% chance that the power
-;   	within the contours is due to noise.
+;       The second parameter requested is the significance (confidence)
+;       level which the WAVELET function will calculate as a set of contours
+;       in the power transform. Concentrations of power enclosed within these
+;       contours will be significant to that level. E.g., if the user specifies
+;       a value of 0.99 (i.e. 99%) then there is a 1% chance that the power
+;       within the contours is due to noise.
 ;
 ;
 ;KEYWORDS:
-;   	PRINT - if set, then set parameters applicable to printing to a
-;   	    	postscript file. NOTE: Does not actually set the display
-;   	    	to the PostScript device - this must be done manually.
+;       PRINT - if set, then set parameters applicable to printing to a
+;               postscript file. NOTE: Does not actually set the display
+;               to the PostScript device - this must be done manually.
 ;
-;   	PC - the plot colour for the contours and cone-of-influence
-;   	        boundary and cross-hatching. This is a value from 0 to 
-;   	    	255. In a monochromatic colour table (e.g. loadct,3 for
-;   	    	red temperature) 0 will be black, 255 will be white, and
-;   	    	any other colours will be somewhere in between (e.g.
-;   	    	scale linearly for colour tables 0,1,3, & 8;
-;   	    	logarithmically for colour table 9).
+;       PC - the plot colour for the contours and cone-of-influence
+;               boundary and cross-hatching. This is a value from 0 to
+;               255. In a monochromatic colour table (e.g. loadct,3 for
+;               red temperature) 0 will be black, 255 will be white, and
+;               any other colours will be somewhere in between (e.g.
+;               scale linearly for colour tables 0,1,3, & 8;
+;               logarithmically for colour table 9).
 ;
-;   	TITLE - a string, specifying the title over the wavelet transform
-;   	    	part of the display output.
+;       TITLE - a string, specifying the title over the wavelet transform
+;               part of the display output.
 ;
-;   	NOCON - if set, then do not display either contours or the
-;   	    	cone-of-influence calculated by the WAVELET routine
+;       NOCON - if set, then do not display either contours or the
+;               cone-of-influence calculated by the WAVELET routine
 ;
 ;OUTPUTS:
-;   	None, except for the display of the wavelet transform etc. to
-;   	either X windows (the default) or (optionally) the PostScript device.
+;       None, except for the display of the wavelet transform etc. to
+;       either X windows (the default) or (optionally) the PostScript device.
 ;
 ;
 ;EXAMPLES:
-;   	IDL> wave4,series,title='Wavelet Transform for our series thing'
-;   	
-;   	 to write the output to an Encapsulated PostScript file:
-;   	IDL> set_plot,'PS
-;   	IDL> DEVICE,/encapsul,/color,filename='test1.eps',xsize=5,ysize=5 
-;   	IDL> sdbwave,series,title='Another Title',/print,pc=0
-;   	IDL> DEVICE,/close
-;   	IDL> SET_PLOT,'X'
+;       IDL> wave4,series,title='Wavelet Transform for our series thing'
 ;
-;   	 or, if you have TOGGLE.PRO in your path:
-;   	IDL> TOGGLE,filename='wavelet.ps',/landscape,/color
-;   	IDL> sdbwave,series,title='Another Title',/print,pc=0
-;   	IDL> TOGGLE
+;        to write the output to an Encapsulated PostScript file:
+;       IDL> set_plot,'PS
+;       IDL> DEVICE,/encapsul,/color,filename='test1.eps',xsize=5,ysize=5
+;       IDL> sdbwave,series,title='Another Title',/print,pc=0
+;       IDL> DEVICE,/close
+;       IDL> SET_PLOT,'X'
+;
+;        or, if you have TOGGLE.PRO in your path:
+;       IDL> TOGGLE,filename='wavelet.ps',/landscape,/color
+;       IDL> sdbwave,series,title='Another Title',/print,pc=0
+;       IDL> TOGGLE
 ;
 ;CALLS:
-;   	ECLIPSFILTER.PRO, WAVELET.PRO, WAVE_SIGNIF.PRO
+;       ECLIPSFILTER.PRO, WAVELET.PRO, WAVE_SIGNIF.PRO
 ;
 ;HISTORY:
-;   	Based on ECLIPSE.PRO by Eoghan O'Shea, QUB, 2000
-;   	Modified in stages by D. Williams for the SECIS eclipse data
-;   	    "    "    "    "  S. Bloomfield for Sac. Peak 2002 data
+;       Based on ECLIPSE.PRO by Eoghan O'Shea, QUB, 2000
+;       Modified in stages by D. Williams for the SECIS eclipse data
+;           "    "    "    "  S. Bloomfield for Sac. Peak 2002 data
 ;-
 
 PRO sdbwave2,curve,print=print,pc=pc,title=title,nocon=nocon,delt=delt,$
     mother=mother,offset=offset,cone=cone,fast=fast,outscale=outscale,$
-    outper=outper,outfreq=outfreq,outtime=outtime, $
-    fig=fig,$
-    color=color, $
+    outper=outper,outfreq=outfreq,outtime=outtime,color=color,fig=fig,$
     sigg=sigg, $
-    line_color=line_color, $
-    rgb_table=rgb_table, $
+    line_color=line_color, rgb_table=rgb_table, $
     short=short,long=long,ylog=ylog,lthick=lthick,sig_fudge=sig_fudge,$
     maxper=maxper,conf=conf;, xticksep=xticksep
 
@@ -104,14 +101,15 @@ IF NOT KEYWORD_SET(pc) then pc=255
 
 ;change the titles from here
 IF NOT KEYWORD_SET(title) THEN title = 'a) Time series'
-mainTitle='Wavelet analysis and global power spectrum'	;overall title for the main wavelet window
+mainTitle='Wavelet analysis and global power spectrum'  ;overall title for the main wavelet window
 
 ;time interval betweend data points (in seconds), i.e. the cadence
 IF NOT KEYWORD_SET(delt) THEN delt=(1*10.)
 IF NOT KEYWORD_SET(sig_fudge) THEN sig_fudge=1.
-		
-;set the maximum frequency to be plotted, NOT the cut-off frequency for the low-pass filter:
-topF=1./(2*delt)     	; the Nyquist frequency
+
+;set the maximum frequency to be plotted,
+;  NOT the cut-off frequency for the low-pass filter:
+topF=1./(2*delt)        ; the Nyquist frequency
 
 ;need to be able to work out the maximum of the COI for the
 ;purposes of determining the maximum trustable period
@@ -125,11 +123,12 @@ time=(findgen(elem)*delt)+offset;+(39.46)
 ;print,'Min. time',min(time)
 ;print,'Max. time',max(time)
 
-as=curve  	;avoid negative values by taking the modulus of the values only.
-series=as  	;a duplicate of the filtered curve
+as=curve    ;avoid negative values by taking the modulus of the values only.
+series=as   ;a duplicate of the filtered curve
 ;why Eoghan ever called it series is anyone's guess...
 
-;for control over the size of the plot text. Should be 1 by default, but another routine
+;for control over the size of the plot text.
+; Should be 1 by default, but another routine
 ;might have set it to a different value.
 !p.charsize=1.0
 IF NOT KEYWORD_SET(lthick) THEN lthick=1.
@@ -148,10 +147,6 @@ if not keyword_set(sigg) then sigg=0.99
 IF NOT KEYWORD_SET(color) THEN color=1
 ;LOADCT,color
 ;GAMMA_CT,0.4
-
-
-
-
 
 ;
 ;========================= PLOT TIME SERIES ===============================
@@ -217,7 +212,7 @@ plt_lc = plot2( $
     ;ytickunits="exponent", $
     xtitle='Time [s]', ytitle='DN',$
     title=title $
-) 
+)
 
 ax = plt_lc.axes
 ;ax[0].tickunits="Seconds"
@@ -246,7 +241,7 @@ FIG:
 ;   PERIOD is the list of the periods at which the wavelet transform was calculated
 ;   SCALE is the list of the corresponding wavelet scales
 ;   COI is the list of Cone-Of-Influence values so that it can be plotted over the
-;   	wavelet transform
+;       wavelet transform
 ;   SIGGLVL is set to SIGG, the significance level
 ;   SIGNIF is the array of significance contours calculated for SIGG percent
 ;   FFT_THEOR is a theoretical FFT background spectrum for the time series.
@@ -255,6 +250,8 @@ FIG:
 IF NOT KEYWORD_SET(mother) THEN BEGIN
     mother='morlet'
     param = 6
+    ;- param used in call to wave_signif:
+    ;-  global_signif = WAVE_SIGNIF(series,delt, ..., MOTHER=mother,param=param)
 END
 
 wave = WAVELET(series,delt,PERIOD=period,SCALE=scale,COI=coi,$
@@ -272,9 +269,9 @@ IF NOT KEYWORD_SET(long) THEN long=max(period)
 ;we're interested in the POWER transform, not the amplitude or phase,
 ;so we square the values in the transform (WAVE), and call the power
 ;transform power. Eoghan's name, not mine
-power=abs(wave)^2   	;the power plot from the complex image
+power=abs(wave)^2       ;the power plot from the complex image
 ;power=power*elem/(moment(curve))(1)
-power=power^0.5 	    ;decrease the power so you can actually see what's there
+power=power^0.5         ;decrease the power so you can actually see what's there
 
 
 
@@ -289,26 +286,24 @@ power=power^0.5 	    ;decrease the power so you can actually see what's there
 ;printers, which may not be able to handle a large number of vertices in the plot
 ;description in the PostScript language.
 
-	levels=25
+    levels=25
     ;levels=200
-	step=(max(power)-min(power))/levels
-	userlevels=indgen(levels)*step + min(abs(wave)^2)      
+    step=(max(power)-min(power))/levels
+    userlevels=indgen(levels)*step + min(abs(wave)^2)
 
 ;set the device plotting co-ordinates for the wavelet power spectrum
-IF NOT KEYWORD_SET(fig) THEN begin 
-    ;pos2 = [pos1(0),0.32,pos1(2),0.72]
+IF NOT KEYWORD_SET(fig) THEN begin
+    ;-pos2 = [pos1(0),0.32,pos1(2),0.72]
     pos2 = [ pos1[0], 0.15, pos1[2], pos1[1]-0.10 ]
-    wavetitle='b) Morlet wavelet power transform' 
+    wavetitle='b) Morlet wavelet power transform'
 ENDIF ELSE begin
     pos2 = [pos1(0),0.38,pos1(2),0.92]
-    wavetitle='' 
+    wavetitle=''
 ;    XYOUTS,0.4,0.960,'a) Morlet wavelet power transform',/norm,align=0.5,charsize=1.3
 ENDELSE
 
-
-
-;POLYFILL,[pos2(0),pos2(2),pos2(2),pos2(0)],$
-;    [pos2(1),pos2(1),pos2(3),pos2(3)],/norm,color=0
+POLYFILL,[pos2(0),pos2(2),pos2(2),pos2(0)],$
+    [pos2(1),pos2(1),pos2(3),pos2(3)],/norm,color=0
 
 pickpeakperiod,power^2.,maxper,period,perpower
 
@@ -341,16 +336,19 @@ cntr = CONTOUR2( $
     power, time, period, $
     /current, $
     position=pos2, $
+    overplot=0, $  ; contour2 sets overplot=1 by default
     ;/NOERASE,$
     ;/ytype, $
     /fill, $
     n_levels=levels, $
-    overplot=0, $
     axis_style=2, $
+    ;rgb_table=color, $
     rgb_table=rgb_table, $
     c_label_show=0, $
 ;    min_value=1.0e4, $   ; Min/Max over 1600 and 1700...
 ;    max_value=1.68e7, $  ;  ... not comparing them, so commenting this for now.
+    xthick=lthick, ythick=lthick, $
+        ;- Not sure if I wanted this commented out or not...
     xticklen=0.020, $
     yticklen=0.015, $
     yminor=0, $
@@ -362,6 +360,7 @@ cntr = CONTOUR2( $
     xtitle='Time [s]', $
     ytitle='Period [s]' $
 )
+
 
 ;- Color bar for wavelet plot (b)
 ;cbar = colorbar( title='power', rgb_table=color, major=5, $
@@ -376,7 +375,7 @@ cntr = CONTOUR2( $
     ;tickvalues=[min(power), max(power)], $
     ;tickvalues=[1.e6, 1.e7], $
     ;major=2 )
-    
+
 
 y_horline = (elem-1)*delt/(4*sqrt(2))
 horline = plot2( $
@@ -397,8 +396,10 @@ cutoff = plot2( $
     ;/current, axis_style=4, position=pos2, $
     overplot=cntr, $
     ;axis_style=1, $
+    ;linestyle='--', $
     linestyle='__', $
     ;linestyle=[1, '4FF2'X], $
+    ;color='white'
     color=line_color )
 
 ; mark what frequency the maximum power occurs at at each time
@@ -436,7 +437,7 @@ norm_global_ws = global_ws/(moment(curve))(1)
 ;this ensures that DOF is a VECTOR rather than a single number.
 ;this is necessary for WAVE_SIGNIF with SIGTEST=1 (what we
 ;need)
-dof = n - scale     	;the -scale has the effect of correcting for padding at edges
+dof = n - scale         ;the -scale has the effect of correcting for padding at edges
 
 ;calcluate the global significance level:
     global_signif = WAVE_SIGNIF(series,delt,scale,1, $
@@ -507,9 +508,6 @@ IF KEYWORD_SET(nocon) then GOTO,NO_CONTOURS
 ;thick=3, C_CHARTHICK=lthick,$
 ;xtitle='Time [s]',yrange=[short,long],ystyle=1
 
-;-
-
-
 
 ;- outline significance level (e.g. 99%)
 mywin.SetCurrent
@@ -523,22 +521,24 @@ cntr2 = CONTOUR2( $
     ;c_label_objects=['99%'], $
     ;label_format='(F0.2, "%")', $
     ;label_format='(F0.2)', $
+    ;color='white', $
+    ;c_thick=lthick, $
     color=line_color, $
     xtitle='Time [s]', $
-	;yrange=[short, long], $
-	ystyle=1 $
+    ;yrange=[short, long], $
+    ystyle=1 $
 )
 
 
 
 NO_CONTOURS:
-        
+
 IF KEYWORD_SET(cone) THEN BEGIN
 
     x = [MIN(time),time,MAX(time)]
     y = [MAX(period),coi,MAX(period)]
 
-;    PLOTS,time,coi,COLOR=pc,NOCLIP=0,THICK=lthick	    
+;    PLOTS,time,coi,COLOR=pc,NOCLIP=0,THICK=lthick
 
     mywin.SetCurrent
     plt_coi = plot2( time, coi, /overplot, COLOR=line_color )
@@ -622,14 +622,14 @@ IF KEYWORD_SET(cone) THEN BEGIN
 
 
     ;- The following was commented in original code:
-    ;	plots,[MIN(global_ws),MAX(global_ws)],$
-    ;	[max(coi(middle-20:middle+20)),$
-    ;	max(coi(middle-20:middle+20))],line=1
+    ;   plots,[MIN(global_ws),MAX(global_ws)],$
+    ;   [max(coi(middle-20:middle+20)),$
+    ;   max(coi(middle-20:middle+20))],line=1
 
 
 
-    ;	horline,(elem-1)*delt/(3*sqrt(2)),line=2
-    ;-    	horline,(elem-1)*delt/(4*sqrt(2)),line=2
+    ;   horline,(elem-1)*delt/(3*sqrt(2)),line=2
+    ;-      horline,(elem-1)*delt/(4*sqrt(2)),line=2
         y_horline = (elem-1)*delt/(4*sqrt(2))
         horline = plot2( $
             cntr.xrange, $
@@ -722,7 +722,6 @@ ax3 = axis2( 'Y', log=ylog, $
 
 level=signif_conf(curve,sigg) * elem / var_curve
 
-
 ;- Doesn't match original plots
 verline = plot2( $
     [level, level], $
@@ -761,7 +760,7 @@ IF NOT KEYWORD_SET(fig) THEN begin
 ENDIF ELSE begin
     pos4 = [pos1(0),0.09,pos1(2),0.29]
     randomtitle=''
-    XYOUTS,0.4,0.3,'c) Confidence level for peak power',/norm,align=0.5,charsize=1.3    
+    XYOUTS,0.4,0.3,'c) Confidence level for peak power',/norm,align=0.5,charsize=1.3
 ENDELSE
 
 ;plot,time,perpower,yst=3,position=pos4,/noerase,/xst

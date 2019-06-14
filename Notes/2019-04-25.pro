@@ -287,4 +287,11 @@ stop
 ;;- batch_plot takes [*,2], not [2,*]
 ;
 ;
+;- 30 April 2019
+;-  Putting this line in after the fact because I saved the file from IDL's
+;-  command line... NEVER DO THIS! Need to preserve filenames in the routines
+;-  that created the files. My life will be so much easier...
+;save2, "spectra"
+;save2, "spectra_norm"
+
 end
