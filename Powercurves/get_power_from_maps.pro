@@ -32,11 +32,11 @@
 
 
 goto, start
-start:;----------------------------------------------------------------------------------------
 
 ;- Restore AIA powermaps from .sav files and read into A[0].map and A[1].map.
 @restore_maps
-
+stop
+start:;----------------------------------------------------------------------------------------
 
 ;- Thu Jan 24 11:46:02 MST 2019
 ;-   Correct restored power map for saturation by multiplying by mask.
@@ -46,16 +46,19 @@ dz = 64
 ;- --> write subroutine with data as input argument
 sz = size( A.data, /dimensions )
 
-
 ;- Initialize MAP mask
-map_mask = fltarr(sz[0],sz[1],sz[2]-dz,n_elements(A))
+map_mask = fltarr(sz[0],sz[1],sz[2]-dz+1,n_elements(A))
 ;map_mask = fltarr(500,330,686,n_elements(A))
+;- [] use dimensions of maps themselves instead of changing sz[2] of data?:
+;-   sz = size( A.maps, /dimensions )
+;-   map_mask = fltarr(sz, n_elements(A))
+;-  Any reason why this wouldn't work? E.g. maps not restored yet...
 
 ;- Compute MAP mask
 resolve_routine, 'powermap_mask', /either
 for cc = 0, 1 do $
     map_mask[*,*,*,cc] = POWERMAP_MASK( $
-        A[cc].data, dz, exptime=A[cc].exptime, threshold=10000.)
+        A[cc].data, dz=dz, exptime=A[cc].exptime, threshold=10000.)
 ; --> returns FLOAT [500,330,686,2]
 
 ;- 1D array of # unsaturated pixels in each map.
@@ -75,6 +78,7 @@ endif
 
 ;-  Went ahead and did this.
 A.map = A.map * map_mask
+stop
 
 ;---------------------------------------------------------------------------------------------
 
@@ -85,18 +89,17 @@ A.map = A.map * map_mask
 
 ;- Total power for small subregions
 
-r = 20
-cc = 0
+;r = 20
+;cc = 0
 
 ;map1 = CROP_DATA( A[cc].map, dimensions=[r,r], center=[367,213] )
 ;map2 = CROP_DATA( A[cc].map, dimensions=[r,r], center=[382,193] )
 
 ;- center variable is defined in sub.pro
-map1 = CROP_DATA( A[cc].map, dimensions=[r,r], center=center[*,0] )
-map2 = CROP_DATA( A[cc].map, dimensions=[r,r], center=center[*,1] )
+;map1 = CROP_DATA( A[cc].map, dimensions=[r,r], center=center[*,0] )
+;map2 = CROP_DATA( A[cc].map, dimensions=[r,r], center=center[*,1] )
 
-
-n_pix = float(r*r) ;- map is FLOAT, so may as well convert n_pix
+;n_pix = float(r*r) ;- map is FLOAT, so may as well convert n_pix
 
 ;p1 = (total(total(map1,1),1)) / n_pix
 ;p2 = (total(total(map2,1),1)) / n_pix
@@ -115,46 +118,42 @@ n_pix = float(r*r) ;- map is FLOAT, so may as well convert n_pix
 ;ydata = [ [p1[*,0]], [p2[*,0]] ]
 ;plt = BATCH_PLOT( xdata, ydata, buffer=0 )
 
+
+dw
 wx = 8.0
 wy = 4.0
-win = window( dimensions=[wx,wy]*dpi, location=[1250,0] )
+win = window( dimensions=[wx,wy]*dpi, buffer=1 );location=[1250,0] )
 xdata = indgen(686)
 
-mm = (size(center, /dimensions))[1]
-plt = objarr(mm)
-for ii = 0, mm-1 do begin
-    map1 = CROP_DATA( A[cc].map, dimensions=[r,r], center=center[*,ii] )
-    p1 = (total(total(map1,1),1)) / n_pix
-    plt[ii] = plot2( xdata, p1, /current, overplot=ii<1, ylog=1, color=color[ii] )
-endfor
-
-
+;mm = (size(center, /dimensions))[1]
+;plt = objarr(mm)
+;for ii = 0, mm-1 do begin
+    ;map1 = CROP_DATA( A[cc].map, dimensions=[r,r], center=center[*,ii] )
+;    p1 = (total(total(map1,1),1)) / n_pix
+;    plt[ii] = plot2( xdata, p1, /current, overplot=ii<1, ylog=1, color=color[ii] )
+;endfor
 
 ;plt = plot2( xdata, p1, /current, ylog=1, color="blue" )
 ;plt = plot2( xdata, p2, /overplot, ylog=1, color="red" )
 
+;help, (total(total(A[0].map,1),1)) / n_pix
+power = fltarr(685, 2)
+;power = (total(total(map,1),1)) / n_pix
+power[*,0] = (total(total(A[0].map,1),1)) / n_pix
+power[*,1] = (total(total(A[1].map,1),1)) / n_pix
+help, power
+
 stop
 
-
-
-
-print, "AIA 1600:"
-st = stats( power[*,0], /display )
-
-print, st.min * A[0].exptime
-print, st.max * A[0].exptime
-
+;print, "AIA 1600:"
+;st = stats( power[*,0], /display )
+;print, st.min * A[0].exptime
+;print, st.max * A[0].exptime
 ;print, "AIA 1700:"
 ;st = stats( power[*,1], /display )
 
-
 ;- Run separate routine for plotting:
-
-
 power_from_maps = power
-
-
-
 props = { $
     ;yrange=[-250,480], $ ; maps
     yminor : 4, $
@@ -166,16 +165,16 @@ file = 'time-3minpower_maps'
 ;-   overplots each additional array. (ie don't have to loop over each
 ;-   channel or call procedure more than once).
 
-
 ;- --> Try adding mini-axis BEFORE shifting ydata.
-
 
 ;- With the "props" structures, the call to plot_pt is still exactly
 ;-  the same in _maps as it is in _flux...
+;- NOTE: xdata is defined in plot_pt
 resolve_routine, 'plot_pt', /either
-plot_pt, power, dz, A[0].time, $
+PLOT_PT, power, dz, A[0].time, $
     ;file=file, $
     _EXTRA = props
 
+save2, file
 
 end

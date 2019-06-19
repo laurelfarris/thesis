@@ -22,6 +22,7 @@ function color_tables;, desired_colors
     pr = [148,000,211]
     in = [075,000,130]
 
+    return,  COLORTABLE( [[wh], [rd], [og], [ye], [gr], [bl], [pr]])
 
     ;s = { $
     ;    im_colors    : colortable( [[bk], [wh]]), $
@@ -35,6 +36,6 @@ function color_tables;, desired_colors
     ;return, s.(i)
 
     ; 2018 April 19
-    return,  colortable( [[wh], [rd], [og], [ye], [gr], [bl], [pr]])
+    ;return,  colortable( [[wh], [rd], [og], [ye], [gr], [bl], [pr]])
 
 end

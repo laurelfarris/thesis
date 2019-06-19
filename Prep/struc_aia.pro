@@ -1,5 +1,5 @@
 ;-
-;- NOTE: Using "data_struc.pro" now.
+;-  Using "data_struc.pro" now.
 ;-  This file was saved after an unfortunate and careless conflict in git
 ;-   repositories, but probably not needed. Pretty sure it was renamed to
 ;-   data_struc... (21 May 2019)
@@ -92,14 +92,14 @@ function STRUC_AIA, index, cube, $
     jd = GET_JD( index.date_obs + 'Z' )
 
     ;- Restore shifts to be interpolated
-    restore, path + instr + channel + 'shifts.sav'
+    ;restore, path + instr + channel + 'shifts.sav'
     ;- is variable "shifts", or "aia1600shifts" ?
-    help, shifts
-    help, aia1600shifts
-    stop
+    ;help, shifts
+    ;help, aia1600shifts
+    ;stop
 
     ;- interpolate to get missing data and corresponding timestamp
-    LINEAR_INTERP, cube, jd, cadence, time, shifts=shifts
+    LINEAR_INTERP, cube, jd, cadence, time;, shifts=shifts
     ;- NOTE: cadence is an input argument to this code :)
     ;help, cube ; --> FLOAT [1000, 800, 600]  (AIA 1600, 2013 flare)
 
@@ -109,7 +109,9 @@ function STRUC_AIA, index, cube, $
     ;- If not provided, crop_data.pro computes center using provided dimensions,
     ;-   which is what we want here.
     ;- If dimensions are not provided, default = [500,330,*] (2011 flare dimensions).
-    cube = CROP_DATA(cube, dimensions=dimensions)
+
+    cube = CROP_DATA( cube, dimensions=dimensions )
+
     ;help, cube ; --> FLOAT [dim[0], dim[1], 600]  (AIA 1600, 2013 flare)
     ;cube = fix( round( cube ) )
 
@@ -216,7 +218,8 @@ A[1].color = 'red'
 
 print, 'NOTE: aia1600index, aia1600data, aia1700index, and aia1700data'
 print, '         still exist at ML. '
-print, 'Type ".c" to undefine redundant variables.'
+;print, 'Type ".c" to undefine redundant variables.'
+;stop
 
 undefine, aia1600
 undefine, aia1600index
@@ -224,18 +227,18 @@ undefine, aia1600data
 undefine, aia1700
 undefine, aia1700index
 undefine, aia1700data
-stop
 
 ;- Create different routine for doing this. Leave comment here directing user
 ;-  to this routine to avoid confusion.
 print, ''
+print, ''
 print, '   Type ".CONTINUE" to restore power maps.'
 print, ''
 stop
-help, A[0].data
-help, A[1].data
 
+help, A[0].data
 @restore_maps
+help, A[1].data
 
 ;for cc = 0, 1 do begin
 ;    restore, '../aia' + A[cc].channel + 'map_2.sav'

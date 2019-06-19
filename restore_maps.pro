@@ -20,7 +20,10 @@ aia1700 = create_struct( aia1700, 'map', map )
 
 A = [ aia1600, aia1700 ]
 
-undefine, map, aia1600, aia1700
+
+undefine, map
+undefine, aia1600
+undefine, aia1700
 ;delvar, map
 ;delvar, aia1600
 ;delvar, aia1700

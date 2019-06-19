@@ -10,8 +10,6 @@ function mini_axis, plt;, location=location
     common defaults
     dz = 64
 
-
-
     ;- position of axis (data coordinates).
     ;-  "axis_range" --> x position
     ;-  "location"   --> y position
@@ -20,6 +18,7 @@ function mini_axis, plt;, location=location
     x2 = x1+dz-1
 
     y = 3.e2
+    ;y = (plt[0].yrange)[]
 
     ;- NOTE: if location isn't where you expect,
     ;-  see if plot is scaled in log space. If so, 0.5*yrange[1]
@@ -48,8 +47,8 @@ function mini_axis, plt;, location=location
     resolve_routine, 'text2', /either
     txt = text2( $
         x1+(dz/2), $
-        y+1500., $
-        ;y+350, $ --> maps
+        ;y+1500., $
+        y+350, $ --> maps
         '$T=25.6 min$', $
         /data, $
         target = plt[0], $

@@ -74,7 +74,7 @@ function IMAGE3_wrapper, $
     else $
         win = window(dimensions=[wx,wy]*dpi, location=[250,0])
 
-    print, win.dimensions/dpi
+    ;print, win.dimensions/dpi
 
     im = objarr(nn)
 

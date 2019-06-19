@@ -23,56 +23,6 @@
 ;- Added x and y arguments. May cause trouble...
 
 
-function GET_CONTOUR_DATA, time, channel=channel
-
-    ;- Get contour data from HMI B_LOS ('mag') or HMI continuum ('cont').
-    ;- input desired date_obs (hh:mm). Either single time or array, e.g.
-    ;-    c_data = GET_HMI( time[zz+(dz/2)], channel='mag' )
-
-    ;- 20 November 2018
-    ;- "saturates at +/- 1500 Mx cm^{-1}" -Schrijver2011
-
-    ;- 17 December
-    ;- Returns an HMI image with date_obs close to input time.
-    ;- If hmi_prep routine was run, wouldn't need to restore data,
-    ;-  but do need to extract IND for HMI - since cadence is different from AIA
-    ;-  (can't use same z-indices).
-
-
-    ;- TO DO:
-    ;-   Write to only run once (currently calling this every time the graphic
-    ;-      is re-created.)
-    ;- Make a structure or something to keep at main level.
-    ;-    Or not... this doesn't take that long to run.
-
-    instr = 'hmi'
-
-    READ_MY_FITS, index, instr=instr, channel=channel, $
-        nodata=1, prepped=1
-
-    hmi_time = strmid( index.date_obs, 11, 5 )
-
-    ;- Added strmid to input time in case it's stil the full string.
-    ;-  If it's not, strmid won't do anything, so doesn't hurt.
-    ind1 = (where( hmi_time eq strmid(time[0],0,5) ))[0]
-    ind2 = (where( hmi_time eq strmid(time[-1],0,5) ))[0]
-
-    ind = [ind1:ind2]
-
-    ;- Returns "cube" [750, 500, 398], already centered on AR
-    restore, '/solarstorm/laurel07/hmi_' + channel + '.sav'
-
-    ; Crop data to 500x330 (default dimensions in crop_data.pro)
-    hmi = CROP_DATA( cube, offset=[-15,0] )
-
-    c_data = hmi[*,*,ind]
-
-    c_data = mean(c_data, dimension=3)
-
-    return, c_data
-end
-
-
 function CONTOURS, c_data, x, y, target=target, channel=channel, $
     _EXTRA = e
 
@@ -85,6 +35,7 @@ function CONTOURS, c_data, x, y, target=target, channel=channel, $
 
     if n_elements(x) eq 0 then x = indgen(sz[0])
     if n_elements(y) eq 0 then y = indgen(sz[1])
+
 
     if channel eq 'cont' then begin
         ;- Define continuum contours relative to average in quiet sun (lower right corner).
@@ -109,11 +60,11 @@ function CONTOURS, c_data, x, y, target=target, channel=channel, $
         ;title = 'B$_{LOS} \pm 300$'
     endif
 
-
     for ii = 0, nn-1 do begin
         ;contourr[ii] = CONTOUR( $
         contourr[ii] = CONTOUR2( $
-            c_data, x, y, $
+            c_data, $
+            x, y, $
             overplot=target, $
             c_value=c_value, $
             c_thick=1.0, $
