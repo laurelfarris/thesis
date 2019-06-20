@@ -1,4 +1,3 @@
-
 ;-
 ;- LAST MODIFIED:
 ;-   Mon Dec 17 06:15:25 MST 2018
@@ -46,6 +45,7 @@ pro PLOT_PT, power, dz, time, $
 ;- Maps only --> power_flux doesn't need to be shifted
     resolve_routine, 'shift_ydata', /either
     SHIFT_YDATA, plt, delt=[ mean(power[*,0]), mean(power[*,1]) ]
+      ;- kw "delt" used to label each axis
 
 
     resolve_routine, 'label_time', /either

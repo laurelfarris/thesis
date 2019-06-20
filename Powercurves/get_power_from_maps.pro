@@ -62,7 +62,13 @@ for cc = 0, 1 do $
 ; --> returns FLOAT [500,330,686,2]
 
 ;- 1D array of # unsaturated pixels in each map.
+;-   Not 2D? one array for each channel?
 n_pix = total(total(map_mask,1),1)
+print, ""
+print, "check dimensions of n_pix, and"
+print, "  adjust division by this value for each channel."
+help, n_pix
+stop
 
 ;- Test n_pix
 if (where(n_pix eq 0.0))[0] ne -1 then begin
@@ -72,11 +78,6 @@ endif
 
 
 ;- Multiply mask by AIA power maps to set saturated pixels = 0.
-;-  (may be better to set A.map = A.map * map_mask to save memory...)
-;map = A.map * map_mask
-
-
-;-  Went ahead and did this.
 A.map = A.map * map_mask
 stop
 
@@ -156,6 +157,7 @@ stop
 power_from_maps = power
 props = { $
     ;yrange=[-250,480], $ ; maps
+    stairstep : 1, $
     yminor : 4, $
     name : A.name }
 
@@ -171,9 +173,7 @@ file = 'time-3minpower_maps'
 ;-  the same in _maps as it is in _flux...
 ;- NOTE: xdata is defined in plot_pt
 resolve_routine, 'plot_pt', /either
-PLOT_PT, power, dz, A[0].time, $
-    ;file=file, $
-    _EXTRA = props
+PLOT_PT, power, dz, A[0].time, _EXTRA = props
 
 save2, file
 
