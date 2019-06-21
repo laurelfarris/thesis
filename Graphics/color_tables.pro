@@ -10,19 +10,28 @@ function color_tables;, desired_colors
 
 
     ;; Colors (creation of color tables could go in subroutine...)
-    bk = [000,000,000]
-    wh = [255,255,255]
-    rd = [204,000,000]
-    og = [255,128,000]
-    ye = [255,255,000]
-    gr = [000,153,000]
-    lg = [102,255,102]
-    cy = [000,153,153]
-    bl = [000,000,204]
-    pr = [148,000,211]
-    in = [075,000,130]
+    black  = [000,000,000]
+    white  = [255,255,255]
+    red    = [204,000,000]
+    orange = [255,128,000]
+    yellow = [255,255,000]
+    green  = [000,153,000]
+    lgreen = [102,255,102]
+    cyan   = [000,153,153]
+    blue   = [000,000,204]
+    purple = [148,000,211]
+    indigo = [075,000,130]
 
-    return,  COLORTABLE( [[wh], [rd], [og], [ye], [gr], [bl], [pr]])
+    ;my_colortable = COLORTABLE( [[wh], [rd], [og], [ye], [gr], [bl], [pr]])
+
+    my_colortable = COLORTABLE( [$
+        [black], $
+        [cyan], $
+        [orange], $
+        [red] $
+    ] )
+
+    return, my_colortable
 
     ;s = { $
     ;    im_colors    : colortable( [[bk], [wh]]), $

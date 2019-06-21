@@ -23,6 +23,7 @@
 
 goto, start
 
+
 @restore_maps
 
 ;+
@@ -54,8 +55,7 @@ filename = 'before'
 ;filename = 'during'
 ;filename = 'after'
 
-cc = 0
-time = strmid(A[cc].time,0,5)
+time = strmid(A[0].time,0,5)
 dz = 64
 
 ;+
@@ -93,8 +93,6 @@ min_value = [ min(intensity[*,*,0]), min(intensity[*,*,1]) ]
 intensity = intensity * [ $
     [[aia1600mask[*,*,z_start]]], [[aia1700mask[*,*,z_start]]] ]
 
-
-
 struc = { $
     imdata : [ $
         ;[[ alog10 ( mean( A.data[*,*,z_start:z_start+dz-1, *], dimension=3 ) ) ]], $
@@ -120,8 +118,8 @@ struc = { $
 ;+
 ;- Imaging
 ;-
-start:;---------------------------------------------------------------------------------
 
+start:;---------------------------------------------------------------------------------
 rows = 2
 cols = 2
 dw
@@ -145,40 +143,66 @@ im[1].rgb_table = A[1].ct
 im[0].min_value = min_value[0]
 im[1].min_value = min_value[1]
 
-contourr = objarr(4)
+contourr = objarr(n_elements(im))
+cbar = objarr(n_elements(im))
 resolve_routine, 'colorbar2', /is_function
 resolve_routine, 'contours', /is_function
+
+;c_neg = "black"
+;c_neg = [0,0,0]
+
+;c_pos = "yellow"
+
+;c_pos = '585858'x
+
+; various shades of gray
+c_pos = '303030'x
+;c_pos = '262626'x
+;c_pos = '1c1c1c'x
+
+c_neg = '000000'x ;black
+
 for ii = 0, n_elements(im)-1 do begin
     contourr[ii] = CONTOURS( $
-        c_data, target=im[ii], channel='mag', $ ;c_linestyle=2, $  --> TERRIBLE
-        c_thick=0.5 )
-    cbar = COLORBAR2( $
+        c_data, target=im[ii], channel='mag', $
+        ;color=c_pos, $
+        c_color=[[c_neg], [c_pos]], $
+        c_thick=[0.7,0.4] )
+    cbar[ii] = COLORBAR2( $
         target=im[ii], $
-;        tickinterval=1.0, $
-;        minor=4, $
+        ;tickinterval=1.0, $
+        ;minor=4, $
+        thick=0.5, $
         title=struc.cbar_title[ii] )
 endfor
 
+cbar[2].tickinterval=2
+cbar[3].tickinterval=2
+;cbar[2].tickvalues=[-3:5:2]
+;cbar[3].tickvalues=[-3:9:2]
+
+;- Use same min/max value for all three phases (BDA)
 im[2].min_value = -3
 im[3].min_value = -3
 im[2].max_value = max(struc.imdata[*,*,2:3])
 im[3].max_value = max(struc.imdata[*,*,2:3])
 
 
-;- Trying different colors for power maps (17 June 2019)
+;- Color tables
+
 im[2].rgb_table = A[0].ct
 im[3].rgb_table = A[1].ct
-;power_ct = 74
+
+;power_ct = 73
 ;im[2].rgb_table = power_ct
 ;im[3].rgb_table = power_ct
 ;im[2].rgb_table = reverse(im[2].rgb_table, 2)
 ;im[3].rgb_table = reverse(im[3].rgb_table, 2)
 
-
-contourr[0].c_color = []
-contourr[1].c_color = []
-contourr[2].c_color = []
-contourr[3].c_color = []
+;resolve_routine, 'color_tables', /is_function
+;im[2].rgb_table = color_tables()
+;im[3].rgb_table = color_tables()
 
 save2, filename
+
 end

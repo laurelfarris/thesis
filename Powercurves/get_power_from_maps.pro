@@ -36,7 +36,6 @@ goto, start
 ;- Restore AIA powermaps from .sav files and read into A[0].map and A[1].map.
 @restore_maps
 stop
-start:;----------------------------------------------------------------------------------------
 
 ;- Thu Jan 24 11:46:02 MST 2019
 ;-   Correct restored power map for saturation by multiplying by mask.
@@ -64,11 +63,9 @@ for cc = 0, 1 do $
 ;- 1D array of # unsaturated pixels in each map.
 ;-   Not 2D? one array for each channel?
 n_pix = total(total(map_mask,1),1)
-print, ""
-print, "check dimensions of n_pix, and"
-print, "  adjust division by this value for each channel."
-help, n_pix
-stop
+;help, n_pix
+;-  N_PIX  FLOAT  = Array[686, 2]
+;-   for 15 Feb 2011 flare
 
 ;- Test n_pix
 if (where(n_pix eq 0.0))[0] ne -1 then begin
@@ -119,11 +116,21 @@ stop
 ;ydata = [ [p1[*,0]], [p2[*,0]] ]
 ;plt = BATCH_PLOT( xdata, ydata, buffer=0 )
 
+start:;----------------------------------------------------------------------------------------
+
 
 dw
 wx = 8.0
 wy = 4.0
 win = window( dimensions=[wx,wy]*dpi, buffer=1 );location=[1250,0] )
+
+;- 20 June 2019
+;-  XQuartz quit, chose option to "reopen", but sswidl still quit somewhere in here.
+;-  Triggered by call to DW? Or creation of window object "win"?
+;-    Really fucking tired of this...
+;-  Restarted sswidl. Don't have to ssh in again since re-started XQuartz,
+;-    though still have to start idl session from scratch.
+
 xdata = indgen(686)
 
 ;mm = (size(center, /dimensions))[1]
@@ -140,8 +147,8 @@ xdata = indgen(686)
 ;help, (total(total(A[0].map,1),1)) / n_pix
 power = fltarr(685, 2)
 ;power = (total(total(map,1),1)) / n_pix
-power[*,0] = (total(total(A[0].map,1),1)) / n_pix
-power[*,1] = (total(total(A[1].map,1),1)) / n_pix
+power[*,0] = (total(total(A[0].map,1),1)) / n_pix[*,0]
+power[*,1] = (total(total(A[1].map,1),1)) / n_pix[*,1]
 help, power
 
 stop
@@ -175,6 +182,6 @@ file = 'time-3minpower_maps'
 resolve_routine, 'plot_pt', /either
 PLOT_PT, power, dz, A[0].time, _EXTRA = props
 
-save2, file
+;save2, file
 
 end

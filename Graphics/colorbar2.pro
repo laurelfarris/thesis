@@ -90,6 +90,7 @@ function colorbar2, target=target, _EXTRA=e
         font_style = 2, $ ;italic
         font_size = fontsize, $
         border = 1, $
+        thick = 0.5, $ ;- matches images now! (21 June 2019)
         ;ticklen = 0.3, $
         ;subticklen = 0.5, $
         ;major = 11, $
