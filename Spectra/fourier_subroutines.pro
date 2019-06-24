@@ -8,6 +8,8 @@
 ;  20 July 2018 - moved line to calculate resolution BEFORE cropping frequency,
 ;    since spacing should be the same over the entire array (if not, something
 ;    was not calculated correctly).
+;- 24 June 2019 - also, freq resolution can be computed from input flux and cadence
+;-   (should = 1/T)
 
 ; input: flux, cadence
 ; output: frequency, power

@@ -18,7 +18,7 @@
 
 
 
-pro PLOT_PT, power, dz, time, $
+function PLOT_PT, power, dz, time, $
     _EXTRA = e
 
 
@@ -89,4 +89,5 @@ pro PLOT_PT, power, dz, time, $
     ax[1].text_color = color[0]
     ax[3].text_color = color[1]
 
+    return, plt
 end

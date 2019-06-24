@@ -151,13 +151,6 @@ function GET_IMAGE_DATA
         ;hmi_cont:hmi_cont, $
         hmi_BLOS:hmi_BLOS }
 
-    print, ''
-    help, S
-    print, ''
-    print, 'type ".c" to return structure to main level'
-    print, ''
-    stop
-
     return, S
 end
 
@@ -202,7 +195,7 @@ pro IMAGE_STRUCTURE, S
     wx = 8.0
     wy = 5.5
     dw
-    win = window( dimensions=[wx,wy]*dpi, buffer=0, location=[700,0] )
+    win = window( dimensions=[wx,wy]*dpi, buffer=1, location=[700,0] )
 
 
     ; Need to speed this part up a little bit...
@@ -311,7 +304,7 @@ pro IMAGE_AR_ONLY, S
 
     resolve_routine, 'image3', /either
     im = image3( $
-        imdata, XX, YY, buffer=0, $
+        imdata, XX, YY, buffer=1, $
         title=title, $
         xtitle='X (arcseconds)', ytitle='Y (arcseconds)', $
         top=0.25, $
@@ -331,8 +324,9 @@ pro IMAGE_AR_ONLY, S
         XX, YY, $
         ;overplot=im[2], $
         c_value=[-300, 300], $
-        c_thick=0.1, $
-        c_color=['black', 'white'], $
+        c_thick=[0.5,0.1], $
+        ;c_color=['black', 'white'], $
+        c_color=[ ['000000'x], ['303030'x] ], $  ; black, gray
         name = ['-300 G', '+300 G'] )
 
 
@@ -371,15 +365,11 @@ pro IMAGE_AR_ONLY, S
 end
 
 
-;- Create graphic STRUCTURE containing 2D full disk data and other info
+;- return graphic info in structure 'S' and create image.
 ;S = GET_IMAGE_DATA()
-
-;- procedure to create the graphic.
 ;IMAGE_STRUCTURE, S
-
 IMAGE_AR_ONLY, S
 
-stop
 save2, 'images';, /add_timestamp, idl_code='image_ar'
 
 

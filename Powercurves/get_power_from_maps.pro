@@ -34,6 +34,7 @@
 goto, start
 
 ;- Restore AIA powermaps from .sav files and read into A[0].map and A[1].map.
+
 @restore_maps
 stop
 
@@ -116,8 +117,6 @@ stop
 ;ydata = [ [p1[*,0]], [p2[*,0]] ]
 ;plt = BATCH_PLOT( xdata, ydata, buffer=0 )
 
-start:;----------------------------------------------------------------------------------------
-
 
 dw
 wx = 8.0
@@ -149,7 +148,11 @@ power = fltarr(685, 2)
 ;power = (total(total(map,1),1)) / n_pix
 power[*,0] = (total(total(A[0].map,1),1)) / n_pix[*,0]
 power[*,1] = (total(total(A[1].map,1),1)) / n_pix[*,1]
-help, power
+
+print, min(power[*,0])
+print, max(power[*,0])
+print, min(power[*,1])
+print, max(power[*,1])
 
 stop
 
@@ -162,6 +165,9 @@ stop
 
 ;- Run separate routine for plotting:
 power_from_maps = power
+
+start:;----------------------------------------------------------------------------------------
+
 props = { $
     ;yrange=[-250,480], $ ; maps
     stairstep : 1, $
@@ -180,8 +186,13 @@ file = 'time-3minpower_maps'
 ;-  the same in _maps as it is in _flux...
 ;- NOTE: xdata is defined in plot_pt
 resolve_routine, 'plot_pt', /either
-PLOT_PT, power, dz, A[0].time, _EXTRA = props
+plt = PLOT_PT( power, dz, A[0].time, _EXTRA = props )
 
-;save2, file
+ax = plt[0].axes
+
+ax[1].tickname = strtrim([68, 91, 114, 137, 160],1)
+ax[3].tickname = strtrim([1220, 1384, 1548, 1712, 1876],1)
+
+save2, file
 
 end

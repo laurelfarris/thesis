@@ -66,6 +66,16 @@ stop
 
 start:;-------------------------------------------------------------------------------
 cc = 0
+
+
+resolve_routine, 'sdbwave', /either
+SDBWAVE, detrended[*,cc], short = 50, long = 2000, $
+    ;/fast, $
+    /cone, ylog=1, delt=A[cc].cadence
+;- Unclear what kw "fast" is for, but skips call to randomwave...
+
+stop
+
 time = strmid(A[cc].time, 0, 5)
 ti = (where( time eq '01:30' ))[0]
 tf = (where( time eq '02:30' ))[0]

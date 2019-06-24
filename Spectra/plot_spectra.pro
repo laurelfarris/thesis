@@ -1,9 +1,27 @@
-;- 28 November 2018
-;
-
-;- To Do
-;-   Option for vertical lines and ax[2] tick labels
-;-    for 120, 180, and 200 seconds
+;+
+;- LAST MODIFIED:
+;-   28 November 2018
+;-
+;- ROUTINE:
+;-   routine_name.pro
+;-
+;- PURPOSE:
+;-
+;- USEAGE (aka calling syntax):
+;-   result=routine_name(arg, kw=kw)
+;-
+;- INPUT:
+;-   arg1   input time series
+;-   arg2   time separation (cadence)
+;-
+;- KEYWORDS:
+;-   kw     set to do this
+;-
+;- OUTPUT:
+;-   result     blah
+;-
+;- TO DO:
+;-   [] Option to specify freq/period values to mark with vertical lines.
 
 
 function PLOT_SPECTRA, frequency, power, $
@@ -49,7 +67,6 @@ function PLOT_SPECTRA, frequency, power, $
     ;help, plt --> 1 element so far...
 
 
-    ;-----------------------------------------------
     ax = plt[0].axes
 
     ;- oplot vertical lines at periods of interest.
@@ -70,8 +87,6 @@ function PLOT_SPECTRA, frequency, power, $
     ax[2].title = 'period (seconds)'
     ax[2].showtext = 1
 
-
-
     ;- convert frequency units: Hz --> mHz AFTER placing period markers
     ;- in the correct position, based on original frequency values.
     ;- SYNTAX: axis = a + b*data
@@ -79,7 +94,6 @@ function PLOT_SPECTRA, frequency, power, $
     ax[0].title='frequency (mHz)'
     ax[0].major=7
     ax[0].tickformat='(F0.2)'
-
 
     resolve_routine, 'legend2', /either
     leg = LEGEND2( $
@@ -89,8 +103,6 @@ function PLOT_SPECTRA, frequency, power, $
         font_size=8, $
         target=plt $
     )
-
 ;    leg.position = [0.95, 0.85]
-
     return, plt
 end

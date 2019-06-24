@@ -46,14 +46,15 @@ aia1700mask = POWERMAP_MASK( $
     threshold=10000. )
 stop
 
+start:;---------------------------------------------------------------------------------
 
 ;+
 ;- "The usual"
 
 
-filename = 'before'
+;filename = 'before'
 ;filename = 'during'
-;filename = 'after'
+filename = 'after'
 
 time = strmid(A[0].time,0,5)
 dz = 64
@@ -119,7 +120,6 @@ struc = { $
 ;- Imaging
 ;-
 
-start:;---------------------------------------------------------------------------------
 rows = 2
 cols = 2
 dw
@@ -167,7 +167,7 @@ for ii = 0, n_elements(im)-1 do begin
         c_data, target=im[ii], channel='mag', $
         ;color=c_pos, $
         c_color=[[c_neg], [c_pos]], $
-        c_thick=[0.7,0.4] )
+        c_thick=[0.5,0.1] )
     cbar[ii] = COLORBAR2( $
         target=im[ii], $
         ;tickinterval=1.0, $
