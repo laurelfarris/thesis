@@ -153,12 +153,15 @@ resolve_routine, 'contours', /is_function
 
 ;c_pos = "yellow"
 
-;c_pos = '585858'x
 
-; various shades of gray
-c_pos = '303030'x
-;c_pos = '262626'x
-;c_pos = '1c1c1c'x
+; various shades of gray (darkest at top)
+;c_pos = '303030'x  ;236
+c_pos = '3a3a3a'x  ;237
+;c_pos = '444444'x  ;238
+;c_pos = '4e4e4e'x  ;239
+;c_pos = '585858'x  ;240
+; ...
+; 'eeeeee'x  ;255  --> basically white
 
 c_neg = '000000'x ;black
 
