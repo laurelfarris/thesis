@@ -10,7 +10,7 @@
 ;-       number of consecutive images missing at each hole, etc.
 
 goto, start
-
+start:;---------------------------------------------------------------------------
 
 year=['2012', '2014']
 month=['03', '04']
@@ -23,25 +23,40 @@ channel='1700'
 nn = 1  ;- M7.3 -- birthday flare
 
 
-read_my_fits, index, data, fls, $
+READ_MY_FITS, index, data, fls, $
     instr='aia', $
     channel=channel, $
-    ind=[460:467], $
+    ind=[0:149], $ ; 150 files ... 750/5 = 150, should be 1 hour of data
     nodata=0, $
     prepped=0, $
     year=year[nn], $
     month=month[nn], $
     day=day[nn]
 
-start:;---------------------------------------------------------------------------
-foreach ind, index, ii do begin
+;foreach ind, index, ii do begin
     ;print, ind 
     ;- NOTE: each "ind" is a full header, since "index" is an array of structures.
-    print, index[ii].date_obs
-endforeach
+    ;print, index[ii].date_obs
+;endforeach
 ;- --> 2014-04-18T13:24:30.71
-stop
 
+;- 23 July 2019:
+;-  Testing "find_missing_images.pro", where coords of missing observations are
+;-  determined in separated routine. Returned coords are then used to apply
+;-  interpolations, or just to display WHERE missing images should have been,
+;-  see if they're spread out or if there's a continuous time chunk of time with
+;-  no data.
+;-
+
+time = strmid( index.date_obs, 11, 11 )
+jd = GET_JD( index.date_obs + 'Z' )
+
+dt = 5 * 3600
+interp_coords = FIND_MISSING_IMAGES( jd, cadence, time, dt=dt )
+
+
+
+stop
 
 
 

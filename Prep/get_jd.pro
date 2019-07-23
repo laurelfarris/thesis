@@ -16,7 +16,7 @@
 
 
 
-function get_jd, timestampstring
+function GET_JD, timestampstring
 
     ; Use timestamp string to get individual time values
     TIMESTAMPTOVALUES, timestampstring, $

@@ -1,33 +1,33 @@
 ;+
 ;- LAST MODIFIED:
 ;-
-;- ROUTINE:         routine_name.pro
+;- ROUTINE:
+;-   routine_name.pro
 ;-
 ;- EXTERNAL SUBROUTINES:
 ;-
 ;- PURPOSE:
 ;-
-;- USEAGE (aka calling syntax):  result=routine_name(arg, kw=kw)
+;- USEAGE (aka calling syntax):
+;-   result = routine_name( arg1, arg2, kw=kw )
 ;-
 ;- INPUT:
-;-   arg1   input time series
-;-   arg2   time separation (cadence)
+;-   arg1   e.g. input time series
+;-   arg2   e.g. time separation (cadence)
 ;-
-;- KEYWORDS:
-;-   kw     set to do this
+;- KEYWORDS (optional):
+;-   kw     set <kw> to ...
 ;-
 ;- OUTPUT:
 ;-   result     blah
 ;-
-
-
-
-Comment style from fourier2.pro (original):
-
-;+
-; TO DO:
-;
-; AUTHOR:
-;
-; KNOWN BUGS:
+;- TO DO:
+;-   [] item 1
+;-   [] item 2
+;-   [] ...
 ;-
+;- AUTHOR:
+;-
+;- KNOWN BUGS:
+;-
+;+
