@@ -38,10 +38,16 @@
 ;- quiet sun to test codes and look for expected osc. behavior NOT during flares
 
 
-tstart='2013/12/28 10:00:00'
+;tstart='2013/12/28 10:00:00'
 ;tend  ='2013/12/28 13:59:59' 
 ;tstart='2013/12/28 14:00:00'
-tend  ='2013/12/28 14:59:59' 
+;tend  ='2013/12/28 14:59:59' 
+
+;- 2019 July 19
+;tstart='2012/03/09 03:21:00'
+;tend  ='2012/03/09 03:23:59'
+tstart='2014/04/18 13:24:00'
+tend  ='2014/04/18 14:59:59'
 
 ;- HMI, just to see what it looks like
 ;tstart='2013/12/28 12:45:00'
@@ -66,10 +72,10 @@ tend  ='2013/12/28 14:59:59'
 ;dat171  = vso_search(tstart,tend, instr='aia',sample=sample,wave='171')
 ;dat193  = vso_search(tstart,tend, instr='aia',sample=sample,wave='193')
 ;dat211  = vso_search(tstart,tend, instr='aia',sample=sample,wave='211')
-dat304  = vso_search(tstart,tend, instr='aia',sample=sample,wave='304')
+;dat304  = vso_search(tstart,tend, instr='aia',sample=sample,wave='304')
 ;dat335  = vso_search(tstart,tend, instr='aia',sample=sample,wave='335')
 ;dat1600 = vso_search( tstart, tend, instr='aia', sample=sample, wave='1600')
-;dat1700 = vso_search( tstart, tend, instr='aia', sample=sample, wave='1700')
+dat1700 = vso_search( tstart, tend, instr='aia', sample=sample, wave='1700')
 
 
 ;datHMI=VSO_SEARCH(tstart,tend, instr='hmi')
@@ -102,10 +108,10 @@ dir='/solarstorm/laurel07/Data/AIA/'
 ;status171 = VSO_GET(dat171, /force, out_dir=dir)
 ;status193 = VSO_GET(dat193, /force, out_dir=dir)
 ;status211 = VSO_GET(dat211, /force, out_dir=dir)
-status304 = VSO_GET(dat304, /force, out_dir=dir)
+;status304 = VSO_GET(dat304, /force, out_dir=dir)
 ;status335 = VSO_GET(dat335, /force, out_dir=dir)
 ;status1600 = VSO_GET(dat1600, /force, out_dir=dir)
-;status1700 = VSO_GET(dat1700, /force, out_dir=dir)
+status1700 = VSO_GET(dat1700, /force, out_dir=dir)
 
 ;statusHMIcont = VSO_GET(datHMIcont, /force, out_dir=dir)
 ;statusHMIlosV = VSO_GET(datHMIlosV, /force, out_dir=dir)

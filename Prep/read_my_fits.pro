@@ -139,7 +139,6 @@ pro READ_MY_FITS, index, data, fls, $
     end ;- end of "case" statements
 
 
-
     ;- Confirm files with user.
 
     fls = file_search( path + files )

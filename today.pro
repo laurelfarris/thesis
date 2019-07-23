@@ -1,54 +1,68 @@
-;+
-;- 24 June 2019
+;- 19 July 2019
+;- Downloading data for a few flares around GOES peak time;
+;-  looking for new flares for multi-flare phase of thesis.
 ;-
-
+;- 22 July 2019
+;- Check where 1700 stopped downloading.
+;- To do:
+;-   [] Generalized code for reading index.date_obs from fits files,
+;-       and displaying where the missing images are -- indices, dt between images,
+;-       number of consecutive images missing at each hole, etc.
 
 goto, start
 
-n_pix = 500.*300.
 
-;- P(t) plots for new flare
-pow1 = total(total(A[0].map,1),1) / n_pix
-pow2 = total(total(A[1].map,1),1) / n_pix
-;- ... actually didn't intend to do this yet. Wanted power spectra, not P(t).
+year=['2012', '2014']
+month=['03', '04']
+day=['09', '18']
 
+;channel='1600'
+channel='1700'
 
-;- sloppy way of doing things:
-;flux1 = total(total(A[0].data,1),1) / n_pix
-;flux2 = total(total(A[1].data,1),1) / n_pix
-;flux = [ [flux1], [flux2] ]
+;nn = 0  ;- M6.3 -- 09 March 2012 flare
+nn = 1  ;- M7.3 -- birthday flare
 
 
-start:;-------------------------------------------------------------------------------
-cadence = 24
-sz = size(A.data, /dimensions)
+read_my_fits, index, data, fls, $
+    instr='aia', $
+    channel=channel, $
+    ind=[460:467], $
+    nodata=0, $
+    prepped=0, $
+    year=year[nn], $
+    month=month[nn], $
+    day=day[nn]
 
-;- TO DO:
-;-   Compute FFTs for BDA times separately, not entire data series.
-;-   Show all three time segments at once, for ONE channel!
-;-   Display time ranges on plot somewhere: legend, title, axis titles, ...
-;-   Specify min/max values on x-axis
-
-zind = [0:260]
-
-;- Initialize freq/power array variables
-;frequency = fltarr( sz[2]/2, n_elements(A) )
-frequency = fltarr( n_elements(zind)/2, n_elements(A) )
-power = frequency
-
-for cc = 0, n_elements(A)-1 do begin
-    flux =  total(total(A[cc].data[*,*,zind],1),1) / n_pix
-    result = fourier2(  flux , cadence, norm=0 )
-    frequency[*,cc] = reform( result[0,*] )
-    power[*,cc] = reform( result[1,*] )
-endfor
-
+start:;---------------------------------------------------------------------------
+foreach ind, index, ii do begin
+    ;print, ind 
+    ;- NOTE: each "ind" is a full header, since "index" is an array of structures.
+    print, index[ii].date_obs
+endforeach
+;- --> 2014-04-18T13:24:30.71
 stop
 
-plt = plot_spectra( frequency, power, buffer=1 )
 
-filename = 'newflare_bda_ffts'
 
-save2, filename
+
+;- 500" W and 200" S of disk center (Brannon2015)
+x0 = 2046 + (500/0.6)
+y0 = 2046 - (200/0.6)
+
+print, x0, y0
+
+wx = 8
+wy = 8
+dw
+win = window(dimensions=[wx, wy]*dpi, buffer=1)
+imdata = crop_data( data[*,*,3], center=[x0,y0], dimensions=[600,600] )
+im = image( $
+    aia_intscale( imdata, wave=fix(channel), exptime=index[3].exptime), $
+    current=1, $
+    rgb_table=aia_colors(channel) $
+)
+
+save2, 'birthday'
+
 
 end
