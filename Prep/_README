@@ -1,18 +1,62 @@
-This file: "_README" (in Prep/ directory)
+Last modified:   23 July 2019
+
+file "_README" in /solarstorm/laurel07/thesis_project/Prep/
+
 
 ----------------------------------------------------------------------------------
+Routines in "work"/Prep/:
+
+
+  • prep_data.pro
+    - ??
+
+  • get_jd.pro
+    - short subroutine that takes timestampstring as input, and uses
+       IDL procedure TIMESTAMPTOVALUES to generate and
+       return Julian Date (what form?)
+  • get_time.pro
+    - also fairly short, takes JD as input and uses
+        IDL procedure CALDAT to get parsed values of year, month, day, etc. and
+        returns "hh:mm:ss.dd" (string)
+
+
+  • apply_aia_prep.pro
+    - ML routine to read fits files, set output directory for prepped files,
+        and run aia_prep
+    - runs script "parameters"
+    - Includes sample file names of both prepped and UNprepped fits files
+        from AIA and HMI.
+
+  • data_struc.pro
+    - general code for creating array of structures for either AIA or HMI.
+  • extra.pro
+    - separate routine to add instrument-specific tags/values to a structure
+    - Allows the use of a general routine to initiate array of structures "A"
+        for ANY data set, regardless of instrument/channel. Then use extra.pro
+        to add extras (hence the name) such as standard AIA colors (HMI does not
+        appear to have color tables for each data type, as far as I can tell,
+        so in the past, regular black and white or greyscale was set as default).
+    - Appears to run routines to compute P(t) from flux and maps
+        (get_power_from_flux.pro and get_power_from_maps.pro)
+        which is not done in struc_aia.pro.
+  • struc_aia.pro
+    - create array of structures "A" for AIA alone.
+  • struc_hmi.pro
+    - create array of structures "H" for HMI alone.
+    - No ML code at the moment (23 July 2019)
+
+
+
+
+----------------------------------------------------------------------------------
+NOTES:
 
 Mon Jul 22 22:49:22 MDT 2019
   - Moved align_data.pro, spikes.pro, and plot_num_saturated_pixels.pro
     from Prep/ to Align/.
 
-
-----------------------------------------------------------------------------------
 Wed Jan 23 19:27:50 MST 2019
-
-Ideally, prep_hmi.pro and prep_aia.pro would be combined into one routine
-since they're so similar.
-
-Currently using the two separate routines since having them combined would
-be "nice", but not high priority right now.
-----------------------------------------------------------------------------------
+  - Ideally, prep_hmi.pro and prep_aia.pro would be combined into one routine
+      since they're so similar.
+  - Currently using the two separate routines since having them combined would
+      be "nice", but not high priority right now.

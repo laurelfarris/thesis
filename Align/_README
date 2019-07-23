@@ -1,6 +1,39 @@
+23 July 2019
+
+[] Re-name codes to something more descriptive of each
+NOTE: there may be duplicates of subroutines inside multiple .pro files
+
+------------------------------------------------------------------------
+My codes:
 
 
-codes written by me:
-  - spikes.pro
-  - plot_num_saturated_pixels.pro
-  - align_data.pro
+  • align_data.pro
+    - Loops through align_cube3.pro until stddev of shifts stops decreasing
+  • shift_coords.pro
+    - align first and last image in time series and
+        use total pixel shift over full dt to calculate estimation of
+        distance traveled by the AR across the solar disk, in arcseconds.
+    - NOTE: this routine uses main alignment routines to get pixel count,
+         but is not required for the actual alignment of data cube
+
+
+For less-than-straightforward alignment (i.e. saturated pixels):
+  • align_in_pieces.pro
+    - Lots of subroutines for dealing with skewed alignment due to saturation.
+    - NOTE: duplicate of align_data procedure is included here
+  • align_interp.pro
+    - interpolate good shifts to estimate/replace bad ones
+        (similar to procedure I use to estimate images missing from raw data cube)
+  • plot_num_saturated_pixels.pro
+    - ML code that plots #saturated pixels as function of z-index (I think).
+    - Could be useful even if alignment runs smoothly... but I'm listing it with
+        the other routines for skewy alignment to keep from getting confused.
+  • spikes.pro
+    - IMAGE saturated images (bleeding looks "spiky"
+
+
+------------------------------------------------------------------------
+codes I did NOT write:
+  • align_cube3.pro
+  • alignoffset.pro
+  • shift_sub.pro

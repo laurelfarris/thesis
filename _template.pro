@@ -3,6 +3,8 @@
 ;-
 ;- ROUTINE:         routine_name.pro
 ;-
+;- EXTERNAL SUBROUTINES:
+;-
 ;- PURPOSE:
 ;-
 ;- USEAGE (aka calling syntax):  result=routine_name(arg, kw=kw)

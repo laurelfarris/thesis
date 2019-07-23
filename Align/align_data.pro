@@ -1,3 +1,11 @@
+;- 23 July 2019
+;- --> "align_data" procedure is exact duplicate of the subroutine by the
+;-        same name in "align_in_pieces".
+;-   See top of "align_in_pieces.pro" for similar comments.
+;-
+;-
+;-
+;
 ; Last modified:   04 June 2018
 ;
 ; ROUTINE:    align_data.pro

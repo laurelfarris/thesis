@@ -1,3 +1,12 @@
+;-
+;- 23 July 2019
+;- --> "align_data" procedure below is exact duplicate of the subroutine by the
+;-        same name in "align_data.pro", a routine that loops through align_cube3
+;-        without dealing with saturation problems. BOTH situations require running
+;-        align_data, so it should probably go in its own file...
+;-   See top of "align_data.pro" for similar comments.
+;-
+;-
 ; Last modified:   04 June 2018
 ;
 ; ROUTINE:    align.pro

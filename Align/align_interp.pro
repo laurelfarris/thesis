@@ -1,7 +1,9 @@
 ;; Last modified:   05 March 2018 23:14:16
-
-
 ; input:            shifts [ 2 x N ]; x/y shifts for N images
+
+
+;- 23 July 2019
+;- [] See "align.pro" for similar routine(s)
 
 
 pro plot_all_shifts, shifts

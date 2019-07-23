@@ -18,7 +18,7 @@
 function GET_TIME, jd
     ; Input jd and return string in form hh:mm:ss.dd
 
-    caldat, jd, month, day, year, hour, minute, second
+    CALDAT, jd, month, day, year, hour, minute, second
 
     hour_string = strtrim(hour,1)
     minute_string = strtrim(minute,1)

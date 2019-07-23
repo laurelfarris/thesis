@@ -98,8 +98,20 @@ function STRUC_AIA, index, cube, $
     ;help, aia1600shifts
     ;stop
 
+    ;+
+    ;- 23 July 2019:
+    ;-  Split linear_interp.pro into two routines:
+    ;-   1. calculate interp_coords, then 2. apply interpolation to array(s).
+    ;- Removed "cadence" arg from calling sequence of interpolation routine.
+    ;-  (NOTE: still haven't written code to apply interpolation to shifts).
+    ;-
+
+    ;- Find INDICES of missing data (if any)
+    interp_coords = FIND_MISSING_IMAGES( jd, cadence, time )
+
     ;- interpolate to get missing data and corresponding timestamp
-    LINEAR_INTERP, cube, jd, cadence, time;, shifts=shifts
+    ;LINEAR_INTERP, cube, jd, cadence, time;, shifts=shifts
+    LINEAR_INTERP, cube, jd, time, interp_coords;, shifts=shifts
     ;- NOTE: cadence is an input argument to this code :)
     ;help, cube ; --> FLOAT [1000, 800, 600]  (AIA 1600, 2013 flare)
 

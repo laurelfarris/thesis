@@ -1,16 +1,21 @@
 ;-
 ;- LAST MODIFIED:
-;-   Thu Dec 20 06:29:46 MST 2018
+;-   Thu Jan 24 15:35:04 MST 2019
+;-     Added "ind" keyword to set z-indices if only subset is desired.
 ;-
 ;- PURPOSE:
 ;-   Read HMI headers and restore .sav files (data)
-;- INPUT:
-;- KEYWORDS:
-;- OUTPUT:
-;- TO DO:
 ;-
-;- Thu Jan 24 15:35:04 MST 2019
-;-   Added "ind" keyword to set z-indices if only subset is desired.
+;- INPUT:
+;-
+;- KEYWORDS:
+;-
+;- OUTPUT:
+;-
+;- TO DO:
+;-   [] edit to call separate routines to
+;-   calculate interpolation indices (find_missing_images.pro), and
+;-   apply interpolation to arrays USING interp indices (linear_interp.pro)
 ;-
 
 function STRUC_HMI, index, cube, $

@@ -1,58 +1,86 @@
 ;+
-;- Last modified:   30 April 2019
-;-      Added kw "shifts"
-;
-; CREATED       04 April 2018
-;
-; ROUTINE:      Prep.pro
-;
-; PURPOSE:
-;
-; USEAGE:
-;
-; AUTHOR:       Laurel Farris
-;
+;- LAST MODIFIED:
+;-   04 April 2019 --
+;-     At some point, array values are converted to float, so
+;-     added line after loop to convert back to integer data type.
+;-
+;-   30 April 2019 -- Added kw "shifts"
+;-
+;-   23 July 2019 -- splitting into two routines:
+;-     one to find missing indices, and the
+;-     second to do the actual interpolation and return new data cube.
+;-
+;- PURPOSE:
+;-
+;- ROUTINE:
+;-   linear_interp.pro
+;-
+;- EXTERNAL SUBROUTINE(S):
+;-   get_jd.pro
+;-     NOTE: only called once, but that line is commented, so
+;-        currrent version of linear_interp.pro does NOT call this routine
+;-        (23 July 2019)
+;-   get_time.pro
+;-
+;- USEAGE:
+;-   LINEAR_INTERP, array, jd, time, shifts=shifts
+;-
+;- INPUT:
+;-  array = 3D data cube
+;-  time = strmid( index.date_obs,11,11 )
+;-    --> "hh:mm:ss.dd"
+;-  jd = julian date (figure this out OUTSIDE of this routine, before calling)
+;-    jd = GET_JD( index.date_obs + 'Z' )
+    ;- INPUT ARGS:
+    ;-   array (3D data cube)
+    ;-   jd
+    ;-     numerical array (LONG? DOUBLE? I dunno) of
+    ;-     Julian dates corresponding to each observation time in index.date_obs.
+    ;-     Updated using "interp_coords"
+    ;-   time
+    ;-     string array of observation times from index.date_obs
+    ;-     in the form "hh:mm:ss.dd"
+    ;-     Updated using updated JD values.
+    ;-   interp_coords
+    ;-     OUTPUT from find_missing_images.pro (to be run prior to this)
+    ;-
+    ;- KEYWORDS:
+    ;-   shifts
+    ;-     Updated by interpolating at the indices given in "interp_coords"
+    ;-
+;-
+;- KEYWORDS:
+;-   shifts = shifts from alignment (I think... ?)
+;-   set to shifts obtained during alignment procedures to apply an interpolation
+;-    to the same indices as the missing data.
+;-   Aka: get the shifts the missing images WOULD have had, had they existed...
+;-    Forgot the purpose of this... in case the values in "shifts" can be used later.
+;-  NOTE: code to interpolate and update "shifts" has NOT been written yet.
+;-
+;- AUTHOR:       Laurel Farris
+;-
 ;-
 
 
-pro LINEAR_INTERP, array, jd, cadence, time, shifts=shifts
+;- Old notes:
 
 ; Linear interpolation at coordinates specified by caller.
-;  Get indices of missing data by subtracting each observation
-;  time from the previous time.
-; Each index[i-1] and index[i] are averaged, with new image
-;  inserted between them
+; Each index[i-1] and index[i] are averaged; new image is inserted between them
 
 ; Output: Array with N more elements in the z direction,
-;   where N is equal to the
-;   number of elements in the indices array
-
-; 04 April 2018
-;  At some point, array values are converted to float, so
-;  added line after loop to convert back to integer data type.
+;   where N = number of elements in the indices array
 
 ; TO-DO:  Consider using IDL's interpol routine instead of average.
 
 ;  Is there a way to read in the input data type at beginning
 ;  of subroutine, then convert back to that at the end?
+;- 23 July 2019 -- Yes: function TYPENAME(); see https://www.harrisgeospatial.com/docs/TYPENAME.html
 
-    ; Use time to get julian date
-    ;jd = get_jd( timestampstring )
+;+
 
-    ;- difference in jd from one image to the next -- small fraction of a day.
-    dt = jd - shift(jd,1)
 
-    ; convert from days to seconds
-    dt = dt * 24 * 3600
+pro LINEAR_INTERP, array, jd, time, interp_coords, shifts=shifts
 
-    ; Exclude first element because of wrapping from SHIFT.
-    dt = dt[1:*]
-
-    ; use FIX to convert data type from LONG to INT
-    dt = fix(round(dt))
-
-    ; Print where there's a gap in the data (between i-1 and i)
-    interp_coords = where(dt ne cadence)
 
     if interp_coords[0] ne -1 then begin
 
