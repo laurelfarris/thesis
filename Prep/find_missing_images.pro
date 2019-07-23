@@ -36,14 +36,7 @@
 ;+
 
 
-function FIND_MISSING_IMAGES, jd, cadence, time, dt=dt
-
-
-    ;- Compute number of images that should have been downloaded,
-    ;-  given instrumental cadence and amount of obs. time queried (5 hours)
-    ;- Not high priority right now...
-    ;if keyword_set(dt) then n_expected_obs = fix(float(dt)/cadence)
-
+function FIND_MISSING_IMAGES, jd, cadence, time
 
     ;- difference in jd from one image to the next
     ;-   (24 seconds = small fraction of a day).
@@ -67,92 +60,61 @@ end
 
 goto, start
 
+cadence = 24
 
 year=['2012', '2014']
 month=['03', '04']
 day=['09', '18']
 
-channel='1600'
-;channel='1700'
+;channel='1600'
+channel='1700'
 
 ;nn = 0  ;- M6.3 -- 09 March 2012 flare
 nn = 1  ;- M7.3 -- birthday flare
+stop
 
-;ind=[  0:149]  ; 150 files ... 750/5 = 150, should be 1 hour of data
-;ind=[150:699]  ; remaining 550 files downloaded for AIA 1700Å (700 total)
+start:;---------------------------------------------------------------------------
 
+ind=[0:130]
 
 READ_MY_FITS, index, data, fls, $
     instr='aia', $
     channel=channel, $
-    ;ind=ind, $
+    ind=ind, $
     nodata=0, $
     prepped=0, $
     year=year[nn], $
     month=month[nn], $
     day=day[nn]
 
-;foreach ind, index, ii do begin
-    ;print, ind 
-    ;- NOTE: each "ind" is a full header, since "index" is an array of structures.
-    ;print, index[ii].date_obs
-;endforeach
-;- --> 2014-04-18T13:24:30.71
-
-;- 23 July 2019:
-;-  Testing "find_missing_images.pro", where coords of missing observations are
-;-  determined in separated routine. Returned coords are then used to apply
-;-  interpolations, or just to display WHERE missing images should have been,
-;-  see if they're spread out or if there's a continuous time chunk of time with
-;-  no data.
-;-
-
-cadence = 24
+;- get indices of missing images (gaps), where each z-index points to location
+;-  of an observation that is followed by an observation NE previous obs + cadence
 time = strmid( index.date_obs, 11, 11 )
 jd = GET_JD( index.date_obs + 'Z' )
-
-dt = 5 * 3600
-interp_coords = FIND_MISSING_IMAGES( jd, cadence, time, dt=dt )
-help, interp_coords
+gaps = FIND_MISSING_IMAGES( jd, cadence, time )
 stop
 
 time = strmid( index.date_obs, 11, 8 )
 
-foreach ii, interp_coords do begin
-    ;- Print indices where images are missing, along with
-    print, ii, '  ', index[ii].date_obs
-endforeach
-stop
-
-for ii = 0, n_elements(interp_coords)-2 do begin
-    ;- Print # images (z-value) BETWEEN missing images
-    ;-   Actually not sure this makes sense... come back when I'm less tired
-    print, interp_coords[ii+1] - interp_coords[ii]
-endfor
-stop
-
-print, ''
-;for ii = 13, 19 do begin
 dt = []
-foreach zind, interp_coords, ii do begin
-    jd1 = GET_JD( index[zind].date_obs + 'Z' )
-    jd2 = GET_JD( index[zind+1].date_obs + 'Z' )
+  ;- # seconds between consecutive observation times in header
+
+foreach zz, gaps, ii do begin
+    jd1 = GET_JD( index[zz].date_obs + 'Z' )
+    jd2 = GET_JD( index[zz+1].date_obs + 'Z' )
     dt = [ dt,  (jd2 - jd1) * 24 * 3600  ]
 
-    ;print, interp_coords[zind], '  ', index[ interp_coords[zind] ].date_obs
-    print, strmid(zind,9,3), '-', strmid(zind+1,9,3), '   ', $
-        time[zind], '--', time[zind+1], '   ', $
-        'dt = ', strtrim(dt[ii],1), ' seconds'
+    ;print, gaps[zz], '  ', index[ gaps[zz] ].date_obs
+    print, strmid(zz,9,3), '-', strmid(zz+1,9,3), '   ', $
+        time[zz], '--', time[zz+1], '   ', $
+        'dt = ', strtrim(dt[ii],1), ' sec'
+        ;'dt = ', round( strtrim(dt[ii],1) ), ' sec'
 
 endforeach
+stop
 
-start:;---------------------------------------------------------------------------
 
 locs = where( round(dt) ne 48 )
 print, round(dt[locs])
-
-
-;print, format='( "Number of seconds between observations: ", F0.2)', dt
-
 
 end

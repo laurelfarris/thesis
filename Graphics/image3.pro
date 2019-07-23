@@ -16,8 +16,9 @@
 ;-   graphic
 ;-
 ;- TO DO:
-;-   See if errors happen when the product of default rows and cols
-;-   doesn't match number of images in input array.
+;-   [] See if errors happen when the product of default rows and cols
+;-      doesn't match number of images in input array.
+;-   [] Add colorbar option
 ;-
 ;- NOTE:
 ;-   This is NOT meant to be called just like IDL's image, so
