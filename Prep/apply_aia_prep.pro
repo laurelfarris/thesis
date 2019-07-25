@@ -18,10 +18,6 @@
 ;- TO DO:
 
 
-goto, start
-
-;-- § Read fits files (downloaded, NOT prepped)
-
 ;- Naming convention of fits files for, e.g. AIA 1600\AA{}
 ;     UNprepped fits:
 ;        'aia.lev1.1600A_2013-12-28T10:00:00.00Z.image_lev1.fits'
@@ -30,11 +26,20 @@ goto, start
 ;        'AIA20131228_10:00:00_1600.fits'
 ;        'AIA20131228_10:00:00_0304.fits'
 
+goto, start
+
+
+;-- § Read fits files (downloaded, NOT prepped)
+
 @parameters
 
+;instr = 'hmi'
+;channel = 'cont'
+;channel = 'mag'
+
 instr = 'aia'
-channel = '304'
-;channel = '1600'
+;channel = '304'
+channel = '1600'
 ;channel = '1700'
 
 resolve_routine, 'read_my_fits', /either
@@ -55,19 +60,25 @@ print, old_indices[-1].date_obs
 stop
 
 ;- Pull up an image to see how it looks.
-zz = 830
+sz = size(old_data, /dimensions)
+zz = sz[2]/2
 ct = AIA_colors( wave=fix(channel), /load )
 imdata = old_data[*,*,zz]
 im = image2( $
-    aia_intscale(imdata, wave=fix(channel), exptime=old_indices[zz].exptime), $
-    rgb_table=ct ) ;-  ... pretty cool :)
+    AIA_INTSCALE(imdata, wave=fix(channel), exptime=old_indices[zz].exptime), $
+    buffer=1, $
+    rgb_table=ct $
+) ;-  ... pretty cool :)
+save2, 'aia1600image_pre-aia_prep'
 stop
+
+start:;----------------------------------------------------------------------------
 
 
 ;-- § Run aia_prep.pro on old_indices and old_data, read using read_my_fits
 
-outdir="/solarstorm/laurel07/Data/AIA_prepped/"
-;outdir="/solarstorm/laurel07/Data/HMI_prepped/"
+outdir="/solarstorm/laurel07/Data/" + strupcase(instr) + "_prepped/"
+
 
 start_time = systime(/seconds)
 print, systime()

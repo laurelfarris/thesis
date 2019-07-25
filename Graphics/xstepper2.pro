@@ -39,7 +39,7 @@ pro xstepper2, $
 
     xstepper, cube>max(mindata)<min(maxdata), $
         xsize=xsize, ysize=ysize, $
-        start=start
+        start=start, $
         _EXTRA=e
 
 end

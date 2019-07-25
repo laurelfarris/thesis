@@ -1,9 +1,13 @@
+;- LAST MODIFIED:
+;-   25 July 2019 -- changed arg "wave" to kw "wave=wave" to
+;-     achieve same calling sequence as ssw routine "aia_intscale.pro"
+;-      --> AIA_INTSCALE( data, wave=wave, exptime=exptime )
+;- 
+;+ 
 
-
-;- Thu Dec 20 07:25:24 MST 2018
 
 ;function aia_colors, wave, load=load, syntax=syntax
-function aia_colors, wave, load=load
+function aia_colors, wave=wave, load=load
 
 ;    if keyword_set(syntax) then begin
 ;        print, ''

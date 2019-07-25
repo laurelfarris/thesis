@@ -36,19 +36,25 @@
 ;+
 
 
-function FIND_MISSING_IMAGES, jd, cadence, time
+;function FIND_MISSING_IMAGES, cadence, date_obs, 
+    ;- jd and time arrays must be accessible to caller so they can then be
+    ;- interpolated and updated if needed.
+function FIND_MISSING_IMAGES, cadence, time, jd
 
-    ;- difference in jd from one image to the next
-    ;-   (24 seconds = small fraction of a day).
+;    time = strmid( date_obs, 11, 11 )
+;    jd = GET_JD( date_obs + 'Z' )
+
+    ;- difference in jd between consecutive observation times in header
     dt = jd - shift(jd,1)
 
-    ; convert units of "dt" from days to seconds
+    ; convert dt units from days to seconds
     dt = dt * 24 * 3600
 
     ; Exclude first element because of wrapping from SHIFT.
     dt = dt[1:*]
 
     ; convert data type from DOUBLE to INT
+    ;- NOTE: function "ROUND" returns LONG data type
     dt = fix(round(dt))
 
     ; Print where there's a gap in the data (between i-1 and i)
@@ -59,62 +65,59 @@ end
 
 
 goto, start
+start:;---------------------------------------------------------------------------
 
-cadence = 24
 
 year=['2012', '2014']
 month=['03', '04']
 day=['09', '18']
 
-;channel='1600'
-channel='1700'
+channel='1600'
+;channel='1700'
 
 ;nn = 0  ;- M6.3 -- 09 March 2012 flare
 nn = 1  ;- M7.3 -- birthday flare
-stop
-
-start:;---------------------------------------------------------------------------
-
-ind=[0:130]
 
 READ_MY_FITS, index, data, fls, $
     instr='aia', $
     channel=channel, $
-    ind=ind, $
-    nodata=0, $
+;    ind=ind, $
+    nodata=1, $
     prepped=0, $
     year=year[nn], $
     month=month[nn], $
     day=day[nn]
 
-;- get indices of missing images (gaps), where each z-index points to location
-;-  of an observation that is followed by an observation NE previous obs + cadence
+stop
+
+cadence = 24
+;- index.cadence -- HMI, doesn't appear to be in AIA headers... ??
+
+
 time = strmid( index.date_obs, 11, 11 )
 jd = GET_JD( index.date_obs + 'Z' )
-gaps = FIND_MISSING_IMAGES( jd, cadence, time )
-stop
+gaps = FIND_MISSING_IMAGES( cadence, time, jd )
+;gaps = FIND_MISSING_IMAGES( cadence, index.date_obs )
 
-time = strmid( index.date_obs, 11, 8 )
+time = ( strmid( index.date_obs, 11, 8 ) )
 
-dt = []
-  ;- # seconds between consecutive observation times in header
+;dt = ( jd - shift(jd,1) ) * 24 * 3600
+dt = ( shift(jd,-1) - jd ) * 24 * 3600
+dt = fix(round(dt))
 
-foreach zz, gaps, ii do begin
-    jd1 = GET_JD( index[zz].date_obs + 'Z' )
-    jd2 = GET_JD( index[zz+1].date_obs + 'Z' )
-    dt = [ dt,  (jd2 - jd1) * 24 * 3600  ]
+;help, where( dt eq 24 )
+;help, where( dt eq 48 )
+;help, where( dt eq 72 )
 
-    ;print, gaps[zz], '  ', index[ gaps[zz] ].date_obs
-    print, strmid(zz,9,3), '-', strmid(zz+1,9,3), '   ', $
-        time[zz], '--', time[zz+1], '   ', $
-        'dt = ', strtrim(dt[ii],1), ' sec'
-        ;'dt = ', round( strtrim(dt[ii],1) ), ' sec'
+missing_string = $
+    strmid(gaps,9,3) + '-' + strmid(gaps+1,9,3) + '     ' + $
+        time[gaps] + ' - ' + time[gaps+1] + '     ' + $
+        'dt = ' + strtrim(dt[gaps],1)
 
-endforeach
-stop
+print, missing_string, format='(A)'
+;- format='(A)' --> prints each element in array on a new line!
+;-      Don't need to use a loop after all!
 
-
-locs = where( round(dt) ne 48 )
-print, round(dt[locs])
+;foreach str, missing_string do print, str
 
 end

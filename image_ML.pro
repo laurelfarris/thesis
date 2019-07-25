@@ -20,6 +20,13 @@
 ;- OUTPUT:
 ;-
 ;- TO DO:
+;-   [] change filename to all lowercase. IDL language is not case-sensitive, but
+;-       external filenames are, and ".run image_ml" will give error for
+;-      filename = "image_ML.pro"
+;-
+;- --> No capital letters in IDL filenames!!
+;-
+;+
 
 
 goto, start
@@ -27,45 +34,111 @@ start:;-------------------------------------------------------------------------
 
 common defaults
 
-;- Crop imdata
-;r = 600
-;dimensions = [r, r]
-;center=[1700,1650]
 
-imdata = A[0].data[*,*,0:23] ;- made up #s to get rows*cols
+year=['2012', '2014']
+month=['03', '04']
+day=['09', '18']
+
+;channel='1600'
+;channel='1700'
+
+;nn = 0  ;- M6.3 -- 09 March 2012 flare
+nn = 1  ;- M7.3 -- birthday flare
+
+instr='hmi'
+channel = 'cont'
+;channel = 'mag'
+
+READ_MY_FITS, index, data, fls, $
+    instr=instr, $
+    channel=channel, $
+;    ind=ind, $
+    nodata=0, $
+    prepped=0, $
+    year=year[nn], $
+    month=month[nn], $
+    day=day[nn]
+
+stop
+
+
+;imdata = A[0].data[*,*,0:23] ;- made up #s to get rows*cols
+
+
+;- Crop imdata
+;dimensions = [600, 600]
+;x0 = 1700
+;y0 = 1650
+;center=[x0,y0]
+
+;- AIA center coords, with offset for (UNprepped) HMI data (birthday flare)
+x0 = 2879 + 215
+y0 = 1713 - 80
+dimensions=[400,340]
+
+;- syntax:  AIA_INTSCALE( data, wave=wave, exptime=exptime )
+
+imdata = CROP_DATA( rotate(data,2), center=[x0,y0], dimensions=dimensions )
+
+;- Ensure a 3D array, even for only one image
+sz = size(imdata, /dimensions)
+if n_elements(sz) eq 2 then $
+    imdata=reform(imdata, sz[0], sz[1], 1, /overwrite)
 sz = size(imdata, /dimensions)
 
-;- Syntax
-;-   imdata = AIA_INTSCALE( data, wave=wave, exptime=exptime )
+rows=1
+cols=1
 
-rows=6
-cols=4
+margin_offset = 0.00
+margin_offset = 0.05 ;- Axis labels
 
-left   = 0.05
+left   = 0.05 + margin_offset
+bottom = 0.05 + margin_offset
 right  = 0.05
-bottom = 0.05
-top    = 0.1
-; These could be arrays... 
+top    = 0.1  ;- room for title at top
+
+margin=[left,bottom,right,top]
 
 
 props = { $
-    axis_style : 2,  $
-    rgb_table : AIA_COLORS( wave=1600 )  }
+    ;rgb_table : AIA_COLORS( wave=1600 ), $
+    xtitle : 'X (pixels)', ytitle : 'Y (pixels)', $
+    ;xtitle : 'X (arcsec)', ytitle : 'Y (arcsec)', $
+    axis_style : 2  } ;- axis_style: 0=none, 1=bottom/left, 2=box, 3=crosshair
 
-im = objarr(sz[2])
 dw
+im = objarr(sz[2])
 for ii = 0, sz[2]-1 do begin
+    title = $
+        ;'HMI B$_{LOS}$' + $
+        'HMI cont' + $
+        ' (' + index[ii].bunit + ')   ' + $
+        index[ii].date_obs
     im[ii] = image2( $
         imdata[*,*,ii], $
         layout=[cols,rows,ii+1], $
-        margin=[left,bottom,right,top], $
+        margin=margin, $
+        ;current=1, $
         current=ii<1, $
         axis_style=0, $
-        title=index[ii].date_obs, $
+        title=title, $
         buffer=1, $
         _EXTRA = props)
 endfor
 
+ax = im[0].axes
+;b_Xscale = index[0].cdelt1
+;b_Yscale = index[0].cdelt2
+;a_Xshift = ( (dimensions[0]/2) - x0); / b_Xscale
+;a_Yshift = ((dimensions[1]/2)/b_Yscale) - y0
+;ax[0].coord_transform = [a_Xshift, b_scale]
+;ax[1].coord_transform = [a_Yshift, b_scale]
+
+
+
+filename = instr + '_' + channel + '_Mflare'
+save2, filename
+stop
 
 ;_________________________________________________________________________
 

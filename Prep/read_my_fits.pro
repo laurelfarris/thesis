@@ -129,10 +129,22 @@ pro READ_MY_FITS, index, data, fls, $
             ;files = '*_45s*' + channel + '*.fits'
             ;files = '*_' + channel + '*.fits'
 
-            files = $
-                'hmi.m_45s.' + year + '.' + month + '.' + day + '*' + $
-                'TAI.magnetogram.fits'
-              ;- NOTE: This is specific to magnetograms! Needs to be generalized.
+            ;- HMI channels: only changes in filename are
+            ;-   • 'hmi.ic' --> 'hmi.m'
+            ;-   • 'TAI.continuum.fits' --> 'TAI.magnetogram.fits'
+
+            ;- Continuum/Intensity
+            if channel eq 'cont' then $
+                files = $
+                    'hmi.ic_45s.' $
+                    + year + '.' + month + '.' + day + '*' + $
+                    'TAI.continuum.fits'
+
+            ;- LOS magnetogram
+            if channel eq 'mag' then $
+                files = $
+                    'hmi.m_45s.' + year + '.' + month + '.' + day + '*' + $
+                    'TAI.magnetogram.fits'
         endelse
         end ;- end of HMI
 

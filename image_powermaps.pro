@@ -39,7 +39,7 @@ pro image_powermaps, imdata, cols, rows
             min_value=min_value, $
             max_value=max_value, $
             axis_style = 0, $
-            ;rgb_table = AIA_COLORS( A[cc].channel ), $
+            ;rgb_table = AIA_COLORS( wave=A[cc].channel ), $
             title=title[ii], $
             buffer=0, $
             _EXTRA=e )
