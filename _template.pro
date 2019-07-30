@@ -1,14 +1,15 @@
 ;+
 ;- LAST MODIFIED:
+;-   dd Month yyyy
 ;-
 ;- ROUTINE:
-;-   routine_name.pro
+;-   name_of_routine.pro
 ;-
 ;- EXTERNAL SUBROUTINES:
 ;-
 ;- PURPOSE:
 ;-
-;- USEAGE (aka calling syntax):
+;- USEAGE:
 ;-   result = routine_name( arg1, arg2, kw=kw )
 ;-
 ;- INPUT:
@@ -26,8 +27,10 @@
 ;-   [] item 2
 ;-   [] ...
 ;-
-;- AUTHOR:
-;-
 ;- KNOWN BUGS:
+;-   Possible errors, harcoded variables, etc.
+;-
+;- AUTHOR:
+;-   Laurel Farris
 ;-
 ;+

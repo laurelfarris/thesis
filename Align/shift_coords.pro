@@ -1,11 +1,40 @@
-
-
-
-; 16 August 2018
-
-; Align first and last image to see how far to shift pixels in
-; x and y to get the correct physical coordinates in arcseconds
-; when labeling images at various points throughout time series.
+;+
+;- LAST MODIFIED:
+;-   16 August 2018
+;-
+;- ROUTINE:
+;-   name_of_routine.pro
+;-
+;- PURPOSE:
+;-   Align first and last image to see how far to shift pixels in
+;-   x and y to get the correct physical coordinates in arcseconds
+;-   when labeling images at various points throughout time series.
+;-
+;- USEAGE:
+;-   result = routine_name( arg1, arg2, kw=kw )
+;-
+;- INPUT:
+;-   arg1   e.g. input time series
+;-   arg2   e.g. time separation (cadence)
+;-
+;- KEYWORDS (optional):
+;-   kw     set <kw> to ...
+;-
+;- OUTPUT:
+;-   result     blah
+;-
+;- TO DO:
+;-   [] item 1
+;-   [] item 2
+;-   [] ...
+;-
+;- KNOWN BUGS:
+;-   Possible errors, harcoded variables, etc.
+;-
+;- AUTHOR:
+;-   Laurel Farris
+;-
+;+
 
 
 function SHIFT_COORDS, channel

@@ -1,13 +1,11 @@
 23 July 2019
 
-[] Re-name codes to something more descriptive of each
-NOTE: there may be duplicates of subroutines inside multiple .pro files
 
 ------------------------------------------------------------------------
 My codes:
 
 
-  • align_data.pro
+  • align_loop.pro
     - Loops through align_cube3.pro until stddev of shifts stops decreasing
   • shift_coords.pro
     - align first and last image in time series and

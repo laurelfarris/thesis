@@ -24,10 +24,11 @@
 ;-   index (and data, if nodata=0), just like READ_SDO
 ;-
 ;- TO DO:
+;-   [] call @parameters instead of specifying year, month, day every time?
+;-   [] see if strtrim converts numbers to string data type.
 ;-   [] Instead of setting "ind" kw, add option to set start/end times.
 ;-        User is more likely to know what time range to read around flare peak,
 ;-         though may use "ind" to get just the first hour of data... I dunno.
-;-   [] Option to read UNprepped data from HMI
 ;=   [] Better way to pad channels with leading zeros
 ;-
 
@@ -39,13 +40,27 @@ pro READ_MY_FITS, index, data, fls, $
     prepped=prepped, $
     year=year, $
     month=month, $
-    day=day
+    day=day, $
+    syntax=syntax
 
+
+    if keyword_set(syntax) then begin$
+        print, ''
+        print, "READ_MY_FITS, index, data, fls,", $
+            "instr=instr, channel=channel, ind=ind,", $
+            "nodata=nodata, prepped=prepped,", $
+            "year=year, month=month, day=day", $
+            "syntax=syntax"
+        print, ''
+        print, "NOTE: prepped=0 by default."
+
+        return
+    endif
 
 
     start_time = systime()
 
-    ; Convert channel to string if not already.
+    ;- Make sure channel is variable stype 'string'
     if not ( typename(channel) eq 'STRING' ) then begin
         ;print, 'Illegal typename for channel.'
         channel = strtrim(channel,1)
@@ -61,11 +76,6 @@ pro READ_MY_FITS, index, data, fls, $
     month = strtrim(month, 1)
     day = strtrim(day, 1)
 
-    ; 28 June 2017
-    ; Want prepped=1 by default, now that I've aligned all prepped data.
-    ;if not keyword_set(prepped) then prepped = 1
-
-
     ;- Set up variables
 
     print, '--------------------------------------------'
@@ -75,8 +85,6 @@ pro READ_MY_FITS, index, data, fls, $
     ;- IRIS
 ;    ( strlowcase(instr) eq 'iris' ): begin
 ;        end ;- end of IRIS -------------------------------------------
-
-
 
 
     ;'aia': begin
@@ -114,24 +122,22 @@ pro READ_MY_FITS, index, data, fls, $
 
     ;'hmi': begin
     (instr eq 'hmi') OR (instr eq 'HMI'): begin
-;- see E-note "SDO/HMI" for filenames
+
         if keyword_set(prepped) then begin
             print, 'NOTE: Reading PREPPED data from HMI.'
-            path = '/solarstorm/laurel07/Data/HMI_prepped/'
-
+            ;path = '/solarstorm/laurel07/Data/HMI_prepped/'
+            path = '/solarstorm/laurel07/Data/' + strupcase(instr) + '_prepped/'
             files = strupcase(instr) + year + month + day + '_*_' + channel + '.fits'
 
         endif else begin
             print, 'NOTE: Reading UNPREPPED data from HMI.'
-            ;print, '(currently no option to read unprepped HMI data...'
-            path = '/solarstorm/laurel07/Data/HMI/'
+            ;path = '/solarstorm/laurel07/Data/HMI/'
+            path = '/solarstorm/laurel07/Data/' + strupcase(instr) + '/'
 
-            ;files = '*_45s*' + channel + '*.fits'
-            ;files = '*_' + channel + '*.fits'
-
-            ;- HMI channels: only changes in filename are
+            ;- HMI fits filenames (various channels) -- only changes are:
             ;-   • 'hmi.ic' --> 'hmi.m'
             ;-   • 'TAI.continuum.fits' --> 'TAI.magnetogram.fits'
+            ;- See E-note "SDO/HMI"
 
             ;- Continuum/Intensity
             if channel eq 'cont' then $
@@ -143,7 +149,8 @@ pro READ_MY_FITS, index, data, fls, $
             ;- LOS magnetogram
             if channel eq 'mag' then $
                 files = $
-                    'hmi.m_45s.' + year + '.' + month + '.' + day + '*' + $
+                    'hmi.m_45s.' $
+                    + year + '.' + month + '.' + day + '*' + $
                     'TAI.magnetogram.fits'
         endelse
         end ;- end of HMI

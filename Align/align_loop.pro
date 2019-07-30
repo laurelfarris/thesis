@@ -1,7 +1,7 @@
 ;
 ; Last modified:   04 June 2018
 ;
-; ROUTINE:    align_data.pro
+; ROUTINE:    align_loop.pro
 ;
 ; PURPOSE:    Run align_cube3 on a loop until standard deviation
 ;              of shifts don't change by a significant amount.
@@ -33,7 +33,7 @@
 ;-   (25 July 2019)
 ;-
 ;- NOTE:
-;-   "align_data" procedure is duplicate of subroutine in "align_in_pieces";
+;-   "align_loop" procedure is duplicate of subroutine in "align_in_pieces";
 ;-   see top of "align_in_pieces.pro" for similar comments.
 ;-  (23 July 2019)
 ;-
@@ -45,7 +45,7 @@
 ;+
 
 
-pro ALIGN_DATA, cube, ref, allshifts, display=display
+pro ALIGN_LOOP, cube, ref, allshifts, display=display, buffer=buffer
 
     ; save shifts calculated for every iteration.
     sz = size(cube, /dimensions)
@@ -60,39 +60,22 @@ pro ALIGN_DATA, cube, ref, allshifts, display=display
 
         ;- 25 July 2019
         ;-   Plot shifts to make sure alignment doesn't need extra care.
-        if keyword_set(display) then begin
-            plt = objarr(2)
-            plt[0] = plot2( shifts[0,*], color= 'red', name="X shifts", buffer=1 )
-            plt[1] = plot2( shifts[1,*], color='blue', name="Y shifts", overplot=1, buffer=1 )
-            leg = legend2( target=plt, /upperright )
-            save2, 'align_shifts'
-            ;stop -- may as well let code continue to run. If plots don't look right,
-            ;         can always stop code via ctrl+c at any time.
-        endif
+        if keyword_set(display) then plt = PLOT_SHIFTS( shifts, buffer=buffer )
+        ;stop
+          ;- may as well let code continue to run. If plots don't look right,
+          ;-   can always stop code via ctrl+c at any time.
 
         allshifts = [ [[allshifts]], [[shifts]] ]
         sdv = [ sdv, stddev( shifts[0,*] ) ]
         k = n_elements(sdv)
 
         print, "stddev(X) = ", sdv[k-1], format='(F0.4)'
-            ;- 25 July 2019
-            ;-   displaying number not helpful if user doesn't know what it means.
 
         if k eq 10 then break
     endrep until ( k ge 2 && sdv[k-1] gt sdv[k-2] )
     print, "End:  ", systime()
     print, format='(F0.2, " minutes")', (systime(/seconds)-start_time)/60.
 end
-
-@parameters
-instr='aia'
-;channel='304'
-;channel='1600'
-channel='1700'
-print, ''
-print, 'channel = ', channel
-print, ''
-
 
 ;--- § Read PREPPED fits files
 
@@ -129,6 +112,15 @@ print, ''
 
 
 
+@parameters
+instr='aia'
+;channel='1600'
+channel='1700'
+print, ''
+print, 'channel = ', channel
+print, ''
+
+
 
 resolve_routine, 'read_my_fits', /either
 READ_MY_FITS, index, data, fls, $
@@ -143,7 +135,6 @@ READ_MY_FITS, index, data, fls, $
 
 ;- Make sure PREPPED fits files were read:
 print, index[0].lvl_num
-help, data
 
 ;print, n_elements(fls)
 ;print, index[0].wave_str
@@ -153,7 +144,7 @@ help, data
 
 
 ;-
-;--- § Crop to subset centered on AR,
+;--- § Crop (prepped) data to subset centered on AR,
 
 help, data
 resolve_routine, 'crop_data', /either
@@ -161,13 +152,13 @@ cube = CROP_DATA( $
     data, $
     center=center, $ ;- defined in @parameters
     dimensions=[700,500] )
+    ;- NOTE: kw "dimensions"=[500,330] (default set in crop_data.pro)
 help, cube
 
-;- NOTE: if kw "dimensions" isn't set, defaults to [500,330] in crop_data.pro
 
 
 ;-
-;--- § Align prepped, cropped data
+;--- § Crop (prepped) data
 
 ;- Use image in center of time series as reference.
 sz = size(cube, /dimensions)
@@ -189,38 +180,33 @@ save2, 'test_cropped_image'
 undefine, data
 
 
+;-
+;--- § Align data
 
-;- Loop through ALIGN_CUBE3 until stddev stops decreasing
-ALIGN_DATA, cube, ref, shifts
+;- Call procedure to run ALIGN_CUBE3 on a loop until stddev stops decreasing
+ALIGN_LOOP, cube, ref, shifts
+
+;- Check values by showing movie in xstpper, plotting shifts, and/or
+;-   printing max values (should be ≤ 1 after first loop).
+
+xstepper2, cube, channel=channel, scale=0.75
+    ;- Does this work while ssh-ed?? --> yes, but very slow.
+
+PLOT_SHIFTS, shifts[*,*,0], buffer=1
+save2, 'align_shifts'
+
 help, shifts
-
-
-;- Check values.
 print, max( shifts[0,*,0] )
 print, max( shifts[0,*,4] )
 
-;- Plot x and y shifts (# pixels) as function of z-index.
-;-  (both should = 0 for ref).
-plt = objarr(2)
-plt[0] = plot2( shifts[0,*], buffer=1, color='red' )
-plt[1] = plot2( shifts[1,*], buffer=1, color='blue', overplot=1 )
-leg = legend2( target=plt, /upperright )
-save2, 'align_shifts'
-
-
-;- Make sure images don't jump around all willy nilly.
-xstepper2, cube, channel=channel, scale=0.75
-    ;- Does this work while ssh-ed??
 
 ;-
 ;--- § Save cube and shifts to .sav files.
 
-;path = '/solarstorm/laurel07/20131228/'
 path = '/solarstorm/laurel07/' + year + month + day + '/'
 print, path
 
 save, shifts, filename = path + instr + channel + 'shifts.sav'
-cube = data
 save, cube, filename = path + instr + channel + 'aligned.sav'
 
 
