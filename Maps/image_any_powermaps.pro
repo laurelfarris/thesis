@@ -39,7 +39,7 @@
 
 
 center = [ 225, 175 ]
-r = 200
+rr = 200
 
 ;- Distinguish between simply assigning numbers and
 ;-  actually using them
@@ -49,7 +49,7 @@ r = 200
 imdata = CROP_DATA( $
     A[cc].map, $
     center=center, $
-    dimensions=[r,r], $
+    dimensions=[rr,rr], $
     z_ind=z_ind )
 
 ;----------------------------------------------------------------------------------
@@ -60,7 +60,7 @@ imdata = CROP_DATA( $
 ;- center of coords for ROIs, NOT for cropping data!
 center = [ $
     [000, 000] ]
-r = 10 ; pixel size
+rr = 10 ; pixel size
 
 
 

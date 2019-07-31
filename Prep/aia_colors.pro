@@ -7,7 +7,7 @@
 
 
 ;function aia_colors, wave, load=load, syntax=syntax
-function aia_colors, wave=wave, load=load
+function AIA_COLORS, wave=wave, load=load
 
 ;    if keyword_set(syntax) then begin
 ;        print, ''
@@ -28,7 +28,14 @@ function aia_colors, wave=wave, load=load
     endif
 
     aia_lct, r, g, b, wave=fix(wave), load=load
-    ct = [ [r], [g], [b] ]
+
+
+    ;ct = [ [r], [g], [b] ]
+    ct = transpose([ [r], [g], [b] ])
+    ;- switching from [256, 3] to [3, 256], tho may not matter... pretty
+    ;-  sure rgb_table kw can deal with either one (30 July 2019)
+
+
     return, ct
 
 

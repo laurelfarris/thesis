@@ -29,25 +29,29 @@
 ;+
 
 
-goto, start
-start:;-------------------------------------------------------------------------------
 
-common defaults
+;-------------------------------------------------------------
 
+;- This should be set in @parameters:
 
-year=['2012', '2014']
-month=['03', '04']
-day=['09', '18']
+;year=['2012', '2014']
+;month=['03', '04']
+;day=['09', '18']
+
+;instr='hmi'
+;channel = 'cont'
+;channel = 'mag'
 
 ;channel='1600'
 ;channel='1700'
 
 ;nn = 0  ;- M6.3 -- 09 March 2012 flare
-nn = 1  ;- M7.3 -- birthday flare
+;nn = 1  ;- M7.3 -- birthday flare
 
-instr='hmi'
-channel = 'cont'
-;channel = 'mag'
+;-------------------------------------------------------------
+
+common defaults
+@parameters
 
 READ_MY_FITS, index, data, fls, $
     instr=instr, $
@@ -55,11 +59,10 @@ READ_MY_FITS, index, data, fls, $
 ;    ind=ind, $
     nodata=0, $
     prepped=0, $
-    year=year[nn], $
-    month=month[nn], $
-    day=day[nn]
+    year=year, $
+    month=month, $
+    day=day
 
-stop
 
 
 ;imdata = A[0].data[*,*,0:23] ;- made up #s to get rows*cols
@@ -78,7 +81,8 @@ dimensions=[400,340]
 
 ;- syntax:  AIA_INTSCALE( data, wave=wave, exptime=exptime )
 
-imdata = CROP_DATA( rotate(data,2), center=[x0,y0], dimensions=dimensions )
+imdata = CROP_DATA( $
+    rotate(data,2), center=[x0,y0], dimensions=dimensions )
 
 ;- Ensure a 3D array, even for only one image
 sz = size(imdata, /dimensions)

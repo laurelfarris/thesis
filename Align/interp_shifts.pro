@@ -68,11 +68,23 @@ function INTERPOLATE_SHIFTS, shifts
 
 end
 
+
+
 ;----------------------------------------------------------------------------------
 
+;30 July 2019
+function INTERP_SHIFTS_MANUALLY, shifts, cad
 
-;22 May 2018 (ML code)
+    for ii = 0, 1 do begin
+        d_shifts = $
+            ( shifts[ii,cad[-1]+1] - shifts[ii,cad[0]-1] ) / (n_elements(cad)+1)
+    endfor
 
+end
+
+;----------------------------------------------------------------------------------
+
+;22 May 2018
 function INTERP_SHIFTS, shifts, cad
 ;- Uses IDL's INTERPOL routine
 
@@ -80,15 +92,17 @@ function INTERP_SHIFTS, shifts, cad
     cadence_inter = indgen(sz[1])
     new_shifts = fltarr(sz)
 
-    for i = 0, sz[0]-1 do begin
-        data = shifts[i,cad]
+    for ii = 0, sz[0]-1 do begin
+        data = shifts[ii,cad]
         data_inter = interpol( data, cad, cadence_inter );, /spline )
-        new_shifts[i,*] = data_inter
+        new_shifts[ii,*] = data_inter
     endfor
     return, new_shifts
 end
 
+;----------------------------------------------------------------------------------
 
+;22 May 2018 (ML code)
 
 ;path = '/solarstorm/laurel07/Data/AIA_prepped/'
 ;fls = file_search( path + '*1600*.fits' )
@@ -123,4 +137,89 @@ cad = [ $
     748 ]
 
 ;----------------------------------------------------------------------------------
+
+;- 30 July 2019
+
+@parameters
+restore, '../' + year + month + day + '/' + instr + channel + 'shifts.sav'
+
+sz = size(shifts, /dimensions)
+new_shifts = fltarr(sz)
+help, new_shifts
+
+
+cad = [423:469]
+
+good_indices = [0, [1:422], [470:sz[1]-1] ]
+new_indices = indgen(sz[1])
+
+
+xdata = indgen(sz[1])
+for jj = 0, sz[2]-1 do begin
+    for ii = 0, 1 do begin
+        yy = reform(shifts[ii,good_indices,jj])
+        new_shifts[ii,*,jj] = interpol( $
+            yy, good_indices, new_indices) ;, $
+            ;/spline )
+            ;/lsquadratic )
+            ;/quadratic )
+    endfor
+    ;plt = PLOT_SHIFTS( shifts[*,xdata,jj], xdata=xdata, buffer=0, location=[5,0]*dpi )
+;    plt = PLOT_SHIFTS( $
+;        new_shifts[*,xdata,jj], xdata=xdata, buffer=0, location=[5,5.5]*dpi, $
+;        title="spline" )
+;        title="LSquadratic" )
+;        title="quadratic" )
+endfor
+
+
+plt = PLOT_SHIFTS( $
+    new_shifts[*,xdata,3], xdata=xdata, buffer=0, location=[5,5.5]*dpi, $
+    ;title="spline" )
+    ;title="LSquadratic" )
+    ;title="quadratic" )
+    title="linear" )
+
+
+;- INTERPOL test
+xx = [ 0, [1:4], [7:9] ]
+yy = (xx+1) * 10
+new_yy = interpol( yy, xx, indgen(10) )
+
+
+
+
+resolve_routine, 'apply_shifts', /either
+APPLY_SHIFTS, cube, new_shifts
+
+
+;imdata = CROP_DATA( /syntax )
+
+rr = 200
+center=[475,250]
+dimensions=[rr,rr]
+imdata = CROP_DATA(cube, center=center, dimensions=dimensions, z_ind=[375] )
+help, imdata
+if instr eq 'aia' then begin
+    imdata = AIA_INTSCALE( imdata, wave=fix(channel), exptime=index[0].exptime )
+    ct = AIA_COLORS(wave=fix(channel))
+endif else $
+if instr eq 'hmi' then begin
+    imdata = ref
+    ct = 0
+endif else print, "variable instr must be 'hmi' or 'aia'."
+dw
+im = image2( imdata, buffer=0, layout=[1,1,1], margin=0.1, rgb_table=ct )
+
+
+xstepper2, CROP_DATA( $
+        cube, $
+        ;z_ind=[370:500], $
+        center=center, dimensions=dimensions ), $
+    channel=channel, $
+    subscripts=[370:500], $
+    scale=3.0
+
+
+
 end

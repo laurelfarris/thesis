@@ -24,9 +24,9 @@ function GET_JD, timestampstring
         hour=hour, $
         minute=minute, $
         month=month, $
-        offset=offset, $
         second=second, $
-        year=year
+        year=year, $
+        offset=offset
 
     ; Covert observations times to JD
     jd = JULDAY(month, day, year, hour, minute, second)

@@ -28,17 +28,26 @@ function CROP_DATA, data, $
     offset=offset, $
     syntax=syntax
 
+
+
     if keyword_set(syntax) then begin
         print, ''
-        print, 'Syntax: CROP_DATA, data, $'
-        print,     'dimensions=dimensions, $'
-        print,     'center=center'
+        print, 'result = CROP_DATA( data, $'
+        print, '    dimensions=dimensions, $'
+        print, '    center=center'
+        print, '    z_ind=z_ind'
+        print, '    offset=offset'
+        print, ''
+        return, 0
     endif
 
     sz = size( data, /dimensions )
 
     ; Crop relative to center of input cube by default
     if not keyword_set(center) then begin
+
+        print, 'NOTE: kw "center" not set!'
+        print, '  = center (x0,y0) of input data by default.'
 
         ;- Added 15 to coords in each dimension for 2011 flare,
         ;-   don't remember why. Should have added a comment explaining this...
@@ -66,6 +75,8 @@ function CROP_DATA, data, $
 
 
     if not keyword_set(dimensions) then begin
+        print, 'NOTE: kw "dimensions" not set!'
+        print, '  = [500, 300] by default.'
         x_length = 500
         y_length = 330
     endif else begin

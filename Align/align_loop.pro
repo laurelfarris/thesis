@@ -60,7 +60,8 @@ pro ALIGN_LOOP, cube, ref, allshifts, display=display, buffer=buffer
 
         ;- 25 July 2019
         ;-   Plot shifts to make sure alignment doesn't need extra care.
-        if keyword_set(display) then plt = PLOT_SHIFTS( shifts, buffer=buffer )
+        if keyword_set(display) then $
+            plt = PLOT_SHIFTS( shifts, buffer=buffer )
         ;stop
           ;- may as well let code continue to run. If plots don't look right,
           ;-   can always stop code via ctrl+c at any time.
@@ -69,7 +70,9 @@ pro ALIGN_LOOP, cube, ref, allshifts, display=display, buffer=buffer
         sdv = [ sdv, stddev( shifts[0,*] ) ]
         k = n_elements(sdv)
 
-        print, "stddev(X) = ", sdv[k-1], format='(F0.4)'
+        print, "stddev(X) = ", sdv[k-1], format='(F0.8)'
+        ;- "Type conversion error: Unable to convert given STRING to Double"... 
+        ;-   Is this a problem?
 
         if k eq 10 then break
     endrep until ( k ge 2 && sdv[k-1] gt sdv[k-2] )
@@ -110,43 +113,39 @@ end
 ; endforeach
 
 
-
-
 @parameters
-instr='aia'
-;channel='1600'
-channel='1700'
 print, ''
+print, 'instr = ', instr
 print, 'channel = ', channel
 print, ''
 
 
 
+;-
+;--- § Read index and data from PREPPED fits files
+
 resolve_routine, 'read_my_fits', /either
 READ_MY_FITS, index, data, fls, $
     instr=instr, $
     channel=channel, $
-    ;ind=ind, $
+    ;ind=[0], $
     nodata=0, $
     prepped=1, $
     year=year, $
     month=month, $
     day=day
 
-;- Make sure PREPPED fits files were read:
-print, index[0].lvl_num
+help, data
+help, index[0].wave_str
+help, index[0].lvl_num
+print, index[0].date_obs
+print, index[-1].date_obs
 
-;print, n_elements(fls)
-;print, index[0].wave_str
-;print, index[0].lvl_num
-;print, index[0].date_obs
-;print, index[-1].date_obs
 
 
 ;-
-;--- § Crop (prepped) data to subset centered on AR,
+;--- § Crop (prepped) data to subset centered on AR
 
-help, data
 resolve_routine, 'crop_data', /either
 cube = CROP_DATA( $
     data, $
@@ -158,23 +157,27 @@ help, cube
 
 
 ;-
-;--- § Crop (prepped) data
+;--- § Set reference image to center of time series, and display
 
-;- Use image in center of time series as reference.
 sz = size(cube, /dimensions)
-ref = cube[*,*,sz[2]/2]
+print, sz
 print, sz[2]/2  ;- make sure this is center of ts
-print, index[sz[2]/2].date_obs
+print, strmid(index[sz[2]/2].date_obs,11,11)
+ref = cube[*,*,sz[2]/2]
 help, ref
 
-im = image2( $
-    AIA_INTSCALE( ref, wave=fix(channel), exptime=index[0].exptime ), $
-    buffer=1, rgb_table=AIA_COLORS(wave=fix(channel)) $
-)
 
-;if buffer eq 1 then save2, 'figure_name'
-;- Only need to save figures when working remotely (or actually want to save the figure..)
-save2, 'test_cropped_image'
+if instr eq 'aia' then begin
+    imdata = AIA_INTSCALE( $
+        ref, wave=fix(channel), exptime=index[0].exptime )
+    ct = AIA_COLORS(wave=fix(channel))
+endif else $
+if instr eq 'hmi' then begin
+    imdata = ref
+    ct = 0
+endif else print, "variable instr must be 'hmi' or 'aia'."
+im = image2( imdata, buffer=0, rgb_table=ct )
+;save2, 'test_cropped_image'
 
 ;- If image looks to be centered and cropped nicely, don't need data variable anymore.
 undefine, data
@@ -184,20 +187,21 @@ undefine, data
 ;--- § Align data
 
 ;- Call procedure to run ALIGN_CUBE3 on a loop until stddev stops decreasing
-ALIGN_LOOP, cube, ref, shifts
+ALIGN_LOOP, cube, ref, shifts, /display
+
 
 ;- Check values by showing movie in xstpper, plotting shifts, and/or
 ;-   printing max values (should be ≤ 1 after first loop).
-
-xstepper2, cube, channel=channel, scale=0.75
-    ;- Does this work while ssh-ed?? --> yes, but very slow.
-
-PLOT_SHIFTS, shifts[*,*,0], buffer=1
-save2, 'align_shifts'
-
 help, shifts
-print, max( shifts[0,*,0] )
-print, max( shifts[0,*,4] )
+print, max( shifts[*,*,0] )
+print, max( shifts[*,*,7] )
+
+xstepper2, $
+    CROP_DATA( cube, center=[475,250], dimensions=[200,200] ), $
+    channel=channel, subscripts=[300:500], scale=2.00
+    ;- Does this work while ssh-ed?? --> yes, but very slow.
+;save2, 'align_shifts'
+
 
 
 ;-
@@ -206,8 +210,26 @@ print, max( shifts[0,*,4] )
 path = '/solarstorm/laurel07/' + year + month + day + '/'
 print, path
 
-save, shifts, filename = path + instr + channel + 'shifts.sav'
-save, cube, filename = path + instr + channel + 'aligned.sav'
+
+shifts_filename = path + instr + channel + 'shifts.sav'
+print, filename
+
+
+
+;- 1700\AA{} -- seems to have aligned just fine w/o needed interpolation.
+;-  (30 July 2019)
+save, shifts, filename=shifts_filename
+
+;- 1600\AA{} -- interpolated shifts to get new_shifts,
+;- then applied new_shifts to align cube. Replaced cube in .sav file.
+;- See interp_shifts.pro for details.
+;-  (30 July 2019)
+;save, new_shifts, filename = path + instr + channel + 'new_shifts.sav'
+
+cube_filename = path + instr + channel + 'aligned.sav'
+print, cube_filename
+
+save, cube, filename=cube_filename 
 
 
 

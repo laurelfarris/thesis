@@ -33,29 +33,35 @@
 ;-
 
 pro READ_MY_FITS, index, data, fls, $
-    instr=instr, $
-    channel=channel, $
+    ;instr=instr, $
+    ;channel=channel, $
     ind=ind, $
     nodata=nodata, $
     prepped=prepped, $
-    year=year, $
-    month=month, $
-    day=day, $
+    ;year=year, $
+    ;month=month, $
+    ;day=day, $
     syntax=syntax
 
 
-    if keyword_set(syntax) then begin$
-        print, ''
-        print, "READ_MY_FITS, index, data, fls,", $
-            "instr=instr, channel=channel, ind=ind,", $
-            "nodata=nodata, prepped=prepped,", $
-            "year=year, month=month, day=day", $
-            "syntax=syntax"
-        print, ''
+    if keyword_set(syntax) then begin
+        print, ""
+        print, "READ_MY_FITS, index, data, fls,"
+        ;print, "  instr=instr,", $
+        ;print, "  channel=channel,", $
+        print, "  ind=ind,"
+        print, "  nodata=nodata, "
+        print, "  prepped=prepped,"
+            ;"year=year, month=month, day=day", $
+        print, "  syntax=syntax"
+        print, ""
         print, "NOTE: prepped=0 by default."
-
+        print, ""
         return
     endif
+
+
+    @parameters
 
 
     start_time = systime()

@@ -36,19 +36,26 @@
 ;+
 
 
-;function FIND_MISSING_IMAGES, cadence, date_obs, 
-    ;- jd and time arrays must be accessible to caller so they can then be
-    ;- interpolated and updated if needed.
-function FIND_MISSING_IMAGES, cadence, time, jd
+;function FIND_MISSING_IMAGES, cadence, time, jd
+pro FIND_MISSING_IMAGES, cadence, date_obs, $
+    time, jd, dt, $
+    syntax=syntax
+    ;- NOTE: jd and time arrays must be accessible to caller so they can then be
+    ;-   interpolated and updated if needed.
 
-;    time = strmid( date_obs, 11, 11 )
-;    jd = GET_JD( date_obs + 'Z' )
+    time = strmid( date_obs, 11, 11 )
+    jd = GET_JD( date_obs + 'Z' )
 
     ;- difference in jd between consecutive observation times in header
     dt = jd - shift(jd,1)
 
     ; convert dt units from days to seconds
-    dt = dt * 24 * 3600
+    ;- NOTE: here, 24 is the conversion from days to hours,
+    ;-   NOT the cadence of AIA's UV channels
+    days_to_hours = 24
+    hours_to_minutes = 60
+    minutes_to_seconds = 60
+    dt = dt * days_to_hours * hours_to_minutes * minutes_to_seconds
 
     ; Exclude first element because of wrapping from SHIFT.
     dt = dt[1:*]
@@ -58,54 +65,63 @@ function FIND_MISSING_IMAGES, cadence, time, jd
     dt = fix(round(dt))
 
     ; Print where there's a gap in the data (between i-1 and i)
-    interp_coords = where(dt ne cadence)
+    gaps = where(dt ne cadence)
 
-    return, interp_coords
+    ;return, gaps
 end
 
-
-goto, start
-start:;---------------------------------------------------------------------------
 
 
 year=['2012', '2014']
 month=['03', '04']
 day=['09', '18']
 
-channel='1600'
+
+
+@parameters
+instr='hmi'
+channel='cont'
+
+;instr='aia'
+;channel='1600'
 ;channel='1700'
 
 ;nn = 0  ;- M6.3 -- 09 March 2012 flare
-nn = 1  ;- M7.3 -- birthday flare
+;nn = 1  ;- M7.3 -- birthday flare
+
 
 READ_MY_FITS, index, data, fls, $
-    instr='aia', $
+    instr=instr, $
     channel=channel, $
 ;    ind=ind, $
     nodata=1, $
     prepped=0, $
-    year=year[nn], $
-    month=month[nn], $
-    day=day[nn]
+    year=year, $
+    month=month, $
+    day=day
 
-stop
 
-cadence = 24
+
+
+
+
+;cadence = 24
+cadence = 45
 ;- index.cadence -- HMI, doesn't appear to be in AIA headers... ??
 
 
 time = strmid( index.date_obs, 11, 11 )
 jd = GET_JD( index.date_obs + 'Z' )
-gaps = FIND_MISSING_IMAGES( cadence, time, jd )
-;gaps = FIND_MISSING_IMAGES( cadence, index.date_obs )
+;gaps = FIND_MISSING_IMAGES( cadence, time, jd )
+FIND_MISSING_IMAGES, cadence, index.date_obs, time, jd, dt
 
 time = ( strmid( index.date_obs, 11, 8 ) )
 
-;dt = ( jd - shift(jd,1) ) * 24 * 3600
-dt = ( shift(jd,-1) - jd ) * 24 * 3600
+;dt = ( jd - shift(jd,1) ) * cadence * 3600
+dt = ( shift(jd,-1) - jd ) * cadence * 3600
 dt = fix(round(dt))
 
-;help, where( dt eq 24 )
+;help, where( dt eq cadence )
 ;help, where( dt eq 48 )
 ;help, where( dt eq 72 )
 

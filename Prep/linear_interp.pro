@@ -79,7 +79,8 @@
 ;+
 
 
-pro LINEAR_INTERP, array, jd, time, interp_coords, shifts=shifts
+pro LINEAR_INTERP, array, jd, time, interp_coords;, $
+    ;shifts=shifts (see commented code below regarding "shifts" array)
 
 
     if interp_coords[0] ne -1 then begin
@@ -105,11 +106,11 @@ pro LINEAR_INTERP, array, jd, time, interp_coords, shifts=shifts
             missing_jd = ( jd[i-1] + jd[i] ) / 2.
             jd = [ jd[0:i-1], missing_jd, jd[i:-1] ]
 
-            if keyword_set(shifts) then begin
+            ;if keyword_set(shifts) then begin
                 ;- code here to interpolate missing values in shifts
                 ;-   (amount that image would have shifted during alingment
                 ;-   had it been there...)
-            endif
+            ;endif
 
         endforeach
 
