@@ -5,7 +5,7 @@
 ;- PURPOSE:
 ;-   General routine for imaging powermaps... for real this time!
 ;-   One place for anything that changes from one figure to the next.
-;-   12 February 2019 - pulling code from all others to get complete list. 
+;-   12 February 2019 - pulling code from all others to get complete list.
 ;-
 ;- INPUT:
 ;-   None (currently runs from main level).
@@ -20,24 +20,21 @@
 ;-
 ;- To keep in mind:
 ;-   Could edit this code directly, or copy into another routine.
-;-   
+;-
 ;-   It's okay that this is at the main level (for now).
 ;-   Better than constantly typing the same code and
 ;-     dealing with the same errors over and over.
 ;-
-;-
+;+
 
 
 
 
 ;----------------------------------------------------------------------------------
 ;+
-;- CROP data in xy direction, if desired
-;-   Not sure about order yet, i.e. if this should go before or after
-;-   setting up NN.
-;- Definitely crop before computing power maps, obviously.
-
-
+;- SUBSET of AR (single sunspot, small ROI, etc.) in xy direction.
+;-  (skip this part if using entire AR)
+;- Crop data BEFORE computing power maps; only run FT on pixels that are keepers.
 center = [ 225, 175 ]
 rr = 200
 
@@ -54,18 +51,16 @@ imdata = CROP_DATA( $
 
 ;----------------------------------------------------------------------------------
 ;+
-;- ROIs
+;- ROI(s)
+;-
+;- NOTE: still imaging whole AR here (no x|y cropping),
+;-  but extracting ROIs to be analyzed separately from integrated emission.
 ;-
 
-;- center of coords for ROIs, NOT for cropping data!
+;- center of coords for ROI(s)
 center = [ $
     [000, 000] ]
 rr = 10 ; pixel size
-
-
-
-
-
 
 ;----------------------------------------------------------------------------------
 ;+
@@ -73,11 +68,8 @@ rr = 10 ; pixel size
 
 cc = 0
 time = strmid(A[cc].time,0,5)
-dz = 64
-
-;- nn = n_elements( array of changes from one panel to the next )
-;-   Generally equal to third dimension of image stack, but usually
-;-   predined so it's a shorthand used to PREDEFINE dimemsions...
+;dz = 64
+dz = 150
 
 ;----------------------------------------------------------------------------------
 ;+
@@ -86,7 +78,10 @@ dz = 64
 ;-
 
 
-;- image_powermaps.pro (this code)
+;- image_powermaps.pro (this code)...
+;-    except not anymore... bda_powermaps.pro calls a function called
+;-   IMAGE_POWERMAPS, I'm guessing this used to be a subroutine, turned into
+;-   (attempts at) general, ML code.
 z_ind = [0, 197]
 
 
@@ -117,9 +112,28 @@ z_start = [ 387, 405, 450, 467, 475, 525, 625, 660, 685 ]
 ;-
 
 
+;-
+;------------
+;- Image power maps  (31 July 2019)
+;-
+;-----
+;- Titles (several ways to define title string array)
+;-
+
+
+;- title, one way
+title = strupcase(instr) + ' @5.6mHz' + ' (' + $
+    strmid(index[z_start].date_obs,11,8) + $
+    '-' + $
+    strmid(index[z_start+dz-1].date_obs,11,8) + $
+    ')'
+
+;---
+
 nn = n_elements(z_ind)
 
-;- Titles, one way
+
+;- title, another way
 title = strarr(nn)
 foreach zz, z_ind, ii do begin
     title[ii] = A[cc].name + ' ' + $
@@ -127,19 +141,19 @@ foreach zz, z_ind, ii do begin
         ' (' + strtrim(zz,1) + '-' + strtrim(zz+dz-1,1)  + ')'
 endforeach
 
-;- Titles, another way
 
-titles = []
+;- title, a third way
+title = []
 for cc = 0, 1 do begin
     for ii = 0, NM-1 do begin
         ind = indgen(dz) + z0 + (dz*ii)
-        titles = [ titles, $
+        title = [ title, $
             A[cc].channel + '$\AA$ ' + $
             time[ind[0]] + '-' + time[ind[-1]] ]
     endfor
 endfor
-titles = 'AIA ' + titles + ' UT'
-titles = reform( titles, NM, 2)
+title = 'AIA ' + title + ' UT'
+title = reform( title, NM, 2)
 ;-    Both channels in one graphic? maybe don't do this?
 ;-    Just put "aia1600_" or "aia1700_" in filename.
 ;-    This would avoid 4D data sets, but may need to preserve each channel so can
@@ -147,11 +161,19 @@ titles = reform( titles, NM, 2)
 
 
 
-;----------------------------------------------------------------------------------
+
 ;+
+;--------
 ;- Central period/frequency
+;-   (see central_freq_powermaps.pro).
+;- Was this adapted from that code, or vice versa?
+;-   The following little bits of code appear to simply set up the variables
+;-   needed to compute power maps at various central freq. values;
+;-   doesn't actually do any calculations.
 ;-
 
+
+;- The following is definitely direct copy of code in central_freq_powermaps.pro
 
 bandwidth = 0.001
 
@@ -168,11 +190,7 @@ z_start = 75
 period = [120, 180, 300]
 period = [180]
 
-
-
 nn = n_elements(period)
-
-
 
 ;- Titles
 title = strarr(nn)
@@ -182,9 +200,8 @@ foreach pp, period, ii do begin
     strtrim(pp, 1) + ' sec ' + $
     '(' + time[z_start] + '-' + time[z_start+dz-1] + ' UT'
 endforeach
-stop
 
-;----------------------------------------------------------------------------------
+;---
 ;+
 ;- MASK for map and/or image data.
 ;-
@@ -197,31 +214,44 @@ mask1[where( data ge threshold )] = 0.0
 sat = where(mask1 eq 0.0)
 unsat = where(mask1 eq 1.0)
 
-
 ;- also see image_bda_powermaps.com, which may have been written before
 ;-  powermap_mask, a subroutine that computes masks and applys to maps separtely.
 
 
-
-;----------------------------------------------------------------------------------
+;---
 ;+
 ;- Imaging
 ;-
 
-@color ; polygons... maybe.
+;@color ; polygons for ROIs or to box any subset that's doing something interesting
+;-    Not used anywhere...
 
-;- Scale data for better contrast in images.
+;+
+;- SCALE data for better contrast in images.
+;-   • raw #s
+;-   • log(power)
+;-   • sqrt (power^0.5), or raised to even smaller fraction (power^0.1)
+;-   • min/max values -- lower/upper limit
+;-   • whatever ssw routine AIA_INTSCALE does... uses exposure time somehow
+;-
+
+;- variable "map" doesn't appear to be defined or restored anywhere in this code..
 imdata = alog10(map[*,*,*,cc])
 ;imdata = AIA_INTSCALE( map[*,*,*,cc], wave=fix(A[cc].channel), exptime=A[cc].exptime )
 ;imdata = (map[*,*,*,cc])^0.2
 
 
+;- One channel (row 1), 3 time segments (BDA) --> 3 columns
 rows = 1
 cols = 3
 
-width = 2.5
-height = width * float(sz[1])/sz[0]
+;width = 2.5
+;height = width * float(sz[1])/sz[0]
+;-    neither width nor height appear to be used in this code anywhere...
 
+
+;- function definition/calling sequence (31 July 2019):
+;- im = IMAGE3( data, XX, YY, _Extra=e )
 im = image3( $
     imdata, $
     buffer=0, $
@@ -238,6 +268,5 @@ im = image3( $
     title = title, $ ; title = ARRAY of titles, one for each panel.
     ;rgb_table = AIA_COLORS( wave=fix(A[cc].channel) ), $
     rgb_table=A[cc].ct )
-
 
 end

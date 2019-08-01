@@ -10,7 +10,7 @@ function BDA_POWERMAPS, $
     map, $
     rows=rows, $
     cols=cols, $
-    titles=titles, $
+    title=title, $
     _EXTRA=e
 
     common defaults
@@ -41,7 +41,7 @@ function BDA_POWERMAPS, $
         yshowtext=0, $
         ;min_value=1.2*min(map), $
         ;max_value=0.5*max(map), $
-        title=titles )
+        title=title )
 
     cbar = colorbar3( target=im )
 
@@ -100,11 +100,11 @@ endif
 ;sat = where(mask1 eq 0.0)
 ;unsat = where(mask1 eq 1.0)
 
-titles = []
+title = []
 for cc = 0, 1 do begin
     for ii = 0, NM-1 do begin
         ind = indgen(dz) + z0 + (dz*ii)
-        titles = [ titles, $
+        title = [ title, $
             A[cc].channel + '$\AA$ ' + $
             time[ind[0]] + '-' + time[ind[-1]] ]
         CONTINUE
@@ -112,9 +112,9 @@ for cc = 0, 1 do begin
     endfor
 endfor
 
-titles = 'AIA ' + titles + ' UT'
-titles = reform( titles, NM, 2)
-foreach t, titles do print, t
+title = 'AIA ' + title + ' UT'
+title = reform( title, NM, 2)
+foreach t, title do print, t
 stop ;---
 
 
@@ -123,11 +123,11 @@ stop ;---
 map   = fltarr( sz[0], sz[1], NM, 2)
 ;mask2 = fltarr( sz[0], sz[1], NM, 2)
 
-resolve_routine, 'powermaps', /either
+resolve_routine, 'compute_powermaps', /either
 for cc = 0, 1 do begin
     for ii = 0, NM-1 do begin
         ind = indgen(dz) + z0 + (dz*ii)
-        map[*,*,ii,cc] = POWERMAPS( $
+        map[*,*,ii,cc] = COMPUTE_POWERMAPS( $
             A[cc].data[*,*,ind], $
             A[cc].cadence, fmin=fmin, fmax=fmax )
         ;mask2[*,*,ii,cc] = PRODUCT( mask1[*,*,ind,cc], 3 )
@@ -153,6 +153,9 @@ for cc = 0, 1 do begin
     image_data = alog10(map[*,*,*,cc])
     ;image_data = AIA_INTSCALE( map[*,*,*,cc], wave=fix(A[cc].channel), exptime=A[cc].exptime )
     ;image_data = (map[*,*,*,cc])^0.2
+
+
+    ;- --> image_powermaps does not exist... need to re-write this!
     im = IMAGE_POWERMAPS( $
         image_data, $
         min_value = min(image_data), $
@@ -160,12 +163,11 @@ for cc = 0, 1 do begin
         rows = 4, $
         cols = 2, $
         rgb_table = AIA_COLORS( wave=fix(A[cc].channel) ), $
-        titles = titles[*,cc] )
+        title = title[*,cc] )
 
     file = 'aia' + A[cc].channel + 'map_45.pdf'
     ;save2, file
 endfor
-stop
 
 
 ;time = strmid(A[ii].time,0,8)
@@ -174,7 +176,7 @@ stop
 ;time_range = time_range[ 0 : sz[2]-1 ]
 ;ind = [ 0 : sz[2]-1 : 40 ]
 
-;-  powermaps.pro is written to take entire data set and an array of starting indices.
+;-  compute_powermaps.pro is written to take entire data set and an array of starting indices.
 ;-  This is probably faster than passing hugs arrays back and forth when computing a bunch of maps...
 ;-  not sure what the best coding practice would be in this case, if there even is one.
 ;-  kws are optional: if z isn't specified then default is to start at index 0
@@ -188,5 +190,5 @@ for ii = 0, 3 do begin
         title = 'mask map' )
 endfor
 ;save2, 'saturation_mask.pdf'
-stop
+
 end

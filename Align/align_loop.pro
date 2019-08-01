@@ -71,7 +71,7 @@ pro ALIGN_LOOP, cube, ref, allshifts, display=display, buffer=buffer
         k = n_elements(sdv)
 
         print, "stddev(X) = ", sdv[k-1], format='(F0.8)'
-        ;- "Type conversion error: Unable to convert given STRING to Double"... 
+        ;- "Type conversion error: Unable to convert given STRING to Double"...
         ;-   Is this a problem?
 
         if k eq 10 then break
@@ -152,6 +152,8 @@ cube = CROP_DATA( $
     center=center, $ ;- defined in @parameters
     dimensions=[700,500] )
     ;- NOTE: kw "dimensions"=[500,330] (default set in crop_data.pro)
+    ;- NOTE ALSO: @parameters defines "align_dimensions=[1000,800]" ...
+    ;-   doesn't need to be hardcoded here.
 help, cube
 
 
@@ -229,7 +231,7 @@ save, shifts, filename=shifts_filename
 cube_filename = path + instr + channel + 'aligned.sav'
 print, cube_filename
 
-save, cube, filename=cube_filename 
+save, cube, filename=cube_filename
 
 
 

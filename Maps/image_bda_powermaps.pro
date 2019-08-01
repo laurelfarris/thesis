@@ -6,6 +6,13 @@
 ;-   contours and polygons can be viewed in detail.)
 ;- At time of writing, powermap figures in article1 were generated from
 ;-   this routine.
+;-
+;- OUTPUT:
+;-   3x3 array of power maps (for a single channel)
+;-   all of which cover one major time segment (B, D, or A).
+;-  E.g. the file aia1600before_20181204.pdf has 9 powermaps for AIA 1600,
+;-  from beginning of ts (00:00 UT) to just prior to start of Xflare (01:44 UT)
+;-
 
 
 ;- 04 December 2018
@@ -97,7 +104,7 @@ for cc = 0, 1 do begin
 
 
 
-    
+
     ;- Overlay titles on images instead of above them, left-aligned,
     ;- with letters, (a), etc. also at top, right-aligned
     ;-   --> really hacky.

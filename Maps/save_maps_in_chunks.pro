@@ -1,40 +1,141 @@
+;+
+;- LAST MODIFIED:
+;-   31 July 2019 -- combined ML code with the two subroutines it calls,
+;-    which were only just written to their own files a few days ago...
+;-   Pretty sure this (save_maps_in_chunks.pro) is the only code that calls
+;-    either of those two subroutines.
+;-
+;-
+;- 12 July 2018 (changed threshold from hard-coded variable
+;-      to optional keyword
+;-  Calculates power map
+;-  Input:  data = 3D data cube for which to calculate power maps
+;-       z_start = array of START indices
+;-            dz = length over which to calculate FT (# images)
+;-       cadence = cadence of data (seconds)
+;-  NOTES:     (May 11 2018) Added /NORM keyword to fourier2.
+;-             (May 13 2018) switched from TOTAL to MEAN power.
 
-; Last modified:   12 July 2018 (changed threshold from hard-coded variable
-;     to optional keyword
-; Calculates power map
-; Input:  data = 3D data cube for which to calculate power maps
-;      z_start = array of START indices
-;           dz = length over which to calculate FT (# images)
-;      cadence = cadence of data (seconds)
-; NOTES:     (May 11 2018) Added /NORM keyword to fourier2.
-;            (May 13 2018) switched from TOTAL to MEAN power.
+;- TO-DO:
+;-   Make another level of subroutines for all the specifics below,
+;-   one for several different situations. Each of them call the
+;-   general routine above, and all return essentially the same thing.
 
-;; TO-DO:
-;;   Make another level of subroutines for all the specifics below,
-;;   one for several different situations. Each of them call the
-;;   general routine above, and all return essentially the same thing.
+;- 15 June 2018
+;- Reading in data and creating maps first, without messing with
+;-  structures or dictionaries (yet). Do need to interpolate though!
 
-; 15 June 2018
-; Reading in data and creating maps first, without messing with
-;  structures or dictionaries (yet). Do need to interpolate though!
-
-; 23 September 2018
-; Removing part that excludes saturation. Will take longer to compute,
-;  but better to have extra information that can easily be excluded,
-;  in this case, by using masks.
+;- 23 September 2018
+;- Removing part that excludes saturation. Will take longer to compute,
+;-  but better to have extra information that can easily be excluded,
+;-  in this case, by using masks.
 
 ;- 19 October 2018
 ;- Now putting it back... only calculating four maps, which can be done
 ;- fast enough to test different threshold values.
 ;-   Added if statement to use code that manages saturated pixels
 ;-   only if threshold kw is set.
-
 ;-
-;------------------------------------------------------------------------
-;- 31 July 2019
-;- ML code following definition of function "compute_powermaps".
-;- Separated ML part into its own file.
 
+;++++
+
+;-----------------------------------------------------------------------------------
+function MAKE_FEW_MAPS, data, time
+
+    ; 18 July 2018
+    ; Power maps with dz = 1 hour
+    time = strmid(time, 0, 5)
+    z = [ '00:30', '01:30', '02:30', '03:30']
+    z = [ '00:30', '01:30' ]
+    print, (where(time eq z[1]))[0] - (where(time eq z[0]))[0]
+    ; --> 150
+
+    dz = 150
+    result = fourier2( indgen(dz), 24 )
+    frequency = reform( result[0,*] )
+    fmin = 0.005
+    fmax = 0.006
+    ind = where( frequency ge fmin AND frequency le fmax )
+    ;print, 1000*frequency[ind], format='(F0.2)'
+    ;print, 1./(frequency[ind]), format='(F0.2)'
+
+    sz = size(data, /dimensions)
+    N = n_elements(z)
+    map = fltarr( sz[0], sz[1], N-1 )
+
+    for i = 0, N-2 do begin
+        i1 = (where( time eq z[i] ))[0]
+        i2 = (where( time eq z[i+1] ))[0] - 1
+        ;map[*,*,i] = power_maps( $
+        map[*,*,i] = COMPUTE_POWERMAPS( $
+            data[*,*,i1:i2], 24, [fmin,fmax], threshold=10000 )
+    endfor
+    return, map
+end
+
+;-----------------------------------------------------------------------------------
+;+
+;- PURPOSE:
+;-   written in DC to save bits of power maps at a time while ssh-ed to avoid
+;-    losing everything when ssh connection broke (happened a lot...).
+;-  Probably don't need this if working directly from machine at dept.
+;-
+
+pro AIA_MAPS, cube, channel, file, start=start, norm=norm
+    ; Generates new map or restores EXISTING map and starts at kw 'start'.
+    ; WRITES TO FILE!
+    ;   (make sure you're not overwriting a file that took hours to compute...)
+
+    cadence = 24
+    fmin = 0.0048
+    fmax = 0.0060
+    dz = 64
+    print, 'Running power maps for AIA ' + channel
+
+    if keyword_set(start) then begin
+        ; restore existing map
+        restore, file & endif $
+    else begin
+        ; generate new map
+        ; NOTE: z-dim of map must be at least dz LESS than z-dim of data.
+        start = 0
+        sz = size( cube, /dimensions )
+        map = fltarr( sz[0], sz[1], sz[2]-dz )
+        endelse
+
+    sz = size( map, /dimensions )
+
+    ; save map to file every 50-th timestep (or whatever value is desired)
+    step = 50
+
+    ; Loop - sole purpose of this is to save every increment.
+    ;   otherwise, no loop is needed, just set map[*] = power_maps(...)
+    ;   So if computing last 30 or so images, don't need loop, e.g.
+    ;   z = [ 650:sz[2]-dz-1]
+
+    for i = start, sz[2]-1, step do begin
+
+        ; Test that z isn't out of range
+        ;   (find better way to do this... later)
+        if sz[2] - i LT step then z = [i:sz[2]-1] else z = [i:i+step-1]
+
+        map[*,*,z] = COMPUTE_POWERMAPS( $
+            ;- 21 April 2019
+            ;- I think power_maps was renamed to compute_powermaps
+            ;-  so it was more obvious what the routine was for.
+            ;-  Same change in the following function.
+            cube, cadence, [fmin,fmax], z=z, dz=dz, norm=norm )
+
+        save, map, filename=file
+        endfor
+end
+
+;----
+;-
+;- ML code -- calls function MAKE_FEW_MAPS, and procedure AIA_MAPS,
+;-   both defined above in this same file.
+;---
+;+
 
 ii = 0
 map6 = MAKE_FEW_MAPS( A[ii].data, A[ii].time )
@@ -95,6 +196,9 @@ start = 250
 file = 'aia' + channel + 'map_norm.sav'
 AIA_MAPS, cube, channel, file, start=start, norm=1
 stop
+
+
+
 
 
 ;----------------------------------------------------------------------------------

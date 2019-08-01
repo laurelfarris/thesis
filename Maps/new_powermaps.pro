@@ -1,4 +1,10 @@
 ;+
+;- PURPOSE:
+;-   Image powermaps for "new flare" ("new" meaning the first flare I've worked
+;-   on other than the 2011 February 15 X2.2 flare.
+;-   --> is C3.0
+;-
+;-
 ;- 21 April 2019
 ;- Copied "image_central_freq_powermaps.pro"
 ;-
@@ -119,7 +125,7 @@ endfor
 ;print, title
 ;for ii = 0, nn-1 do begin
 ;    str = strtrim( (1000./period[ii]), 1)
-;    str = strmid(str, 0, 3) 
+;    str = strmid(str, 0, 3)
 ;    title[ii] = A[cc].name + ' ' + $
 ;        ;strtrim(fcenter[ii]*1000, 1) + ' mHz ('  + $
 ;        '@' + str + ' mHz' + $

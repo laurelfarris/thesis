@@ -1,8 +1,16 @@
 ;+
 ;- LAST MODIFIED:
+;-   ls -lt --> 22 Feb 2019, so that's the "last modified" date
+;-     I'm assigning to this file (31 July 2019)
 ;-
-;- To do:
-;- 
+;- PURPOSE:
+;-   Typical "today.pro", testing random stuff:
+;-     • Fourier power spectrum for single pixel in umbra, compare
+;-        to single pixel in penumbra, or various locations relative to boundaries
+;- TO DO:
+;-   Look over this, see if it should go with Power spectrum codes, rather
+;-    than power maps.
+;-
 
 
 goto, start
@@ -35,6 +43,9 @@ ff = [ [f1], [f2] ]
 fmin = 0.003
 fmax = 0.020
 
+
+;- "nu" = $\nu$, greek letter often used to represent frequency...
+;- looks weird tho, like "num" is too long an abbreviation for the word "number".
 nu = []
 pow = []
 for ii = 0, 1 do begin
@@ -99,8 +110,5 @@ for ii = 0, 1 do begin
 endfor
 
 leg = legend( target = plt )
-
-
-
 
 end

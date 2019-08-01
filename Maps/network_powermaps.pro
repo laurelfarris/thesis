@@ -97,6 +97,14 @@ min_value = [ 50, 50, 50, 0.006, 0.006, 0.006 ]
     endfor
 
 file = 'aia' + A[cc].channel + '_quiet_powermaps'
+;-  NOTE: in Dropbox/Figures/Subregions/, there are a few figures of
+;-    quiet sun powermaps, overlaid with contours, but didn't find any
+;-    figures that match the file name defined here.
+;-  May have renamed these figures at some point during quest to find
+;-   the perfect file naming system (or at least good enough to know what
+;-   kind of figure is shown and whether it's the one I'm looking for...
+;- (31 July 2019)
+
 save2, file, /add_timestamp
 
 end

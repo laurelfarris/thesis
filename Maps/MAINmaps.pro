@@ -3,24 +3,22 @@
 ;-   31 July 2019
 ;-
 ;- ROUTINE:
-;-   MAIN_maps.pro
+;-   MAINmaps.pro
 ;-
 ;- EXTERNAL SUBROUTINES:
 ;-
 ;- PURPOSE:
-;-   Main Level (ML) code for computing power maps
-;-     * restore aligned data cubes
-;-     * define time segements: start indices, length of each (T), ...
-;-     * save maps to .sav files if large computation time is required
-;-     *
+;-   ML code for COMPUTING (not imaging!) power maps from aligned data. Steps:
+;-     * restore aligned data cubes from, e.g. aia1600aligned.sav files
+;-     * define time segments: start indices, length of each (T), ...
+;-     * save maps to, e.g. aia1600maps.sav if long computation time is required.
 ;-
 ;- TO DO:
-;-   [] item 1
-;-   [] item 2
-;-   [] ...
+;-   [] Come up with better filename for main code (avoid capital letters...)
+;-      This could also be ML code in same file as compute_powermaps.pro,
+;-      not sure if I want to do that... gets sloppy real fast.
 ;-
 ;- KNOWN BUGS:
-;-   Possible errors, harcoded variables, etc.
 ;-
 ;- AUTHOR:
 ;-   Laurel Farris
@@ -28,8 +26,8 @@
 ;+
 
 
-;-----------------------------------------------------------------------------------
 ;-
+;----
 ;- Restore aligned data cube, show movie in xsteppper to double check that
 ;-  alignment looks okay and that edge pixels are trimmed appropriately.
 ;-
@@ -49,12 +47,16 @@ print, path + filename
 restore, path + filename
 help, cube
 
-;cube = CROP_DATA(/syntax) 
-cube = CROP_DATA(cube) 
+;cube = CROP_DATA(/syntax)
+cube = CROP_DATA(cube)
 help, cube
 
 
+;-
+;----
 ;- Interpolate missing images (if needed)
+;-
+
 ;cadence = 24 --> defined in @parameters
 ;time = strmid( index.date_obs,  11, 11 )
 ;jd = get_jd( index.date_obs + 'Z' )
@@ -68,7 +70,7 @@ print, index[gaps].date_obs, format='(A0)'
 print, index[gaps+1].date_obs, format='(A0)'
 
 
-;if channel eq 'aia' 
+;if channel eq 'aia'
 resolve_routine, 'linear_interp', /either
 LINEAR_INTERP, cube, jd, time, gaps
 
@@ -77,8 +79,8 @@ xstepper2, cube, channel=channel
 
 
 
-;-----------------------------------------------------------------------------------
 ;-
+;----
 ;- Set input values for computing maps (central freq, bandwidth, dz, etc.)
 ;-
 
@@ -114,19 +116,6 @@ print, mapfilename
 print, path + mapfilename
 
 save, map, filename=path + mapfilename
-
-
-
-;-----------------------------------------------------------------------------------
-;-
-;- Image power maps
-;-
-
-title = strupcase(instr) + ' @5.6mHz' + ' (' + $
-    strmid(index[z_start].date_obs,11,8) + $
-    '-' + $
-    strmid(index[z_start+dz-1].date_obs,11,8) + $
-    ')'
 
 
 end

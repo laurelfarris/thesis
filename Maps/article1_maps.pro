@@ -13,12 +13,18 @@
 ;- To do:
 ;-   Better way to change between BDA, preferably without re-defining
 ;-   contour data (c_data) every time.
-;- 
+;-
 ;- To consider:
-;-   There's a very significant different between
+;-   There's a very significant difference between
 ;-     lines of code that define variables (e.g. dz=64) and those that perform
 ;-     actual computations, which can take time to run (e.g. c_data=...)
 ;-     Consider this when writing subroutines ( Wed Feb 20 03:56:27 MST 2019 )
+;-
+;- 31 July 2019:
+;- Is this specifically for addressing the referee comments after article1
+;-  was submitted to ApJ?
+;-
+;+
 
 
 goto, start
