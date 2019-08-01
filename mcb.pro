@@ -1,7 +1,7 @@
 ;Copied from clipboard
 
 
-save, map, filename=path + mapfilename
+save2, filename
 
 end
 

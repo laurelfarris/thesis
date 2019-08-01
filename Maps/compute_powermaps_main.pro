@@ -3,7 +3,7 @@
 ;-   31 July 2019
 ;-
 ;- ROUTINE:
-;-   MAINmaps.pro
+;-   compute_powermaps_main.pro
 ;-
 ;- EXTERNAL SUBROUTINES:
 ;-
@@ -80,6 +80,16 @@ xstepper2, cube, channel=channel
 
 
 ;-
+;- Everything up to here is fairly general, not specific to power
+;-  maps in any way...
+;- In fact, this is exactly what my struc_aia routine does...
+;-   (31 July 2019)
+;-
+;-
+
+
+
+;-
 ;----
 ;- Set input values for computing maps (central freq, bandwidth, dz, etc.)
 ;-
@@ -89,11 +99,8 @@ print, strmid( index[  0].date_obs, 11, 11 )
 print, strmid( index[149].date_obs, 11, 11 )
 
 dz = 150 ;- = ~1 hour for 24-second cadence
-
 ;- 3-elements array for z_start: BDA
 z_start = intarr(3)
-
-
 ;- start index for "During" = GOES start time
 locs = where( strmid(index.date_obs,11,5) eq strmid(gstart,0,5) )
 ;- decided to use 12:30 instead of 12:31:... for cleaner labeling of figures
@@ -106,6 +113,11 @@ print, z_start
 
 print, index[z_start].date_obs, format='(A0)'
 
+
+
+;- Only part of this code that actually CREATES power map..
+;-  Everything else needs to be done even after maps are created
+;-  and saved..
 resolve_routine, 'compute_powermaps', /either
 map = COMPUTE_POWERMAPS( /syntax )
 map = COMPUTE_POWERMAPS( cube, cadence, z_start=z_start, dz=dz )

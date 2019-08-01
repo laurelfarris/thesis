@@ -37,6 +37,7 @@ function IMAGE3_wrapper, $
     top = top, bottom = bottom, ygap = ygap, $
     rows=rows, cols=cols, $
     title=title, $
+    cbar=cbar, $
     buffer=buffer, $
     _EXTRA=e
 
