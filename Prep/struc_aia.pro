@@ -56,10 +56,8 @@ function STRUC_AIA, index, cube, $
             instr=instr, $
             channel=channel, $
             nodata=1, $
-            prepped=1, $
-            year=year, $
-            month=month, $
-            day=day
+            prepped=1  ;, $
+            ;year=year, $ month=month, $ day=day
     endif
     print, ''
     print, 'Reading header for level ', $
@@ -170,6 +168,7 @@ function STRUC_AIA, index, cube, $
 
     ;- MEMORY - Is this making copies of everything?
     struc = { $
+        date: date, $  ;- from @parameters (03 Aug 2019)
         channel: channel, $
         cadence: cadence, $
         exptime: exptime, $

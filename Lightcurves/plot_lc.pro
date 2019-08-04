@@ -1,6 +1,8 @@
 ;+
 ;- LAST MODIFIED:
-;-   21 April 2019
+;-   03 August 2019
+;-   Bare Min: needs to produce lc figures for ANY flare.
+;-     (see plot_lc_2.pro for early attempts at a nice subroutine)
 ;-
 ;- PURPOSE:
 ;-   Plot light curves.
@@ -14,13 +16,16 @@
 ;- TO DO:
 ;-
 
-goto, start
-
-start:;----------------------------------------------------------------------------------
 
 @parameters
+;- uncomment the flare to plot LCs for.
+
+
+;IDL .run struc_aia
+
 
 file = 'lc'
+    ;- plus something to make it clear which flare this is for??
 
 ;ydata = A.flux
 
@@ -61,10 +66,10 @@ plt = BATCH_PLOT(  $
 increment = (max(ydata1)-min(ydata1))/ymajor
 
 ax = plt[0].axes
-;ax[1].tickname = string( [ min(A[0].flux) : max(A[0].flux) : increment ] ) 
-;ax[3].tickname = string( [ min(A[1].flux) : max(A[1].flux) : increment ] ) 
-ax[1].tickname = [ '2.78$\times10^{7}$' , '2.94$\times10^{7}$' ]
-ax[3].tickname = [ '4.96$\times10^{8}$' , '9.08$\times10^{8}$' ]
+;ax[1].tickname = string( [ min(A[0].flux) : max(A[0].flux) : increment ] )
+;ax[3].tickname = string( [ min(A[1].flux) : max(A[1].flux) : increment ] )
+;ax[1].tickname = [ '2.78$\times10^{7}$' , '2.94$\times10^{7}$' ]
+;ax[3].tickname = [ '4.96$\times10^{8}$' , '9.08$\times10^{8}$' ]
 
 ;dy = ytickinterval * (max(A[0].flux)-min(A[0].flux))
 ;ax[1].tickname = string( [ min(A[0].flux) : max(A[0].flux) : dy ] )
@@ -75,6 +80,7 @@ ax[3].showtext = 1
 time = strmid( A[0].time, 0, 5 )
 ax[0].tickname = time[ax[0].tickvalues]
 ax[0].title = 'Start time (' + date + ' ' + tstart + ')'
+    ;-  date is defined in @parameters
 
 ;resolve_routine, 'label_time', /either
 ;LABEL_TIME, plt, time=A.time;, jd=A.jd
@@ -116,9 +122,6 @@ ax[3].text_color = A[1].color
 ;print, 'ax[1] set color, ax[3] set text_color'
 ; 17 February 2019 - going with text_color
 
-stop
-
-
 
 
 ; Single lines creating each object that can easily be commented.
@@ -129,20 +132,29 @@ stop
 ;- 02 December 2018
 ;- Mark BDA times on LC.
 
-time = strmid(A[0].time,0,5)
+;time = strmid(A[0].time,0,5) --> defined earlier, right after LC plot is produced.
 ;bda_times = ['01:00', '01:45', '02:30', '03:15']
-bda_times = ['01:44', '02:30']
-nn = n_elements(bda_times)
-ind = intarr(nn)
-for ii = 0, nn-1 do $
-    ind[ii] = (where( time eq bda_times[ii] ))[0]
+;bda_times = ['01:44', '02:30']
+;nn = n_elements(bda_times)
+;ind = intarr(nn)
+;for ii = 0, nn-1 do $
+;    ind[ii] = (where( time eq bda_times[ii] ))[0]
 
+;- split 3-hour time series into three parts: BDA, each one hour long (150 obs)
+ind = [150, 300]
 
 yrange=plt[0].yrange
-shaded = plot( [ind[0], ind[1]], [yrange[0], yrange[0]], /overplot, $
-    /fill_background, fill_color='white smoke', fill_level=yrange[1] )
+shaded = plot( $
+    [ind[0], ind[1]], $
+    [yrange[0], yrange[0]], $
+    /overplot, $
+    /fill_background, $
+    fill_color='white smoke', $
+    fill_level=yrange[1] $
+)
 shaded.Order, /send_to_back
 
+;- BDA lines, before I figured out how to do shading?
 ;vert = objarr(nn)
 ;for ii = 0, nn-1 do begin
 ;    vert[ii] = plot( $

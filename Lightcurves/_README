@@ -1,0 +1,22 @@
+README for Lightcurves/
+
+---------------------------------------------------------------------------------
+General routine for plotting a light curve:
+  • plot_lc.pro
+
+Axis labels:
+  • label_time.pro
+
+Shift curves in y-dir (+ coord_transform)
+  • shift_ydata.pro
+
+Overlay other plot lines:
+  • oplot_background.pro
+  • oplot_flare_lines.pro
+
+Other:
+  • bda_lightcurves.pro
+  • plot_bda_lightcurves.pro
+  • plot_lightcurve_reference.pro
+
+---------------------------------------------------------------------------------

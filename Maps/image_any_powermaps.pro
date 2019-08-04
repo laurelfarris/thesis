@@ -273,22 +273,16 @@ print, max(imdata[*,*,2])
 ;height = width * float(sz[1])/sz[0]
 ;-    neither width nor height appear to be used in this code anywhere...
 
-
-;- One channel (row 1), 3 time segments (BDA) --> 3 columns
-rows = 1
-cols = 3
 resolve_routine, 'image3', /is_function
 ;- function definition/calling sequence (31 July 2019):
 ;- im = IMAGE3( data, XX, YY, _Extra=e )
 im = image3( $
     imdata, $
     buffer=0, $
-    ;wx=, $ ;- --> default = 8.0
-    rows=rows, $
-    cols=cols, $
+    rows=1, cols=3, $ ;- One channel (row 1), 3 time segments (BDA) --> 3 columns
     ;top=, left=, right=, bottom=, xgap=, ygap=,  $
-    xshowtext=0, $
-    yshowtext=0, $
+    xshowtext=1, yshowtext=1, $  ;- Images
+    ;xshowtext=0, yshowtext=0, $  ;- Power maps
     ;min_value=-2.23, max_value=3.45, $   ;- 1600
     min_value=-1.23, max_value=3.97, $   ;- 1700
     ;min_value=1.2*min(map), $

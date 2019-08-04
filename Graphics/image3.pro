@@ -167,4 +167,5 @@ function IMAGE3, data, XX, YY, _EXTRA=e
         title = alph[0:sz[2]-1], $
         _EXTRA = e)
     return, im
+
 end

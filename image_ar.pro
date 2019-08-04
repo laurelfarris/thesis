@@ -368,7 +368,7 @@ end
 ;- return graphic info in structure 'S' and create image.
 ;S = GET_IMAGE_DATA()
 ;IMAGE_STRUCTURE, S
-IMAGE_AR_ONLY, S
+;IMAGE_AR_ONLY, S
 
 save2, 'images';, /add_timestamp, idl_code='image_ar'
 
