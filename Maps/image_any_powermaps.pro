@@ -87,9 +87,8 @@ rr = 10 ; pixel size
 
 cc = 0
 time = strmid(A[cc].time,0,5)
-;dz = 64
-
-dz = 150
+dz = 64
+;dz = 150
 
 ;----------------------------------------------------------------------------------
 ;+
@@ -140,15 +139,17 @@ z_start = [ 387, 405, 450, 467, 475, 525, 625, 660, 685 ]
 ;- Titles (several ways to define title string array)
 ;-
 
+;=================================================================================
 
 ;- title, one way
 title = $
     ;strupcase(instr) + ' ' + $
-    channel + '$\AA$ @5.6mHz' + ' (' + $
-    strmid(index[z_start].date_obs,11,5) + $
+    A[cc].channel + '$\AA$ @5.6mHz' + ' (' + $
+    strmid(A[cc].time[z_start],0,5) + $
     '-' + $
-    strmid(index[z_start+dz-1].date_obs,11,5) + $
+    strmid(A[cc].time[z_start+dz-1],0,5) + $
     ' UT)'
+print, title, format='(A0)'
 
 ;---
 
@@ -263,10 +264,11 @@ unsat = where(mask1 eq 1.0)
 
 imdata = alog10(map) ;- map currently = 3D array for one channel only
 print, min(imdata[*,*,0])
-print, max(imdata[*,*,0])
 print, min(imdata[*,*,1])
-print, max(imdata[*,*,1])
 print, min(imdata[*,*,2])
+print, ''
+print, max(imdata[*,*,0])
+print, max(imdata[*,*,1])
 print, max(imdata[*,*,2])
 
 ;width = 2.5
@@ -276,26 +278,30 @@ print, max(imdata[*,*,2])
 resolve_routine, 'image3', /is_function
 ;- function definition/calling sequence (31 July 2019):
 ;- im = IMAGE3( data, XX, YY, _Extra=e )
+dw
 im = image3( $
     imdata, $
-    buffer=0, $
+    buffer=1, $
     rows=1, cols=3, $ ;- One channel (row 1), 3 time segments (BDA) --> 3 columns
+    xshowtext=0, $
+    yshowtext=0, $
     ;top=, left=, right=, bottom=, xgap=, ygap=,  $
-    xshowtext=1, yshowtext=1, $  ;- Images
-    ;xshowtext=0, yshowtext=0, $  ;- Power maps
-    ;min_value=-2.23, max_value=3.45, $   ;- 1600
-    min_value=-1.23, max_value=3.97, $   ;- 1700
+    ;min_value=-1.61, max_value=5.09, $   ;- 1600 X22
+    min_value=-0.78, max_value=4.76, $   ;- 1700 X22
+    ;min_value=-2.23, max_value=3.45, $   ;- 1600 M73
+    ;min_value=-1.23, max_value=3.97, $   ;- 1700 M73
+    ;min_value=-2.17, max_value=3.40, $   ;- 1600 C30
+    ;min_value=-0.55, max_value=4.32, $   ;- 1700 C30
     ;min_value=1.2*min(map), $
     ;max_value=0.5*max(map), $
     title = title, $ ; title = ARRAY of titles, one for each panel.
-    rgb_table = AIA_COLORS( wave=fix(channel) ) )
+    rgb_table = AIA_COLORS( wave=fix(A[cc].channel) ) )
     ;rgb_table = AIA_COLORS( wave=fix(A[cc].channel) ) )
     ;rgb_table=A[cc].ct )
 
 
-filename = instr + channel + 'bda_maps'
-print, filename
-
+instr='aia'
+filename = instr + A[cc].channel + 'bda_maps' + class
 save2, filename
 
 

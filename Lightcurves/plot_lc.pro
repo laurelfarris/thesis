@@ -24,8 +24,7 @@
 ;IDL .run struc_aia
 
 
-file = 'lc'
-    ;- plus something to make it clear which flare this is for??
+file = 'lc_C30'
 
 ;ydata = A.flux
 
@@ -44,9 +43,6 @@ xdata = [ [indgen(n_obs)], [indgen(n_obs)] ]
 xtickinterval = 75
 ytitle=A.name + ' (DN s$^{-1}$)'
 
-;ytickinterval = 0.2
-ymajor = 2
-
 dw
 resolve_routine, 'batch_plot', /either
 plt = BATCH_PLOT(  $
@@ -56,14 +52,13 @@ plt = BATCH_PLOT(  $
     thick=[0.5, 0.8], $
     xtickinterval=xtickinterval, $
     ;ytickinterval=ytickinterval, $
-    ymajor = ymajor, $
     ;ylog = 1, $
     color=A.color, $
     name=A.name, $
-    buffer=0 )
+    buffer=1 )
 
 
-increment = (max(ydata1)-min(ydata1))/ymajor
+;increment = (max(ydata1)-min(ydata1))/ymajor
 
 ax = plt[0].axes
 ;ax[1].tickname = string( [ min(A[0].flux) : max(A[0].flux) : increment ] )
@@ -88,12 +83,12 @@ ax[0].title = 'Start time (' + date + ' ' + tstart + ')'
 ;resolve_routine, 'shift_ydata', /either
 ;SHIFT_YDATA, plt
 
-resolve_routine, 'oplot_flare_lines', /either
-OPLOT_FLARE_LINES, plt, t_obs=A[0].time, thick=1.0;, jd=A.jd
-;-   17 April 2019
-;-    oplot_flare_lines.pro does not appear to be using jd...
-;-     unless plot_lc.pro is also outdated, I'm not sure what's going on here.
+resolve_routine, 'oplot_flare_lines', /is_function
 
+vert = OPLOT_FLARE_LINES( $
+    plt, $
+    t_obs=A[0].time, $
+    send_to_back=1 )
 
 resolve_routine, 'legend2', /either
 leg = LEGEND2( target=plt, /upperleft, sample_width=0.25 )
@@ -140,8 +135,7 @@ ax[3].text_color = A[1].color
 ;for ii = 0, nn-1 do $
 ;    ind[ii] = (where( time eq bda_times[ii] ))[0]
 
-;- split 3-hour time series into three parts: BDA, each one hour long (150 obs)
-ind = [150, 300]
+ind = [375, 525]
 
 yrange=plt[0].yrange
 shaded = plot( $

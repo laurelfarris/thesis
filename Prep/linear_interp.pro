@@ -115,7 +115,7 @@ pro LINEAR_INTERP, array, jd, time, interp_coords;, $
         endforeach
 
         ; Convert from float back to integers by rounding.
-        ;array = fix(round(array))
+        array = fix(round(array))
 
         ; Update time array
         time = GET_TIME( jd )

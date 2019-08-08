@@ -77,8 +77,7 @@ function OPLOT_FLARE_LINES, $
     ;--- GOES ----------------
     if keyword_set(goes) then begin
 
-        flare_times = date + [ gstart, gpeak, gend ]
-        flare_times = date + phases
+        flare_times = date + ' ' + phases
 
         ;- Each element in the FLARE_TIMES array is a string of the form
         ;-      "dd-Mon-yyyy hh:mm:ss.sss"
@@ -142,6 +141,7 @@ function OPLOT_FLARE_LINES, $
         strmid( gstart, 0, 5 ), $
         strmid( gpeak, 0, 5 ), $
         strmid( gend, 0, 5 ) ]
+
     name = flare_times + [ ' UT (start)', ' UT (peak)', ' UT (end)' ]
 
 
@@ -166,10 +166,9 @@ function OPLOT_FLARE_LINES, $
             name = name[jj], $
             color = 'black', $
             _EXTRA=e )
-        ;if keyword_set(send_to_back) then vert[jj].Order, /SEND_TO_BACK
-            ;- Apparently the user doesn't get to decide this... suck it!
-        vert[jj].Order, /SEND_TO_BACK
+        if keyword_set(send_to_back) then vert[jj].Order, /SEND_TO_BACK
     endforeach
+    return, vert
 
     ; . . . . . . . . . . .
     vert[0].linestyle = [1, '1111'X]
@@ -260,5 +259,5 @@ function OPLOT_FLARE_LINES, $
 
     endif
     plt = [ plt, vert ]
-    return, vert
+    ;return, vert
 end

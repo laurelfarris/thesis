@@ -148,7 +148,10 @@ function GOES, tstart=tstart, tend=tend, sat=sat
 end
 
 
-d = goes()
+d = GOES( $
+    tstart = date + ' ' + '10:00:00', $
+    tend = date + ' ' + '14:59:59' $
+    )
 help, d
 
 ;- Alternative variable name I commonly use.

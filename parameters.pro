@@ -23,10 +23,10 @@
 ;----------------------------------------------------------
 
 
-instr = 'aia'
+;instr = 'aia'
 ;channel = '1600'
-channel = '1700'
-cadence = 24
+;channel = '1700'
+;cadence = 24
 
 ;instr = 'hmi'
 ;channel = 'mag'
@@ -35,19 +35,21 @@ cadence = 24
 
 ;----------------------------------------------------------
 
-flare_num = 2
+flare_num = 0
 
 
-;AR 11158
-;AR 11936
-;AR 12036
+;AR
+;AR
+;AR
 
+AR = [ '11158', '11936', '12036' ]
+class = ['X22', 'C30', 'M73']
 date = ['15-Feb-2011', '28-Dec-2013', '18-Apr-2014']
 year = ['2011', '2013', '2014']
 month = ['02', '12', '04']
 day = ['15', '28', '18']
-tstart = ['00:00:00', '10:00:00', '10:00:00']
-tend = ['04:59:59', '13:59:59', '14:59:59']
+ts_start = ['00:00:00', '10:00:00', '10:00:00']
+ts_end = ['04:59:59', '13:59:59', '14:59:59']
 gstart = ['01:47:00', '12:40:00', '12:31:00']
 gpeak = ['01:56:00', '12:47:00', '13:03:00']
 gend = ['02:06:00', '12:59:00', '13:20:00']
@@ -59,12 +61,14 @@ align_dimensions = [1000,800];- "Pad" dimensions with extra pixels to prepare fo
 ;y1 = 1485 ;    or this...
 
 ;----------------------------------------------------------
+AR = AR[ flare_num ]
+class = class[ flare_num ]
 date = date[ flare_num ]
 year = year[ flare_num ]
 month = month[ flare_num ]
 day = day[ flare_num ]
-tstart = tstart[ flare_num ]
-tend = tend[ flare_num ]
+ts_start = ts_start[ flare_num ]
+ts_end = ts_end[ flare_num ]
 gstart = gstart[ flare_num ]
 gpeak = gpeak[ flare_num ]
 gend = gend[ flare_num ]

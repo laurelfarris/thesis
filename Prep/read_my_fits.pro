@@ -33,8 +33,8 @@
 ;-
 
 pro READ_MY_FITS, index, data, fls, $
-    ;instr=instr, $
-    ;channel=channel, $
+    instr=instr, $
+    channel=channel, $
     ind=ind, $
     nodata=nodata, $
     prepped=prepped, $

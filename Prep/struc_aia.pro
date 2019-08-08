@@ -59,6 +59,7 @@ function STRUC_AIA, index, cube, $
             prepped=1  ;, $
             ;year=year, $ month=month, $ day=day
     endif
+
     print, ''
     print, 'Reading header for level ', $
         strtrim(index[0].lvl_num,1), ' data.'
@@ -83,7 +84,6 @@ function STRUC_AIA, index, cube, $
 
     path = '/solarstorm/laurel07/' + year + month + day + '/'
     restore, path + instr + channel + 'aligned.sav'
-
     help, cube ; --> INT [1000, 800, 596]  (AIA 1600, 2013 flare)
 
     time = strmid(index.date_obs,11,11)
@@ -105,9 +105,11 @@ function STRUC_AIA, index, cube, $
     ;-
 
     ;- Find INDICES of missing data (if any)
-    interp_coords = FIND_MISSING_IMAGES( jd, cadence, time )
+    resolve_routine, 'find_missing_images'
+    FIND_MISSING_IMAGES, cadence, index.date_obs, interp_coords, time, jd, dt
 
     ;- interpolate to get missing data and corresponding timestamp
+    resolve_routine, 'linear_interp'
     ;LINEAR_INTERP, cube, jd, cadence, time;, shifts=shifts
     LINEAR_INTERP, cube, jd, time, interp_coords;, shifts=shifts
     ;- NOTE: cadence is an input argument to this code :)
@@ -172,7 +174,7 @@ function STRUC_AIA, index, cube, $
         channel: channel, $
         cadence: cadence, $
         exptime: exptime, $
-        data: cube, $
+        data: float(cube), $
         X: X, $
         Y: Y, $
         flux: flux, $
@@ -193,11 +195,11 @@ function STRUC_AIA, index, cube, $
     ;aia = dictionary( 'aia1600', aia1600, 'aia1700', aia1700 )
 end
 
-
-
-goto, start
-
-start:;---------------------------------------------------------------------------------------------
+;---- 03 August 2019
+;@parameters
+;restore, '../20140418/aia1600aligned.sav'
+;cube = cube[*,*,1:749]
+;save, cube, filename="aia1600aligned.sav"
 
 ;- 1.
 ;- initialize 'A' as a !NULL variable,

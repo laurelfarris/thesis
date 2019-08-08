@@ -137,7 +137,7 @@ function PLOT_GOES, gdata
     dw
     wx = 8.0
     wy = 3.50
-    win = window( dimensions=[wx,wy]*dpi, buffer=0 )
+    win = window( dimensions=[wx,wy]*dpi, buffer=1 )
 
     ;- 25 November 2018 - changed to match margins of AIA light curves.
     left = 1.00
@@ -200,56 +200,67 @@ function PLOT_GOES, gdata
     return, plt
 end
 
-goto, start
+@parameters
 
 ;- GOES() contains commented lines from website explaining keywords and such.
 ;- Creates object, sets parameters (defaults are for the 2011-Feb-15 flare), and
 ;- returns structure with data and derived quantities.
 ;-    (see goes.pro for details).
-gdata = GOES()
-
-
-start:;----------------------------------------------------------------------------
+;gdata = GOES()
 
 ;- 20 April 2019
 ;-  Multiple flares now... need to specify date/times.
-tstart = '28-Dec-2013 10:00:00'
-tend   = '28-Dec-2013 13:59:59'
-gdata = GOES( tstart=tstart, tend=tend )
+;tstart = '28-Dec-2013 10:00:00'
+;tend   = '28-Dec-2013 13:59:59'
+;gdata = GOES( tstart=tstart, tend=tend )
 
-stop
+;tstart = date + ' 10:00:00'
+;tend = date + ' 14:59:59'
+tstart = date + ' ' + ts_start
+tend = date + ' ' + ts_end
+gdata = GOES( tstart=tstart, tend=tend )
 
 ;- UTPLOT procedure:
 ;-   set /SAV kw to save system variables: !x.tickv and !x.tickname
 ;-   (used for xtickvalues and xtickname in PLOT_GOES routine above).
-UTPLOT, gdata.tarray, gdata.ydata[*,0], gdata.utbase, /sav
+;UTPLOT, gdata.tarray, gdata.ydata[*,0], gdata.utbase, /sav
 ;oplot, gdata.tarray, gdata.ydata[*,1], color='FF0000'X
 ;- --> oplot the other GOES channel.
-stop
 
+dw
 plt = PLOT_GOES(gdata)
-stop
-
-resolve_routine, 'oplot_flare_lines', /either
+resolve_routine, 'oplot_flare_lines', /is_function
     ;-  currently residing in '../Lightcurves/'
+vert = OPLOT_FLARE_LINES( $
+    plt, t_obs=A[0].time, $
+    /goes, $
+    utbase=date + ' ' + A[cc].time[0] + '0', $
+    /send_to_back )
 
-OPLOT_FLARE_LINES, plt, /goes, /send_to_back
+file = 'lc_goes_C30'
+save2, file
+
 
 ax = plt[0].axes
 ax[3].tickname = ['A', 'B', 'C', 'M', 'X']
 ax[3].title = ''
 ax[3].showtext = 1
-
 leg = legend2( target=plt, /upperleft, sample_width=0.25 )
 
+;- 04 August 2019
+;- Shaded region:
+;-  compare to code in oplot_flare_lines, runs if kw "shaded" is set
+;-   (tho pretty sure that version is old, based on the comments)
+
+yrange = plt[0].yrange
+x_indices = [150,300]
 p = plot( x_indices, [yrange[0],yrange[0]], /overplot, $
     /fill_background, $
     fill_color = 'white smoke', $
     fill_level = yrange[1] )
 p.Order, /send_to_back
 
-;file = 'lc_goes'
-file = 'test'
+file = 'lc_goes_C30'
 save2, file
 
 stop

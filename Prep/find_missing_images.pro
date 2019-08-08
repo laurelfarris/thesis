@@ -37,8 +37,9 @@
 
 
 ;function FIND_MISSING_IMAGES, cadence, time, jd
-pro FIND_MISSING_IMAGES, cadence, date_obs, $
-    time, jd, dt, $
+pro FIND_MISSING_IMAGES, cadence, date_obs, $      ; required input
+    gaps, $                                        ; main output
+    time, jd, dt                                   ; potentially interesting output
     syntax=syntax
     ;- NOTE: jd and time arrays must be accessible to caller so they can then be
     ;-   interpolated and updated if needed.
@@ -67,7 +68,6 @@ pro FIND_MISSING_IMAGES, cadence, date_obs, $
     ; Print where there's a gap in the data (between i-1 and i)
     gaps = where(dt ne cadence)
 
-    ;return, gaps
 end
 
 
