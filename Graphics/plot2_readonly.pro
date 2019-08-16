@@ -1,40 +1,11 @@
-;+
-;- LAST MODIFIED:
-;-   16 August 2019 -- made a copy b/c orig. plot2.pro gave "readonly"
-;-       warning when attempted to edit (on mac, right after git pull).
-;-       No changes made to code itself.
+;- Last modified:    May 2018
+;- Programmer:       Laurel Farris
+;- Description:      subroutines with custom default configurations
+;- To Do:
+;-   Make sure xinput is working correctly as an optional argument.
 ;-
-;- ROUTINE:
-;-   plot2.pro
 ;-
-;- EXTERNAL SUBROUTINES:
-;-   Calls IDL's PLOT function
 ;-
-;- PURPOSE:
-;- DESCRIPTION:      subroutines with custom default configurations
-;-
-;- USEAGE:
-;-   plt = plot2( arg1, arg2, kw=kw )
-;-     --> use just like IDL's PLOT function.
-;-
-;- INPUT:
-;-   Same as IDL PLOT function
-;-
-;- KEYWORDS (optional):
-;-   Same as IDL PLOT function
-;-
-;- OUTPUT:
-;-   plot
-;-
-;- TO DO:
-;-   [] Make sure xinput is working correctly as an optional argument.
-;-
-;- KNOWN BUGS:
-;-
-;- AUTHOR:
-;-   Laurel Farris
-;-
-;+
 
 
 function plot2, xinput, yinput, $
@@ -57,7 +28,7 @@ function plot2, xinput, yinput, $
 
     ;if keyword_set(props) then plot_props = {e, props} else plot_props = e
 
-    ;- font_style =
+    ;- font_style = 
     ;-   0 ("Normal" or "rm")
     ;-   1 ("Bold" or "bf")
     ;-   2 ("Italic" or "it")
@@ -72,12 +43,6 @@ function plot2, xinput, yinput, $
         ytickfont_style = 0, $
         xtickfont_style = 0, $
         axis_style = 2, $
-        ; axis_style = 0  No axes, decrease margins
-        ; axis_style = 1  left/bottom axes
-        ; axis_style = 2  Box axes (left/bottom/right/top)
-        ; axis_style = 3  Cross-style axes
-        ; axis_style = 4  No axes, preserve margins as if axes were there
-        ;      --> useful for overlaying curves with different y-values
         thick = 0.5, $
         xthick = 0.5, $
         ythick = 0.5, $
