@@ -40,7 +40,6 @@
 
 
 
-;pro OPLOT_FLARE_LINES, $
 function OPLOT_FLARE_LINES, $
     plt, $
     t_obs=t_obs, $
@@ -118,6 +117,7 @@ function OPLOT_FLARE_LINES, $
             strmid( gstart, 0, 5 ), $
             strmid( gpeak, 0, 5 ), $
             strmid( gend, 0, 5 ) ]
+            ;- values for gstart, gpeak, and gend read in from @parameters
 
         ;-  For GOES, flare_times is of the form: "15-Feb-2011 00:00:01.725"
         ;-  For  AIA, flare_times is of the form: "15-Feb-2011 00:00"
@@ -168,7 +168,7 @@ function OPLOT_FLARE_LINES, $
             _EXTRA=e )
         if keyword_set(send_to_back) then vert[jj].Order, /SEND_TO_BACK
     endforeach
-    return, vert
+    ;return, vert
 
     ; . . . . . . . . . . .
     vert[0].linestyle = [1, '1111'X]
@@ -259,5 +259,5 @@ function OPLOT_FLARE_LINES, $
 
     endif
     plt = [ plt, vert ]
-    ;return, vert
+    return, vert
 end

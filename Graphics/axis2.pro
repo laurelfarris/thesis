@@ -8,6 +8,19 @@
 ;- To Do:
 ;-
 
+;- font_style = 
+;-   0 ("Normal" or "rm")
+;-   1 ("Bold" or "bf")
+;-   2 ("Italic" or "it")
+;-   3 ("Bold Italic" or "bi")
+
+;- x|y style =
+;-   0  Nice
+;-   1  Exact
+;-   2  Pad nice
+;-   3  Pad exact
+
+
 
 function AXIS2, direction, $
     location=location, $
@@ -17,19 +30,6 @@ function AXIS2, direction, $
     common defaults
 
 
-    ;- font_style = 
-    ;-   0 ("Normal" or "rm")
-    ;-   1 ("Bold" or "bf")
-    ;-   2 ("Italic" or "it")
-    ;-   3 ("Bold Italic" or "bi")
-
-    ;- x|y style =
-    ;-   0  Nice
-    ;-   1  Exact
-    ;-   2  Pad nice
-    ;-   3  Pad exact
-
-
     ax = axis( $
         direction, $
         location=location, $
@@ -37,7 +37,8 @@ function AXIS2, direction, $
         ;axis_range=, $
         tickfont_size = fontsize, $
         tickfont_style = 0, $
-        ;thick = 0.5, $
+        tickfont_name = 0, $
+        thick = 0.5, $
         ;tickdir = 0, $
         ;ticklen = 0.02, $
         ;subticklen = 0.5, $
@@ -45,4 +46,5 @@ function AXIS2, direction, $
         ;minor = 4, $
         _EXTRA = e )
     return, ax
+
 end

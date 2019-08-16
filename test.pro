@@ -77,3 +77,60 @@ pro test
 
 
 end
+
+
+;nn = 1000
+;xx = (findgen(nn)/nn) * !PI
+;yy = fltarr(nn, 2)
+;yy[*,0] = sin(8*xx)
+;yy[*,1] = 10*(sin(4*xx)) + 5
+
+
+
+xx = indgen(685)
+;help, xx
+yy = power
+;help, yy
+
+
+dw
+win = window( dimensions=[8.0,4.0]*dpi, buffer=1 )
+
+plt = objarr(2)
+
+plt[0] = plot2( $
+    xx, yy[*,0], /current, $
+    layout=[1,1,1], margin=0.2, $
+    axis_style = 1, $
+    ytitle = "AIA 1600", $
+    ycolor = "dark green", $
+    ytext_color = "orange", $
+    color = "blue" )
+
+plt[1] = plot2( $
+    xx, yy[*,1], /current, $
+    position=plt[0].position, $
+    ;layout=[1,1,1], margin=0.2, $
+    axis_style = 4, $
+    color = "red" )
+
+
+ ax2 = axis2( 'X', $
+    location='top', $
+    target=plt[0], $
+    showtext = 0 )
+
+ax3 = axis2( 'Y', $
+    location='right', $
+    target=plt[1], $
+    text_color = "red", $
+    title = "AIA 1700", $
+    showtext=1 )
+
+
+save2, "test"
+
+
+
+
+end

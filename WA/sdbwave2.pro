@@ -589,7 +589,10 @@ plt_wavelet = PLOT2( $
     axis_style=1, $  ; left and bottom only (not a "box" plot)
     ;XTITLE='Power [DN]',$;,TITLE='c) Global'
     xrange=[MIN(norm_global_ws),MAX(norm_global_ws)], $
-    xstyle=2,$
+    ;xstyle=0,$ ; nice
+    ;xstyle=1,$ ; exact
+    xstyle=2,$ ; nice+
+    ;xstyle=3,$ ; exact+
     xmajor=3, $
     xtickname=[' ',' ',' '], $
     yrange=[long,short], $
@@ -676,8 +679,9 @@ bb = ( max(fser[1,*]) - aa ) / max(norm_global_signif)
 
 ;- Currently have plt_wavelet at pos3
 
-
 xrange = [0,20]
+
+
 
 plt_spectrum = plot2( $
     fser[1,*], pser, $
