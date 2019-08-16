@@ -63,8 +63,6 @@ function WRAP_BATCH_PLOT_2, $
     _EXTRA = e
 
 
-    print, "batch_plot_2_!!!!!!!!!!!!!!!!"
-
 
 ; For single panel, pick margins, and use window dimensions to set width/height
 ;  (the other unknown)
@@ -131,28 +129,7 @@ function WRAP_BATCH_PLOT_2, $
             _EXTRA = e )
     endfor
 
-    print, plt[0].axis_style
-    print, plt[1].axis_style
 
-    return, plt
-
-;- Add top and right axes for plt2 (excluded when axis_style=1)
-
-resolve_routine, 'axis2', /is_function
-
-;ax2 = axis2( 'X', $
-;    location='top', $
-;    target=plt[0], $
-;    showtext=0 $
-;)
-
-ax3 = axis2( 'Y', $
-    location='right', $
-    target = plt[1], $
-    text_color = color[1], $
-    title = title[1], $
-    showtext=1 $
-)
     
     ;- Add some extra white space between plot lines and x-axes.
     ;yr = plt[0].yrange
@@ -170,7 +147,7 @@ ax3 = axis2( 'Y', $
     xdata = reform(xdata)
     ydata = reform(ydata)
 
-    ;return, plt
+    return, plt
 
     ;- Need to do all overplots of flare lines, periods of interest, etc.
     ;- before making legend... unless there's a way to add targts to
@@ -202,7 +179,7 @@ function BATCH_PLOT_2, $
 
     symbol = make_array( sz[1], value="None" )
 
-    plt = WRAP_BATCH_PLOT( $
+    plt = WRAP_BATCH_PLOT_2( $
         xdata, ydata, $
         wx = 8.0, $
         wy = 3.0, $

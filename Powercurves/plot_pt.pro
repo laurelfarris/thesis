@@ -63,7 +63,7 @@ function PLOT_PT, power, dz, time, $
 
     color = ['green', 'purple']
 
-    resolve_routine, 'batch_plot', /is_function
+    ;resolve_routine, 'batch_plot', /is_function
     resolve_routine, 'batch_plot_2', /is_function
 
     dw
@@ -79,6 +79,24 @@ function PLOT_PT, power, dz, time, $
         buffer = 1, $
         _EXTRA = e )
 
+    ;- Add top and right axes for plt2 (excluded when axis_style=1)
+
+    resolve_routine, 'axis2', /is_function
+
+
+    ax2 = axis2( 'X', $
+        location='top', $
+        target=plt[0], $
+        showtext=0 $
+    )
+
+    ax3 = axis2( 'Y', $
+        location='right', $
+        target = plt[1], $
+        text_color = color[1], $
+        ;title = plt[1].name + ' 3-minute power', $
+        showtext=1 $
+    )
 
 ;- Maps only --> power_flux doesn't need to be shifted
     ;resolve_routine, 'shift_ydata', /either
@@ -86,22 +104,22 @@ function PLOT_PT, power, dz, time, $
       ;- kw "delt" used to label each axis
 
 ;    resolve_routine, 'label_time', /either ;- procedure, as of 13 August 2019
-;    LABEL_TIME, plt, time=time;, jd=A.jd
+    LABEL_TIME, plt, time=time;, jd=A.jd
 
-;    resolve_routine, 'oplot_flare_lines', /is_function
-;    vert = OPLOT_FLARE_LINES( $
-;        plt, $
-;        t_obs=time, $
-;        ;jd=jd, $
-;        color = 'dark gray', $
-;        send_to_back=1 )
+    resolve_routine, 'oplot_flare_lines', /is_function
+    vert = OPLOT_FLARE_LINES( $
+        plt, $
+        t_obs=time, $
+        ;jd=jd, $
+        color = 'dark gray', $
+        send_to_back=1 )
 
 
-;    resolve_routine, 'legend2', /either
-;    leg = LEGEND2( target=plt, /upperleft, sample_width=0.2 )
+    resolve_routine, 'legend2', /either
+    leg = LEGEND2( target=plt, /upperleft, sample_width=0.2 )
 
-;    resolve_routine, 'mini_axis', /either
-;    mini = mini_axis(plt);, location=1.e2)
+    resolve_routine, 'mini_axis', /is_function
+    mini = MINI_AXIS(plt);, location=1.e2)
 
 
 ;- Also maps only:

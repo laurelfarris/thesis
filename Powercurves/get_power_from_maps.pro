@@ -75,7 +75,6 @@ sz = size( A.map, /dimensions )
 
 map_mask = fltarr(sz)  ;- I was making this way too complicated...
 help, map_mask
-
 ;- Compute MAP mask
 resolve_routine, 'powermap_mask', /either
 for cc = 0, 1 do $
@@ -183,10 +182,8 @@ A.map = A.map * map_mask
 ;power = fltarr(685, 2)
   ;- what's with the hard-coding??
 power = fltarr( sz[2], sz[3] )
-
 ;power = (total(total(map,1),1)) / n_pix
   ;- ??
-
 ;power[*,0] = (total(total(A[0].map,1),1)) / n_pix[*,0]
 ;power[*,1] = (total(total(A[1].map,1),1)) / n_pix[*,1]
 for cc = 0, n_elements(A)-1 do begin
@@ -232,18 +229,21 @@ endfor
 ;- With the "props" structures, the call to plot_pt is still exactly
 ;-  the same in _maps as it is in _flux...
 ;- NOTE: xdata is defined in plot_pt
-resolve_routine, 'plot_pt', /either
-
+resolve_routine, 'plot_pt', /is_function
 plt = PLOT_PT( $
     power, dz, A[0].time, buffer=1, $
     stairstep = 1, $
     ;yminor = 4, $
     name = A.name )
     ;yrange=[-250,480], $ ; maps
-
 ;ax = plt[0].axes
 ;ax[1].tickname = strtrim([68, 91, 114, 137, 160],1)
 ;ax[3].tickname = strtrim([1220, 1384, 1548, 1712, 1876],1)
+ax2 = (plt[0].axes)[1]
+ax2.title = plt[0].name + " 3-minute power"
+ax2.text_color = plt[0].color
+ax3 = plt[1].axes
+ax3.title = plt[1].name + " 3-minute power"
 file = 'time-3minpower_maps'
 save2, file
 

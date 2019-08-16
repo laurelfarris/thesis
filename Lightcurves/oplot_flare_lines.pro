@@ -52,9 +52,9 @@ function OPLOT_FLARE_LINES, $
     ;yrange=yrange, $   ; ?????
     send_to_back=send_to_back, $
     date=date, $
-    gstart=gstart, $
-    gpeak=gpeak, $
-    gend=gend, $
+;    gstart=gstart, $
+;    gpeak=gpeak, $
+;    gend=gend, $
     _EXTRA=e
 
 
@@ -69,6 +69,8 @@ function OPLOT_FLARE_LINES, $
     @parameters
     ;-   21 April 2019
     ;-     call script "parameters" to set flare-specific variables
+    ;-   16 August 2019
+    ;-     commented kws for gstart/peak/end since they're defined in @parameters
 
     phases = [gstart, gpeak, gend]
 
@@ -146,7 +148,7 @@ function OPLOT_FLARE_LINES, $
 
 
     ;plt[0].GetData, xx, yy ;- only needed when xdata = jd... I think.
-    yrange = plt[0].yrange
+    yrange = plt[1].yrange
 
     ;- [] Try to come up with better, more intuitive variable names here.
     ;-      These are just a mess.

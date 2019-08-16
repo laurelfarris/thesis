@@ -17,8 +17,10 @@ function mini_axis, plt;, location=location
     x1 = 600 ; hard-coded... improve this later.
     x2 = x1+dz-1
 
-    y = 3.e2
-    ;y = (plt[0].yrange)[]
+    ;y = 3.e2
+    y = 0.90*((plt[0].yrange)[1])
+
+    dy =  0.05 * ( (plt[0].yrange)[1] - (plt[0].yrange)[0] )
 
     ;- NOTE: if location isn't where you expect,
     ;-  see if plot is scaled in log space. If so, 0.5*yrange[1]
@@ -43,12 +45,17 @@ function mini_axis, plt;, location=location
         ;tickdir=(i mod 2), $
         tickfont_size = fontsize )
 
+    ;- NOTE: location variable ('y') is returned as 3-element vector when AXIS
+    ;-   function is finished with it... = [x, y, z] locations. x and z are 0.
+    ;-  Messes up y location when creating text...
+    ;-  Changed y to y[1] in call to TEXT2 below, should be fine.
 
     resolve_routine, 'text2', /either
     txt = text2( $
         x1+(dz/2), $
         ;y+1500., $
-        y+350, $ --> maps
+        ;y+350, $ ;  --> maps
+        y[1]+dy, $
         '$T=25.6 min$', $
         /data, $
         target = plt[0], $
@@ -57,6 +64,7 @@ function mini_axis, plt;, location=location
     ;print, plt[0].yrange
     ;print, dz_axis.location
     ;print, convert_coord(txt.position, /normal, /to_data)
+
 
     return, dz_axis
 end
