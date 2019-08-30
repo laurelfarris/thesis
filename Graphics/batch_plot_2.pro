@@ -129,7 +129,6 @@ function WRAP_BATCH_PLOT_2, $
             _EXTRA = e )
     endfor
 
-
     
     ;- Add some extra white space between plot lines and x-axes.
     ;yr = plt[0].yrange

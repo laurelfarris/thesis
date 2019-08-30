@@ -33,7 +33,7 @@ pro CALC_FOURIER2, flux, cadence, frequency, power, fmax=fmax, fmin=fmin
 end
 
 ;- 21 May 2019
-;- The function "calc_fourier2" defined above was coped from a
+;- The function "calc_fourier2" defined above was copied from a
 ;-  routine also called filter.pro, but not the same as function
 ;-  defined below... no idea where the above code came from.
 
@@ -108,13 +108,17 @@ function FILTER, flux, cadence
 end
 
 goto, start
-
-t1_string = '01:30'
-t2_string = '02:30'
-
 start:;---------------------------------------------------------------------------------
-t1_string = '12:30'
-t2_string = '13:30'
+
+
+;- 30 August 2019
+;- 1-hour time segment (hardcoded...)
+;t1_string = '01:30'
+;t2_string = '02:30'
+;t1_string = '12:30'
+;t2_string = '13:30'
+t1_string = '12:15'
+t2_string = '13:15'
 
 wx = 8.0
 wy = 3.0
@@ -135,7 +139,7 @@ flux = A.flux[ind]
 
 ;- Plot original light curves
 xdata = [ [ind], [ind] ]
-dw
+;dw
 resolve_routine, 'batch_plot', /either
 plt = BATCH_PLOT( $
     xdata, flux, $
@@ -172,6 +176,10 @@ for cc = 0, 1 do begin
         [FILTER(flux[*,cc], A[cc].cadence)] ]
 endfor
 
+
+;----
+;- overplot smoothed LC on top of raw data (plt)
+
 ;inverseTransform[*,0] = inverseTransform[*,0] + bg[0]
 ;inverseTransform[*,1] = inverseTransform[*,1] + bg[1]
 for ii = 0, 1 do begin
@@ -198,9 +206,11 @@ ax = plt2[0].axes
 ax[0].tickname = time[ax[0].tickvalues]
 ax[3].showtext=1
 
-ax[1].tickinterval = 2.e7
+;ax[1].tickinterval = 2.e7
+ax[1].major = 5
 ax[1].title = A[0].name + ' (DN s$^{-1}$)'
-ax[3].tickinterval = 0.2e8
+;ax[3].tickinterval = 0.2e8
+ax[3].major = 5
 ax[3].title = A[1].name + ' (DN s$^{-1}$)'
 
 ;save2, 'detrendedLC'
@@ -210,19 +220,26 @@ ax[3].title = A[1].name + ' (DN s$^{-1}$)'
 ;save2, 'lc_filter'
 ;-  Better file name
 
-dw
 
-detrended = flux - inverseTransform
+;dw
+
+;----
+;- new plot window with detrended light curves
+;-   (2nd window, even though variable is plt3... confusing at first b/c
+;-    assumed there should be 3 windows... )
+;-
+
+detrended = flux[2:*,*] - inverseTransform[1:*,*]
 ;help, xdata
 ;help, detrended
-;stop
+
 plt3 = BATCH_PLOT( $
     ;ind, $
-    xdata, $   ;- xdata defined above as [ [ind], [ind] ] so dimensions match ydata.
+    xdata[2:*,*], $   ;- xdata defined above as [ [ind], [ind] ] so dimensions match ydata.
     detrended, $
     stairstep=1, $
     ;ytickvalues=[-1.e6, 0, 1e6], $
-    ytickvalues=[0.0], $
+    ;ytickvalues=[0.0], $
     ;overplot = 1<cc, $
     title = 'Detrended', $
     ;color=['dark orange', 'blue'], $
@@ -234,6 +251,8 @@ plt3 = BATCH_PLOT( $
 
 ;save2, 'lc_detrended'
 
+;plt3 = plot2( xdata[*,0], detrended[*,0], buffer=0 )
+;plt3 = plot2( xdata[*,1], detrended[*,1], /overplot, color='red' )
 
 
 ;hor = plot2( $

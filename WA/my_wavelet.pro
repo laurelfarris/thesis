@@ -8,7 +8,8 @@ start:;-------------------------------------------------------------------------
 
 
 ;- NOTE: need to run filter.pro first ( IDL> .run filter )
-;-   to get detrended signal. Variable "detrended" is input curve for sdbwave2.pro
+;-   to get detrended signal.
+;-  Variable "detrended" is input curve for sdbwave2.pro
 
 
 cc = 0
