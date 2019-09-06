@@ -47,8 +47,8 @@ pro READ_MY_FITS, index, data, fls, $
     if keyword_set(syntax) then begin
         print, ""
         print, "READ_MY_FITS, index, data, fls,"
-        ;print, "  instr=instr,", $
-        ;print, "  channel=channel,", $
+        print, "  instr=instr,"
+        print, "  channel=channel,"
         print, "  ind=ind,"
         print, "  nodata=nodata, "
         print, "  prepped=prepped,"

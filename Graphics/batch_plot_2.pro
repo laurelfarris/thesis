@@ -185,7 +185,8 @@ function BATCH_PLOT_2, $
         left = 1.00, $
         right = 1.10, $
         bottom = 0.5, $
-        top = 0.2, $
+        ;top = 0.2, $
+        top = 0.3, $
         buffer = 1, $
         ;overplot = 0, $
         name = name, $

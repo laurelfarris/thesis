@@ -43,7 +43,8 @@ READ_MY_FITS, index, data, fls, $
 
 
 ;- 23 July 2019:
-;-  Testing "find_missing_images.pro", where coords of missing observations are
+;-  Testing "find_missing_images.pro", (NOTE: renamed to "MISSING_OBS")
+;-  where coords of missing observations are
 ;-  determined in separated routine. Returned coords are then used to apply
 ;-  interpolations, or just to display WHERE missing images should have been,
 ;-  see if they're spread out or if there's a continuous time chunk of time with
@@ -55,6 +56,7 @@ jd = GET_JD( index.date_obs + 'Z' )
 
 dt = 5 * 3600
 interp_coords = FIND_MISSING_IMAGES( jd, cadence, time, dt=dt )
+;- NOTE: renamed to "MISSING_OBS"
 
 ;foreach ind, index, ii do begin
     ;print, ind 

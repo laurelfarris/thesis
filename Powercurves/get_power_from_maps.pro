@@ -74,13 +74,15 @@ sz = size( A.map, /dimensions )
   ;- remove correction to z-dim (only needed when using data dims...)
 
 map_mask = fltarr(sz)  ;- I was making this way too complicated...
-help, map_mask
+
 ;- Compute MAP mask
 resolve_routine, 'powermap_mask', /either
 for cc = 0, 1 do $
     map_mask[*,*,*,cc] = POWERMAP_MASK( $
         A[cc].data, dz=dz, exptime=A[cc].exptime, threshold=10000.)
 ; --> returns FLOAT [500,330,686,2]
+
+
 
 ;- 1D array of # unsaturated pixels in each map.
 ;-   Not 2D? one array for each channel?
@@ -102,7 +104,7 @@ endif
 ;-  Doing it here because already did this once before noticing that map_mask
 ;-  had the wrong z-dimensions... but now there's a "conflicting or dupliate
 ;-  structure tag definition... stupid.
-@restore_maps
+;@restore_maps
 
 A.map = A.map * map_mask
 
@@ -230,8 +232,9 @@ endfor
 ;-  the same in _maps as it is in _flux...
 ;- NOTE: xdata is defined in plot_pt
 resolve_routine, 'plot_pt', /is_function
+dw
 plt = PLOT_PT( $
-    power, dz, A[0].time, buffer=1, $
+    power, dz, A[0].time, buffer=0, $
     stairstep = 1, $
     ;yminor = 4, $
     name = A.name )
@@ -244,7 +247,11 @@ ax2.title = plt[0].name + " 3-minute power"
 ax2.text_color = plt[0].color
 ax3 = plt[1].axes
 ax3.title = plt[1].name + " 3-minute power"
-file = 'time-3minpower_maps'
+
+file = 'time-3minpower_maps_' + class
+
+resolve_routine, 'save2', /either
 save2, file
+
 
 end

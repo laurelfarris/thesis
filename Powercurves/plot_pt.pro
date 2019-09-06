@@ -50,6 +50,7 @@
 function PLOT_PT, power, dz, time, $
     _EXTRA = e
 
+    @parameters
 
     sz = size(power,/dimensions)
 
@@ -66,18 +67,22 @@ function PLOT_PT, power, dz, time, $
     ;resolve_routine, 'batch_plot', /is_function
     resolve_routine, 'batch_plot_2', /is_function
 
-    dw
     ;plt = BATCH_PLOT( $
     plt = BATCH_PLOT_2( $
         xdata, power, $
         ;xrange=[0,748], $
+        thick=[0.5, 1.0], $
+            ;- NOTE: lines look thicker in pdf than xwindow
         xrange=[0,sz[0]+dz-2], $
         xtickinterval = 75, $
+        title = class + '-class flare; NOAA AR ' + AR, $
         ytitle='3-minute power', $
         color=color, $
         wy = 3.0, $  ; --> still a kw for batch_plot, which is NOT the same thing as plot3.
         buffer = 1, $
         _EXTRA = e )
+
+
 
     ;- Add top and right axes for plt2 (excluded when axis_style=1)
 
@@ -103,7 +108,7 @@ function PLOT_PT, power, dz, time, $
     ;SHIFT_YDATA, plt, delt=[ mean(power[*,0]), mean(power[*,1]) ]
       ;- kw "delt" used to label each axis
 
-;    resolve_routine, 'label_time', /either ;- procedure, as of 13 August 2019
+    resolve_routine, 'label_time', /either
     LABEL_TIME, plt, time=time;, jd=A.jd
 
     resolve_routine, 'oplot_flare_lines', /is_function
@@ -111,6 +116,7 @@ function PLOT_PT, power, dz, time, $
         plt, $
         t_obs=time, $
         ;jd=jd, $
+        utbase = date + ' ' + ts_start, $
         color = 'dark gray', $
         send_to_back=1 )
 
@@ -120,6 +126,8 @@ function PLOT_PT, power, dz, time, $
 
     resolve_routine, 'mini_axis', /is_function
     mini = MINI_AXIS(plt);, location=1.e2)
+
+
 
 
 ;- Also maps only:

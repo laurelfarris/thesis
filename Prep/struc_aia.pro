@@ -105,8 +105,8 @@ function STRUC_AIA, index, cube, $
     ;-
 
     ;- Find INDICES of missing data (if any)
-    resolve_routine, 'find_missing_images'
-    FIND_MISSING_IMAGES, cadence, index.date_obs, interp_coords, time, jd, dt
+    resolve_routine, 'missing_obs'
+    MISSING_OBS, cadence, index.date_obs, interp_coords, time, jd, dt
 
     ;- interpolate to get missing data and corresponding timestamp
     resolve_routine, 'linear_interp'
@@ -122,6 +122,8 @@ function STRUC_AIA, index, cube, $
     ;-   which is what we want here.
     ;- If dimensions are not provided, default = [500,330,*] (2011 flare dimensions).
 
+    
+    resolve_routine, 'crop_data', /is_function
     cube = CROP_DATA( cube, dimensions=dimensions )
 
     ;help, cube ; --> FLOAT [dim[0], dim[1], 600]  (AIA 1600, 2013 flare)
@@ -228,9 +230,8 @@ A = [ aia1600, aia1700 ]
 A[0].color = 'blue'
 A[1].color = 'red'
 
-
-print, 'NOTE: aia1600index, aia1600data, aia1700index, and aia1700data'
-print, '         still exist at ML. '
+;print, 'NOTE: aia1600index, aia1600data, aia1700index, and aia1700data'
+;print, '         still exist at ML. '
 ;print, 'Type ".c" to undefine redundant variables.'
 ;stop
 
@@ -240,6 +241,12 @@ undefine, aia1600data
 undefine, aia1700
 undefine, aia1700index
 undefine, aia1700data
+
+
+stop
+
+
+;--------------------------------------------------------------------------
 
 ;- Create different routine for doing this. Leave comment here directing user
 ;-  to this routine to avoid confusion.

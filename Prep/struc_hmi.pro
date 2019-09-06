@@ -14,7 +14,7 @@
 ;-
 ;- TO DO:
 ;-   [] edit to call separate routines to
-;-   calculate interpolation indices (find_missing_images.pro), and
+;-   calculate interpolation indices (missing_obs.pro), and
 ;-   apply interpolation to arrays USING interp indices (linear_interp.pro)
 ;-
 

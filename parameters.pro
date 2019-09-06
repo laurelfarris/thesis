@@ -24,7 +24,7 @@
 
 
 ;instr = 'aia'
-;channel = '1600'
+;;channel = '1600'
 ;channel = '1700'
 ;cadence = 24
 

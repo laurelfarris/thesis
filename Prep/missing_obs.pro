@@ -3,7 +3,7 @@
 ;-   23 July 2019
 ;-
 ;- ROUTINE:
-;-   find_missing_images.pro
+;-   missing_obs.pro
 ;-
 ;- PURPOSE:
 ;-   Generalized code to read observation times from fits headers
@@ -25,7 +25,7 @@
 ;-    image[N-1] (observation AFTER the missing one)
 ;-
 ;- USEAGE:
-;-   result = FIND_MISSING_IMAGES( jd, cadence, time )
+;-   result = MISSING_OBS( jd, cadence, time )
 ;-
 ;- TO DO:
 ;-   []
@@ -36,10 +36,10 @@
 ;+
 
 
-;function FIND_MISSING_IMAGES, cadence, time, jd
-pro FIND_MISSING_IMAGES, cadence, date_obs, $      ; required input
-    gaps, $                                        ; main output
-    time, jd, dt                                   ; potentially interesting output
+pro MISSING_OBS, $
+    cadence, date_obs, $      ; required input
+    gaps, $                   ; main output
+    time, jd, dt              ; potentially interesting output
     syntax=syntax
     ;- NOTE: jd and time arrays must be accessible to caller so they can then be
     ;-   interpolated and updated if needed.
@@ -112,8 +112,7 @@ cadence = 45
 
 time = strmid( index.date_obs, 11, 11 )
 jd = GET_JD( index.date_obs + 'Z' )
-;gaps = FIND_MISSING_IMAGES( cadence, time, jd )
-FIND_MISSING_IMAGES, cadence, index.date_obs, time, jd, dt
+MISSING_OBS, cadence, index.date_obs, time, jd, dt
 
 time = ( strmid( index.date_obs, 11, 8 ) )
 

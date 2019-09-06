@@ -46,8 +46,8 @@ function CROP_DATA, data, $
     ; Crop relative to center of input cube by default
     if not keyword_set(center) then begin
 
-        print, 'NOTE: kw "center" not set!'
-        print, '  = center (x0,y0) of input data by default.'
+        print, 'NOTE: kw "center" not set (just fwi);'
+        print, '  default = center coords of input data (x0,y0).'
 
         ;- Added 15 to coords in each dimension for 2011 flare,
         ;-   don't remember why. Should have added a comment explaining this...

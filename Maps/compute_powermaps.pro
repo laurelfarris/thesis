@@ -86,16 +86,20 @@ function COMPUTE_POWERMAPS, $
 
     if keyword_set(syntax) then begin
         print, ''
-        print, 'calling sequence, shown with default kw values:'
+        print, '----------------------------------------------------'
+        print, 'calling sequence for "compute_powermaps" function'
+        print, ' (default kw values shown):'
         print, ''
-        print, 'result = COMPUTE_POWERMAPS( data, cadence, '
-        print, '  fcenter='
-        print, '  bandwidth=1 (Hz)'
-        print, '  threshold='
-        print, '  z_start='
-        print, '  dz='
-        print, '  norm='
-        print, ''
+        print, '  result = COMPUTE_POWERMAPS( '
+        print, '    data,'
+        print, '    cadence,'
+        print, '    fcenter = 0.0056'
+        print, '    bandwidth = 0.001 (1 mHz, centered on fcenter)'
+        print, '    threshold = '
+        print, '    z_start = 0'
+        print, '    dz = sz[2]'
+        print, '    norm = '
+        print, '----------------------------------------------------'
         return, 0
     endif
 
@@ -111,7 +115,7 @@ function COMPUTE_POWERMAPS, $
 
     ;- Set default bandwidth as 1 mHz
     if not keyword_set(bandwidth) then begin
-        print, 'Default value of bandwidth=1 mHz, centered on fcenter.' 
+        print, 'Default value of bandwidth = 1 mHz, centered on fcenter.' 
         bandwidth = 0.001
     endif
 
@@ -129,7 +133,7 @@ function COMPUTE_POWERMAPS, $
     ;-
     ;- Set default central frequency as 5.6 mHz (3 minutes)
     if not keyword_set(fcenter) then begin
-        print, 'Default value of fcenter=5.6 mHz (3 minutes).' 
+        print, 'Default value of fcenter = 5.6 mHz (3 minutes).' 
         fcenter = 0.0056
     endif
     ;-
@@ -176,39 +180,40 @@ function COMPUTE_POWERMAPS, $
 
         for i = 0, nn-1 do begin
             for y = 0, sz[1]-1 do begin
-            for x = 0, sz[0]-1 do begin
+                for x = 0, sz[0]-1 do begin
 
-                ;- Subtract 1 from dz so that total # images is eqal to dz
-                flux = data[ x, y, zz[i]:zz[i]+dz-1 ]
+                    ;- Subtract 1 from dz so total # images = dz
+                    flux = data[ x, y, zz[i]:zz[i]+dz-1 ]
 
-                ;- z-coordinate(s) of saturated pixels in time segment
-                sat = [where( flux ge threshold )]
+                    ;- z-coordinate(s) of saturated pixels in time segment
+                    sat = [where( flux ge threshold )]
 
-                if sat[0] eq -1 then begin
+                    if sat[0] eq -1 then begin
 
-                    power = reform( (fourier2( flux, cadence, norm=norm ))[1,*] )
+                        power = reform( (fourier2( flux, cadence, norm=norm ))[1,*] )
 
-                    ;map[x,y,i] = total( power[ind] )
-                    map[x,y,i] = mean( power[ind] )
-                    ;- MEAN is better than TOTAL,
-                    ;     accounts for variation due to frequency resolution.
-                endif
-            endfor
+                        ;map[x,y,i] = total( power[ind] )
+                        map[x,y,i] = mean( power[ind] )
+                        ;- MEAN is better than TOTAL,
+                        ;     accounts for variation due to frequency resolution.
+                    endif
+                endfor
             endfor
         endfor
+
     ;-
-    ;-- Run calculations on all pixels, whether saturated or not.
+    ;-- Process all pixels (saturated or not).
     endif else begin
         for ii = 0, nn-1 do begin
             for yy = 0, sz[1]-1 do begin
-            for xx = 0, sz[0]-1 do begin
+                for xx = 0, sz[0]-1 do begin
 
-                ;- Subtract 1 from dz so that total # images is eqal to dz
-                flux = data[ xx, yy, zz[ii]:zz[ii]+dz-1 ]
+                    ;- Subtract 1 from dz so that total # images is eqal to dz
+                    flux = data[ xx, yy, zz[ii]:zz[ii]+dz-1 ]
 
-                power = reform( (fourier2( flux, cadence, norm=norm ))[1,*] )
-                map[xx,yy,ii] = mean( power[ind] )
-            endfor
+                    power = reform( (fourier2( flux, cadence, norm=norm ))[1,*] )
+                    map[xx,yy,ii] = mean( power[ind] )
+                endfor
             endfor
         endfor
     endelse

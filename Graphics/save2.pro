@@ -108,6 +108,15 @@ pro SAVE2, filename, $
         endfor
     endif
 
+    
+    if FILE_EXIST(path + new_filename) then begin
+        print, ''
+        print, 'File "', new_filename, '" already exists!'
+        print, 'Type ".c" to overwrite.'
+        print, ''
+        stop
+    endif
+
     win.SAVE, path + new_filename, $
         page_size=[wx,wy], $
         width=wx, height=wy, _EXTRA=e

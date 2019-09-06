@@ -42,7 +42,7 @@
     ;-     in the form "hh:mm:ss.dd"
     ;-     Updated using updated JD values.
     ;-   interp_coords
-    ;-     OUTPUT from find_missing_images.pro (to be run prior to this)
+    ;-     OUTPUT from missing_obs.pro (to be run prior to this)
     ;-
     ;- KEYWORDS:
     ;-   shifts

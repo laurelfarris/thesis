@@ -34,11 +34,15 @@
 
 
 @parameters
+instr = 'aia'
+;channel = '1600'
+channel = '1700'
+;cadence = 24
 
 ;- Read headers from PREPPED fits files
 resolve_routine, 'read_my_fits', /either
 READ_MY_FITS, /syntax
-READ_MY_FITS, index, data, nodata=1, prepped=1
+READ_MY_FITS, index, data, instr=instr, channel=channel, nodata=1, prepped=1
 
 ;- Restore data (var = 'cube')
 path = '/solarstorm/laurel07/' + year + month + day + '/'
@@ -51,26 +55,32 @@ help, cube
 cube = CROP_DATA(cube)
 help, cube
 
+stop
+
 
 ;-
 ;----
 ;- Interpolate missing images (if needed)
 ;-
 
-;cadence = 24 --> defined in @parameters
+cadence = 24
+;- --> defined in @parameters
+;-   ... actually those lines are commented out (04 September 2019)
 ;time = strmid( index.date_obs,  11, 11 )
 ;jd = get_jd( index.date_obs + 'Z' )
-FIND_MISSING_IMAGES, cadence, index.date_obs, time, jd, dt
 
-gaps = where(dt ne cadence)
+MISSING_OBS, cadence, index.date_obs, gaps, time, jd, dt
+    ;gaps = where(dt ne cadence) -- passed from missing_obs.pro
 print, dt[gaps]
 print, index[gaps].date_obs, format='(A0)'
-print, index[gaps+1].date_obs, format='(A0)'
+;print, index[gaps+1].date_obs, format='(A0)'
 
 
 ;if channel eq 'aia'
 resolve_routine, 'linear_interp', /either
 LINEAR_INTERP, cube, jd, time, gaps
+help, cube
+
 
 ;- Show movie of cropped time series, make sure everything looks okay.
 xstepper2, cube, channel=channel
@@ -84,12 +94,12 @@ xstepper2, cube, channel=channel
 
 ;-
 ;----
-;- Set input values for computing maps
+;- Set input values for computing maps (if needed)
 ;-
 
 @parameters
-;cc = 0
-cc = 1
+cc = 0
+;cc = 1
 ;dz = 150 ;- = ~1 hour for 24-second cadence
 dz = 64
 ;- 3-elements array for z_start: BDA
@@ -106,16 +116,33 @@ print, A[cc].time[z_start], format='(A0)'
 
 
 
-;- Only part of this code that actually CREATES power map..
-;-  Everything else needs to be done even after maps are created
-;-  and saved..
+
+
+;----
+;----
+;- Finally, compute power maps.
+;-
+
+dz = 64
+sz = size(cube, /dimensions)
+help, cube
+print, sz
+z_start = [0:sz[2]-dz]
+help, z_start
+
 resolve_routine, 'compute_powermaps', /either
-;map = COMPUTE_POWERMAPS( /syntax )
-;map = COMPUTE_POWERMAPS( cube, cadence, z_start=z_start, dz=dz )
-map = COMPUTE_POWERMAPS( A[cc].data, A[cc].cadence, z_start=z_start, dz=dz )
+map = COMPUTE_POWERMAPS( /syntax )
 
+resolve_routine, 'compute_powermaps', /either
+map = COMPUTE_POWERMAPS( cube, cadence, dz=dz, z_start=z_start )
+    ;- standard call to compute map from restored, aligned data
+help, map
 
-mapfilename = 'aia' + A[cc].channel + 'map.sav'
+;map = COMPUTE_POWERMAPS( A[cc].data, A[cc].cadence, z_start=z_start, dz=dz )
+    ;- specific values for z_start, dz, etc.
+
+;channel = A[cc].channel
+mapfilename = 'aia' + channel + 'map.sav'
 print, mapfilename
 print, path + mapfilename
 
