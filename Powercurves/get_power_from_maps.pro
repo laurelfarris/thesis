@@ -55,6 +55,14 @@
 ;- Restore AIA powermaps from .sav files and read into A[0].map and A[1].map.
 @restore_maps
 
+format = "(e0.5)"
+for cc = 0, n_elements(A)-1 do begin
+    print, ""
+    print, A[cc].channel, ":"
+    print, "  min PowerMap = ", min(A[cc].map);, format=format
+    print, "  max PowerMap = ", max(A[cc].map);, format=format
+endfor
+
 ;- Thu Jan 24 11:46:02 MST 2019
 ;-   Correct restored power map for saturation by multiplying by mask.
 
@@ -74,7 +82,6 @@ sz = size( A.map, /dimensions )
   ;- remove correction to z-dim (only needed when using data dims...)
 
 map_mask = fltarr(sz)  ;- I was making this way too complicated...
-
 ;- Compute MAP mask
 resolve_routine, 'powermap_mask', /either
 for cc = 0, 1 do $
@@ -107,6 +114,13 @@ endif
 ;@restore_maps
 
 A.map = A.map * map_mask
+
+for cc = 0, n_elements(A)-1 do begin
+    print, ""
+    print, A[cc].channel, ":"
+    print, "  min PowerMap = ", min(A[cc].map);, format=format
+    print, "  max PowerMap = ", max(A[cc].map);, format=format
+endfor
 
 ;---------------------------------------------------------------------------------------------
 
@@ -194,7 +208,9 @@ for cc = 0, n_elements(A)-1 do begin
     print, A[cc].channel, ":"
     print, "  min P(t) = ", min(power[*,cc])
     print, "  max P(t) = ", max(power[*,cc])
+    print, "$\Delta$P = ", max(power[*,cc])/min(power[*,cc])
 endfor
+stop
 
 ;print, min(power[*,0])
 ;print, max(power[*,0])
@@ -249,6 +265,9 @@ ax3 = plt[1].axes
 ax3.title = plt[1].name + " 3-minute power"
 
 file = 'time-3minpower_maps_' + class
+
+
+stop
 
 resolve_routine, 'save2', /either
 save2, file

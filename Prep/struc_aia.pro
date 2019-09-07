@@ -160,7 +160,7 @@ function STRUC_AIA, index, cube, $
     flux = total( total( cube, 1), 1 )
 
     ;- Standard AIA colors
-    aia_lct, r, g, b, wave=fix(channel);, /load
+    AIA_LCT, r, g, b, wave=fix(channel);, /load
     ct = [ [r], [g], [b] ]
 
     name = 'AIA ' + channel + '$\AA$'

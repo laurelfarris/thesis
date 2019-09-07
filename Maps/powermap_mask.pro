@@ -90,8 +90,8 @@ function POWERMAP_MASK, $
     ;-  but since maps are not input option,
     ;-  have to use data dimensions and subtract from z-dimension using dz.
     sz = size(data_mask, /dimensions)
-    sz[2] = sz[2]-dz+1
-    ;sz[2] = sz[2]-dz
+    ;sz[2] = sz[2]-dz+1
+    sz[2] = sz[2]-dz
       ;-  map_mask had one too many elements in the z-direction, so removed the
       ;-  "+1" for now...
       ;-  don't know if this is actually wrong, or if I cheated
