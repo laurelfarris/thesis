@@ -86,7 +86,12 @@ map_mask = fltarr(sz)  ;- I was making this way too complicated...
 resolve_routine, 'powermap_mask', /either
 for cc = 0, 1 do $
     map_mask[*,*,*,cc] = POWERMAP_MASK( $
-        A[cc].data, dz=dz, exptime=A[cc].exptime, threshold=10000.)
+        A[cc].data, $
+        sz = size(A[cc].map, /dimensions), $
+        dz=dz, $
+        exptime=A[cc].exptime, $
+        threshold=10000. )
+
 ; --> returns FLOAT [500,330,686,2]
 
 
@@ -238,9 +243,9 @@ stop
 ;-   multiple lines overlaid on the same axes. It takes care of all the
 ;-   looping and making the plots look pretty, allowing the caller, the code
 ;-   doing the actual science, to be relatively clutter-free ("relatively"...)
-;- 
+;-
 ;- buffer=1 by default in plot_pt.pro (tho wouldn't hurt to set anyway).
-;- 
+;-
 
 ;- --> Try adding mini-axis BEFORE shifting ydata.
 
