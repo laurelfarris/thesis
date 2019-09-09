@@ -1,13 +1,16 @@
 ;Copied from clipboard
 
 
-A.map = A.map * map_mask
-for cc = 0, n_elements(A)-1 do begin
-    print, ""
-    print, A[cc].channel, ":"
-    print, "  min PowerMap = ", min(A[cc].map);, format=format
-    print, "  max PowerMap = ", max(A[cc].map);, format=format
+win = window( dimensions=[8.5,11.0]*dpi )
+for ii = 0, 2 do begin
+    im = image2( $
+        imdata[*,*,ii], $
+        /current, $
+        layout=[1,3,ii+1], $
+        margin=0.1 $
+        )
 endfor
+        
 
-end
+        end
 
