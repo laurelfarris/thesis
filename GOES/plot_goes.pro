@@ -125,7 +125,7 @@ end
 ;-
 
 
-function PLOT_GOES, gdata
+function PLOT_GOES, gdata, buffer=buffer
 
     if n_elements(gdata) eq 0 then gdata = GOES()
     ;- If this routine hits an error further down, gdata might not
@@ -136,8 +136,9 @@ function PLOT_GOES, gdata
     common defaults
     dw
     wx = 8.0
-    wy = 3.50
-    win = window( dimensions=[wx,wy]*dpi, buffer=1 )
+    ;wy = 3.50
+    wy = 3.0 ;- match to height for AIA light curve window (10 Sep 2019)
+    win = window( dimensions=[wx,wy]*dpi, buffer=buffer )
 
     ;- 25 November 2018 - changed to match margins of AIA light curves.
     left = 1.00
@@ -218,7 +219,8 @@ end
 ;tend = date + ' 14:59:59'
 tstart = date + ' ' + ts_start
 tend = date + ' ' + ts_end
-gdata = GOES( tstart=tstart, tend=tend )
+if typename(gdata) eq "UNDEFINED" then $
+    gdata = GOES( tstart=tstart, tend=tend )
 
 ;- UTPLOT procedure:
 ;-   set /SAV kw to save system variables: !x.tickv and !x.tickname
@@ -228,17 +230,16 @@ gdata = GOES( tstart=tstart, tend=tend )
 ;- --> oplot the other GOES channel.
 
 dw
-plt = PLOT_GOES(gdata)
+plt = PLOT_GOES(gdata, buffer=0)
+
 resolve_routine, 'oplot_flare_lines', /is_function
     ;-  currently residing in '../Lightcurves/'
 vert = OPLOT_FLARE_LINES( $
     plt, t_obs=A[0].time, $
     /goes, $
-    utbase=date + ' ' + A[cc].time[0] + '0', $
+    utbase=date + ' ' + A[0].time[0] + '0', $
     /send_to_back )
 
-file = 'lc_goes_C30'
-save2, file
 
 
 ax = plt[0].axes
@@ -246,6 +247,13 @@ ax[3].tickname = ['A', 'B', 'C', 'M', 'X']
 ax[3].title = ''
 ax[3].showtext = 1
 leg = legend2( target=plt, /upperleft, sample_width=0.25 )
+
+file = 'lc_goes_C30'
+save2, file
+stop
+
+
+
 
 ;- 04 August 2019
 ;- Shaded region:
@@ -260,10 +268,6 @@ p = plot( x_indices, [yrange[0],yrange[0]], /overplot, $
     fill_level = yrange[1] )
 p.Order, /send_to_back
 
-file = 'lc_goes_C30'
-save2, file
-
-stop
 
 ;- Vertical lines dividing up BDA.
 ;- See oplot_flare_lines.pro for comments on this.

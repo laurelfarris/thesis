@@ -9,8 +9,8 @@
 ;-
 ;+
 
-;DLpath = 'AIA/'
-DLpath = 'HMI/'
+DLpath = 'AIA/'
+;DLpath = 'HMI/'
 
 ;- Start/End times, in UT
 ;tstart = '2014/04/18 10:00:00'
@@ -21,8 +21,42 @@ DLpath = 'HMI/'
 ;tstart = '2014/04/18 13:16:00'
 ;tend   = '2014/04/18 13:31:59'
 
-tstart = '2014/04/18 10:15:00'
-tend   = '2014/04/18 14:59:59'
+;------------
+;- 1600
+
+tstart = '2014/04/18 10:53:00'
+tend   = '2014/04/18 10:55:00'
+
+;tstart = '2014/04/18 12:18:00'
+;tend   = '2014/04/18 12:20:00'
+;
+;tstart = '2014/04/18 12:28:00'
+;tend   = '2014/04/18 12:30:00'
+;
+;tstart = '2014/04/18 12:57:00'
+;tend   = '2014/04/18 12:59:00'
+;-----------------
+
+;- 1700
+
+tstart = '2014/04/18 10:59:00'
+tend   = '2014/04/18 11:01:00'
+
+;tstart = '2014/04/18 11:59:00'
+;tend   = '2014/04/18 12:01:00'
+;
+;tstart = '2014/04/18 12:59:00'
+;tend   = '2014/04/18 13:01:00'
+;
+;tstart = '2014/04/18 13:26:00'
+;tend   = '2014/04/18 13:28:00'
+;
+;tstart = '2014/04/18 13:39:00'
+;tend   = '2014/04/18 13:41:00'
+;
+;tstart = '2014/04/18 13:59:00'
+;tend   = '2014/04/18 14:01:00'
+;
 
 ;sample='60'
 
@@ -37,11 +71,11 @@ tend   = '2014/04/18 14:59:59'
 ;dat304  = vso_search(tstart,tend, instr='aia',sample=sample,wave='304')
 ;dat335  = vso_search(tstart,tend, instr='aia',sample=sample,wave='335')
 ;dat1600 = vso_search( tstart, tend, instr='aia', sample=sample, wave='1600')
-;dat1700 = vso_search( tstart, tend, instr='aia', sample=sample, wave='1700')
+dat1700 = vso_search( tstart, tend, instr='aia', sample=sample, wave='1700')
 
 ;datHMIcont = VSO_SEARCH(tstart, tend, instr='hmi', physobs='intensity')
-datHMIlosB = VSO_SEARCH(tstart, tend, instr='hmi', physobs='LOS_magnetic_field') 
-;datHMIlosV = VSO_SEARCH(tstart, tend, instr='hmi', physobs='LOS_velocity') 
+;datHMIlosB = VSO_SEARCH(tstart, tend, instr='hmi', physobs='LOS_magnetic_field') 
+
 ;datHMIvectorB = VSO_SEARCH(tstart, tend, instr='hmi', physobs='VECTOR_MAGNETIC_FIELD') 
 
 stop
@@ -73,10 +107,10 @@ dir='/solarstorm/laurel07/Data/' + DLpath
 ;status304 = VSO_GET(dat304, /force, out_dir=dir)
 ;status335 = VSO_GET(dat335, /force, out_dir=dir)
 ;status1600 = VSO_GET(dat1600, /force, out_dir=dir)
-;status1700 = VSO_GET(dat1700, /force, out_dir=dir)
+status1700 = VSO_GET(dat1700, /force, out_dir=dir)
 
 ;statusHMIcont = VSO_GET(datHMIcont, /force, out_dir=dir)
-statusHMIlosB = VSO_GET(datHMIlosB, /force, out_dir=dir)
+;statusHMIlosB = VSO_GET(datHMIlosB, /force, out_dir=dir)
 ;statusHMIlosV = VSO_GET(datHMIlosV, /force, out_dir=dir)
 ;statusHMIvectorB=VSO_GET(datHMIvectorB,/force,out_dir=dir)
 

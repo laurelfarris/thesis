@@ -47,7 +47,7 @@
 
 
 
-function PLOT_PT, power, dz, time, $
+function PLOT_PT, time, power, dz, $
     _EXTRA = e
 
     @parameters
@@ -81,7 +81,6 @@ function PLOT_PT, power, dz, time, $
         wy = 3.0, $  ; --> still a kw for batch_plot, which is NOT the same thing as plot3.
         buffer = 1, $
         _EXTRA = e )
-
 
 
     ;- Add top and right axes for plt2 (excluded when axis_style=1)

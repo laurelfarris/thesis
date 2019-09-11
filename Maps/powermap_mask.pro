@@ -61,6 +61,7 @@ function POWERMAP_MASK, $
     exptime=exptime, $
     threshold=threshold
 
+    @parameters
 
     start_time = systime(/seconds)
 
@@ -90,14 +91,13 @@ function POWERMAP_MASK, $
     ;-  but since maps are not input option,
     ;-  have to use data dimensions and subtract from z-dimension using dz.
     sz = size(data_mask, /dimensions)
-    ;sz[2] = sz[2]-dz+1
-    sz[2] = sz[2]-dz
-      ;-  map_mask had one too many elements in the z-direction, so removed the
-      ;-  "+1" for now...
-      ;-  don't know if this is actually wrong, or if I cheated
-      ;-  myself of one power map when computing maps for 2011-02-15 flare...
-      ;-  Pretty sure it's the latter: sz[2] should = 686, not 685.
-      ;-  For future flares, sz[2]+1 should be correct z-dimension.
+
+    
+    if flare_num eq 0 then $
+        sz[2] = sz[2]-dz $
+    else sz[2] = sz[2]-dz+1
+      ;-  sz[2]-dz+1 is correct EXCEPT X2.2 flare... missing last map
+
     map_mask = fltarr(sz)
 
     ; Create power map mask (this takes a while to run...)

@@ -45,6 +45,8 @@ pro MISSING_OBS, $
     ;-   interpolated and updated if needed.
 
     time = strmid( date_obs, 11, 11 )
+
+    resolve_routine, 'get_jd', /is_function
     jd = GET_JD( date_obs + 'Z' )
 
     ;- difference in jd between consecutive observation times in header
@@ -72,19 +74,21 @@ end
 
 
 
-year=['2012', '2014']
-month=['03', '04']
-day=['09', '18']
-
-
+;year=['2012', '2014']
+;month=['03', '04']
+;day=['09', '18']
 
 @parameters
-instr='hmi'
-channel='cont'
+;instr='hmi'
+;cadence = 45
+;channel='cont'
 
-;instr='aia'
+;- index.cadence -- HMI, doesn't appear to be in AIA headers... ??
+
+instr='aia'
+cadence = 24
 ;channel='1600'
-;channel='1700'
+channel='1700'
 
 ;nn = 0  ;- M6.3 -- 09 March 2012 flare
 ;nn = 1  ;- M7.3 -- birthday flare
@@ -95,24 +99,13 @@ READ_MY_FITS, index, data, fls, $
     channel=channel, $
 ;    ind=ind, $
     nodata=1, $
-    prepped=0, $
-    year=year, $
-    month=month, $
-    day=day
+    prepped=0
 
 
+;time = strmid( index.date_obs, 11, 11 )
+;jd = GET_JD( index.date_obs + 'Z' )
+MISSING_OBS, cadence, index.date_obs, gaps, time, jd, dt
 
-
-
-
-;cadence = 24
-cadence = 45
-;- index.cadence -- HMI, doesn't appear to be in AIA headers... ??
-
-
-time = strmid( index.date_obs, 11, 11 )
-jd = GET_JD( index.date_obs + 'Z' )
-MISSING_OBS, cadence, index.date_obs, time, jd, dt
 
 time = ( strmid( index.date_obs, 11, 8 ) )
 
@@ -128,7 +121,6 @@ missing_string = $
     strmid(gaps,9,3) + '-' + strmid(gaps+1,9,3) + '     ' + $
         time[gaps] + ' - ' + time[gaps+1] + '     ' + $
         'dt = ' + strtrim(dt[gaps],1)
-
 print, missing_string, format='(A)'
 ;- format='(A)' --> prints each element in array on a new line!
 ;-      Don't need to use a loop after all!

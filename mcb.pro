@@ -1,16 +1,13 @@
 ;Copied from clipboard
 
 
-win = window( dimensions=[8.5,11.0]*dpi )
-for ii = 0, 2 do begin
-    im = image2( $
-        imdata[*,*,ii], $
-        /current, $
-        layout=[1,3,ii+1], $
-        margin=0.1 $
-        )
-endfor
-        
+missing_string = $
+    strmid(gaps,9,3) + '-' + strmid(gaps+1,9,3) + '     ' + $
+        time[gaps] + ' - ' + time[gaps+1] + '     ' + $
+        'dt = ' + strtrim(dt[gaps],1)
+print, missing_string, format='(A)'
+;- format='(A)' --> prints each element in array on a new line!
+;-      Don't need to use a loop after all!
 
-        end
+end
 

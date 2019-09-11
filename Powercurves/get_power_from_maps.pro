@@ -210,7 +210,6 @@ for cc = 0, n_elements(A)-1 do begin
     print, "  max P(t) = ", max(power[*,cc])
     print, "$\Delta$P = ", max(power[*,cc])/min(power[*,cc])
 endfor
-stop
 
 ;print, min(power[*,0])
 ;print, max(power[*,0])
@@ -247,12 +246,19 @@ stop
 ;- With the "props" structures, the call to plot_pt is still exactly
 ;-  the same in _maps as it is in _flux...
 ;- NOTE: xdata is defined in plot_pt
+
+
+stop ;- Before plotting..
+
+
+
 resolve_routine, 'plot_pt', /is_function
 dw
 plt = PLOT_PT( $
-    power, dz, A[0].time, buffer=0, $
+    A[0].time, power, dz, buffer=0, $
     stairstep = 1, $
     ;yminor = 4, $
+    title = '', $
     name = A.name )
     ;yrange=[-250,480], $ ; maps
 ;ax = plt[0].axes
@@ -264,13 +270,9 @@ ax2.text_color = plt[0].color
 ax3 = plt[1].axes
 ax3.title = plt[1].name + " 3-minute power"
 
-file = 'time-3minpower_maps_' + class
-
-
-stop
-
+fname = 'time-3minpower_maps_' + class
 resolve_routine, 'save2', /either
-save2, file
+save2, fname
 
 
 end

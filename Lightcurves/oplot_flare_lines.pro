@@ -79,6 +79,8 @@ function OPLOT_FLARE_LINES, $
     if keyword_set(goes) then begin
 
         flare_times = date + ' ' + phases
+        print, flare_times
+        stop
 
         ;- Each element in the FLARE_TIMES array is a string of the form
         ;-      "dd-Mon-yyyy hh:mm:ss.sss"

@@ -14,13 +14,20 @@ function mini_axis, plt;, location=location
     ;-  "axis_range" --> x position
     ;-  "location"   --> y position
 
-    x1 = 600 ; hard-coded... improve this later.
+
+    plt[0].GetData, xdata, ydata
+
+    ;x1 = 600 ; hard-coded... improve this later.
+    x1 = 0.9 * xdata[-1] 
     x2 = x1+dz-1
 
+    ;yrange = plt[0].yrange
     ;y = 3.e2
-    y = 0.90*((plt[0].yrange)[1])
+    ;y = 0.90*((plt[0].yrange)[1])
+    y = 0.90 * max(ydata)
 
-    dy =  0.05 * ( (plt[0].yrange)[1] - (plt[0].yrange)[0] )
+    ;dy =  0.05 * ( (plt[0].yrange)[1] - (plt[0].yrange)[0] )
+    dy =  0.05 * ( max(ydata) - min(ydata) )
 
     ;- NOTE: if location isn't where you expect,
     ;-  see if plot is scaled in log space. If so, 0.5*yrange[1]
