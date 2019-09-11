@@ -84,7 +84,7 @@ function POWERMAP_MASK, $
 
     data_mask = data lt threshold
 
-    ;- 
+    ;-
     ;- 13 August 2019
     ;-  Initialize map_mask variable using dimensions of data arg.
     ;-  map_mask should have same dimensions as power map,
