@@ -13,11 +13,11 @@
 
 ;- Naming convention of fits files for, e.g. AIA 1600\AA{}
 ;     UNprepped fits:
-;        'aia.lev1.1600A_2013-12-28T10:00:00.00Z.image_lev1.fits'
-;        'aia.lev1.304A_2013-12-28T10:00:00.00Z.image_lev1.fits'
+;        'aia.lev1.1600A_2013-12-28T10_00_00.00Z.image_lev1.fits'
+;        'aia.lev1.304A_2013-12-28T10_00_00.00Z.image_lev1.fits'
 ;     PREPPED fits:
-;        'AIA20131228_10:00:00_1600.fits'
-;        'AIA20131228_10:00:00_0304.fits'
+;        'AIA20131228_100000_1600.fits'
+;        'AIA20131228_100000_0304.fits'
 
 
 ;----------------------------------------------------------

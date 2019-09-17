@@ -34,7 +34,8 @@ goto, start
 ;- Class C3.0
 ;- 28 December 2013
 ;- Prepped file names: /solarstorm/laurel07/Data/AIA_prepped/
-;-   "AIAyyyymmdd_hhmmss_channel.fits", where channel = 1600, 1700, 304, ...
+;-   "AIAyyyymmdd_hhmmss_channel.fits",
+;-       where channel = 1600, 1700, 0304, ... (Note leading 0's for <4 chars)
 
 ;tstart = '2013/12/28 10:00:00'
 ;tend   = '2013/12/28 13:59:59'
