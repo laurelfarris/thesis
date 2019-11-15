@@ -25,6 +25,7 @@
 
 pro SAVE2, filename, $
     confirm_replace=confirm_replace, $
+    overwrite=overwrite, $
     stamp=stamp, $
     idl_code=idl_code, $
     _EXTRA=e
@@ -108,13 +109,14 @@ pro SAVE2, filename, $
         endfor
     endif
 
-    
-    if FILE_EXIST(path + new_filename) then begin
-        print, ''
-        print, 'File "', new_filename, '" already exists!'
-        print, 'Type ".c" to overwrite.'
-        print, ''
-        stop
+    if not keyword_set(overwrite) then begin
+        if FILE_EXIST(path + new_filename) then begin
+            print, ''
+            print, 'File "', new_filename, '" already exists!'
+            print, 'Type ".c" to overwrite.'
+            print, ''
+            stop
+        endif
     endif
 
     win.SAVE, path + new_filename, $
