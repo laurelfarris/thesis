@@ -168,21 +168,26 @@ ax[0].title = 'Start time (' + date + ' ' + ts_start + ')'
 ;SHIFT_YDATA, plt
 
 resolve_routine, 'oplot_flare_lines', /is_function
-
 vert = OPLOT_FLARE_LINES( $
     plt, $
+    ;color='magenta', $
+      ;- confirming that kw value set when calling subroutine
+      ;-  overrides the value set when subroutine calls PLOT. 
     t_obs=A[0].time, $
     send_to_back=1 )
 
 resolve_routine, 'legend2', /either
 leg = LEGEND2( target=plt, /upperleft, sample_width=0.25 )
 
+;- NO point in defining these twice (ax[1] and ax[3]) -- 17 January 2020
+ymajor = -1
+yminor = -1
 
 ax[1].title = ytitle[0]
 ;ax[1].tickvalues = [2:8:2]*10.^7 ; -- hardcoded, 2011 flare
 ;ax[1].tickname = scinot( ax[1].tickvalues )
-ax[1].major = 5
-ax[1].minor = 3
+ax[1].major = ymajor
+ax[1].minor = yminor
 
 
 ;ax = plt[1].axes
@@ -190,8 +195,8 @@ ax[3].title = ytitle[1]
 ;ax[3].tickvalues = [2.2:2.8:0.2]*10.^8 ; -- hardcoded, 2011 flare
 ;ax[3].tickname = scinot( ax[3].tickvalues )
 ;ax[3].tickinterval = 1e7
-ax[3].major = 5
-ax[3].minor = 3
+ax[3].major = ymajor
+ax[3].minor = yminor
 
 ax[3].title = ytitle[1]
 ;ax3.title = ytitle[1]
@@ -209,8 +214,12 @@ ax[3].text_color = A[1].color
 
 ;- --> Put ML stuff into a subroutine that calls all the other subroutines?
 
+;----------------------------------------------------------------
+
 ;- 02 December 2018
 ;- Mark BDA times on LC.
+
+;- aka, indices of x-axis where shading goes (should cover "During").
 
 ;time = strmid(A[0].time,0,5) --> defined earlier, right after LC plot is produced.
 ;bda_times = ['01:00', '01:45', '02:30', '03:15']
@@ -220,7 +229,22 @@ ax[3].text_color = A[1].color
 ;for ii = 0, nn-1 do $
 ;    ind[ii] = (where( time eq bda_times[ii] ))[0]
 
-ind = [375, 525]
+;- Attempt at generalizing for multiple flares:
+;ind = [ $
+;    (where(time eq strmid(gstart,0,5)))[0], $
+;    (where(time eq strmid(  gend,0,5)))[0] ]
+;- Seems to work, but goes start/end times do NOT define the boundaries
+;-  of the shaded region... I defnined this myself as the "During" phase
+
+;ind = [375, 525] ;- flare[1], I think. (17 January 2020)
+
+ind = [(where(time eq my_start))[0],(where(time eq my_end))[0]]
+
+;print, ind
+;print, time[ind]
+
+;----------------------------------------------------------------
+
 ;yrange=[ [plt[0].yrange], [plt[1].yrange] ]
 ;yrange = [ $
 ;    min( [plt[0].yrange[0], plt[1].yrange[0] ] ), $
@@ -251,7 +275,8 @@ shaded.Order, /send_to_back
 ;endfor
 
 print, ''
-print, 'Type .c to save file: ', file
+print, 'ATTENTION USER!!'
+print, ' ... --> Type .c to save file: ', file
 stop
 save2, file
 

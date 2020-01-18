@@ -1,5 +1,9 @@
 ;+
 ;- LAST MODIFIED:
+;-  17 January 2020
+;-    Removed kw opt for "shaded". Created separate subroutine
+;-    called "shade_my_plot.pro" in same directory.
+;-
 ;-  17 April 2019
 ;-    Used strmid( var, 0, 5 ) instead of hardcoding flare times...
 ;-    Not sure why I didn't do that in the first place, unless I just didn't
@@ -17,7 +21,6 @@
 ;-     where A[0] is AIA 1600 -- same values are used for both channels
 ;-     (Tried using JD to be more scientifially correct, but too much
 ;-      of a pain, and the values are close enough for plotting light curves.
-;-   shaded -- set to shade the portion of the plot contained within vert lines.
 ;-   goes   -- set if plotting data from GOES, not AIA (corrects for cadence).
 ;-   send_to_back -- set to plot vertical lines behind all others.
 ;-      Uses the IDL method for graphic objects.
@@ -46,9 +49,8 @@ function OPLOT_FLARE_LINES, $
     ;jd=jd, $  Not used anywhere in code... only appears in one comment, but
                       ; as an actual comment, not a line of code that's been shelved.
     ;target=target, $   ; ?????
-    shaded=shaded, $
     goes=goes, $
-    utbase=utbase, $
+    ;utbase=utbase, $
     ;yrange=yrange, $   ; ?????
     send_to_back=send_to_back, $
     date=date, $
@@ -90,7 +92,8 @@ function OPLOT_FLARE_LINES, $
         x_indices = fltarr(nn)
 
         ;- Added yet another optional kw that defaults to value for this flare.
-        if not keyword_set(utbase) then utbase = '15-Feb-2011 00:00:01.725'
+        ;if not keyword_set(utbase) then utbase = '15-Feb-2011 00:00:01.725'
+        ;- Added utbase to @parameters... NO HARDCODING! (17 January 2020)
 
         ;- INPUT arg = 7xN array,
         ;-  generated using anytim2ex to convert utbase to "ex" (whatever that is)
@@ -168,7 +171,7 @@ function OPLOT_FLARE_LINES, $
             linestyle = linestyle[jj], $
             ystyle = 1, $
             name = name[jj], $
-            color = 'black', $
+            color = 'dark gray', $
             _EXTRA=e )
         if keyword_set(send_to_back) then vert[jj].Order, /SEND_TO_BACK
     endforeach
@@ -235,33 +238,6 @@ function OPLOT_FLARE_LINES, $
     ; 7C92
 
 
-    ; Shaded region
-    ;-  Given the absense of a '-' after the semi in the previous line,
-    ;-    I'd say this first chunk is outdated, and can probably be removed.
-    if keyword_set(shaded) then begin
-        ;for ii = 0, n_elements(graphic)-1 do begin
-            ;yrange = (graphic[ii]).yrange
-            v_shaded = plot2( $
-                [ vx[0]-32, vx[0]-32, vx[-1]+32-1, vx[-1]+32-1 ], $
-                [ yrange[0], yrange[1], yrange[1], yrange[0] ], $
-                /overplot, ystyle=1, linestyle=6, $
-                fill_transparency=50, $
-                fill_background=1, $
-                fill_color='light gray' )
-            v_shaded.Order, /SEND_TO_BACK
-        ;endfor
-
-        ;- Another way to shade:
-        v_shaded = polygon( $
-            [x1, x2, x2, x1], $
-            [y1, y1, y2, y2], $
-            /data, $
-            linestyle = 4, $
-            fill_background = 0, $
-            fill_color='light gray' )
-        v_shaded.Order, /send_to_back
-
-    endif
     plt = [ plt, vert ]
     return, vert
 end

@@ -58,11 +58,30 @@ gend   = ['02:06:00', '12:59:00', '13:20:00']
 center = [ [2400,1650], [1675,1600], [2879,1713] ]
 dimensions = [ [500,330], [500,330], [500,330] ]
 
+;----------------------------------------------------------
+;- 17 January 2020
+;-  BDA start/end times for shaded regions on LC and P_t plots, defined
+;-  here so that codes can be generalized for multiflare.
+;-  NOTE: still need times for C and M flares.
+my_start = ['01:44']
+my_end = ['02:30']
+
+utbase = [ $
+    '15-Feb-2011 00:00:01.725', $
+    '28-Dec-2013 00:00:12.600', $
+    '18-Apr-2014 00:00:12.500'  $
+]
+;- NOTE: utbase times for C and M flare are ESTIMATES based
+;-   on gstart... [] --> look up official utbase!
+;----------------------------------------------------------
+
 align_dimensions = [1000,800];- "Pad" dimensions with extra pixels to prepare for alignment
 ;x1 = 2150 ; (hardcoded, don't need this anymore)
 ;y1 = 1485 ;    or this...
 
-;----------------------------------------------------------
+
+
+
 AR = AR[ flare_num ]
 class = class[ flare_num ]
 date = date[ flare_num ]
@@ -76,6 +95,11 @@ gpeak = gpeak[ flare_num ]
 gend = gend[ flare_num ]
 center = reform(center[*, flare_num ])
 dimensions = reform(dimensions[*, flare_num ])
+
+my_start = my_start[ flare_num ]
+my_end = my_end[ flare_num ]
+
+utbase = utbase[ flare_num ]
 
 
 ;- NOTE: see crop_data.pro, where 15 was added to each

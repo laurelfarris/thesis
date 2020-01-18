@@ -115,8 +115,10 @@ function PLOT_PT, time, power, dz, $
         plt, $
         t_obs=time, $
         ;jd=jd, $
-        utbase = date + ' ' + ts_start, $
-        color = 'dark gray', $
+        ;utbase = date + ' ' + ts_start, $
+           ;- 17 January 2020
+           ;-   Don't need utbase unless also setting /goes ...
+           ;-   Added utbase to @parameters, so doesn't really matter anymore
         send_to_back=1 )
 
 
@@ -154,6 +156,28 @@ function PLOT_PT, time, power, dz, $
     ;-   because P(t) plots use different colors than A.color.
 ;;    ax[1].text_color = color[0]
 ;;    ax[3].text_color = color[1]
+
+
+    
+;----------------------------------------------------------------
+
+;- 17 January 2020
+;-  Add shading to match light curves
+;-  (copied directly from plot_lc.pro... make a subroutine for this?)
+
+yrange = plt[1].yrange
+
+shaded = plot( $
+    [ind[0], ind[1]], $
+    [yrange[0], yrange[0]], $
+    /overplot, $
+    /fill_background, $
+    fill_color='white smoke', $
+    fill_level=yrange[1] $
+)
+shaded.Order, /send_to_back
+
+;----------------------------------------------------------------
 
     return, plt
 end
