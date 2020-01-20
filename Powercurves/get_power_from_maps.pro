@@ -76,6 +76,9 @@ sz = size( A.map, /dimensions )
   ;-  Wouldn't work if maps weren't computed or restored yet, and needed map_mask
   ;-   first? Unlikely...
 
+
+;--------------------------------------------------------------------------
+
 ;- Initialize MAP mask
 ;map_mask = fltarr(sz[0],sz[1],sz[2]-dz+1,n_elements(A))
 ;map_mask = fltarr(sz[0],sz[1],sz[2],n_elements(A))
@@ -87,27 +90,13 @@ resolve_routine, 'powermap_mask', /either
 for cc = 0, 1 do $
     map_mask[*,*,*,cc] = POWERMAP_MASK( $
         A[cc].data, $
-        sz = size(A[cc].map, /dimensions), $
+        ;sz = size(A[cc].map, /dimensions), $
+          ;- see rambling comments in powermap_mask.pro where sz is defined.
         dz=dz, $
         exptime=A[cc].exptime, $
         threshold=10000. )
 
 ; --> returns FLOAT [500,330,686,2]
-
-
-
-;- 1D array of # unsaturated pixels in each map.
-;-   Not 2D? one array for each channel?
-n_pix = total(total(map_mask,1),1)
-;help, n_pix
-;-  N_PIX  FLOAT  = Array[686, 2]
-;-   for 15 Feb 2011 flare
-;-
-;- Test n_pix
-if (where(n_pix eq 0.0))[0] ne -1 then begin
-    print, "Problem: n_pix = 0 somewhere, which should be impossible. "
-    stop
-endif
 
 
 ;- Multiply mask by AIA power maps to set saturated pixels = 0.
@@ -126,6 +115,19 @@ for cc = 0, n_elements(A)-1 do begin
     print, "  min PowerMap = ", min(A[cc].map);, format=format
     print, "  max PowerMap = ", max(A[cc].map);, format=format
 endfor
+
+
+
+
+;- # UNSATURATED pixels in each map.
+n_pix = total(total(map_mask,1),1)
+;- FLOAT  = Array[686, 2] for 15 Feb 2011 flare
+    ;- Test n_pix
+    if (where(n_pix eq 0.0))[0] ne -1 then begin
+        print, "Problem: n_pix = 0 somewhere, which should be impossible. "
+        stop
+    endif
+
 
 ;---------------------------------------------------------------------------------------------
 
@@ -207,14 +209,44 @@ power = fltarr( sz[2], sz[3] )
   ;- ??
 ;power[*,0] = (total(total(A[0].map,1),1)) / n_pix[*,0]
 ;power[*,1] = (total(total(A[1].map,1),1)) / n_pix[*,1]
+
+;-----------------------------------------------------------------------------------
+;- Compute power WITHOUT excluding saturated pixels, compare values
+
+@restore_maps
+;A.map = A.map * map_mask
 for cc = 0, n_elements(A)-1 do begin
+;for cc = 0, 0 do begin
     print, ""
-    power[*,cc] = (total(total(A[cc].map,1),1)) / n_pix[*,cc]
+    power[*,cc] = (total(total(A[cc].map,1),1))
+    ;power[*,cc] = (total(total(A[cc].map,1),1)) / (500.*330)
+    ;power[*,cc] = (total(total(A[cc].map,1),1)) / n_pix[*,cc]
     print, A[cc].channel, ":"
     print, "  min P(t) = ", min(power[*,cc])
     print, "  max P(t) = ", max(power[*,cc])
     print, "$\Delta$P = ", max(power[*,cc])/min(power[*,cc])
+    print, ""
+    print, max(A[cc].map[*,*,280])
 endfor
+
+
+for cc = 0, n_elements(A)-1 do begin
+    loc = where( power[*,cc] eq max(power[*,cc]) )
+;    print, loc
+;    print, A[0].time[loc]
+;    print, A[0].time[loc+dz-1]
+    print, loc + (dz/2)
+    print, A[0].time[loc+(dz/2)]
+endfor
+
+
+
+;-----------------------------------------------------------------------------------
+
+
+
+
+
 
 ;print, min(power[*,0])
 ;print, max(power[*,0])
@@ -275,7 +307,9 @@ ax2.text_color = plt[0].color
 ax3 = plt[1].axes
 ax3.title = plt[1].name + " 3-minute power"
 
-fname = 'time-3minpower_maps_' + class
+stop
+
+fname = 'time-3minpower_maps_' + class + '_3'
 resolve_routine, 'save2', /either
 save2, fname
 

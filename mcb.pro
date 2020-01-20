@@ -1,10 +1,9 @@
 ;Copied from clipboard
 
 
-@parameters
-ind = [(where(time eq my_start))[0],(where(time eq my_end))[0]] ;X2.2
-print, ind
-print, time[ind]
+print, max(aia1600map[*,*,ii])
+print, max(map1)
+print, max(map2)
 
 end
 

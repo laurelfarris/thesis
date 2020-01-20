@@ -215,17 +215,18 @@ for ii = 0, 1 do begin
     f3 = fupper * 1000
 
     lines = objarr(6)
+    stop
 
-    h = OPLOT_HORIZONTAL_LINES( $
-        im[ii].xrange, [f1,f2,f3], $
-        color = 'red', $
-        linestyle=[':','--',':'], $
-        names=[  $
-            '$\nu_{lower} $ = 5.0 mHz', $
-            '$\nu_{center}$ = 5.6 mHz', $
-            '$\nu_{upper} $ = 6.0 mHz' ] )
-
-    v = OPLOT_FLARE_LINES( time, yrange=im[ii].yrange )
+;    h = OPLOT_HORIZONTAL_LINES( $
+;        im[ii].xrange, [f1,f2,f3], $
+;        color = 'red', $
+;        linestyle=[':','--',':'], $
+;        names=[  $
+;            '$\nu_{lower} $ = 5.0 mHz', $
+;            '$\nu_{center}$ = 5.6 mHz', $
+;            '$\nu_{upper} $ = 6.0 mHz' ] )
+;
+;    v = OPLOT_FLARE_LINES( time, yrange=im[ii].yrange )
     ;save2, 'wa' + A[ii].channel + '.pdf'
 endfor
 

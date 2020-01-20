@@ -90,6 +90,13 @@ function POWERMAP_MASK, $
     ;-  map_mask should have same dimensions as power map,
     ;-  but since maps are not input option,
     ;-  have to use data dimensions and subtract from z-dimension using dz.
+    ;- 19 January 2020
+    ;-  In call to this subroutine, get_power_from_maps.pro passes kw
+    ;-    sz=SIZE(A[cc].map, /dimensions)
+    ;-  I'm guessing this was before I added lines below to adjust
+    ;-    data size to map size, since map cubes have dz fewer elements
+    ;-    in the z-direction... makes the main routines simplier when
+    ;-    messy code is put in subroutines wherever possible...
     sz = size(data_mask, /dimensions)
 
     

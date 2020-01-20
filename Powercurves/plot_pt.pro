@@ -165,6 +165,8 @@ function PLOT_PT, time, power, dz, $
 ;-  Add shading to match light curves
 ;-  (copied directly from plot_lc.pro... make a subroutine for this?)
 
+
+ind = [(where(time eq my_start))[0],(where(time eq my_end))[0]]
 yrange = plt[1].yrange
 
 shaded = plot( $

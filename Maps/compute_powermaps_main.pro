@@ -35,9 +35,8 @@
 
 @parameters
 instr = 'aia'
-;channel = '1600'
-channel = '1700'
-;cadence = 24
+channel = '1600'
+;channel = '1700'
 
 ;- Read headers from PREPPED fits files
 resolve_routine, 'read_my_fits', /either

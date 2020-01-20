@@ -24,6 +24,12 @@ path = '/solarstorm/laurel07/' + year+month+day + '/'
 ;-   NOTE: structure tag strings ARE case-sensitive (i.e. "map" doesn't match)
 tagnames = tag_names(A)
 test = where(tagnames eq "MAP")
+print, tagnames
+print, test
+
+
+
+stop
 
 ;if test eq -1 then begin  -->  true even though test = 13... I don't get it.
 
@@ -31,13 +37,17 @@ if (test ge 0) then begin
 ;- If map is already included in structures, simply set each A[cc].map = map,
 ;-   where "map" is name of variable that has just been freshly restored.
 
-    restore, path + 'aia1600map.sav'
+    print, 'Replace existing map with restored map.'
+
+    ;restore, path + 'aia1600map.sav'
+    restore, path + 'aia1600map_2.sav'
 ;    help, map
 ;    help, A[0].map
     A[0].map = map
     undefine, map
 
-    restore, path + 'aia1700map.sav'
+    ;restore, path + 'aia1700map.sav'
+    restore, path + 'aia1700map_2.sav'
     A[1].map = map
     undefine, map
 
@@ -46,11 +56,15 @@ endif else begin
 ;- If tag for "map" has not been added to structures in array "A", add them now.
 ;if (where(tagnames eq "MAP") eq -1) then begin
 
-    restore, path + 'aia1600map.sav'
+    print, 'Adding tag "MAP" to struc array "A", set to restored maps.'
+
+    ;restore, path + 'aia1600map.sav'
+    restore, path + 'aia1600map_2.sav'
     aia1600 = A[0]
     aia1600 = create_struct( aia1600, 'map', map )
 
-    restore, path + 'aia1700map.sav'
+    ;restore, path + 'aia1700map.sav'
+    restore, path + 'aia1700map_2.sav'
     aia1700 = A[1]
     aia1700 = create_struct( aia1700, 'map', map )
 
