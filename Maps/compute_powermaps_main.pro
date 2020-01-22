@@ -91,10 +91,14 @@ xstepper2, cube, channel=channel
 ;-   (31 July 2019)
 ;-
 
+;+
 ;-
-;----
-;- Set input values for computing maps (if needed)
+;-----------------------------------------------------------------
 ;-
+;-
+
+;- input values for computing maps
+
 
 @parameters
 cc = 0
@@ -117,11 +121,15 @@ print, A[cc].time[z_start], format='(A0)'
 
 
 
-;----
-;----
-;- Finally, compute power maps.
+;+
+;- Compute power maps.
 ;-
 
+;- some of these are defined above, but that entire section can be
+;-  skipped if doing a general powermap computation from entire data cube,
+;-  using same value for dz I've been using.  -- 20 January 2020 
+@parameters
+cc = 0
 dz = 64
 sz = size(cube, /dimensions)
 help, cube
@@ -129,9 +137,12 @@ print, sz
 z_start = [0:sz[2]-dz]
 help, z_start
 
+;- print out calling sequence, in case I forgot what args/kws to pass
+;-  and in what order (which I probably did).
 resolve_routine, 'compute_powermaps', /either
 map = COMPUTE_POWERMAPS( /syntax )
 
+;- start computation of power map for 'cube'
 resolve_routine, 'compute_powermaps', /either
 map = COMPUTE_POWERMAPS( cube, cadence, dz=dz, z_start=z_start )
     ;- standard call to compute map from restored, aligned data
