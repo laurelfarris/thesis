@@ -1,0 +1,20 @@
+Codes in this directory I did NOT write:
+  • horline.pro
+  • verline.pro
+  • pickpeakpower.pro
+  • randomwave.pro
+  • sdbwave.pro
+    NOTE: sdbwave2.pro is a copy of the original, where I commented out
+      most of the lines creating graphics, and rewrote them to call IDL's functions
+      and create objects, e.g.: >plt = PLOT(x, y, ...) instead of >PLOT, x, y, ...
+
+
+Codes I DID write:
+  • filter.pro
+  • my_wavelet.pro (calls sdbwave)
+  • wa.pro
+  • wa2.pro
+
+
+22 January 2020
+---

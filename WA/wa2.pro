@@ -5,23 +5,29 @@
 ;-   "Wavelet Analysis" (WA) - discrete
 ;-
 ;- INPUT:
+;-   flux
 ;-
 ;- KEYWORDS:
 ;-
 ;- OUTPUT:
+;-   frequency, wmap (if arg variable names are provided in call to wa2)
 ;-
 ;- TO DO:
 ;-   solid vertical lines at 1:30 and 2:30
-
+;-
+;-
 ; Maybe could be called by power_maps in the intermost loop.
 ; Define z, dz, etc. in one place, since they never change?
+;-  Don't know why I wanted to do that, so I'm going with nooooo (22 January 2020)
+;-
 
 
 
 pro WA2, flux, $
     frequency, wmap, $
     cadence=cadence, $
-    zz=zz, $
+    z_start=z_start, $
+    ;zz=zz, $
     dz=dz, $
     fmin=fmin, $
     fmax=fmax, $
@@ -29,14 +35,24 @@ pro WA2, flux, $
 
     ; Input:  flux
     ; Output: wmap (2D) and frequency (1D)
+    ;-  Gee, sure wish this comment was at the TOP with the rest of the
+    ;-   code documentation! (22 January 2020)
 
     ; Find available frequencies within bandpass
+    ;-  NOTE: this block of code is fairly standard.. appears numerous times
+    ;-   in many of my codes. Somehow never could figure out how to write a
+    ;-   simple, intuitive subroutine for this.
     result = fourier2( indgen(dz), cadence, norm=norm )
     frequency = reform( result[0,*] )
     ind = where( frequency ge fmin AND frequency le fmax )
     frequency = frequency[ind]
 
-    nn = n_elements(zz)
+
+
+    ;-
+    ;--- Original way ---
+    ;-
+    nn = n_elements(z_start)
     mm = n_elements(frequency)
     wmap = fltarr(nn,mm)
 
@@ -45,25 +61,41 @@ pro WA2, flux, $
         power = (reform( result[1,*] ))[ind]
         wmap[ii,*] = power
     endfor
+
+
+    ;-
+    ;--- New way  (22 January 2020) ---
+    ;-
+    wmap = fltarr(n_elements(z_start), n_elements(frequency))
+        ;- variables 'nn' and 'mm' seemed unnecessary...
+    foreach zz, z_start, ii do begin
+        result = fourier2( flux[ zz : zz+dz-1 ], cadence, norm=norm )
+;        power = (reform( result[1,*] ))[ind]
+;        wmap[ii,*] = power
+        wmap[ii,*] = (reform( result[1,*] ))[ind]
+            ;- variable 'power' also seems unnecessary, except as readability.
+    endforeach
 end
 
-goto, start
-start:;---------------------------------------------------------------------------------
-@parameters ;- 21 April 2019
+@parameters
 
-;- User numbers to change (which is why these lines are up at the top, even
-;-   though fcenter, flower, and fupper aren't used until much farther down).
+;-
+;-------------------------------------------------------------------------------------
+;- User-defined parameters
 
 dz = 64
 
-;- coords for overplotting horizontal lines
+;- coords for horizontal lines marking upper/lower boundaries of
 fcenter = 1./180
 flower = 0.005
 fupper = 0.006
 
+;- number of points available with chosen dz
+;-   [] when more awake, figure out a better way to word this...
 NN = n_elements(A[0].flux) - dz + 1
 
 ;- min/max frequencies to display on figure.
+;-   aka: y-range
 fmin = 0.0025
 fmax = 0.0200
 
@@ -75,12 +107,24 @@ z_start = [ 0 : NN : dz/step ]
 
 ;-------------------------------------------------------------------------------------
 
+;-
+;- A.flux is exptime-corrected, but
+;-   NOT divided by # pixels (summed over 500x330 pixel AR)
+;-
+;- 22 January 2020 --> A.flux NO LONGER exptime-corrected ...
+;-
+
 aia_wa_maps = []
-;- A.flux is exptime-corrected, but NOT divided by # pixels
-;-   (summed over 500x330 pixel AR)
 for cc = 0, 1 do begin
-    WA2, A[cc].flux, frequency, wmap_out, $
-        cadence=A[cc].cadence, zz=z_start, dz=dz, fmin=fmin, fmax=fmax, norm=0
+    WA2, A[cc].flux, $ ;- input: flux
+        frequency, wmap_out, $  ;- output: frequency (1D) & wmap (2D)
+        cadence=A[cc].cadence, $  ;- cadence... obviously
+        ;zz=z_start, $
+        z_start=z_start, $
+           ;- Replaced 'zz' kw in wa2 def with 'z_start'...
+           ;-   'zz' is a counter, not a variable name.
+        dz=dz, fmin=fmin, fmax=fmax, $ ;- parameters defined by user at top of ML
+        norm=0
     aia_wa_maps = [ [[aia_wa_maps]], [[wmap_out]] ]
 endfor
 
@@ -111,13 +155,21 @@ for cc = 0, 1 do begin
     D2 = sz[1] * 100
     wmap2 = alog10( congrid(wmap, D1, D2) )
 
-    XX = ((findgen(D1)/100)*dz) / step
-
+    ;-  y-increment
     inc = (max(frequency) - min(frequency)) / (D2-1)
 
+    ;- x & y coordinates of image data (aka "wmap2")
+    XX = ((findgen(D1)/100)*dz) / step
     YY = 1000. * [ min(frequency) : max(frequency) : inc ]
-    n_freq = n_elements(frequency)
-    ytickvalues = 1000.*(frequency[0:n_freq-1:4])
+
+
+;    n_freq = n_elements(frequency)
+;    ytickvalues = 1000.*(frequency[0:n_freq-1:4])
+    ytickvalues = 1000.*(frequency[0:n_elements(frequency)-1:4])
+    ;-  n_freq is never used again... another pointless variable.
+    ;-  Could simply use sz[1] instead of n_elements(frequency), but may be
+    ;-     risky since dimensions of wmap are changed with CONGRID, and
+    ;-     if sz is defined after this, will no longer = n_elements(freq) ...
 
     position = GET_POSITION( layout=[cols,rows,cc+1], $
         top=0.5, left=0.75, width=5.0, height=3.0, ygap=0.75)
@@ -143,14 +195,19 @@ for cc = 0, 1 do begin
     ax[3].title = "Period (s)"
     ax[3].showtext = 1
 
-    ;- Position of image (--> INCHES)
-    pos = im[cc].position*[wx,wy,wx,wy]
 
+    ;-
+    ;- Colorbar
+    ;-
+
+    ;- Convert image position to inches
+    ;-  (easier to tinker with colorbar position when units make sense)
+    pos = im[cc].position*[wx,wy,wx,wy]
     cx1 = pos[2] + 0.75
     cy1 = pos[1]
     cx2 = cx1 + 0.15
     cy2 = pos[3]
-    c = colorbar2( $
+    cbar = colorbar2( $
         position = dpi*[cx1,cy1,cx2,cy2], $
         target = im[cc], $
         /device, $
@@ -163,9 +220,7 @@ for cc = 0, 1 do begin
     ax = im[cc].axes
     xtickvalues = fix(round(ax[0].tickvalues))
     ax[0].tickname = time[xtickvalues]
-    ;ax[0].title = 'Start time (UT) on 2011-February-15'
     ax[0].title = 'Start time (UT) on ' + date
-      ;- 21 April 2019: added @parameters to top of routine
 
     f1 = flower * 1000
     f2 = fcenter * 1000
@@ -173,24 +228,83 @@ for cc = 0, 1 do begin
 
     lines = objarr(6)
 
+;-
+;- 22 January 2020
+;-   Cannot find a code written by me called 'hline'...
+;-   IDL has a routine by this name, but does not appear to be what I'm using..
+;-   wa.pro calls oplot_horizontal_lines.pro; syntax is similar enough
+;-     (counter is ii instead of cc,
+;-     first arg is xrange of image, not the whole image, and
+;-      switched from procedure to function, or vice versa, but probably not)
+;-  that I assume I changed the name of this routine at some point without
+;-  changing the name in every occurrance where that routine was called from
+;-  an external file.. rookie mistake.
+;-
 
-    HLINE, $
-        im[cc], $
+
+
+    HLINE, im[cc], $
         [f1,f2,f3], $
         color = 'red', $
         linestyle=[':','--',':'], $
-        name=[  $
+        names=[  $
             '$\nu_{lower} $ = 5.0 mHz', $
             '$\nu_{center}$ = 5.6 mHz', $
             '$\nu_{upper} $ = 6.0 mHz' ]
 
+    ;h = OPLOT_HORIZONTAL_LINES( im[cc].xrange, ...
+    ;-  Remainder of call to this function matched the above call to "hline" procedure
+    ;
+
 ;    v = OPLOT_FLARE_LINES( time, yrange=im[cc].yrange )
+    ;- same for both wa.pro and wa2.pro, except ii <--> cc
+
+
+
+
+    ;------------
+    resolve_routine, 'oplot_flare_lines', /is_function
+    vert = OPLOT_FLARE_LINES( $
+        im[cc], $
+        t_obs=A[0].time, $
+        yrange=im[cc].yrange $
+    )
+;- NOTE: linestyle already set up in subroutine.
+;-  Copied the lines from plot_lc.pro .. we'll see what happens.
+
+    f1 = flower * 1000
+    f2 = fcenter * 1000
+    f3 = fupper * 1000
+    f_lines = [f1, f2, f3]
+
+    linestyle=[':','--',':']
+
+    name=[  $
+        '$\nu_{lower} $ = 5.0 mHz', $
+        '$\nu_{center}$ = 5.6 mHz', $
+        '$\nu_{upper} $ = 6.0 mHz' ]
+
+    horz = objarr(3)
+    ;- NOTE: syntax for x-coords is NOT correct, this is just a
+    ;- placeholder until I can actually run the code.
+    ;-   This explains the use of im[cc].xrange as arg to
+    ;-     one of the hline plotting routines
+    for hh = 0, n_elements(horz) do begin
+        horz[hh] = plot( $
+            [ xrange[0], xrange[-1] ], $
+            [ f_lines[hh], f_lines[hh] ], $
+            color = 'red', $
+            linestyle = linestyle[hh], $
+            name = name[hh] )
+    endfor
+    ;------------
+
+
+
     ;save2, 'wa' + A[cc].channel + '.pdf'
 endfor
 
 
-
-stop
 
 ;(im[-1]).position
 xl = 1.0
@@ -210,8 +324,10 @@ leg2 = legend2( /device, $
 
     ;print, 1000*frequency, format='(F0.2)'
     ;print, ytickvalues
+
 ;file = 'wa_plots.pdf'
 ;file = 'wa_plots_2.pdf'
-;save2, file
+file = 'wa'
+save2, file
 
 end

@@ -53,7 +53,8 @@ function OPLOT_FLARE_LINES, $
     ;utbase=utbase, $
     ;yrange=yrange, $   ; ?????
     send_to_back=send_to_back, $
-    date=date, $
+    ;date=date, $
+       ;- date is defined in @parameters, don't need to set kw anymore (22 January 2020)
 ;    gstart=gstart, $
 ;    gpeak=gpeak, $
 ;    gend=gend, $
@@ -171,7 +172,8 @@ function OPLOT_FLARE_LINES, $
             linestyle = linestyle[jj], $
             ystyle = 1, $
             name = name[jj], $
-            color = 'dark gray', $
+            color = 'black', $
+            ;color = 'dark gray', $  ;- Seems too light (22 January 2020)
             _EXTRA=e )
         if keyword_set(send_to_back) then vert[jj].Order, /SEND_TO_BACK
     endforeach
