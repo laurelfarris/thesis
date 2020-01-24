@@ -27,7 +27,6 @@
 ;+
 
 
-goto, start
 
 
 @restore_maps
@@ -52,7 +51,6 @@ aia1700mask = POWERMAP_MASK( $
     threshold=10000. )
 stop
 
-start:;---------------------------------------------------------------------------------
 
 ;+
 ;- "The usual"

@@ -8,12 +8,17 @@
 ;- USEAGE:
 ;-   IDL> @restore_maps
 ;-
-;- NOTE: Doesn't work if maps have already been added to structure.
-;-  Get "duplicate tag def." or whatever
+;- NOTE:
+;-  Doesn't work if maps have already been added to structure;
+;-    get "duplicate tag def." or whatever
+;-  Pretty sure test for tagname "MAP" takes care of this, but there
+;-    may be cases where it doesn't, so leaving this note here.
+;-     (23 January 2020)
 ;-
 ;- OLD PATH/FILENAMES:
 ;-   restore, '/solarstorm/laurel07/aia1600map_2.sav'
 ;-   restore, '/solarstorm/laurel07/aia1700map_2.sav'
+;-     ????????? (23 January 2020)
 ;-
 
 @parameters
@@ -26,8 +31,6 @@ tagnames = tag_names(A)
 test = where(tagnames eq "MAP")
 print, tagnames
 print, test
-
-
 
 stop
 
@@ -82,3 +85,6 @@ endif else begin
 
 
 endelse
+
+
+end

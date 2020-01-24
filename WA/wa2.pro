@@ -1,5 +1,10 @@
 ;+
-;- LAST MODIFIED: Thu Jan 31 02:52:30 MST 2019
+;- LAST MODIFIED:
+;-   22 January 2020
+;-
+;- -----------
+;-
+;- Thu Jan 31 02:52:30 MST 2019
 ;-
 ;- PURPOSE:
 ;-   "Wavelet Analysis" (WA) - discrete
