@@ -197,6 +197,10 @@ function STRUC_AIA, index, cube, $
     ;aia = dictionary( 'aia1600', aia1600, 'aia1700', aia1700 )
 end
 
+
+print, 'blah'
+stop
+
 ;---- 03 August 2019
 ;@parameters
 ;restore, '../20140418/aia1600aligned.sav'
@@ -218,6 +222,8 @@ aia1700 = STRUC_AIA( aia1700index, aia1700data, cadence=24., instr='aia', channe
 ;aia1600.color = 'dark orange'
 ;aia1700.color = 'dark cyan'
 A = [ aia1600, aia1700 ]
+
+stop
 
 ;aia1600 = !NULL
 ;aia1700 = !NULL
@@ -257,6 +263,8 @@ print, ''
 stop
 
 help, A[0].data
+stop
+
 @restore_maps
 help, A[1].data
 

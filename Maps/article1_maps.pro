@@ -7,8 +7,8 @@
 ;-    AIA 1600 (left) and AIA 1700 (right)
 ;-
 ;- USEAGE:
-;-   Uncomment filename of time segment to be imaged.
-;-   3 separate figures, one for each time segment.
+;-   Uncomment filename of window to be imaged.
+;-   3 separate figures, one for each window.
 ;-
 ;- To do:
 ;-   Better way to change between BDA, preferably without re-defining
@@ -29,39 +29,58 @@
 
 
 
-@restore_maps
 
 ;+
 ;- 21 February 2019 -- multiply intensity by saturation mask
-
-;threshold = 10000.
 ;data_mask = A[0].data lt threshold/A[0].exptime
+;-
+
+
+
+;- User-defined parameters
+
+;- Shouldn't change often:
+dz = 64
+threshold = 10000.
+
+;- Uncomment phase (BDA) to image:
+;filename = 'before'
+;filename = 'during'
+filename = 'after'
+
+
+;-------------------------------------------------------------------------
+
+@restore_maps
+
+resolve_routine, 'powermap_mask', /is_function
+;- 24 January 2020
+;-   NOTE: include kw for exptime to correct threshold for it
+;-    (threshold / exptime --> calculation is performed in subroutine,
+;-     if condition that "keyword_set(exptime)" is true).
 
 aia1600mask = POWERMAP_MASK( $
     A[0].data, $
     dz=64, $
     exptime=A[0].exptime, $
-    threshold=10000. )
-
+    ;threshold=10000. )
+    threshold=threshold )
+      ;- Is there a reason I didn't use a variable here before?
 
 aia1700mask = POWERMAP_MASK( $
     A[1].data, $
     dz=64, $
     exptime=A[1].exptime, $
-    threshold=10000. )
-stop
+    ;threshold=10000. )
+    threshold=threshold )
+      ;- Ditto for 1700 threshold... same value as 1600.
 
 
 ;+
 ;- "The usual"
 
 
-;filename = 'before'
-;filename = 'during'
-filename = 'after'
-
 time = strmid(A[0].time,0,5)
-dz = 64
 
 ;+
 ;- Define z/t indices

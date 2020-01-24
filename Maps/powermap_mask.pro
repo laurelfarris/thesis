@@ -124,8 +124,18 @@ end
 
 
 ;+
-;- Thu Dec 20 09:59:36 MST 2018
-;- Multiply maps by saturation mask (from bda.pro)
+;- ML code - relatively simple to run this alone, instead of
+;-  dealing with my messy, convoluted subroutines...
+;-
+
+
+
+;-
+;- Restore maps from .sav files,
+;- Compute MAP_MASK from data cube,
+;-   saturation/bleeding threshold,
+;-   and exptime (if desired).
+;- Multiply maps in structure by saturation mask (from bda.pro)
 ;-
 
 @restore_maps
