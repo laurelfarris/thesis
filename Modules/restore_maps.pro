@@ -32,7 +32,6 @@ test = where(tagnames eq "MAP")
 print, tagnames
 print, test
 
-stop
 
 ;if test eq -1 then begin  -->  true even though test = 13... I don't get it.
 
@@ -54,8 +53,10 @@ if (test ge 0) then begin
     A[1].map = map
     undefine, map
 
+stop
 
 endif else begin
+
 ;- If tag for "map" has not been added to structures in array "A", add them now.
 ;if (where(tagnames eq "MAP") eq -1) then begin
 

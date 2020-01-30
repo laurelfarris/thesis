@@ -1,31 +1,49 @@
-;+
+;-
+;-  Using "data_struc.pro" now.
+;-  This file was saved after an unfortunate and careless conflict in git
+;-   repositories, but probably not needed. Pretty sure it was renamed to
+;-   data_struc... (21 May 2019)
+;-
+;-
 ;- LAST MODIFIED:
-;-   29 January 2020
-;-     Made a copy "struc_aia_old.pro" so I could clear old code
-;-      and comments out of this one.
+;-   21 April 2019
+;-     Now that the "multi-flare" phase of my research has begun,
+;-     added (string) arguments 'year', 'month', and 'day'
 ;-
 ;- PURPOSE:
 ;-   Read AIA headers and restore .sav files (data)
-;-
 ;- INPUT:
-;-
 ;- KEYWORDS:
+;-   instr - even though this routine is for aia only, may figure out how
+;-          to combine multiple instruments in one routine, so leaving as
+;-          general as possible
 ;-
 ;- OUTPUT:
-;-
-;- NOTES:
-;-   Unprepped filename:
-;-    aia.lev1.channelA_yyyy-mm-ddThh_mm_ss.ssZ.image_lev1.fits
-;-   Prepped filename:
-;-    AIAyyyymmdd_hhmmss_channel.fits
-;+
+;- TO DO:
+
+; May need to rewrite this to separate everything that can be done
+; without header information (like when I have access to .sav files,
+; but not the fits files, where index is always extracted.
+
+;- TO DO: make a separate routine for reading in maps and power vs. time.
+;         Also need a different name for power vs. time.
+;         --> Google this, may be an actual analysis method with a real name.
+
 
 
 function STRUC_AIA, index, cube, $
+    ;year, month, day, $
     cadence=cadence, $
     instr=instr, $
     channel=channel, $
     ind=ind
+
+
+    ;- Unprepped filename:
+    ;-  aia.lev1.channelA_yyyy-mm-ddThh_mm_ss.ssZ.image_lev1.fits
+    ;- Prepped filename:
+    ;-  AIAyyyymmdd_hhmmss_channel.fits
+
 
 
     ;- Parameters specific to individual flare
@@ -170,20 +188,129 @@ function STRUC_AIA, index, cube, $
         name: name $
     }
     return, struc
+
+    dic = dictionary( $
+        'data', cube, $
+        'jd', jd, $
+        'time', time, $
+        'cadence', cadence )
+    ;aia = dictionary( 'aia1600', aia1600, 'aia1700', aia1700 )
 end
 
 
+print, 'blah'
+stop
+
+;---- 03 August 2019
+;@parameters
+;restore, '../20140418/aia1600aligned.sav'
+;cube = cube[*,*,1:749]
+;save, cube, filename="aia1600aligned.sav"
+
+;- 1.
+;- initialize 'A' as a !NULL variable,
+;A = []
+;A = [A, STRUC_AIA( aia1600index, aia1600data, cadence=24., instr='aia', channel='1600' ) ]
+;A = [A, STRUC_AIA( aia1700index, aia1700data, cadence=24., instr='aia', channel='1700' ) ]
+
+
+;- 2.
+;- Define individual structure for each channel, use to create 'A',
+;-  then set = 0 to clear memory.
 aia1600 = STRUC_AIA( aia1600index, aia1600data, cadence=24., instr='aia', channel='1600' )
 aia1700 = STRUC_AIA( aia1700index, aia1700data, cadence=24., instr='aia', channel='1700' )
+;aia1600.color = 'dark orange'
+;aia1700.color = 'dark cyan'
 A = [ aia1600, aia1700 ]
+
+stop
+
+;aia1600 = !NULL
+;aia1700 = !NULL
+;- or
+;delvar, aia1600
+;delvar, aia1700
+
+;A[0].color = 'dark orange'
+;A[1].color = 'dark cyan'
+A[0].color = 'blue'
+A[1].color = 'red'
+
+;print, 'NOTE: aia1600index, aia1600data, aia1700index, and aia1700data'
+;print, '         still exist at ML. '
+;print, 'Type ".c" to undefine redundant variables.'
+;stop
+
 undefine, aia1600
 undefine, aia1600index
 undefine, aia1600data
 undefine, aia1700
 undefine, aia1700index
 undefine, aia1700data
-A[0].color = 'blue'
-A[1].color = 'red'
 
 
+stop
+
+
+;--------------------------------------------------------------------------
+
+;- Create different routine for doing this. Leave comment here directing user
+;-  to this routine to avoid confusion.
+print, ''
+print, ''
+print, '   Type ".CONTINUE" to restore power maps.'
+print, ''
+stop
+
+help, A[0].data
+stop
+
+@restore_maps
+help, A[1].data
+
+;for cc = 0, 1 do begin
+;    restore, '../aia' + A[cc].channel + 'map_2.sav'
+;    A[cc].map = map
+;endfor
+stop
+
+; To do: save variables with same name so can call this from subroutine.
+restore, '../power_from_maps.sav'
+;power_from_maps = aia1600power_from_maps
+;save, power_from_maps, filename='aia1600power_from_maps.sav'
+;power_from_maps = aia1700power_from_maps
+;save, power_from_maps, filename='aia1700power_from_maps.sav'
+
+;A[0].power_maps = aia1600power_from_maps
+;A[1].power_maps = aia1700power_from_maps
+
+;------------------------------------------------------------------------------------
+
+; A = replicate( struc, 2 )
+; ... potentially useful?
+; need to re-read data, but not headers... commented in subroutine for now.
+
+;------------------------------------------------------------------------------------
+
+;- 23 September 2018
+A[0].data = A[0].data > 0
+;  thought aia_prep produced data with no negative numbers, but not
+;   sure why I thought so...
+
+    resolve_routine, 'get_power_from_flux', /either
+    power_flux = GET_POWER_FROM_FLUX( $
+        flux=flux, $
+        cadence=cadence, $
+        dz=64, $
+        fmin=0.005, $
+        fmax=0.006, $
+        norm=0, $
+        data=cube )
+
+    restore, '../aia' + channel + 'map.sav'
+
+        ;power_flux: power_flux, $
+        ;power_maps: fltarr(685), $
+        ;map: fltarr(sz[0],sz[1],685), $
+        ;map: map, $
 end

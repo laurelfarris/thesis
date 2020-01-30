@@ -57,15 +57,14 @@ pro WA2, flux, $
     ;-
     ;--- Original way ---
     ;-
-    nn = n_elements(z_start)
-    mm = n_elements(frequency)
-    wmap = fltarr(nn,mm)
-
-    for ii = 0, nn-1 do begin
-        result = fourier2( flux[ zz[ii] : zz[ii]+dz-1 ], cadence, norm=norm )
-        power = (reform( result[1,*] ))[ind]
-        wmap[ii,*] = power
-    endfor
+;    nn = n_elements(z_start)
+;    mm = n_elements(frequency)
+;    wmap = fltarr(nn,mm)
+;    for ii = 0, nn-1 do begin
+;        result = fourier2( flux[ zz[ii] : zz[ii]+dz-1 ], cadence, norm=norm )
+;        power = (reform( result[1,*] ))[ind]
+;        wmap[ii,*] = power
+;    endfor
 
 
     ;-
@@ -78,7 +77,6 @@ pro WA2, flux, $
 ;        power = (reform( result[1,*] ))[ind]
 ;        wmap[ii,*] = power
         wmap[ii,*] = (reform( result[1,*] ))[ind]
-            ;- variable 'power' also seems unnecessary, except as readability.
     endforeach
 end
 
@@ -106,7 +104,8 @@ fmax = 0.0200
 
 
 ; starting indices/time for each FT (length = # resulting maps)
-step = 8
+step = 1
+;step = 8
 z_start = [ 0 : NN : dz/step ]
 
 
@@ -150,7 +149,7 @@ wy = 9.0
 win = window( dimensions=[wx,wy]*dpi, location=[500,0], buffer=0 )
 
 
-for cc = 0, 1 do begin
+for cc = 1, 1 do begin
 
     time = strmid(A[cc].time,0,5)
 
@@ -160,12 +159,12 @@ for cc = 0, 1 do begin
     D2 = sz[1] * 100
     wmap2 = alog10( congrid(wmap, D1, D2) )
 
-    ;-  y-increment
-    inc = (max(frequency) - min(frequency)) / (D2-1)
+print, max(wmap2)
 
     ;- x & y coordinates of image data (aka "wmap2")
     XX = ((findgen(D1)/100)*dz) / step
-    YY = 1000. * [ min(frequency) : max(frequency) : inc ]
+    YY = 1000. * [ min(frequency) : max(frequency) :  $
+        (max(frequency) - min(frequency)) / (D2-1) ] ;- y increment
 
 
 ;    n_freq = n_elements(frequency)
@@ -330,6 +329,7 @@ leg2 = legend2( /device, $
     ;print, 1000*frequency, format='(F0.2)'
     ;print, ytickvalues
 
+stop
 ;file = 'wa_plots.pdf'
 ;file = 'wa_plots_2.pdf'
 file = 'wa'

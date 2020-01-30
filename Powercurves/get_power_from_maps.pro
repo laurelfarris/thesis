@@ -107,7 +107,12 @@ for cc = 0, 1 do $
 ;-  structure tag definition... stupid.
 ;@restore_maps
 
-A.map = A.map * map_mask
+
+
+
+
+;- 29 January 2020
+;A.map = A.map * map_mask
 
 for cc = 0, n_elements(A)-1 do begin
     print, ""
@@ -216,7 +221,6 @@ power = fltarr( sz[2], sz[3] )
 @restore_maps
 ;A.map = A.map * map_mask
 for cc = 0, n_elements(A)-1 do begin
-;for cc = 0, 0 do begin
     print, ""
     power[*,cc] = (total(total(A[cc].map,1),1))
     ;power[*,cc] = (total(total(A[cc].map,1),1)) / (500.*330)
