@@ -25,7 +25,77 @@
 ; Define z, dz, etc. in one place, since they never change?
 ;-  Don't know why I wanted to do that, so I'm going with nooooo (22 January 2020)
 ;-
+;-
 
+
+
+
+;------------------------------------------------------------------------
+;-----
+;- 05 February 2020
+;-  Merging wa.pro and wa2.pro
+;-
+
+function WA_AVERAGE, flux, power, dz=dz
+    ; This is a little hacky... optimize later.
+
+    ;- Thu Jan 24 15:17:59 MST 2019
+    ;-   Merged wa_average.pro and wa.pro, then deleted wa_average.pro.
+    ;-   Not sure yet what I was even trying to do here...
+
+
+    x = n_elements(flux)
+    y = n_elements(power)
+    arr = fltarr( x, y )
+
+    ; Set sub-arrays of length dz equal to power[i]
+    ; step in x and y at the same time
+    for i = 0, y-1 do begin
+        arr[ i : i+dz-1, i ] = power[i]
+        ;arr[ 0 : dz-1, i ] = power[i]
+        ;arr[ *, i ] = shift(...)
+    endfor
+
+    ; Set new power to average(arr)
+    arr2 = mean( arr, dimension=2 )
+    N = n_elements(arr2)
+
+    i1 = dz-1
+    i2 = N-dz ; no need to subtract 1 because of inclusivity of indices.
+
+    new_power = arr2[i1:i2]
+    return, new_power
+end
+;arr = WA_AVERAGE( A.power_flux )
+
+
+
+
+
+; Last modified:   14 July 2018
+; Maybe could be called by power_maps in the intermost loop.
+; Define z, dz, etc. in one place, since they never change?
+; Wavelet Analysis (WA) - discrete
+; To do:      solid vertical lines at 1:30 and 2:30
+pro better
+    ; (11 Sep 2018) Better way to code this perhaps:
+
+    power1 = result[1,*]
+    ; power P = [ p0, p1, ..., p185 ]
+
+    NN = n_elements(power1)
+    power2 = fltarr(NN)
+
+    for i = 0, NN-1 do begin
+        power2[i] = mean( power[ i : i+dz-1 ] )
+    endfor
+    ; plot vs. t = [ (dz/2) : NN - (dz/2) ]
+end
+
+
+
+;-------
+;------------------------------------------------------------------------
 
 
 pro WA2, flux, $
@@ -37,6 +107,13 @@ pro WA2, flux, $
     fmin=fmin, $
     fmax=fmax, $
     norm=norm
+
+    ;-
+    ;- 05 February 2020
+    ;-   NOTE: procedure WA2 in wa2.pro is same as "calc_wa" in wa.pro
+    ;-     (which has been moved to ../.old/)
+    ;-
+
 
     ; Input:  flux
     ; Output: wmap (2D) and frequency (1D)
@@ -149,7 +226,7 @@ wy = 9.0
 win = window( dimensions=[wx,wy]*dpi, location=[500,0], buffer=0 )
 
 
-for cc = 1, 1 do begin
+for cc = 0, 1 do begin
 
     time = strmid(A[cc].time,0,5)
 
