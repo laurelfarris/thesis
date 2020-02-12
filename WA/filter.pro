@@ -1,4 +1,11 @@
 ;- Thu Nov 29 08:12:03 MST 2018
+;-
+;-
+;- To Do:
+;-   [] replace hardcoded cutoff for filter (in function "filter")
+;-      used to create mask, and make new kw option, or something...
+;-    (2/12/2020)
+;-
 
 pro CALC_FOURIER2, flux, cadence, frequency, power, fmax=fmax, fmin=fmin
 
