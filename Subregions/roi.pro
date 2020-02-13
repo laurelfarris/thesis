@@ -1,5 +1,3 @@
-
-
 ;- 14 December 2018
 
 ;- This code plots polygons on top of existing image.
