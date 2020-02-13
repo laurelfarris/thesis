@@ -137,6 +137,10 @@ threshold = 15000.
 
 aia_dz = 64
 hmi_dz = (25.6 * 60)/H[0].cadence
+    ;- HMI has longer cadence than AIA, so dz needs to be shorter in order
+    ;- to have the same amount of TIME covered by window
+    ;- i.e. both AIA and HMI have a window length = ~25.6 minutes.
+    ;-   (12 February 2020) 
 
 ;- Time
 ;- AIA z-indices, need to be converted for HMI
