@@ -39,6 +39,7 @@ if (test ge 0) then begin
 ;- If map is already included in structures, simply set each A[cc].map = map,
 ;-   where "map" is name of variable that has just been freshly restored.
 
+
     print, 'Replace existing map with restored map.'
 
     ;restore, path + 'aia1600map.sav'
@@ -61,29 +62,29 @@ endif else begin
 ;if (where(tagnames eq "MAP") eq -1) then begin
 
     print, 'Adding tag "MAP" to struc array "A", set to restored maps.'
-
+    ;
     ;restore, path + 'aia1600map.sav'
     restore, path + 'aia1600map_2.sav'
     aia1600 = A[0]
     aia1600 = create_struct( aia1600, 'map', map )
-
+    ;
     ;restore, path + 'aia1700map.sav'
     restore, path + 'aia1700map_2.sav'
     aia1700 = A[1]
     aia1700 = create_struct( aia1700, 'map', map )
-
+    ;
     A = [ aia1600, aia1700 ]
-
+    ;
     undefine, map
     undefine, aia1600
     undefine, aia1700
     ;delvar, map
     ;delvar, aia1600
     ;delvar, aia1700
-
+    ;
     ;A[0].map = map
     ;A[1].map = map
-
+    ;
 
 endelse
 

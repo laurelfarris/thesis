@@ -68,6 +68,8 @@ pro SAVE2, filename, $
     wy = dims[1]
 
 
+
+
     CALDAT, systime(/julian), $
       month, day, year, hour, minute, second
 
@@ -78,7 +80,34 @@ pro SAVE2, filename, $
     if strlen(month) eq 1 then month = '0' + month
     if strlen(day) eq 1 then day = '0' + day
 
-    new_filename = filename + '_' + year + month + day + '.pdf'
+    ;---------------------------------------------------
+
+    ;+
+    ;- 18 February 2020
+    ;-   IDL> help, SYSTIME(/julian)
+    ;-     <Expression>  DOUBLE  =  2458898.0
+    ;-   IDL> help, SYSTIME()
+    ;-     <Expression>  STRING  =  "Tue Feb 18 12:14:49 2020"
+    ;- Seems like it would have been easier to pull number from
+    ;-  systime(), except just noticed there's no number for month.
+    ;- There's probably a better way to do this, but not important enough
+    ;-
+
+    ;- Adding more hacky code to include time 
+    hh = strmid( systime(), 11, 2 )
+    mm = strmid( systime(), 14, 2 )
+    ss = strmid( systime(), 17, 2 )
+
+
+    ;---------------------------------------------------
+
+
+
+    ;new_filename = filename + '_' + year + month + day + '.pdf'
+    new_filename = filename + '_' + $
+        year + month + day + $
+        hh + mm + ss + $
+        '.pdf'
 
     ; Add timestamp to figure
     if keyword_set(stamp) then begin

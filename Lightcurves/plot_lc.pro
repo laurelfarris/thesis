@@ -1,7 +1,10 @@
 ;+
 ;- LAST MODIFIED:
+;-   18 February 2020
+;-     Attempting to create light curves for ROIs ...
+;-
 ;-   03 August 2019
-;-   Bare Min: needs to produce lc figures for ANY flare.
+;-     Bare Min: needs to produce lc figures for ANY flare.
 ;-     (see plot_lc_2.pro for early attempts at a nice subroutine)
 ;-
 ;- PURPOSE:
@@ -14,6 +17,11 @@
 ;- OUTPUT:
 ;-
 ;- TO DO:
+;-   Generalize variables currently hardcoded:
+;-     * filename
+;-     * ydata
+;-     * xtickinterval
+;-
 ;-
 
 
@@ -24,9 +32,14 @@
 ;IDL .run struc_aia
 
 
-;file = 'lc_C30'
-file = 'lc_' + class
-    ;- from @parameters (30 August 2019)
+;filename = 'lc_C30'
+;filename = 'lc_' + class    ;- 'class' defined in @parameters (30 August 2019)
+
+;+
+;- 18 February 2020
+filename = 'lc_ROI'
+;-
+;-
 
 ;ydata = A.flux
 
@@ -37,11 +50,18 @@ file = 'lc_' + class
 ;ydata2 = ( ydata2 - min(ydata2) )/(max(ydata2)-min(ydata2)); + 0.1
 ;ydata = [ [ydata1], [ydata2] ]
 
-ydata = A.flux
+;ydata = A.flux
 ydata = [ $
     [ A[0].flux / A[0].exptime ], $
     [ A[1].flux / A[1].exptime ] $
 ]
+
+
+;+
+;- 18 February 2020
+ydata = roi_flux
+;-
+;-
 
 ;help, ydata
 ;format = '(e0.2)'
@@ -276,8 +296,9 @@ shaded.Order, /send_to_back
 
 print, ''
 print, 'ATTENTION USER!!'
-print, ' ... --> Type .c to save file: ', file
+print, ' ... --> Type .c to save file: ', filename
 stop
-save2, file
+
+save2, filename
 
 end
