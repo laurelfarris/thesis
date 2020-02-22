@@ -25,6 +25,7 @@
 
 
 function PLOT_SPECTRA, frequency, power, $
+    ;fmin=fmin, fmax=fmax, $
     leg=leg, $  ; return legend in kw "leg"
 ;    margin=margin, $
     _EXTRA=e

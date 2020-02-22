@@ -148,7 +148,7 @@ function STRUC_AIA, index, cube, $
     ;- 18 February 2020
     flux = mean( mean( cube, dimension=1), dimension=1 )
     print, max(flux)
-
+    
 
     ;-
     ;-

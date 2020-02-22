@@ -103,10 +103,9 @@ pro SAVE2, filename, $
 
 
 
-    ;new_filename = filename + '_' + year + month + day + '.pdf'
     new_filename = filename + '_' + $
         year + month + day + $
-        hh + mm + ss + $
+        ;hh + mm + ss + $
         '.pdf'
 
     ; Add timestamp to figure
@@ -138,6 +137,8 @@ pro SAVE2, filename, $
         endfor
     endif
 
+
+
     if not keyword_set(overwrite) then begin
         if FILE_EXIST(path + new_filename) then begin
             print, ''
@@ -147,6 +148,23 @@ pro SAVE2, filename, $
             stop
         endif
     endif
+    ;+
+    ;-
+    ;- 21 February 2020
+    ;-
+    ;- How to append next number (e.g. if filename.pdf exists,
+    ;-  and filename_2.pdf exists, want to update filename to
+    ;-  filename_3.pdf.
+    ;-
+    ;- ...
+    ;- loc = STRPOS(filename, '.pdf')
+    ;- counter = fix(filename[loc-1])
+    ;-   (if filename = 'blah_2.pdf', counter should be set to 2).
+    ;- updated_filename = STRJOIN( [filename, counter+1], '_'  )
+    ;-   ( underscore '_' is the "delimiter", only need to worry about
+    ;-       numerical value following it.) 
+    ;-
+    ;-
 
     win.SAVE, path + new_filename, $
         page_size=[wx,wy], $

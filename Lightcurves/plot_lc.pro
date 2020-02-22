@@ -37,7 +37,10 @@
 
 ;+
 ;- 18 February 2020
-filename = 'lc_ROI'
+;filename = 'lc_ROI'
+;-
+;- 21 February 2020
+;filename = 'lc_ROI_running_avg'
 ;-
 ;-
 
@@ -51,16 +54,21 @@ filename = 'lc_ROI'
 ;ydata = [ [ydata1], [ydata2] ]
 
 ;ydata = A.flux
-ydata = [ $
-    [ A[0].flux / A[0].exptime ], $
-    [ A[1].flux / A[1].exptime ] $
-]
+;ydata = [ $
+;    [ A[0].flux / A[0].exptime ], $
+;    [ A[1].flux / A[1].exptime ] $
+;]
 
 
 ;+
 ;- 18 February 2020
-ydata = roi_flux
+;ydata = roi_flux
+;-   NOTE: roi_flux already divided by exptime in today.pro
+;-    (or whatever code it's defined in the future).
 ;-
+;- 21 February 2020
+;ydata = roi_flux/lc_avg
+;- --> See today.pro for def of ydata
 ;-
 
 ;help, ydata
@@ -70,7 +78,10 @@ ydata = roi_flux
 
 n_obs = (size(ydata, /dimensions))[0]
 ;xdata = A.jd
-xdata = [ [indgen(n_obs)], [indgen(n_obs)] ]
+;-
+;xdata = [ [indgen(n_obs)], [indgen(n_obs)] ]
+;-  see today.pro (21 feb 2020)
+;-
 ;xtickinterval = A[0].jd[75] - A[0].jd[0]
 xtickinterval = 75
 ytitle=A.name + ' (DN s$^{-1}$)'
@@ -197,7 +208,11 @@ vert = OPLOT_FLARE_LINES( $
     send_to_back=1 )
 
 resolve_routine, 'legend2', /either
-leg = LEGEND2( target=plt, /upperleft, sample_width=0.25 )
+leg = LEGEND2( $
+    target=plt, $
+    ;/upperleft, $
+    /upperright, $
+    sample_width=0.25 )
 
 ;- NO point in defining these twice (ax[1] and ax[3]) -- 17 January 2020
 ymajor = -1

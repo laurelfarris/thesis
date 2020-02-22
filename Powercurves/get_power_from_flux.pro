@@ -40,8 +40,18 @@ function GET_POWER_FROM_FLUX, $
     ;   25 November 2018
     ;     - probably a good idea: flux*10^n increases power by factor of 10^2n.
 
-    if keyword_set(n_pix) then new_flux = flux/n_pix $
-        else new_flux=flux
+
+
+    ;+
+    ;-  21 February 2020
+    ;-    Moving this to ML ... usually prefer to clean up code that
+    ;-    user interacts with as much as possible, but this is too
+    ;-    easy to miss, numbers are skewed and wouldn't understand why.
+    ;-
+    ;if keyword_set(n_pix) then new_flux = flux/n_pix $
+    ;   else new_flux=flux
+    ;-
+    ;-
 
 
     resolve_routine, 'calc_fourier2', /either
@@ -57,22 +67,26 @@ function GET_POWER_FROM_FLUX, $
 end
 
 
-goto, start
-
 
 ;- Calculate power from flux (per pixel).
 
-start:;----------------------------------------------------------------------------------------
 dz = 64
 power = fltarr(685, 2)
 
+;+
+;-
+;- 21 Feb 2020 -- moved var 'n_pix' (and division of flux by this)
+;-  here instead of dividing in function by passing N_pix as a keyword...
+;-
+n_pix = 500.*330.
 
 ;- NOTE: A[*].flux = exposure-time corrected, TOTAL flux over AR.
 for cc = 0, 1 do begin
     power[*,cc] = GET_POWER_FROM_FLUX( $
         A[cc].flux, $
+       ; A[cc].flux/n_pix, $
         A[cc].cadence, $
-        n_pix = 500.*330., $
+        ;n_pix = 500.*330., $
         dz=dz, $
         fmin=0.005, $
         fmax=0.006, $
@@ -102,14 +116,16 @@ props = { $
     ;sym_size : 0, $  ;; = 0.1 up to... not sure how big.
     name : A.name }
 
-file = 'time-3minpower_flux'
+filename = 'time-3minpower_flux'
 
-resolve_routine, 'plot_pt';, /either
-PLOT_PT, power, dz, A[0].time, _EXTRA = props
+;- 21 February 2020 -- apparently plot_pt used to be pro, not func
+;resolve_routine, 'plot_pt';, /either
+;PLOT_PT, power, dz, A[0].time, _EXTRA = props
+;-
+resolve_routine, 'plot_pt', /is_function
+plt = PLOT_PT( A[0].time, power, dz, buffer=0);, _EXTRA = props
+;-
 
-
-
-save2, file
-
+;save2, filename
 
 end
