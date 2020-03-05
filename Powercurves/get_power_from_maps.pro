@@ -53,7 +53,9 @@
 
 
 ;- Restore AIA powermaps from .sav files and read into A[0].map and A[1].map.
-@restore_maps
+;@restore_maps
+
+
 
 format = "(e0.5)"
 for cc = 0, n_elements(A)-1 do begin
@@ -89,6 +91,7 @@ map_mask = fltarr(sz)  ;- I was making this way too complicated...
 resolve_routine, 'powermap_mask', /either
 for cc = 0, 1 do $
     map_mask[*,*,*,cc] = POWERMAP_MASK( $
+;    test = POWERMAP_MASK( $
         A[cc].data, $
         ;sz = size(A[cc].map, /dimensions), $
           ;- see rambling comments in powermap_mask.pro where sz is defined.
@@ -112,7 +115,7 @@ for cc = 0, 1 do $
 
 
 ;- 29 January 2020
-;A.map = A.map * map_mask
+A.map = A.map * map_mask
 
 for cc = 0, n_elements(A)-1 do begin
     print, ""
@@ -132,7 +135,7 @@ n_pix = total(total(map_mask,1),1)
         print, "Problem: n_pix = 0 somewhere, which should be impossible. "
         stop
     endif
-
+help, n_pix
 
 ;---------------------------------------------------------------------------------------------
 
@@ -218,7 +221,14 @@ power = fltarr( sz[2], sz[3] )
 ;-----------------------------------------------------------------------------------
 ;- Compute power WITHOUT excluding saturated pixels, compare values
 
-@restore_maps
+
+
+
+
+
+
+
+;@restore_maps
 ;A.map = A.map * map_mask
 for cc = 0, n_elements(A)-1 do begin
     print, ""
@@ -296,7 +306,7 @@ stop ;- Before plotting..
 resolve_routine, 'plot_pt', /is_function
 dw
 plt = PLOT_PT( $
-    A[0].time, power, dz, buffer=0, $
+    A[0].time, power/n_pix, dz, buffer=0, $
     stairstep = 1, $
     ;yminor = 4, $
     title = '', $
@@ -311,9 +321,10 @@ ax2.text_color = plt[0].color
 ax3 = plt[1].axes
 ax3.title = plt[1].name + " 3-minute power"
 
-stop
 
-fname = 'time-3minpower_maps_' + class + '_3'
+;fname = 'time-3minpower_maps_' + class; + '_3'
+;fname = 'N_unsaturated_pixels' + class
+fname = 'time-3minpower_maps_per_pixel' + class
 resolve_routine, 'save2', /either
 save2, fname
 

@@ -140,19 +140,19 @@ function STRUC_AIA, index, cube, $
     ;cube = float(cube)
     ;flux = fltarr( sz[2] )
     flux = total( total( cube, 1), 1 )
-    print, max(flux)
-    print, max( flux / (500.*330.) )
+;    print, max(flux)
+;    print, max( flux / (500.*330.) )
     ;-
 
     ;+
     ;- 18 February 2020
-    flux = mean( mean( cube, dimension=1), dimension=1 )
-    print, max(flux)
+;    flux = mean( mean( cube, dimension=1), dimension=1 )
+;    print, max(flux)
     
 
     ;-
     ;-
-    stop
+    ;stop
     ;-
     ;-
 

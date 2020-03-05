@@ -100,10 +100,13 @@ function POWERMAP_MASK, $
     sz = size(data_mask, /dimensions)
 
     
-    if flare_num eq 0 then $
-        sz[2] = sz[2]-dz $
-    else sz[2] = sz[2]-dz+1
+;    if flare_num eq 0 then $
+;        sz[2] = sz[2]-dz $
+;    else sz[2] = sz[2]-dz+1
       ;-  sz[2]-dz+1 is correct EXCEPT X2.2 flare... missing last map
+      ;-     Maps were re-computed at some point, should have all maps
+      ;-      (26 February 2020)
+    sz[2] = sz[2]-dz+1
 
     map_mask = fltarr(sz)
 

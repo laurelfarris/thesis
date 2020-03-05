@@ -36,10 +36,18 @@ dz = 64
 x0 = center[0]
 y0 = center[1]
 
+
+;rr = 100
+;imdata = A[cc].data[ $
+;imdata = A[cc].map[ $
+;    x0-(rr/2):x0+(rr/2)-1, $
+;    y0-(rr/2):y0+(rr/2)-1, $
+;    z_ind]
+;help, imdata
+
 dw
 rr = 10
-for cc = 0, 0 do begin
-    time = strmid(A[cc].time,0,8)
+for cc = 0, 1 do begin
     imdata = A[cc].map[*,*,z_ind]
     im = image2( $
         alog10(imdata), $
@@ -55,104 +63,11 @@ for cc = 0, 0 do begin
         dimensions=[rr,rr], $
         color='black' $
     )
-    ;save2, 'roi_' + A[cc].channel
+    time = strmid(A[cc].time,0,8)
+    save2, 'roi_' + A[cc].channel
 endfor
 
-
-
-rr = 10
-
-
-;+
-;- 05 March 2020
-;-   "offset" is the distance between ROI center and tip of arrow
-;-   "side" is the length of the x and y vector components of the arrow
-;-     (value determined based on desired length of arrow shaft,
-;-      and good 'ol Pythagorean theorem. Yay, geometry!! )
-;-
-
-offset = 5
-length = 20
-side = sqrt( (length^2)/2 )
-print, side
-x2 = x0 + offset
-y2 = y0 - offset
-x1 = x2 + side
-y1 = y2 - side
-print, x1, y1
-print, x2, y2
-myarrow.delete
-
-myarrow2 = arrow2( $
-    [x1,x2]+10, [y1,y2], /data, $
-    thick=3.0, $
-    fill_background=1, $
-    head_angle=30, $
-    head_indent=0, $
-    ;head_size=0, $
-    color='purple' $
-)
-
-
-;- other values used while playing with IDL's ARROW function... is fun :)
-;xx = [385, 395]
-;yy = [172, 182]
-;
-;x1 = 10
-;x2 = 50
-;y1 = 20
-;y2 = 80
-
-
-    ;[ [x1,x2], [y1,y2] ], $
-    ;[ [x0+rr, x0+(2*rr)], [y0+rr, y0+(2*rr)] ], $
-    ;[ xx, yy], $
-
-;myarrow.delete
-myarrow2 = ARROW( $
-    ;[x1,x2], [y1,y2], $
-    [20, 10]+150, [20, 50]+20, $
-    /data, $
-    color='black', $
-    thick=4.0, $
-    line_thick=2.0, $
-    fill_background=0 $
-)
-;myarrowtoo.delete
-myarrowtoo2 = ARROW( $
-    ;[x1,x2], [y1,y2], $
-    [20, 10]+250, [20, 50]+20, $
-    ;[ [x1,x2], [y1,y2] ], $
-    ;[ [x0+rr, x0+(2*rr)], [y0+rr, y0+(2*rr)] ], $
-    ;[ xx, yy], $
-    /data, $
-    color='gray', $
-    thick=4.0, $
-    line_thick=2.0, $
-    fill_background=0 $
-)
-
-myarrow.thick=10.0
-
-
-mypolygon1.delete
-mypolygon2.delete
-
-rr = 4
-mypolygon1 = polygon2( center=[x1, y1], dimensions=[rr,rr], /data )
-mypolygon2 = polygon2( center=[x2, y2], dimensions=[rr,rr], /data )
-
-
-
-
-
-
-
-
-
-
 stop
-
 
 ;-
 ;------------------------------------------------------
@@ -207,10 +122,43 @@ for cc = 0, 1 do begin
     endfor
 ;
 endfor
+print, max(lc_avg[*,0])
+print, max(lc_avg[*,1])
 
+;xdata = [ [indgen(sz[0])], [indgen(sz[0])] ] + (dz_avg/2)
 
+;help, xdata
+;print, xdata[ 0,0]
+;print, xdata[-1,0]
 
-filename = 'map_with_arrow'
+;ydata = ( roi_flux[ dz_avg/2 : (749-1)-(dz_avg/2), * ] )
+;filename = 'lc_ROI'
+;ydata = lc_avg
+;filename = 'lc_ROI_avg'
+ydata = ( roi_flux[ dz_avg/2 : (749-1)-(dz_avg/2), * ] ) / lc_avg
+filename = 'lc_ROI_flattened'
+;
 
+;IDL> .run plot_lc
+
+;----------------------
+
+;
+resolve_routine, 'calc_ft', /is_function
+resolve_routine, 'plot_spectra', /is_function
+;
+for cc = 0, 0 do begin
+    ft = CALC_FT( ydata[0:100,cc], 24, /norm )
+    plt = PLOT_SPECTRA( $
+        ft.frequency, ft.power, $
+        overplot=cc<1, $
+        xrange=[0.0025,0.010], $
+        ;xrange=[0.0,0.01], $
+        color=A[cc].color, $
+        buffer=0, $
+        name=A[cc].name, $
+        stairstep=1, $
+        leg=leg )
+endfor
 
 end
