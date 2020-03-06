@@ -32,13 +32,13 @@
 ;- User-defined parameters
 ;-
 
-buffer=1
+buffer=0
 
 ;-
 ;- Flare phase: [] uncomment one of the three phases (BDA) to image.
-;filename = 'before'
+filename = 'before'
 ;filename = 'during'
-filename = 'after'
+;filename = 'after'
 
 ;+
 ;- 21 February 2019 -- multiply intensity by saturation mask
