@@ -24,7 +24,16 @@
 ;-
 
 
+;- buffer=0 at dept, =1 if working remotely.
+buffer=1
+
+
 dz = 64
+
+;- index of power map to image, where map was obtained from FFT of
+;-   data from z_ind to z_ind+dz-1.
+z_ind = 201
+
 
 ;- center coords of ROI
 center = [382,192]
@@ -33,16 +42,13 @@ center = [382,192]
 ;-  contains the pixels spatially averaged to obtain LCs (see previous today.pro),
 ;-   for a total area = rr x rr square pixels.
 rr = 10
-
-;- index of power map to image, where map was obtained from FFT of
-;-   data from z_ind to z_ind+dz-1.
-z_ind = 201
-
+;-
 ;-  'offset' = distance between ROI center and tip of arrow
-offset = 5
-
+offset = rr; + 5
+;-
 ;-  'arrow_mag' = "magnitude" of the arrow (length of arrow shaft).
-arrow_mag = 20
+arrow_mag = 25
+;-
 
 
 
@@ -51,81 +57,82 @@ arrow_mag = 20
 ;- general code (no user input required)
 ;-
 
+time = strmid(A.time,0,8)
+title = A.name + ' 3-minute power (' + $
+    time[z_ind,*] + ' - ' + time[z_ind+dz-1,*] + ')'
+;-   title = 2-element string array, one for each channel.
+;-
+
+
+
+;- separate elements of center array into x and y coords.
 x0 = center[0]
 y0 = center[1]
 
-;-
-;title = A[cc].name + ' 3-minute power (' + time[z_ind] + ' - ' + time[z_ind+dz-1] + ')' ,$
-;-   title kw passed to image2 (below) in following form each iteration:
-;-
-;- Title now defined outside image loop so that call to IMAGE is less cluttered.
-;-
-
-
-
-title = A.name + ' 3-minute power (' + time[z_ind] + ' - ' + time[z_ind+dz-1] + ')'
-help, title
-;-   title should be 2-element string array. If not, this won't work. (05 March 2020)
-;-
-
-
-;+
-;--- Create powermap image
-;-
-
-dw
-;for cc = 0, 1 do begin
-for cc = 0, 0 do begin
-    ;- overlaying ARROW graphic on 3-min powermap from AIA 1600Å channel only, for now.
-    ;-
-    time = strmid(A[cc].time,0,8)
-    imdata = A[cc].map[*,*,z_ind]
-    im = image2( $
-        alog10(imdata), $
-        margin=0.1, $
-        title = title[cc], $
-        rgb_table=AIA_COLORS( wave=fix(A[cc].channel) ) $
-    )
-    pol = polygon2( $
-        target=im, $
-        center=[x0, y0], $
-        dimensions=[rr,rr], $
-        color='black' $
-    )
-endfor
-
-
-
-;+
-;--- Create Arrow graphic on top of powermap
-;-
 
 ;- 'xycomp' = length of the x and y vector components of the arrow
 ;-    (sloppy variable name, but all I can come up with right now).
 ;-  Value is calculated from arrow_mag using Pythagorean theorem, and determines
 ;-   x1 and y1 (the coords of the arrow end not pointing at the ROI).
 xycomp = sqrt( (arrow_mag^2)/2 )
-
-
+;-
+;-
 ;- X and Y args for ARROW function (endpoint coords of arrow graphic).
 x2 = x0 + offset
 y2 = y0 - offset
 x1 = x2 + xycomp
 y1 = y2 - xycomp
+;-
 
-;- create arrow graphic on current image
+
+
+
+;+
+;--- Create powermap images with arrows overlaid
+;-
+
+resolve_routine, 'image2', /is_function
 resolve_routine, 'arrow2', /is_function
-myarrow = ARROW2( $
-    [x1,x2], [y1,y2], $
-    thick=3.0, $
-    line_thick=2.0, $
-    head_angle=30, $   ;- default in my subroutine (arrow2) = 45 degrees.
-    ;head_indent=0, $  ;- default already = 0; can delete this line.
-    ;head_size=0, $    ;- forgot what this is...
-    fill_background=1 $
-)
+;dw
+im = objarr(n_elements(A))
+;-
+for cc = 0, 1 do begin
+    dw
+    imdata = A[cc].map[*,*,z_ind]
+    im[cc] = image2( $
+        alog10(imdata), $
+        margin=0.1, $
+        title = title[cc], $
+        rgb_table=AIA_COLORS( wave=fix(A[cc].channel) ), $
+        buffer=buffer $
+    )
+    ;-
+    myarrow = ARROW2( $
+        [x1,x2], [y1,y2], $
+        ;target=im[cc], $
+        thick=3.0, $
+        line_thick=2.0, $
+        head_angle=30, $   ;- default in my subroutine (arrow2) = 45 degrees.
+        ;head_indent=0, $  ;- default already = 0; can delete this line.
+        head_size=0.5, $    ;- forgot what this is...
+        fill_background=1, $
+        buffer=buffer $
+    )
+    ;-
+    filename = 'aia' + A[cc].channel + 'arrow'
+    save2, filename
+    ;-
+endfor
 
-;--------------
+;-
+;- Overlay polygon centered on ROI in addition to arrow
+;-   (removed from loop for now to clean things up a bit).
+;      pol = polygon2(target=im, center=[x0,y0], dimensions=[rr,rr], color='black')
+;-
+;if n_elements(myarrow) gt 0 then myarrow.delete
+
+
+;--------------------------------------------------------------------------
 
 
 ;-

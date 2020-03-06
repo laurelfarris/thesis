@@ -1,0 +1,21 @@
+05 March 2020
+
+PROBLEM:
+    I have no idea what IDL code produced the power map figures
+    presented in article1. This is a problem.
+    I assume they came from one of the codes in this directory (Maps/),
+    but need to maintain up-to-date README file with descriptions of every code.
+    (for ALL major analyses that warrant their own dir., not just maps).
+    Also need to document this information with the figures themselves in E-note.
+
+TASKS:
+    [] Go through all codes and organize/consolidate,
+        remove old/duplicate code, add info to E-note if possible.
+    [] Add description of each Map routine below (this file).
+
+
+name_of_powermap_routine.pro
+  This routine does: ___
+
+
+and so on..

@@ -45,6 +45,10 @@ function arrow2, xx, yy, $
     myarrow = arrow( $
         xx, yy, $
         /data, $
+        ;/device, $
+        ;/normal, $
+        ;/relative, $
+        ;target=, $
         ;arrow_style=1|2|3|4|5, $
             ;- 1  ---->
             ;- 2  <----
