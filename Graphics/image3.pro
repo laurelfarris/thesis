@@ -74,6 +74,10 @@ function IMAGE3_wrapper, $
         win = window(dimensions=[wx,wy]*dpi, buffer=1) $
     else $
         win = window(dimensions=[wx,wy]*dpi, location=[250,0])
+;-
+;-
+;-
+;-
 
     ;print, win.dimensions/dpi
 

@@ -42,6 +42,16 @@ function STRUC_AIA, index, cube, $
             ;year=year, $ month=month, $ day=day
     endif
 
+    ;-
+    ;-
+    stop
+    ;-
+    ;-
+
+    print, index[280].nsatpix
+
+
+
     print, ''
     print, 'Reading header for level ', $
         strtrim(index[0].lvl_num,1), ' data.'
@@ -115,7 +125,7 @@ function STRUC_AIA, index, cube, $
     ;-  Does this apply to HMI as well?
     exptime = index[0].exptime
     ;print, 'Exposure time = ', strtrim(exptime,1), ' seconds.'
-    ;cube = cube/exptime
+    cube = cube/exptime
     ;- exptime is type DOUBLE, so now cube is too...
     ;help, cube ; --> DOUBLE [dim[0], dim[1], 600]  (AIA 1600, 2013 flare)
 

@@ -36,8 +36,8 @@ buffer=0
 
 ;-
 ;- Flare phase: [] uncomment one of the three phases (BDA) to image.
-filename = 'before'
-;filename = 'during'
+;filename = 'before'
+filename = 'during'
 ;filename = 'after'
 
 ;+
@@ -56,6 +56,12 @@ threshold = 10000.
 ;-
 
 ;-------------------------------------------------------------------------
+;-------------------------------------------------------------------------
+;- Everything from this point to the next commented set of double-dashes
+;   only needs to run once, does not change when
+;-  switching between BDA phases. Only needs to re-run if changes
+;-  are made to dz and/or threshold variables.
+;-
 
 ;@restore_maps
 ;- script is causing problems... run on IDL command line using .RUN restore_maps
@@ -77,8 +83,6 @@ aia1700mask = POWERMAP_MASK( $
     A[1].data, dz=dz, exptime=A[1].exptime, threshold=threshold )
 
 
-
-
 ;-
 ;-
 print, max(A[0].map)
@@ -96,7 +100,8 @@ print, max(A[1].map)
 ;-   on the same modified variables.
 ;-     I still don't like it, but whatev.
 ;-
-;--------------
+;-----------------------------------------------------------------------
+;-------------------------------------------------------------------------
 
 
 ;+
@@ -114,16 +119,17 @@ if filename eq 'before' then z_start = [197]
 if filename eq 'during' then z_start = [261]
 if filename eq 'after' then z_start = [450]
 ;-
+;-
+;-
 ;+
 ;- Contour data
 ;-
 resolve_routine, 'get_contour_data', /either
 c_data = GET_CONTOUR_DATA( time[z_start : z_start+dz-1], channel='mag' )
 ;-
-nn = 2
 ;-
-dat_title = strarr(nn)
-map_title = strarr(nn)
+dat_title = strarr(n_elements(A))
+map_title = strarr(n_elements(A))
 for cc = 0, 1 do begin
     dat_title[cc] = A[cc].name + ' intensity (' + $
         time[z_start] + '-' + time[z_start+dz-1] + ' UT)'
@@ -131,8 +137,32 @@ for cc = 0, 1 do begin
         time[z_start] + '-' + time[z_start+dz-1] + ' UT)'
 endfor
 ;-
-intensity = alog10 ( mean( A.data[*,*,z_start:z_start+dz-1, *], dimension=3 ) )
+
+
+
+;+
+;- Extract subset of data from each channel over same time period
+;- from which corresponding power map was obtained.
+;- Average intensity through time to get more accurate representation
+;-  of data that generated power maps.
+;-
+intensity = alog10 ( mean( $
+    A.data[*,*,z_start:z_start+dz-1, *], dimension=3 ))
+;- = FLOAT Array[500,330,2] (one image for each channel during current phase).
+;-
+;-  
+
+
+;+
+;- define min_value to apply when creating image graphics
+;-   (2-elemnt array, one value per channel).
 min_value = [ min(intensity[*,*,0]), min(intensity[*,*,1]) ]
+
+
+
+
+;+
+;- Multiply intensity images by mask
 ;-
 intensity = intensity * [ $
     [[aia1600mask[*,*,z_start]]], [[aia1700mask[*,*,z_start]]] ]
@@ -144,18 +174,27 @@ struc = { $
     title : [ dat_title, map_title ], $
     cbar_title : [ 'log intensity', 'log intensity', 'log power', 'log power' ] $
 }
+
 ;-
 ;--- Wed Feb 20 04:33:33 MST 2019 ---;
 ;testdat = mean( A.data[*,*,z_start:z_start+dz-1, 0], dimension=3 )
 ;testmap = A.map[*,*,z_start,0]
 ;-  Why are these returning arrays with 2 images each?? Should be 1!
-
 ;testdat = mean( A[0].data[*,*,z_start:z_start+dz-1], dimension=3 )
 ;testmap = A[0].map[*,*,z_start]
 ;-  Guess A should be indexed, rather than putting '0' as fourth dimension...
 ;-   still don't know why it works this way, but whatev.
-;---
+;-
+;- 06 March 2020:
+;-  IDL has a weird way of handling things when trying to extract a
+;-    range of indices from an array, in whatever dimension. For simpler
+;-   2D arrays, if wanted 1xN where N is subset of full 2nd dimension,
+;-   had to change range to include a second argument, even if continuous...
+;-  Not important, just hate all the comment clutter here...
+;-
 
+
+stop
 
 ;----------------------------------------------------------------------------------
 ;+
@@ -165,6 +204,7 @@ struc = { $
 rows = 2
 cols = 2
 dw
+resolve_routine, 'image3', /is_function
 im = image3( $
     struc.imdata, $
     buffer=buffer, $
@@ -217,7 +257,7 @@ for ii = 0, n_elements(im)-1 do begin
         ;tickinterval=1.0, $
         ;minor=4, $
         thick=0.5, $
-        title=struc.cbar_title[ii] )
+       title=struc.cbar_title[ii] )
 endfor
 ;-
 cbar[2].tickinterval=2
@@ -233,10 +273,10 @@ im[3].max_value = max(struc.imdata[*,*,2:3])
 ;-
 ;-
 ;- Color tables
-;-
+
 im[2].rgb_table = A[0].ct
 im[3].rgb_table = A[1].ct
-;-
+
 ;power_ct = 73
 ;im[2].rgb_table = power_ct
 ;im[3].rgb_table = power_ct
