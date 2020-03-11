@@ -31,7 +31,8 @@ function STRUC_AIA, index, cube, $
     ;- Parameters specific to individual flare
     @parameters
 
-    ;- Read headers only from Prepped fits files, return as variable "index"
+    ;- Read headers only from Prepped fits files,
+    ;-   return as variable "index"
     if n_elements(index) eq 0 then begin
         resolve_routine, 'read_my_fits'
         READ_MY_FITS, index, $
@@ -41,16 +42,6 @@ function STRUC_AIA, index, cube, $
             prepped=1  ;, $
             ;year=year, $ month=month, $ day=day
     endif
-
-    ;-
-    ;-
-    stop
-    ;-
-    ;-
-
-    print, index[280].nsatpix
-
-
 
     print, ''
     print, 'Reading header for level ', $
@@ -117,6 +108,8 @@ function STRUC_AIA, index, cube, $
     
     resolve_routine, 'crop_data', /is_function
     cube = CROP_DATA( cube, dimensions=dimensions )
+    print, max(cube)
+    stop
 
     ;help, cube ; --> FLOAT [dim[0], dim[1], 600]  (AIA 1600, 2013 flare)
     ;cube = fix( round( cube ) )
@@ -125,7 +118,7 @@ function STRUC_AIA, index, cube, $
     ;-  Does this apply to HMI as well?
     exptime = index[0].exptime
     ;print, 'Exposure time = ', strtrim(exptime,1), ' seconds.'
-    cube = cube/exptime
+    ;cube = cube/exptime
     ;- exptime is type DOUBLE, so now cube is too...
     ;help, cube ; --> DOUBLE [dim[0], dim[1], 600]  (AIA 1600, 2013 flare)
 
@@ -140,9 +133,6 @@ function STRUC_AIA, index, cube, $
     ;-  (make sure the proper lines are commented first).
 
     ; X/Y coordinates of AR, converted from pixels to arcseconds
-;    X = ( (indgen(sz[0]) + x1) - index.crpix1 ) * index.cdelt1
-;    Y = ( (indgen(sz[1]) + y1) - index.crpix2 ) * index.cdelt2
-
     X = ( (indgen(sz[0]) + x1) - index[0].crpix1 ) * index[0].cdelt1
     Y = ( (indgen(sz[1]) + y1) - index[0].crpix2 ) * index[0].cdelt2
 
@@ -159,13 +149,6 @@ function STRUC_AIA, index, cube, $
 ;    flux = mean( mean( cube, dimension=1), dimension=1 )
 ;    print, max(flux)
     
-
-    ;-
-    ;-
-    ;stop
-    ;-
-    ;-
-
     ;- Standard AIA colors
     AIA_LCT, r, g, b, wave=fix(channel);, /load
     ct = [ [r], [g], [b] ]

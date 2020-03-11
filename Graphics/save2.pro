@@ -1,73 +1,60 @@
 ;+
 ;- LAST MODIFIED:
-;-   Fri Feb  8 12:23:50 MST 2019
+;-   10 March 2020
+;-     Removed kws for confirming save to file and whether to replace
+;-     if file already exists (kws not intuitive enough, never used
+;-     anyway...). If user wants confirmation before saving, should
+;-     add that to calling routine.
+;-     Confirmation to overwrite file that already exists is done
+;-     here by default.
+;-
+;-     Also changed kw "stamp" to "timestamp", to be more descriptive.
 ;-
 ;- PURPOSE:
 ;-   Use IDL's SAVE method on current window to save graphic as pdf
 ;-   with date appended in the form "_yyyymmdd".
 ;-
 ;- INPUT:
-;-   "filename" (NOTE: do not include extension; this routine will do that)
+;-   "filename"
+;-     NOTE: extension (.pdf) is appended here.
 ;-
 ;- KEYWORDS:
-;-   CONFIRM_REPLACE
-;-   stamp - Uses IDL's TEXT function to add date and filename to
-;-      bottom of page
-;-   IDL_CODE - name of code that generated the figure. If set, will be added
-;-      to bottom of page along with date and filename. (NOTE: ignored if
-;-      stamp is not set).
+;-   TIMESTAMP
+;-      set /timestamp to add date and filename to bottom of page.
+;-   IDL_CODE
+;-      set = string name of code that generated figure;
+;-      appended to timestamp text.
+;-        (NOTE: ignored if kw TIMESTAMP is not set).
+;-   _EXTRA is for keywords in call to IDL's text function.
+;-     (see documentation)
 ;-
 ;- OUTPUT:
 ;-
 ;- TO DO:
-
-; _EXTRA is for keywords in call to IDL's text function.
+;-   [] for filenames that exist, append "_1", "_2", etc.
+;-
+;-
+;-
 
 pro SAVE2, filename, $
     confirm_replace=confirm_replace, $
     overwrite=overwrite, $
-    stamp=stamp, $
+    timestamp=timestamp, $
     idl_code=idl_code, $
     _EXTRA=e
 
-    ; Confirm saving to file
-    if keyword_set(confirm_replace) then begin
-        confirm = ''
-        prompt = 'Save file? [y/n] '
-        read, confirm, prompt=prompt
-        if confirm ne 'y' then return
-    endif
+
 
     common defaults
     path = '/home/users/laurel07/Figures/'
 
-    fls = file_search( path + filename )
-    if keyword_set(confirm_replace) then begin
 
-        ; Ask if user wants to overwrite
-        if fls ne '' then begin
-            b = ''
-            prompt = 'File ' + filename + ' already exists. Overwrite? [y/n] '
-            read, b, prompt=prompt
-            if b ne 'y' then return
-        endif
-
-        ; Alternatively, append counter to filename
-        ; Lots of string operations that could be used here.
-        ;  Work on this later...
-
-    endif
-
-    ; Add option to append successive numbers to file that already exists.
-    ; while fls ne "" ; i = i + 1 ; filename = basename + '_' + strtrim(i,1)
-    ; keep appending _1, _2, etc. until no other file matches
-
+    ;- Get window dimensions, used when saving figure to file,
+    ;-   and if kw timestamp is set, determines location of text.
     win = GetWindows(/current)
     dims = win.dimensions/dpi
     wx = dims[0]
     wy = dims[1]
-
-
 
 
     CALDAT, systime(/julian), $
@@ -93,7 +80,9 @@ pro SAVE2, filename, $
     ;- There's probably a better way to do this, but not important enough
     ;-
 
-    ;- Adding more hacky code to include time 
+    ;- Include time; appended to end of new_filename after date (below).
+    ;-   (commented in new_filename definition for now...
+    ;-      filename got way too long and confusing).
     hh = strmid( systime(), 11, 2 )
     mm = strmid( systime(), 14, 2 )
     ss = strmid( systime(), 17, 2 )
@@ -109,7 +98,7 @@ pro SAVE2, filename, $
         '.pdf'
 
     ; Add timestamp to figure
-    if keyword_set(stamp) then begin
+    if keyword_set(timestamp) then begin
 
         if not keyword_set(idl_code) then idl_code = ''
 
@@ -139,22 +128,48 @@ pro SAVE2, filename, $
 
 
 
-    if not keyword_set(overwrite) then begin
-        if FILE_EXIST(path + new_filename) then begin
-            print, ''
-            print, 'File "', new_filename, '" already exists!'
-            print, 'Type ".c" to overwrite.'
-            print, ''
-            stop
-        endif
+    ;+
+    ;- Test for existance of file
+    ;-
+    ;- Old:
+;    fls = file_search( path + filename )
+;    if fls ne '' then begin
+;        b = ''
+;        prompt = 'File ' + filename + ' exists. Overwrite? [y/n] '
+;        read, b, prompt=prompt
+;        if b ne 'y' then return
+;    endif
+    ;-
+    ;- New(er):
+    ;- Different way to test for existance of file,
+    ;-  Tells user to continue using standard IDL executive command
+    ;-   ".C" rather than using the READ procedure, as done above.
+    if FILE_EXIST(path + new_filename) then begin
+        print, ''
+        print, 'File "', new_filename, '" already exists!'
+        print, 'Type ".c" to overwrite.'
+        print, ''
+        stop
     endif
+    ;-
+    ;-
+
+
     ;+
     ;-
-    ;- 21 February 2020
+    ;- How to append next number
+    ;-  (e.g. if file.pdf and file_2.pdf exist,
+    ;-   update current filename to file_3.pdf).
+    ;-  
+    ;- Lots of string operations that could be used here.
+    ;-  
     ;-
-    ;- How to append next number (e.g. if filename.pdf exists,
-    ;-  and filename_2.pdf exists, want to update filename to
-    ;-  filename_3.pdf.
+    ;- Ideas:
+    ;-   while fls ne ""
+    ;-     i = i + 1
+    ;-     fname = basename + '_' + strtrim(i,1)
+    ;-   ...
+    ;- keep appending _1, _2, etc. until no other file matches
     ;-
     ;- ...
     ;- loc = STRPOS(filename, '.pdf')
@@ -163,7 +178,6 @@ pro SAVE2, filename, $
     ;- updated_filename = STRJOIN( [filename, counter+1], '_'  )
     ;-   ( underscore '_' is the "delimiter", only need to worry about
     ;-       numerical value following it.) 
-    ;-
     ;-
 
     win.SAVE, path + new_filename, $
