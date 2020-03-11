@@ -108,8 +108,7 @@ function STRUC_AIA, index, cube, $
     
     resolve_routine, 'crop_data', /is_function
     cube = CROP_DATA( cube, dimensions=dimensions )
-    print, max(cube)
-    stop
+    ;print, max(cube)
 
     ;help, cube ; --> FLOAT [dim[0], dim[1], 600]  (AIA 1600, 2013 flare)
     ;cube = fix( round( cube ) )
