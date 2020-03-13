@@ -121,7 +121,7 @@ function WRAP_BATCH_PLOT_2, $
             thick = thick[ii], $
             ;symbol = symbol[ii], $
             ;xmajor=, $
-            ;xminor=5, $
+            xminor=5, $
             ;ymajor=5, $
             ;yminor=, $
             xticklen=0.025, $
@@ -129,7 +129,7 @@ function WRAP_BATCH_PLOT_2, $
             _EXTRA = e )
     endfor
 
-    
+
     ;- Add some extra white space between plot lines and x-axes.
     ;yr = plt[0].yrange
     ;delt = 0.05*(yr[1] - yr[0])

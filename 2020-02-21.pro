@@ -103,7 +103,9 @@ endfor
 ;-    (ydata, filename, others that don't matter if x-axis doesn't change)
 
 
+;- Time over which to calculate average (seconds)
 dt = 400
+
 dz_avg = dt/( (fix(A.cadence))[0]  )
 print, dz_avg
 

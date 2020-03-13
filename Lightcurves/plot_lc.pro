@@ -31,7 +31,6 @@
 
 ;IDL .run struc_aia
 
-
 ;filename = 'lc_C30'
 ;filename = 'lc_' + class    ;- 'class' defined in @parameters (30 August 2019)
 
@@ -112,7 +111,7 @@ plt = BATCH_PLOT_2(  $
 ;-  Trying to shift plots slightly in y relative to each other so
 ;-   they look nicer, like Milligan2017's LCs for AIA 1600 and 1700...
 ;-   Did not work.
-;- 
+;-
 ;- One more attempt
 ;print, plt[1].yrange
 
@@ -136,10 +135,10 @@ plt[1].yrange = [ $
     plt[1].yrange[1]  $
 ]
 
-;- 
-;- 
-;- 
-;- 
+;-
+;-
+;-
+;-
 
 
 
@@ -203,7 +202,7 @@ vert = OPLOT_FLARE_LINES( $
     plt, $
     ;color='magenta', $
       ;- confirming that kw value set when calling subroutine
-      ;-  overrides the value set when subroutine calls PLOT. 
+      ;-  overrides the value set when subroutine calls PLOT.
     t_obs=A[0].time, $
     send_to_back=1 )
 
