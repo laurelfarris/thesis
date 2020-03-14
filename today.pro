@@ -1,81 +1,66 @@
 ;+
-;- 11 March 2020
+;- 13 March 2020
 ;-
-;- Today's project: LCs of ROIs with saturation... see if oscillations at
-;-   periods ~ few minutes are visible (better not be...)
-;-  Copied code from 2020-03-05.pro
+;- Today's project:
 ;-
 
 
-buffer=1
 
 dz = 64
-
-;- center coords and dimesions of (square) area around ROI.
-center = [250,165]
-rr = 6
-
-;-
-;---
-;-
-
-title = "Light curve for " + $
-    strcompress(rr, /remove_all) + "x" + $
-    strcompress(rr, /remove_all) + $
-    " pixel area in center of AR 11158"
-
-x0 = center[0]
-y0 = center[1]
-
-roi = A.data[ $
-    x0-(rr/2) : x0+(rr/2)-1, $
-    y0-(rr/2) : y0+(rr/2)-1, $
-    * ]
-help, roi
-
-;- Sum over area? Or take average?
-;-  Same as computations from 2020-02-18.pro
-roi_flux = mean( mean( roi, dimension=1 ), dimension=1 )
-;roi_flux = total( total( roi, 1 ), 1 )
-help, roi_flux
+buffer = 0
 
 
-help, A[0].time
-help, roi_flux[*,0]
+;- .RUN restore_maps
 
-;xdata = indgen( n_elements(roi_flux[*,0]) )
-xdata = [271:295]
-ydata = roi_flux[xdata,*]
+threshold = 15000.
+mask = product( A.data LT threshold, 3 )
 
-result = fourier2( ydata[*,0], 24)
-help, result
-
-dw
-plt = plot2( result[0,*], result[1,*], buffer=1 )
-save2, 'testFT'
-
-;-
-;- Plot ROI flux
-dw
-win = window( dimensions=[8.5,4.0]*dpi, buffer=buffer )
-plt = objarr(n_elements(A))
-;plt = plot2( roi_flux[*,0], buffer=1)
-;save2, 'test'
+map = A.map
 for cc = 0, 1 do begin
-    plt[cc] = plot2( $
-        xdata, $
-        ydata, $
-        /current, $
-        overplot=cc<1, $
-        color=A[cc].color, $
-        symbol='circle', $
-        buffer=buffer $
-    )
+    for ii = 0, 685 do begin
+        map[*,*,ii,cc] = A[cc].map[*,*,ii] * mask[*,*,cc]
+    endfor
 endfor
-plt[0].title=title
-;-
-;-
-filename = 'ROI_flare_center'
+
+
+dw
+im = image2( alog10(map[*,*,280,0]) )
+im = image2( alog10(map[*,*,280,1]) )
+
+
+;-----------------
+
+;sz = size( A.map, /dimensions)
+;power = fltarr( sz[2], sz[3] )
+;for cc = 0, n_elements(A)-1 do begin
+;    power[*,cc] = (total(total(map[
+;endfor
+
+power = total(total( map, 1),1)
+help, power
+
+
+
+buffer=0
+resolve_routine, 'plot_pt', /is_function
+dw
+plt = PLOT_PT( $
+    A[0].time, power, dz, buffer=buffer, $
+    stairstep = 1, $
+    ;yminor = 4, $
+    title = '', $
+    name = A.name )
+    ;yrange=[-250,480], $ ; maps
+;ax = plt[0].axes
+;ax[1].tickname = strtrim([68, 91, 114, 137, 160],1)
+;ax[3].tickname = strtrim([1220, 1384, 1548, 1712, 1876],1)
+ax2 = (plt[0].axes)[1]
+ax2.title = plt[0].name + " 3-minute power"
+ax2.text_color = plt[0].color
+ax3 = plt[1].axes
+ax3.title = plt[1].name + " 3-minute power"
+
+filename = ''
 save2, filename, /timestamp
 
 end

@@ -1,9 +1,9 @@
 ;Copied from clipboard
 
 
-dw
-plt = plot2( result[0,*], result[1,*], buffer=1 )
-save2, 'testFT'
+print, max(ydata[*,1]) - min(ydata[*,1]), format=format
+print, plt[0].yrange
+stop
 
 end
 

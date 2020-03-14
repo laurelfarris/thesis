@@ -121,7 +121,7 @@ function WRAP_BATCH_PLOT_2, $
             thick = thick[ii], $
             ;symbol = symbol[ii], $
             ;xmajor=, $
-            xminor=5, $
+            ;xminor=5, $ ;- set in CALL (point of wrapper... 3/14/2020)
             ;ymajor=5, $
             ;yminor=, $
             xticklen=0.025, $

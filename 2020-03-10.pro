@@ -15,11 +15,11 @@
 
 threshold = 15000.
 mask = product( A.data LT threshold, 3 )
-
+;-
 title = A.name + " global saturation mask (" $
     + A.time[0] + "-" + A.time[-1]  + ")"
-
-
+;-
+;-
 dw
 win = window( dimensions=[8.5,11.0]*dpi )
 im = objarr(n_elements(A))
