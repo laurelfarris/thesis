@@ -1,10 +1,18 @@
 ;+
 ;- LAST MODIFIED:
-;-   13 August 2019
+;-   14 March 2020
+;-     Changed code so that appropriate scaling of threshold by exptime
+;-       is accomplished without modifying threshold iteself;
+;-     new value was unknowingly returned to caller, causing
+;-       all kinds of confusion until finally figured it out.
+;-   IMPORTANT:
+;-     ==>>> NEVER update value of variable by operating on itself unless value
+;-     is RESET at the beginning, EVERY. SINGLE. TIME.
+;-
 ;-
 ;- ROUTINE:
 ;-   powermap_mask.pro
-;-   -- copied bit of code indside function def from bda.pro (14 December 2018)
+;-   -- copied bit of code inside function def from bda.pro (14 December 2018)
 ;-
 ;- EXTERNAL SUBROUTINES:
 ;-
@@ -36,8 +44,14 @@
 ;- KEYWORDS (optional):
 ;-   dz     = integer number of consecutive images, aka sample number.
 ;-              dz * cadence = total time (seconds) of observations
-;-   exptime  = exptime of data (can be found in inst. header)
-;-   threshold  = saturation threshold (default = 15000)
+;-   threshold
+;-     = max value pixel can have, contaminated via saturation or bleeding
+;-   exptime
+;-     = exposure time (seconds) --> see header.
+;-     If data is exptime-corrected, set kw to divide threshold by
+;-     exptime before computing mask of 1s and 0s.
+;-    NOTE: this routine does NOT apply exptime-correction to data...
+;-            assumes this has been done before passing data to this routine.
 ;-
 ;- OUTPUT:
 ;-   map_mask     3D array of 1s and 0s. Should have same dimensions as
@@ -68,22 +82,22 @@ function POWERMAP_MASK, $
     ;- Default dz = value I've been using the most
     if not keyword_set(dz) then dz = 64
 
-    ;- Default threshold = value defined as "saturation level" (not my choice)
-    if not keyword_set(threshold) then threshold = 15000.
-
-    ;- 13 August 2019
-    ;- Set exptime if you want to divide threshold by exptime
-    ;-  This would imply that data is ALREADY exptime-corrected
-    ;-   (this code does NOT divide data by exptime), therefore
-    ;-   the saturation threshold needs to be scaled by the same factor
+    ;+
+    ;- 14 March 2020
     ;-
-    if keyword_set(exptime) then threshold = threshold/exptime
-
-    ;print, "Exposure-time corrected threshold = ", threshold
-    ;-  Values look correct.
-
-    data_mask = data lt threshold
-
+    ;-
+    ;---- threshold &/or exptime corrections
+    ;-
+    ;- Default threshold = saturation level for AIA data (see SDO_guide for data analysis)
+    if not keyword_set(threshold) then threshold = 15000.
+    ;-
+    ;if keyword_set(exptime) then threshold = threshold/exptime
+    if not keyword_set(exptime) then exptime = 1.0
+    ;data_mask = data lt threshold
+    data_mask = data lt (threshold/exptime)
+    ;-
+    ;--------
+;
     ;-
     ;- 13 August 2019
     ;-  Initialize map_mask variable using dimensions of data arg.

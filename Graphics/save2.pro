@@ -37,7 +37,7 @@
 ;-
 
 pro SAVE2, filename, $
-    confirm_replace=confirm_replace, $
+    ;confirm_replace=confirm_replace, $
     overwrite=overwrite, $
     timestamp=timestamp, $
     idl_code=idl_code, $
@@ -144,12 +144,20 @@ pro SAVE2, filename, $
     ;- Different way to test for existance of file,
     ;-  Tells user to continue using standard IDL executive command
     ;-   ".C" rather than using the READ procedure, as done above.
-    if FILE_EXIST(path + new_filename) then begin
-        print, ''
-        print, 'File "', new_filename, '" already exists!'
-        print, 'Type ".c" to overwrite.'
-        print, ''
-        stop
+    ;-
+    ;-
+    ;-
+    if NOT keyword_set(overwrite) then begin
+        ;- Have to explicitly pass overwrite kw to bypass confirmation to do so.
+        ;-   Typing ".c" over and over gets really annoying when working remotely.
+        ;-    (14 March 2020)
+        if FILE_EXIST(path + new_filename) then begin
+            print, ''
+            print, 'File "', new_filename, '" already exists!'
+            print, 'Type ".c" to overwrite.'
+            print, ''
+            stop
+        endif
     endif
     ;-
     ;-

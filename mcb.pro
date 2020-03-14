@@ -1,9 +1,10 @@
 ;Copied from clipboard
 
 
-print, max(ydata[*,1]) - min(ydata[*,1]), format=format
-print, plt[0].yrange
-stop
+;filename = 'pt_maskGlobal_' + class
+filename = 'time-3minutepower_maps_' + class
+resolve_routine, 'save2'
+save2, filename, /timestamp, /overwrite
 
 end
 
