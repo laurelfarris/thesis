@@ -1,0 +1,14 @@
+14 March 2020
+
+plot_pt.pro vs plot_pt_2.pro
+    IGNORE 2nd version ("*_2.pro") for now.
+    Is not called by any other codes in this directory
+    (based on results of grep -li "plot_pt")
+
+get_power_from_maps.pro vs get_power_from_maps_Subroutine.pro
+    Latter was previously get_power_from_maps_2.pro, and was
+    located one directory up, in the main Codes/ dir. on mac
+    (/ss/laurel07/thesis/ on dept. computer).
+    Appears to be attempt at using a subroutine instead of doing
+    everything at the main level.
+    Abandon this for now.

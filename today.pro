@@ -2,12 +2,16 @@
 ;- 13 March 2020
 ;-
 ;- Today's project:
+;-   Restore maps from .sav files and multiply them by global mask,
+;-   rather than 3D cube of map_masks where pixels only = 0 if saturated
+;-   during that particular window -->   [t_i : t_i+T-1]
+;-
 ;-
 
 
 
 dz = 64
-buffer = 0
+buffer = 1
 
 
 ;- .RUN restore_maps
@@ -41,7 +45,6 @@ help, power
 
 
 
-buffer=0
 resolve_routine, 'plot_pt', /is_function
 dw
 plt = PLOT_PT( $

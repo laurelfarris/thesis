@@ -3,7 +3,7 @@
 ;-   18 August 2019
 ;-
 ;- ROUTINE:
-;-   get_power_from_maps.pro
+;-   get_power_from_maps_2.pro
 ;-
 ;- EXTERNAL SUBROUTINES:
 ;-   powermap_mask.pro
