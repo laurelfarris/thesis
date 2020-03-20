@@ -5,3 +5,21 @@ Mon Apr 29 08:52:01 MDT 2019
 "Modules/" currently contains codes I did NOT write, and don't
 necessarily use. Not sure how to organize codes yet.
 see "Other/" for stuff I did write.
+
+
+
+aia_read_psf.pro ... "/IS_PROCEDURE"  (16 March 2020)
+    input : fnames of image and inversePSF (both existing fits?),
+      and optional kw "kernal"
+    output : index, data
+  procedure applies psf correction, then final step before returning to caller
+    is to run aia_prep
+  --> probably don't need psf correction for my data (double check SDO guide
+    to make sure) but maybe good example for running aia_prep within another
+    routine, in addition to other data prep or corrections that ARE relevant
+    and necessary for my data.
+    My equivalent is in Prep/, called "apply_aia_prep.pro", and runs at
+    ML... should write a procedure or function, if possible.
+
+------
+

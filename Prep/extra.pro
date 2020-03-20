@@ -32,7 +32,7 @@ start:;-------------------------------------------------------------------------
 ;--- AIA
 
 ;- 1.
-;- initialize 'A' as a !NULL variable, 
+;- initialize 'A' as a !NULL variable,
 ;A = []
 ;A = [A, STRUC_AIA( aia1600index, aia1600data, cadence=24., instr='aia', channel='1600' ) ]
 ;A = [A, STRUC_AIA( aia1700index, aia1700data, cadence=24., instr='aia', channel='1700' ) ]
@@ -47,8 +47,17 @@ aia1700 = DATA_STRUC( aia1700index, aia1700data, cadence=24., instr='aia', chann
 ;aia1700.color = 'dark cyan'
 A = [ aia1600, aia1700 ]
 
+
+
 for cc = 0, n_elements(A)-1 do begin
     A[cc].name = 'AIA ' + A[cc].channel + '$\AA$'
+        ;- Probably don't need loop for this..
+        ;-  --> A.name = 'AIA' + A.channel + '$\AA$'
+        ;-  A.name and A.channel are both 2-element string arrays;
+        ;-    appending a single string to a string array should append it to every
+        ;-    element in the array. Not that it matters, since both values are
+        ;-    now defined inside the function, one channel at a time.
+        ;-  (16 March 2020)
     aia_lct, r, g, b, wave=fix(A[cc].channel);, /load
     ct = [ [r], [g], [b] ]
     A[cc].ct = ct
@@ -102,7 +111,7 @@ endfor
 
 stop
 
-    
+
 
 ;-------------------------------------------------------------
 

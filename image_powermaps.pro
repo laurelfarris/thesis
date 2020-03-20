@@ -4,7 +4,8 @@
 ;-
 ;-
 
-pro image_powermaps, imdata, cols, rows
+pro image_powermaps, imdata, cols, rows, $
+    _EXTRA=e
 
     sz = size(imdata, /dimensions)
 
@@ -13,8 +14,8 @@ pro image_powermaps, imdata, cols, rows
     min_array = fltarr(sz[2])
     max_array = fltarr(sz[2])
     for ii = 0, sz[2]-1 do begin
-       min_array[ii] = min(imdata[*,*,ii]) 
-       max_array[ii] = max(imdata[*,*,ii]) 
+       min_array[ii] = min(imdata[*,*,ii])
+       max_array[ii] = max(imdata[*,*,ii])
     endfor
     min_value = max(min_array)
     max_value = min(max_array)
@@ -41,7 +42,7 @@ pro image_powermaps, imdata, cols, rows
             axis_style = 0, $
             ;rgb_table = AIA_COLORS( wave=A[cc].channel ), $
             title=title[ii], $
-            buffer=0, $
+            ;buffer=0, $
             _EXTRA=e )
     endfor
 

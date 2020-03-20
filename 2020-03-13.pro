@@ -13,8 +13,10 @@
 ;-   IDL> .RUN today
 ;-
 
-
-
+;- imaging code : getting it out of my way for now.
+;dw
+;im = image2( alog10(map[*,*,280,0]) )
+;im = image2( alog10(map[*,*,280,1]) )
 
 ;-
 ;- User-defined variables
@@ -22,8 +24,6 @@ dz = 64
 buffer = 1
 threshold = 15000.
 ;threshold = 10000.
-
-z_ind = 280
 
 
 
@@ -57,31 +57,10 @@ z_ind = 280
 ;--- Global mask
 ;-
 mask = product( A.data LT threshold, 3 )
+;-  That was easy enough
 ;-
+;-------
 
-
-;+
-;- 20 March 2020
-;- What should threshold value be for bleeding (less than 15000, but how much less?)
-;-
-;-
-
-
-dw
-for cc = 0, 1 do begin
-    im[cc] = image2( $
-        map[*,*,z_ind,cc], $
-        rgb_table=AIA_COLORS(wave=A[cc].channel), $
-        buffer=buffer $
-        )
-endfor
-
-
-;imdata = [ [[map]], [[map[*,*,280,1]]] ]
-;help, imdata
-;cols = 1
-;rows = 2
-;IMAGE_POWERMAPS, imdata, cols, rows, buffer=buffer
 
 
 ;+
