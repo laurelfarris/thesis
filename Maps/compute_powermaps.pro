@@ -26,7 +26,7 @@
 ;-   fcenter     central frequency (Hz)
 ;-   bandwidth   freq width (centered on fcenter) that will contribute to power
 ;-   threshold*  skip pixels w/ values higher than threshold (sat)
-;-   z_start     array of START indices
+;-   z_start     array of START indices (defaults to ONE value: 0)
 ;-   dz          length over which to calculate FT (# images)
 ;-   norm        sets /NORM kw when computing power using fourier2.pro
 ;-
@@ -115,7 +115,7 @@ function COMPUTE_POWERMAPS, $
 
     ;- Set default bandwidth as 1 mHz
     if not keyword_set(bandwidth) then begin
-        print, 'Default value of bandwidth = 1 mHz, centered on fcenter.' 
+        print, 'Default value of bandwidth = 1 mHz, centered on fcenter.'
         bandwidth = 0.001
     endif
 
@@ -133,7 +133,7 @@ function COMPUTE_POWERMAPS, $
     ;-
     ;- Set default central frequency as 5.6 mHz (3 minutes)
     if not keyword_set(fcenter) then begin
-        print, 'Default value of fcenter = 5.6 mHz (3 minutes).' 
+        print, 'Default value of fcenter = 5.6 mHz (3 minutes).'
         fcenter = 0.0056
     endif
     ;-

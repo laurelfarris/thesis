@@ -1,6 +1,6 @@
 ;+
 ;- LAST MODIFIED:
-;-   Tue Feb 12 12:12:38 MST 2019
+;-   12 February 2019
 ;-
 ;- PURPOSE:
 ;-   General routine for imaging powermaps... for real this time!

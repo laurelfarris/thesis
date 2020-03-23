@@ -5,13 +5,23 @@
 ;- ROUTINE:
 ;-   compute_powermaps_main.pro
 ;-
-;- EXTERNAL SUBROUTINES:
+;-
+;----
+;-
+;- NOTE: this routine includes a LOT of steps prior to powermaps... needs to
+;-    be organize and split somehow ... is probably from last time I was
+;-    working on multi-flare data prep and transition to analysis.
+;-   (23 March 2020)
+;-
+;----
 ;-
 ;- PURPOSE:
 ;-   ML code for COMPUTING (not imaging!) power maps from aligned data. Steps:
 ;-     * restore aligned data cubes from, e.g. aia1600aligned.sav files
 ;-     * define time segments: start indices, length of each (T), ...
 ;-     * save maps to, e.g. aia1600maps.sav if long computation time is required.
+;-
+;- EXTERNAL SUBROUTINES:
 ;-
 ;- TO DO:
 ;-   [] Come up with better filename for main code (avoid capital letters...)
@@ -127,7 +137,7 @@ print, A[cc].time[z_start], format='(A0)'
 
 ;- some of these are defined above, but that entire section can be
 ;-  skipped if doing a general powermap computation from entire data cube,
-;-  using same value for dz I've been using.  -- 20 January 2020 
+;-  using same value for dz I've been using.  -- 20 January 2020
 @parameters
 cc = 0
 dz = 64

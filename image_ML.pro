@@ -4,6 +4,7 @@
 ;-
 ;- PURPOSE:
 ;-   general, simple imaging routine
+;-     -- from ML I assume, from the "_ML" appended to filename (23 March 2020)
 ;- ILD> .RUN some standard image file.
 ;-  Can be pulled up for reference, read into another script, or
 ;-    copied and edited as needed.
