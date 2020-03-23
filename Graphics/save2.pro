@@ -156,7 +156,7 @@ pro SAVE2, filename, $
             print, 'File "', new_filename, '" already exists!'
             print, 'Type ".c" to overwrite.'
             print, ''
-            stop
+            ;stop
         endif
     endif
     ;-

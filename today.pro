@@ -6,75 +6,73 @@
 ;-   rather than 3D cube of map_masks where pixels only = 0 if saturated
 ;-   during that particular window -->   [t_i : t_i+T-1]
 ;-
-;- Steps:
-;-   IDL> .RUN struc_aia
-;-   IDL> .RUN restore_maps
-;-   Set variables to desired values (dz, buffer, threshold, --> see top of ML code)
-;-   IDL> .RUN today
-;-
-
-
-
 
 ;-
 ;- User-defined variables
 dz = 64
 buffer = 1
-threshold = 15000.
-;threshold = 10000.
+;threshold = 15000.
+threshold = 10000.
+;-
 
 z_ind = 280
 
-
-
 ;+
-;--- 3D cube of masks, one for each $T$-length window
-;-
-;sz = size( A.map, /dimensions)
-;mask = fltarr(sz)
-;-  Shouldn't have to run this more than once... sets dimensions of mask,
-;-   is overwritten everytime re-run code, e.g.
-;-     mask = POWERMAP_MASK(...)
-;-  for 3D mask computed using subsets with 3rd dim = dz, or
-;-     mask = product( A.data LT threshold, 3 )
-;-  for global mask (2D mask for each channel)
-;-
-;resolve_routine, 'powermap_mask', /either
-;for cc = 0, 1 do begin
-;    mask[*,*,*,cc] = POWERMAP_MASK( $
-;        ;A[cc].data, $
-;        A[cc].data/A[cc].exptime, $
-;        ;exptime=A[cc].exptime, $
-;        threshold=threshold, $
-;        dz=dz )
-;endfor
-;- IDL> help, map
-;-        FLOAT  = Array[500, 330, 686, 2]
-;-----
-
-
-;+
-;--- Global mask
-;-
+;--- Global mask (see 2020-03-13.pro)
 mask = product( A.data LT threshold, 3 )
 ;-
 
-
 ;+
 ;- 20 March 2020
-;- What should threshold value be for bleeding (less than 15000, but how much less?)
+;- What should threshold value be for bleeding?
+;-    Less than 15000 obviously, but how much less?
 ;-
+;imdata = A[cc].data[*,*,z_ind]
+;-
+im = objarr(2)
 ;-
 
 
+;for ii = 75,84 do print, imdata[212:217,ii]
+
+z_ind=[281,283]
 dw
-for cc = 0, 1 do begin
+;sat = objarr(2)
+resolve_routine, 'contour2', /is_function
+resolve_routine, 'save2', /either
+for cc = 0, 0 do begin
+    ;imdata = AIA_INTSCALE( A[cc].data[*,*,z_ind], wave=A[cc].channel, exptime=A[cc].exptime )
+    imdata = A[cc].data[*,*,z_ind[cc]]
     im[cc] = image2( $
-        map[*,*,z_ind,cc], $
+        imdata, $
+        ;imdata[210:220,75:90], $
+        ;alog10(imdata), $
+        ;A[cc].data[*,*,z_ind], $
+        ;map[*,*,z_ind,cc], $
+        margin=0.1, $
         rgb_table=AIA_COLORS(wave=A[cc].channel), $
         buffer=buffer $
         )
+    ;-
+    print, max(imdata)
+    print, max(A[cc].data)
+    sat0 = contour2( imdata, c_value=threshold, color='red', c_thick=0.5)
+    sat1 = contour2( imdata, c_value=2000, color='yellow', c_thick=0.5 )
+    ;-
+    fname = 'sat_bld_contours_' + A[cc].channel
+    SAVE2, fname, /overwrite
 endfor
+;-
+
+
+;- Plot 1D array of pixel values through saturated pixels,
+;-   overplot array of values farther down in Y, thru pixels with bleeding, not sat
+;print, max(imdata[190:220,85])
+;print, max(imdata[190:220,100])
+;dw
+;plt1 = plot2(imdata[190:220,85], buffer=buffer)
+;plt2 = plot2(imdata[190:220,100], color='blue', /overplot)
+;save2, 'sat_plots_1600_'
 
 
 ;imdata = [ [[map]], [[map[*,*,280,1]]] ]
@@ -84,28 +82,9 @@ endfor
 ;IMAGE_POWERMAPS, imdata, cols, rows, buffer=buffer
 
 
-;+
-;- Create new variable "map", rather than A.map = A.map*mask
-;-  ... NEVER good idea to update variable with itself..
-;-
-
-
-
-;-
-;- For 3D mask:
-;-  Directly multiply map by mask...
-;-    straightforward when dimensions of A.map match those of mask.
-;map = A.map * mask
-;-
-
 
 ;-
 ;- For Global mask:
-;-   Not so straightforward when mask is the same for every map in the
-;-     500x330x686 array that each channel has.
-;-    There's probably a much easier way to do this with matrix operators,
-;-     or some IDL array function I'm not familiar with. Can't think of anything
-;-     at the moment, but this should at least produce the correct result.
 map = A.map
 for cc = 0, 1 do begin
     for ii = 0, 685 do begin
@@ -114,9 +93,7 @@ for cc = 0, 1 do begin
 endfor
 ;-
 ;-
-
-
-
+;+
 ;- Sum over x and y in each power map to get 3min power as function of time: P(t)
 power = total(total( map, 1),1)
 ;-
