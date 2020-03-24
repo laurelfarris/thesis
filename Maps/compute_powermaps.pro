@@ -105,6 +105,12 @@ function COMPUTE_POWERMAPS, $
 
 
     sz = size( data, /dimensions )
+    ;------------------
+    ;if ( n_elements(sz) eq 2 ) then sz = reform(sz, sz[0], sz[1], 1, /overwrite)
+    ;-  -->  sz should ALWAYS have 3 dimensions, otherwise nothing to compute
+    ;-             FFT over!
+    ;-   23 March 2020
+    ;------------------
 
     ;- Number of elements in zz (z_start) will be the number of
     ;-  maps returned (just 1 by default, starting at beginning of data).
@@ -112,6 +118,7 @@ function COMPUTE_POWERMAPS, $
 
 
     if n_elements(dz) eq 0 then dz = sz[2]
+
 
     ;- Set default bandwidth as 1 mHz
     if not keyword_set(bandwidth) then begin

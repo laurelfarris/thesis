@@ -28,17 +28,7 @@
 ;-
 
 
-;+
-;- User-defined parameters
-;-
 
-buffer=0
-
-;-
-;- Flare phase: [] uncomment one of the three phases (BDA) to image.
-;filename = 'before'
-filename = 'during'
-;filename = 'after'
 
 ;+
 ;- 21 February 2019 -- multiply intensity by saturation mask
@@ -46,14 +36,6 @@ filename = 'during'
 ;- ...   ?? (05 March 2020)
 ;-
 
-;-
-dz = 64
-threshold = 10000.
-;-   threshold lowered from 15000 (saturation threshold) to exclude pixels
-;-    contaminated by bleeding/blooming.
-;-     --> How do I know what value to use for new threshold??
-;-      Is there a standard? Pretty sure I "eyeballed" this... :(
-;-
 
 ;-------------------------------------------------------------------------
 ;-------------------------------------------------------------------------
@@ -68,7 +50,7 @@ threshold = 10000.
 ;-  (05 March 2020)
 ;-
 
-resolve_routine, 'powermap_mask', /is_function
+;+
 ;- 24 January 2020
 ;-   NOTE: set kw 'exptime' in call to powermap_mask function
 ;-     to ensure that threshold value is also corrected for it.
@@ -77,50 +59,63 @@ resolve_routine, 'powermap_mask', /is_function
 ;-
 
 
-aia1600mask = POWERMAP_MASK( $
-    A[0].data, dz=dz, exptime=A[0].exptime, threshold=threshold )
-aia1700mask = POWERMAP_MASK( $
-    A[1].data, dz=dz, exptime=A[1].exptime, threshold=threshold )
+;+
+;-----------------------------------------------------------------
+;- 23 March 2020
+;- Re-creating powermap Figures, input data is NOT exptime-corrected,
+;-   so no need for exptime or threshold keywords.
+;-  May be better this way anyway, b/c less futzing with the data.
+;-  Mask should be the same whether data = data / exptime (for which
+;-    mask is computed using threshold = threshold / exptime), or
+;-  data = original data, and threshold = threshold. Array of 0s and 1s
+;-    should look the same in both cases. Less screwing with data, the better.
+;-
+;-
 
 
-;-
-;-
-print, max(A[0].map)
-print, max(A[1].map)
-;-
+dz = 64
+threshold = 10000.
+;-   lowered from 15000 to exclude pixels contaminated by bleeding/blooming.
+
+
+;+
+;- Compute masks
+resolve_routine, 'powermap_mask', /is_function
+;aia1600mask = POWERMAP_MASK( A[0].data, dz=dz, exptime=A[0].exptime, threshold=threshold )
+;aia1700mask = POWERMAP_MASK( A[1].data, dz=dz, exptime=A[1].exptime, threshold=threshold )
+aia1600mask = POWERMAP_MASK( A[0].data, dz=dz )
+aia1700mask = POWERMAP_MASK( A[1].data, dz=dz )
+
+;+
+;- Multiply maps by masks computed above
 A[0].map = A[0].map * aia1600mask
 A[1].map = A[1].map * aia1700mask
-;-
-print, max(A[0].map)
-print, max(A[1].map)
-;-  Horrible way to update maps ... could accidentally repeat these lines
-;-   continually updating variables that should have only been changed once.
-;-  However, masks are all 1s and 0s, so once multiplied once,
-;-    values shouldn't change no matter how many times this code is run
-;-   on the same modified variables.
-;-     I still don't like it, but whatev.
+;- Unless masks are re-computed, repeating these lines shouldn't change maps...
 ;-
 ;-----------------------------------------------------------------------
 ;-------------------------------------------------------------------------
 
 
 ;+
-;- "The usual"
+buffer=1
 ;-
-
-
-time = strmid(A[0].time,0,5)
+;- Flare phase: --> uncomment desired phase.
+;filename = 'before'
+filename = 'during'
+;filename = 'after'
 ;-
-;-
-;+
-;- Define z/t indices
-;-
+;- Define indices for z_start (index corresponding to desired start time) 
 if filename eq 'before' then z_start = [197]
 if filename eq 'during' then z_start = [261]
 if filename eq 'after' then z_start = [450]
 ;-
-;-
-;-
+
+
+time = strmid(A[0].time,0,5)
+
+
+;=============================================================
+
 ;+
 ;- Contour data
 ;-
@@ -151,8 +146,6 @@ intensity = alog10 ( mean( $
 ;- = FLOAT Array[500,330,2] (one image for each channel during current phase).
 ;-
 ;-  
-
-
 ;+
 ;- define min_value to apply when creating image graphics
 ;-   (2-elemnt array, one value per channel).
@@ -207,7 +200,6 @@ dw
 resolve_routine, 'image3', /is_function
 im = image3( $
     struc.imdata, $
-    buffer=buffer, $
     rows=rows, $
     cols=cols, $
     left=0.1, $
@@ -218,8 +210,9 @@ im = image3( $
     right=1.0, $
     xshowtext=0, $
     yshowtext=0, $
-    title = struc.title )
-
+    title = struc.title, $
+    buffer=buffer )
+;-
 im[0].rgb_table = A[0].ct
 im[1].rgb_table = A[1].ct
 im[0].min_value = min_value[0]
@@ -273,20 +266,19 @@ im[3].max_value = max(struc.imdata[*,*,2:3])
 ;-
 ;-
 ;- Color tables
-
 im[2].rgb_table = A[0].ct
 im[3].rgb_table = A[1].ct
-
+;-
 ;power_ct = 73
 ;im[2].rgb_table = power_ct
 ;im[3].rgb_table = power_ct
 ;im[2].rgb_table = reverse(im[2].rgb_table, 2)
 ;im[3].rgb_table = reverse(im[3].rgb_table, 2)
-
+;-
 ;resolve_routine, 'color_tables', /is_function
 ;im[2].rgb_table = color_tables()
 ;im[3].rgb_table = color_tables()
-
+;-
 save2, filename
 
 end

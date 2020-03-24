@@ -86,15 +86,18 @@ function POWERMAP_MASK, $
     ;- 14 March 2020
     ;-
     ;-
-    ;---- threshold &/or exptime corrections
-    ;-
     ;- Default threshold = saturation level for AIA data (see SDO_guide for data analysis)
     if not keyword_set(threshold) then threshold = 15000.
     ;-
+    ;----------
+    ;- Apply exptime correction to threshold
+    ;-
     ;if keyword_set(exptime) then threshold = threshold/exptime
-    if not keyword_set(exptime) then exptime = 1.0
     ;data_mask = data lt threshold
+    if not keyword_set(exptime) then exptime = 1.0
     data_mask = data lt (threshold/exptime)
+    ;- Better way to correct threshold value for exptime
+    ;-  (doesn't pass modified variable back to caller).
     ;-
     ;--------
 ;
