@@ -29,7 +29,8 @@
 ;-   [] Instead of setting "ind" kw, add option to set start/end times.
 ;-        User is more likely to know what time range to read around flare peak,
 ;-         though may use "ind" to get just the first hour of data... I dunno.
-;=   [] Better way to pad channels with leading zeros
+;-   [] Better way to pad channels with leading zeros
+;-   [] See code for other tasks marked with "[]"
 ;-
 
 pro READ_MY_FITS, index, data, fls, $
@@ -38,9 +39,6 @@ pro READ_MY_FITS, index, data, fls, $
     ind=ind, $
     nodata=nodata, $
     prepped=prepped, $
-    ;year=year, $
-    ;month=month, $
-    ;day=day, $
     syntax=syntax
 
 
@@ -70,6 +68,14 @@ pro READ_MY_FITS, index, data, fls, $
     if not ( typename(channel) eq 'STRING' ) then begin
         ;print, 'Illegal typename for channel.'
         channel = strtrim(channel,1)
+            ;- [] try using this line without testing input type.
+            ;-     If channel already in string form, this command
+            ;-     will probably have no effect. More efficient?
+            ;-     Does running line every time take longer than using
+            ;-     if statement to check TYPENAME?
+            ;-     Probably not significant either way...
+            ;-   04 April 2020
+            ;-
     endif
 
     ;- Is the above statement converting channel to string necessary?

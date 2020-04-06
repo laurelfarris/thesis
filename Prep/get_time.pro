@@ -1,22 +1,34 @@
-;; Last modified:   16 May 2018 22:14:06
-
 ;+
-;
-; CREATED       04 April 2018
-;
-; ROUTINE:      Prep.pro
-;
-; PURPOSE:
-;
-; USEAGE:
-;
-; AUTHOR:       Laurel Farris
-;
+;- MODIFIED:
+;-   04 April 2018
+;-     created
+;-   16 May 2018 22:14:06
+;-     What did I do? Poor commenting...
+;-   04 April 2020
+;-     Updated comments/documentation at top of file... was terrible.
+;-     (same for get_jd.pro).
+;-
+;- ROUTINE:
+;-   get_time.pro
+;-
+;- PURPOSE:
+;-   Function takes julian date as (only) argument and
+;-     returns time string in form hh:mm:ss.dd
+;-   Uses jd to get time string by calling IDL procedure CALDAT.
+;-
+;- USEAGE:
+;-   time = GET_TIME(jd)
+;-
+;- NOTE:
+;-   Called BY linear_interp.pro (which itself is called by struc_aia,
+;-     or whatever I'm calling it now -- 04 April 2020 )
+;-
+;- AUTHOR:
+;-   Laurel Farris
 ;-
 
 
 function GET_TIME, jd
-    ; Input jd and return string in form hh:mm:ss.dd
 
     CALDAT, jd, month, day, year, hour, minute, second
 

@@ -1,6 +1,15 @@
-Last modified:   23 July 2019
+Last modified:   04 April 2020
 
 file "_README" in /solarstorm/laurel07/thesis_project/Prep/
+
+
+
+04 April 2020:
+    Two files copied to preserve code:
+      1. struc_MLcode_OLD.pro (initially called "extra.pro")
+      2. struc_aia_OLD.pro
+    Moved to ../.old/ since probably not needed, but may be worth looking over
+    just for kicks. May have eliminated code that isn't as useless as I thought.
 
 
 ----------------------------------------------------------------------------------

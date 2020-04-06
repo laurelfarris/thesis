@@ -1,6 +1,11 @@
 ;+
-;- LAST MODIFIED:
-;-   03 May 2019
+;- DATES MODIFIED:
+;-  03 May 2019 (created)
+;-
+;-  04 April 2020
+;-    NOTE (no modification to this code):
+;-    Pretty sure this was copied from ML code in struc_aia.pro (or similar)
+;-    to enable cleanup of that code... is a mess.
 ;-
 ;- ROUTINE:
 ;-

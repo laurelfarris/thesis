@@ -60,7 +60,7 @@ zz = sz[2]/2
 print, old_index[zz].date_obs
 imdata = old_data[*,*,zz]
 if instr eq 'aia' then begin
-    ct = AIA_COLORS( wave=fix(channel), /load )
+    ct = AIA_GCT( wave=fix(channel), /load )
     imdata = AIA_INTSCALE( $
         imdata, wave=fix(channel), exptime=old_index[zz].exptime)
 endif else $
@@ -68,7 +68,7 @@ if instr eq 'hmi' then begin
     ct = 0
 endif else $
     print, "Must set variable instr to 'hmi' or 'aia'."
-;aiact = AIA_COLORS( wave=fix(1600) )
+;aiact = AIA_GCT( wave=fix(1600) )
 ;hmict = im.rgb_table
 im = image2( $
     imdata, $

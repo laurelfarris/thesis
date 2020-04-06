@@ -2,6 +2,13 @@
 ;- Test normalization for FTs.
 
 
+;+
+;- 04 April 2020
+;- Renamed from test.pro to ft_norm_TEST.pro b/c more descriptive
+;-   and is not the only file that begins with "test"...
+;-
+
+
 
 
 pro test
@@ -65,7 +72,7 @@ pro test
     ;print, frequency[ind]
     print, power[ind[1]]
     print, max(power)
-    
+
     print, variance(signal)
 
     plt = plot_spectra( frequency, power, $

@@ -1,11 +1,18 @@
 ;+
-;- LAST MODIFIED:
+;- MODIFIED:
 ;-   29 January 2020
 ;-     Made a copy "struc_aia_old.pro" so I could clear old code
 ;-      and comments out of this one.
 ;-
 ;- PURPOSE:
 ;-   Read AIA headers and restore .sav files (data)
+;-
+;- EXTERNAL SUBROUTINES
+;-   read_my_fits.pro
+;-   crop_data.pro
+;-   missing_obs.pro
+;-   linear_interp.pro
+;-
 ;-
 ;- INPUT:
 ;-
@@ -105,7 +112,7 @@ function STRUC_AIA, index, cube, $
     ;-   which is what we want here.
     ;- If dimensions are not provided, default = [500,330,*] (2011 flare dimensions).
 
-    
+
     resolve_routine, 'crop_data', /is_function
     cube = CROP_DATA( cube, dimensions=dimensions )
     ;print, max(cube)
@@ -147,7 +154,7 @@ function STRUC_AIA, index, cube, $
     ;- 18 February 2020
 ;    flux = mean( mean( cube, dimension=1), dimension=1 )
 ;    print, max(flux)
-    
+
     ;- Standard AIA colors
     AIA_LCT, r, g, b, wave=fix(channel);, /load
     ct = [ [r], [g], [b] ]
