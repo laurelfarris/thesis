@@ -1,48 +1,47 @@
-
-;-
+;+
 ;- 23 October 2018
+;-
+;- Read data from fits files to show images.
+;- Return structure with data and other info to show in images
+;-
+;-
+;-
+;- Show both AIA channels at 01:44 (beginning of GOES flare).
+;- Read in HMI B_LOS and HMI continuum, and overplot both contours on AIA.
+;- Save both image files, and use whichever is better in paper/presentation.
+;-
+;-
+;- Needed information:
+;-  * Center coordinates of AR at desired date_obs
+;-      (know coords of first image and approximate rotation rate...
+;-       simple calculation?)
+;-  *
+;-
+;- First read fits files with NODATA=1 to get observation times from header.
+;- Need this to figure out index of desired time for inst with different cadence,
+;-   later improve read_my_fits.pro to take time (or array of times) to do this.
+;-
+;-
+;-
+;- 17 December 2018
+;-   I think the purpose of this was solely to create figure with intensity
+;-   images for the Data/Obs section of paper. No analysis is done here.
+;-   This was also before I had a working routine for hmi_prep, though this
+;-   at least doesn't read in the entire array just to show one image, and
+;-   prep routines don't contain full disk images.
+;-   This needs some work though... there's a lot of repeats when creating
+;-   the structures for each instrument/channel.
+;-
+;-
+
 
 function GET_IMAGE_DATA
-
-    ;- Read data from fits files to show images.
-    ;- Return structure with data and other info to show in images
-
-    ;- Show both AIA channels at 01:44 (beginning of GOES flare).
-    ;- Read in HMI B_LOS and HMI continuum, and overplot both contours on AIA.
-    ;- Save both image files, and use whichever is better in paper/presentation.
-    ;-
-    ;-
-    ;- Needed information:
-    ;-  * Center coordinates of AR at desired date_obs
-    ;-      (know coords of first image and approximate rotation rate...
-    ;-       simple calculation?)
-    ;-  *
-    ;-
-    ;- First read fits files with NODATA=1 to get observation times from header.
-    ;- Need this to figure out index of desired time for inst with different cadence,
-    ;-   later improve read_my_fits.pro to take time (or array of times) to do this.
-    ;-
-    ;-
-    ;-
-    ;- 17 December 2018
-    ;-   I think the purpose of this was solely to create figure with intensity
-    ;-   images for the Data/Obs section of paper. No analysis is done here.
-    ;-   This was also before I had a working routine for hmi_prep, though this
-    ;-   at least doesn't read in the entire array just to show one image, and
-    ;-   prep routines don't contain full disk images.
-    ;-   This needs some work though... there's a lot of repeats when creating
-    ;-   the structures for each instrument/channel.
-
-
 
     @parameters
 
 
     ;- date_obs of image(s) to display
     display_time = '01:44'
-
-
-
 
     ;- HMI --------
 

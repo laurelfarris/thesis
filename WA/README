@@ -7,6 +7,10 @@ Codes in this directory I did NOT write:
     NOTE: sdbwave2.pro is a copy of the original, where I commented out
       most of the lines creating graphics, and rewrote them to call IDL's functions
       and create objects, e.g.: >plt = PLOT(x, y, ...) instead of >PLOT, x, y, ...
+  • shuffle.pro
+      Moved here from top code directory since the only routine that calls it
+      is randomwave.pro. Not sure why I didn't put it here to begin with.
+      (05 April 2020)
 
 
 Codes I DID write:
