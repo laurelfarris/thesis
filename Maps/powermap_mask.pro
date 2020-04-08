@@ -72,7 +72,7 @@
 function POWERMAP_MASK, $
     data, $
     dz=dz, $
-    exptime=exptime, $
+    ;exptime=exptime, $
     threshold=threshold
 
     @parameters
@@ -88,19 +88,27 @@ function POWERMAP_MASK, $
     ;-
     ;- Default threshold = saturation level for AIA data (see SDO_guide for data analysis)
     if not keyword_set(threshold) then threshold = 15000.
+    ;print, "threshold set to ", threshold, threshold
     ;-
     ;----------
-    ;- Apply exptime correction to threshold
     ;-
+    ;- 08 April 2020 --> no longer correcting for exptime in this subroutine.
+    ;-  Up to user to apply corrections either to both input args, or neither.
+    ;-
+    ;- Apply exptime correction to threshold:
     ;if keyword_set(exptime) then threshold = threshold/exptime
     ;data_mask = data lt threshold
-    if not keyword_set(exptime) then exptime = 1.0
-    data_mask = data lt (threshold/exptime)
+    ;if not keyword_set(exptime) then exptime = 1.0
+    ;data_mask = data lt (threshold/exptime)
     ;- Better way to correct threshold value for exptime
     ;-  (doesn't pass modified variable back to caller).
     ;-
     ;--------
-;
+
+
+
+    data_mask = data lt threshold
+
     ;-
     ;- 13 August 2019
     ;-  Initialize map_mask variable using dimensions of data arg.
@@ -158,22 +166,24 @@ end
 ;- Multiply maps in structure by saturation mask (from bda.pro)
 ;-
 
-@restore_maps
+;IDL> .RUN restore_maps
+;-
 
+dz = 64
+threshold = 10000.
 
 print, ''
 print, ' Type ".CONTINUE" to apply saturation mask to powermaps.'
 print, ''
 stop
 
-
 for cc = 0, 1 do begin
     map_mask = POWERMAP_MASK( $
         A[cc].data, $
-        dz=64, $
+        dz=dz, $
         exptime=A[cc].exptime, $
-        threshold=10000. )
-
+        threshold=threshold $
+    )
     A[cc].map = A[cc].map * map_mask
 endfor
 

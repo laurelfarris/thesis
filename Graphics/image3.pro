@@ -27,7 +27,7 @@
 
 function IMAGE3_wrapper, $
     data, $
-    XX, YY, $
+    ;XX, YY, $
     wx = wx, $
     ;wy = wy, $
     ;width = width, $
@@ -106,7 +106,7 @@ function IMAGE3_wrapper, $
 
         im[ii] = image2( $
             data[*,*,ii], $
-            XX, YY, $
+            ;XX, YY, $
             /current, /device, $
             position=position*dpi, $
             ;layout = [cols,rows,ii+1], $
@@ -126,7 +126,9 @@ function IMAGE3_wrapper, $
 end
 
 
-function IMAGE3, data, XX, YY, _EXTRA=e
+function IMAGE3, data, $
+    ;XX, YY, $
+    _EXTRA=e
 
 
     common defaults
@@ -147,13 +149,13 @@ function IMAGE3, data, XX, YY, _EXTRA=e
     endif
 
 
-    if n_elements(XX) eq 0 then XX = indgen(sz[0])
-    if n_elements(YY) eq 0 then YY = indgen(sz[1])
+;    if n_elements(XX) eq 0 then XX = indgen(sz[0])
+;    if n_elements(YY) eq 0 then YY = indgen(sz[1])
 
 
     im = IMAGE3_wrapper( $
         data, $
-        XX, YY, $
+        ;XX, YY, $
         buffer = 1, $
         rows = 1, $
         cols = 1, $
