@@ -35,6 +35,7 @@ threshold = 10000.
 ;-
 aia1600mask = powermap_mask( A[0].data, dz=dz, threshold=threshold )
 aia1700mask = powermap_mask( A[1].data, dz=dz, threshold=threshold )
+stop
 
 ;------------------------------------------------------------------------------
 ;-
@@ -44,8 +45,6 @@ filename = 'during'
 ;filename = 'after'
 ;------------------------------------------------------------------------------
 ;-
-
-
 ;- Define indices for z_start (index corresponding to desired start time)
 if filename eq 'before' then z_start = [197]
 if filename eq 'during' then z_start = [261]
@@ -61,25 +60,17 @@ time = strmid(A[0].time,0,5)
 ;- Average intensity through time to get more accurate representation
 ;-  of data that generated power maps.
 ;-
-intensity = alog10 ( mean( $
-    A.data[*,*,z_start:z_start+dz-1, *], dimension=3 ))
+intensity = mean( A.data[*,*,z_start:z_start+dz-1, *], dimension=3 )
 ;- = FLOAT Array[500,330,2] (one image for each channel during current phase).
-;-
 help, intensity
 ;-
+
+
+
 ;+
-;- Multiply intensity images by mask
-;-
-intensity = intensity * [ $
-    [[aia1600mask[*,*,z_start]]], [[aia1700mask[*,*,z_start]]] ]
-;-
-
-aia1600map = (alog10(A[0].map)) * aia1600mask
-
-
 imdata = [ $
-    [[ intensity[*,*,0] ]], $
-    [[ intensity[*,*,1] ]], $
+    [[ (alog10(intensity[*,*,0])) * aia1600mask[*,*,z_start] ]], $
+    [[ (alog10(intensity[*,*,1])) * aia1700mask[*,*,z_start] ]], $
     [[ (alog10(A[0].map[*,*,z_start])) * aia1600mask[*,*,z_start] ]], $
     [[ (alog10(A[1].map[*,*,z_start])) * aia1700mask[*,*,z_start] ]]  $
 ]
@@ -94,7 +85,9 @@ endfor
 dw
 
 ;-
-;------------
+;================================================================
+;================================================================
+;================================================================
 
 
 
