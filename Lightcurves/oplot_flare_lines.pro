@@ -126,6 +126,12 @@ function OPLOT_FLARE_LINES, $
             strmid( gpeak, 0, 5 ), $
             strmid( gend, 0, 5 ) ]
             ;- values for gstart, gpeak, and gend read in from @parameters
+        ;--
+        ;- 10 April 2020
+        ;-  Pretty sure the above line can be condensed to:
+        ;-    flare_times = strmid( [gstart, gpeak, gend], 0, 5 )
+        ;-  Should double check tho.
+        ;-------
 
         ;-  For GOES, flare_times is of the form: "15-Feb-2011 00:00:01.725"
         ;-  For  AIA, flare_times is of the form: "15-Feb-2011 00:00"
