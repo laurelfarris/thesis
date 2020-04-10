@@ -1,17 +1,43 @@
 ;+
-;- 08 April 2020
-;-   Trying to re-create powermap figures in A1
-
-;+
-;- IDL> .RUN struc_aia
-;- IDL> .RUN restore_maps
-;-
-
-.RUN struc_aia
-.RUN restore_maps
-.RUN article1_maps
+;- 10 April 2020
 
 
-;- See comments in article1_maps.pro from 08 April 2020.
 
-;end
+;1. 226 ffff00
+;2. 30 008787or 31 0087af
+;3. 53 5f005f or 54 5f0087
+
+
+viridis = COLORTABLE( [ $
+    [255, 255, 000], $
+    [000, 135, 135], $
+    [095, 000, 095] ], $
+    get_names=myCTnames $
+    ;background=, $
+    ;indices=, $
+    ;ncolors=, $
+    ;/reverse, $
+    ;/transpose, $
+    ;/stretch=[-100:100], $
+    )
+
+
+
+;viridis = COLORTABLE( $
+;  [ $
+;    [68 1 84]
+;    [71, 39, 117], $
+;    [ 62 72 135], $
+;    [49 102 141], $
+;    [38 130 141], $
+;    [36 157 136 ], $
+;    [55 181 120], $
+;    [109 204 88], $
+;    [176 221 49], $
+;    [253 231 37] $
+;  ]
+;...
+;)
+
+
+end
