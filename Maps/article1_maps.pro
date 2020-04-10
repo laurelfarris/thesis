@@ -26,12 +26,17 @@
 ;-    sets dz and threshold at ML as well..
 ;-
 
+;------------------------------------------------------------------------------
+buffer=1
 
 dz = 64
 threshold = 10000.
 ;-   lowered from 15000 to exclude pixels contaminated by bleeding/blooming.
 ;-
-buffer=1
+aia1600mask = powermap_mask( A[0].data, dz=dz, threshold=threshold )
+aia1700mask = powermap_mask( A[1].data, dz=dz, threshold=threshold )
+
+;------------------------------------------------------------------------------
 ;-
 ;- Flare phase: --> uncomment desired phase.
 ;filename = 'before'
@@ -41,14 +46,13 @@ filename = 'during'
 ;-
 
 
-;- Define indices for z_start (index corresponding to desired start time) 
+;- Define indices for z_start (index corresponding to desired start time)
 if filename eq 'before' then z_start = [197]
 if filename eq 'during' then z_start = [261]
 if filename eq 'after' then z_start = [450]
 ;-
 time = strmid(A[0].time,0,5)
 ;-
-
 
 
 ;+
@@ -70,11 +74,14 @@ intensity = intensity * [ $
     [[aia1600mask[*,*,z_start]]], [[aia1700mask[*,*,z_start]]] ]
 ;-
 
+aia1600map = (alog10(A[0].map)) * aia1600mask
+
+
 imdata = [ $
     [[ intensity[*,*,0] ]], $
     [[ intensity[*,*,1] ]], $
-    [[ A[0].map[*,*,z_start] ]], $
-    [[ A[1].map[*,*,z_start] ]]  $
+    [[ (alog10(A[0].map[*,*,z_start])) * aia1600mask[*,*,z_start] ]], $
+    [[ (alog10(A[1].map[*,*,z_start])) * aia1700mask[*,*,z_start] ]]  $
 ]
 help, imdata
 
