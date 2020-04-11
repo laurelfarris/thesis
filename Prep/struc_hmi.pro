@@ -35,11 +35,8 @@ function STRUC_HMI, index, cube, $
             instr=instr, $
             channel=channel, $
             nodata=1, $
-            prepped=1, $
             ;ind=ind, $
-            year=year, $
-            month=month, $
-            day=day
+            prepped=1
     endif
 
     print, 'Reading header for level ', $

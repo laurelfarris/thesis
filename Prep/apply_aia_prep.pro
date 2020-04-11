@@ -43,10 +43,7 @@ READ_MY_FITS, old_index, old_data, fls, $
     instr=instr, $
     channel=channel, $
     nodata=0, $
-    prepped=0, $
-    year=year, $
-    month=month, $
-    day=day
+    prepped=0
 ;- Test to make sure that all downloaded files were read
 ;-  (and no extra files managed to sneak in)
 help, fls

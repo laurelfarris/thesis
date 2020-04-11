@@ -102,8 +102,7 @@ function data_struc, index, cube, $
     if n_elements(index) eq 0 then begin
         resolve_routine, 'read_my_fits'
         READ_MY_FITS, index, instr=instr, channel=channel, $
-            nodata=1, prepped=1, $
-            year=year, month=month, day=day
+            nodata=1, prepped=1
     endif
 
 ;- Don't think lvl_num tag exists for hmi...
@@ -134,7 +133,7 @@ function data_struc, index, cube, $
       ;-  Maybe those should be two separate routines... not top priority right now.
 
 
-    
+
     path = '/solarstorm/laurel07/' + year + month + day + '/'
 
     if (strlowcase(instr) eq 'aia') then begin

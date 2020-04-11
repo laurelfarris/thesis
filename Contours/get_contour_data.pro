@@ -65,9 +65,7 @@ function GET_CONTOUR_DATA, time, channel=channel
     @parameters
     READ_MY_FITS, index, $
         instr=instr, channel=channel, $
-        nodata=1, prepped=1;, $
-        ;year=year, day=day, month=month
-        ;-  read_my_fits no longer takes these kws, calls @parameters (05 Mar 2020)
+        nodata=1, prepped=1
 
     hmi_time = strmid( index.date_obs, 11, 5 )
 
@@ -77,7 +75,7 @@ function GET_CONTOUR_DATA, time, channel=channel
     ind2 = (where( hmi_time eq strmid(time[-1],0,5) ))[0]
     ind = [ind1:ind2]
 
-    
+
 
     ;- Returns "cube" [750, 500, 398], already centered on AR
     @parameters

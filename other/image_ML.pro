@@ -59,10 +59,7 @@ READ_MY_FITS, index, data, fls, $
     channel=channel, $
 ;    ind=ind, $
     nodata=0, $
-    prepped=0, $
-    year=year, $
-    month=month, $
-    day=day
+    prepped=0
 
 
 

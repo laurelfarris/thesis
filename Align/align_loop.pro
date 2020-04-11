@@ -130,10 +130,7 @@ READ_MY_FITS, index, data, fls, $
     channel=channel, $
     ;ind=[0], $
     nodata=0, $
-    prepped=1, $
-    year=year, $
-    month=month, $
-    day=day
+    prepped=1
 
 help, data
 help, index[0].wave_str
