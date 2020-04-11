@@ -33,9 +33,9 @@ dz = 64
 threshold = 10000.
 ;-   lowered from 15000 to exclude pixels contaminated by bleeding/blooming.
 ;-
-aia1600mask = powermap_mask( A[0].data, dz=dz, threshold=threshold )
-aia1700mask = powermap_mask( A[1].data, dz=dz, threshold=threshold )
-stop
+;aia1600mask = powermap_mask( A[0].data, dz=dz, threshold=threshold )
+;aia1700mask = powermap_mask( A[1].data, dz=dz, threshold=threshold )
+;stop
 
 ;------------------------------------------------------------------------------
 ;-
@@ -52,8 +52,7 @@ if filename eq 'after' then z_start = [450]
 ;-
 time = strmid(A[0].time,0,5)
 ;-
-
-
+;----
 ;+
 ;- Extract subset of data from each channel over same time period
 ;- from which corresponding power map was obtained.
@@ -62,11 +61,9 @@ time = strmid(A[0].time,0,5)
 ;-
 intensity = mean( A.data[*,*,z_start:z_start+dz-1, *], dimension=3 )
 ;- = FLOAT Array[500,330,2] (one image for each channel during current phase).
-help, intensity
+;help, intensity
+
 ;-
-
-
-
 ;+
 imdata = [ $
     [[ (alog10(intensity[*,*,0])) * aia1600mask[*,*,z_start] ]], $
@@ -75,8 +72,8 @@ imdata = [ $
     [[ (alog10(A[1].map[*,*,z_start])) * aia1700mask[*,*,z_start] ]]  $
 ]
 help, imdata
-
-
+;-
+;-
 for ii = 0, 3 do begin
     ;print, min(imdata[*,*,ii])
     im = image2( imdata[*,*,ii], buffer=buffer )
@@ -92,9 +89,15 @@ dw
 
 
 
+
+
+
+;+
+;- Titles for each image and each colorbar.
 ;-
 ;- image titles for Intensity (top row) and power (bottom row) for
 ;-   1600 (left col) and 1700 (right col)
+;-
 dat_title = strarr(n_elements(A))
 map_title = strarr(n_elements(A))
 for cc = 0, 1 do begin
@@ -103,44 +106,41 @@ for cc = 0, 1 do begin
     map_title[cc] = A[cc].name + ' 5.6 mHz (' + $
         time[z_start] + '-' + time[z_start+dz-1] + ' UT)'
 endfor
+title = [ dat_title, map_title ]
+cbar_title = [ 'log intensity', 'log intensity', 'log power', 'log power' ]
+;struc = { $
+;    imdata : [ $
+;        ;[[ alog10 ( mean( A.data[*,*,z_start:z_start+dz-1, *], dimension=3 ) ) ]], $
+;        [[ intensity ]], $
+;        [[ alog10( A.map[*,*,z_start,*] ) ]] ], $
+;    title : [ dat_title, map_title ], $
+;    cbar_title : [ 'log intensity', 'log intensity', 'log power', 'log power' ] $
+;}
 
-;-
-struc = { $
-    imdata : [ $
-        ;[[ alog10 ( mean( A.data[*,*,z_start:z_start+dz-1, *], dimension=3 ) ) ]], $
-        [[ intensity ]], $
-        [[ alog10( A.map[*,*,z_start,*] ) ]] ], $
-    title : [ dat_title, map_title ], $
-    cbar_title : [ 'log intensity', 'log intensity', 'log power', 'log power' ] $
-}
 
 ;+
 ;- Contour data
-;-
 resolve_routine, 'get_contour_data', /either
 c_data = GET_CONTOUR_DATA( time[z_start : z_start+dz-1], channel='mag' )
 ;-
-;-
-
-;----------------------------------------------------------------------------------
 
 
 ;+
 ;- Imaging
 ;-
 
-
 ;+
 ;- define min_value to apply when creating image graphics
 ;-   (2-elemnt array, one value per channel).
 min_value = [ min(intensity[*,*,0]), min(intensity[*,*,1]) ]
-
+;-
 rows = 2
 cols = 2
 dw
 resolve_routine, 'image3', /is_function
 im = image3( $
-    struc.imdata, $
+    ;struc.imdata, $
+    imdata, $
     rows=rows, $
     cols=cols, $
     left=0.1, $
@@ -151,7 +151,8 @@ im = image3( $
     right=1.0, $
     xshowtext=0, $
     yshowtext=0, $
-    title = struc.title, $
+    ;title = struc.title, $
+    title=title, $
     buffer=buffer )
 ;-
 im[0].rgb_table = A[0].ct
@@ -161,10 +162,6 @@ im[1].min_value = min_value[1]
 ;-
 contourr = objarr(n_elements(im))
 cbar = objarr(n_elements(im))
-;
-
-
-
 
 
 
@@ -182,7 +179,8 @@ for ii = 0, n_elements(im)-1 do begin
     cbar[ii] = COLORBAR2( $
         target=im[ii], $
         thick=0.5, $
-       title=struc.cbar_title[ii] )
+       ;title=struc.cbar_title[ii] )
+       title=cbar_title[ii] )
 endfor
 ;-
 ;-
