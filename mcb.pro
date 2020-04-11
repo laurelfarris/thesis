@@ -1,7 +1,9 @@
 ;Copied from clipboard
 
 
-    print, [ flower, fcenter, fupper ] * 1000
+dw
+IMAGE_STRUCTURE, S, buffer=1
+;IMAGE_AR_ONLY, S, buffer=1
 
-    end
+end
 
