@@ -4,6 +4,10 @@
 ;-     Changed rgb_table to "my_viridis", custom made by me using
 ;-     IDL routine COLORTABLE and a close examination of the viridis colortable
 ;-     found online.
+;-   14 April 2020
+;-     Removed codes from 4/10/2020 defining colortable directly in this routine.
+;-     Copied lines creating viridis colortable into function "my_viridis",
+;-     called simply as rgb_table = my_viridis().
 ;-
 ;- PURPOSE:
 ;-   "Wavelet Analysis" (WA) - discrete
@@ -122,14 +126,12 @@ wy = 9.0
 win = window( dimensions=[wx,wy]*dpi, location=[500,0], buffer=buffer )
 
 
-;- 10 April 2020
-my_viridis = COLORTABLE( $
-    [ [255, 235, 000], $
-      [000, 215, 135], $
-      [000, 135, 135], $
-      [067, 000, 089] ], $
-    /reverse $
-)
+;+
+;- 14 April 2020
+rgb_table = my_viridis()
+;- IDL> help, rgb_table
+;-        INT   = Array[256, 3]
+;-
 
 for cc = 0, 1 do begin
 
@@ -158,7 +160,7 @@ for cc = 0, 1 do begin
         aspect_ratio=0, $
         min_value=alog10(min_value), $
         max_value=alog10(max_value), $
-        rgb_table=my_viridis, $
+        rgb_table=rgb_table, $
         xtickinterval=75, $
         xtitle='image #', $
         ytickvalues=ytickvalues, $

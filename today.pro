@@ -1,53 +1,46 @@
 ;+
-;- 10 April 2020
+;- 14 April 2020
+;-
+;- running average LCs to accompany time-freq power plots (aka discrete WA)
+;- has been on to-do list for way too long, seems like should be relatively simple..
+;-
+
 
 
 buffer=1
 
-imdata = findgen(300,300)
-help, imdata
-;-
+dz = 64
+
+sz = size(A.flux, /dimensions)
+
+lc_avg = fltarr( sz[0]-dz+1, sz[1] )
+help, lc_avg
+
+for cc = 0, 1 do begin
+    for ii = 0, sz[0]-dz do begin
+        lc_avg[ii,cc] = MEAN( A[cc].flux[ ii:ii+dz-1 ] )
+    endfor
+endfor
+
+print, max(lc_avg[*,0])
+print, max(lc_avg[*,1])
 
 
-;1. yellow
-;     226 ffff00 [255, 255, 000] -- too light
-;     220 ffff00 [255, 215, 000] -- too dark
-;   ...
-;2. green
-;      30 008787  [000, 135, 135], $
-;      31 0087af  [ ] <-- haven't tried this one yet
-;3. cyan
-;      24 005f87  [000, 095, 135], $
-;4. Violet
-;      53 5f005f [095, 000, 095]
-;      54 5f0087 [095, 000, 135] <-- better, still not dark enough
-
-viridis = COLORTABLE( [ $
-    [255, 235, 000], $
-    [000, 215, 135], $
-    ;[000, 175, 135], $
-    ;[000, 175, 095], $
-    [000, 135, 135], $
-    [067, 000, 089] ], $  ; "Mulberry"
-    /reverse $
-)
-;-
-;-
 dw
-im = image($
-    rotate(imdata, 1), $
-    margin=0.0, $
-    rgb_table=viridis, $
-    buffer=buffer $
-)
-;cbar = colorbar2( target=im )
-;print, cbar.position
+plt = objarr(2)
+for cc = 0, 1 do begin
+    plt[cc] = plot2( $
+        lc_avg[*,cc], $
+        buffer=buffer, $
+        overplot=cc<1, $
+        linestyle=cc $
+    )
+endfor
 ;-
-save2, 'test_CT'
+;-
+save2, 'LC_running_avg'
 ;-
 ;-
-
-
 
 
 end

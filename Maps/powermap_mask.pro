@@ -172,6 +172,17 @@ end
 dz = 64
 threshold = 10000.
 
+;-
+;- 14 April 2020:
+;-   Copied the following 2 lines from article1_maps.pro,
+;-   independent variables for the masks so
+;-   I can avoid modifying A.maps directly, preserve the original vlaues
+;-   as restored from .sav files to make sure I don't screw anything up.
+;- --> DO NOT ".continue" when prompted! Masks are defined at ML, so
+;-  we're done with this routine.
+aia1600mask = powermap_mask( A[0].data, dz=dz, threshold=threshold )
+aia1700mask = powermap_mask( A[1].data, dz=dz, threshold=threshold )
+
 print, ''
 print, ' Type ".CONTINUE" to apply saturation mask to powermaps.'
 print, ''
@@ -181,7 +192,7 @@ for cc = 0, 1 do begin
     map_mask = POWERMAP_MASK( $
         A[cc].data, $
         dz=dz, $
-        exptime=A[cc].exptime, $
+        ;exptime=A[cc].exptime, $
         threshold=threshold $
     )
     A[cc].map = A[cc].map * map_mask

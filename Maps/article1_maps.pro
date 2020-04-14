@@ -25,17 +25,16 @@
 ;- IDL> .RUN powermap_mask
 ;-    sets dz and threshold at ML as well..
 ;-
-
-;------------------------------------------------------------------------------
-buffer=1
-
-dz = 64
-threshold = 10000.
+;dz = 64
+;threshold = 10000.
 ;-   lowered from 15000 to exclude pixels contaminated by bleeding/blooming.
 ;-
 ;aia1600mask = powermap_mask( A[0].data, dz=dz, threshold=threshold )
 ;aia1700mask = powermap_mask( A[1].data, dz=dz, threshold=threshold )
 ;stop
+
+;------------------------------------------------------------------------------
+buffer=1
 
 ;------------------------------------------------------------------------------
 ;-
@@ -71,25 +70,39 @@ imdata = [ $
     [[ (alog10(A[0].map[*,*,z_start])) * aia1600mask[*,*,z_start] ]], $
     [[ (alog10(A[1].map[*,*,z_start])) * aia1700mask[*,*,z_start] ]]  $
 ]
-help, imdata
+;-
+;imdata = alog10( [ $
+;    [[ intensity[*,*,0] ]], $
+;    [[ intensity[*,*,1] ]], $
+;    [[ A[0].map[*,*,z_start] ]], $
+;    [[ A[1].map[*,*,z_start] ]]  $
+;])
+print, min(imdata[*,*,0])
+print, min(imdata[*,*,1])
+print, min(imdata[*,*,2])
+print, min(imdata[*,*,3])
+stop
+
+;test = A[0].map[*,*,z_start] * aia1600mask[*,*,z_start]
+;print, min(test)
+;locs = array_indices( test, where( test gt 0 ) )
+;print, min( test[locs])
+
+
+
 ;-
 ;-
-for ii = 0, 3 do begin
-    ;print, min(imdata[*,*,ii])
-    im = image2( imdata[*,*,ii], buffer=buffer )
-    save2, 'test' + strcompress(ii, /remove_all)
-endfor
-dw
+;for ii = 2, 3 do begin
+;    ;print, min(imdata[*,*,ii])
+;    im = image2( (imdata[*,*,ii])^0.1, buffer=buffer )
+;    save2, 'test' + strcompress(ii, /remove_all)
+;endfor
+;dw
 
 ;-
 ;================================================================
 ;================================================================
 ;================================================================
-
-
-
-
-
 
 
 ;+
@@ -129,11 +142,6 @@ c_data = GET_CONTOUR_DATA( time[z_start : z_start+dz-1], channel='mag' )
 ;- Imaging
 ;-
 
-;+
-;- define min_value to apply when creating image graphics
-;-   (2-elemnt array, one value per channel).
-min_value = [ min(intensity[*,*,0]), min(intensity[*,*,1]) ]
-;-
 rows = 2
 cols = 2
 dw
@@ -157,14 +165,28 @@ im = image3( $
 ;-
 im[0].rgb_table = A[0].ct
 im[1].rgb_table = A[1].ct
-im[0].min_value = min_value[0]
-im[1].min_value = min_value[1]
+;-
+;----------
+;+
+;- 14 April 2020 -- confused by this...
+;-
+;- define min_value to apply when creating image graphics
+;-   (2-elemnt array, one value per channel).
+;min_value = [ min(intensity[*,*,0]), min(intensity[*,*,1]) ]
+;-
+;print, im[0].min_value
+;print, min(imdata[*,*,0])
+;-
+;im[0].min_value = min_value[0]
+;im[1].min_value = min_value[1]
+;-
+;-
 ;-
 contourr = objarr(n_elements(im))
 cbar = objarr(n_elements(im))
-
-
-
+;-
+;-
+;-
 resolve_routine, 'colorbar2', /is_function
 resolve_routine, 'plot_contours', /is_function
 ;-
@@ -189,18 +211,32 @@ cbar[3].tickinterval=2
 ;-
 ;-
 ;- Use same min/max value for all three phases (BDA)
-im[2].min_value = -3
-im[3].min_value = -3
-im[2].max_value = max(struc.imdata[*,*,2:3])
-im[3].max_value = max(struc.imdata[*,*,2:3])
+;im[2].min_value = -3
+;im[3].min_value = -3
+;;im[2].max_value = max(struc.imdata[*,*,2:3])
+;;im[3].max_value = max(struc.imdata[*,*,2:3])
+;im[2].max_value = max(imdata[*,*,2:3])
+;im[3].max_value = max(imdata[*,*,2:3])
 ;-
 ;-
 ;- Color tables
 im[2].rgb_table = A[0].ct
 im[3].rgb_table = A[1].ct
 ;-
+
+
+
+;+
+;- testing different things to figure out how I produced maps with saturated
+;-  pixels = 0.0 and showing up black, but pixel values where LOG = value
+;-   LESS THAN 0.0 are still represented... did I set saturated pixels to
+;-  the minimum value of LOG(map), rather than 0? Can see why this would be
+;-  confusing to referee... should re-read comments with this in mind.
+;- (14 April 2020)
+im[2].min_value = 0.0
+im[3].min_value = 0.0
+
+;+
 save2, filename
-;-
-;-
 
 end
