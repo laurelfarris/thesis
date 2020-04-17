@@ -1,11 +1,38 @@
-;- Thu Nov 29 08:12:03 MST 2018
+;- LAST MODIFIED:
+;-   04/16/2020
 ;-
+;- ROUTINE:
+;-   filter.pro
 ;-
-;- To Do:
+;- EXTERNAL SUBROUTINES:
+;-
+;- PURPOSE:
+;-
+;- USEAGE:
+;-   result = routine_name( arg1, arg2, kw=kw )
+;-
+;- INPUT:
+;-   arg1   e.g. input time series
+;-   arg2   e.g. time separation (cadence)
+;-
+;- KEYWORDS (optional):
+;-   kw     set <kw> to ...
+;-
+;- OUTPUT:
+;-   result     blah
+;-
+;- TO DO:
 ;-   [] replace hardcoded cutoff for filter (in function "filter")
 ;-      used to create mask, and make new kw option, or something...
 ;-    (2/12/2020)
 ;-
+;- KNOWN BUGS:
+;-   Possible errors, harcoded variables, etc.
+;-
+;- AUTHOR:
+;-   Laurel Farris
+;-
+
 
 pro CALC_FOURIER2, flux, cadence, frequency, power, fmax=fmax, fmin=fmin
 
@@ -114,18 +141,20 @@ function FILTER, flux, cadence
 
 end
 
-goto, start
-start:;---------------------------------------------------------------------------------
+buffer = 1
 
 
 ;- 30 August 2019
 ;- 1-hour time segment (hardcoded...)
-;t1_string = '01:30'
-;t2_string = '02:30'
-;t1_string = '12:30'
-;t2_string = '13:30'
-t1_string = '12:15'
-t2_string = '13:15'
+    ;- X2.2 flare
+        t1_string = '01:30'
+        t2_string = '02:30'
+    ;- M or C flare (I assume)
+        ;t1_string = '12:30'
+        ;t2_string = '13:30'
+    ;- M or C flare ...
+        ;t1_string = '12:15'
+        ;t2_string = '13:15'
 
 wx = 8.0
 wy = 3.0
@@ -144,9 +173,9 @@ flux = A.flux[ind]
 
 ;flux = [ [flux], [A[cc].flux[ind] - min(A[cc].flux[ind])] ]
 
+;+
 ;- Plot original light curves
 xdata = [ [ind], [ind] ]
-;dw
 resolve_routine, 'batch_plot', /either
 plt = BATCH_PLOT( $
     xdata, flux, $
@@ -158,16 +187,15 @@ plt = BATCH_PLOT( $
     wx=wx, wy=wy, $
     yticklen=0.010, $
     stairstep=1, $
-    buffer=0 )
-
-
+    buffer=buffer )
+;-
 delt = [ min(flux[*,0]), (min(flux[*,1])-1.e7) ]
 resolve_routine, 'shift_ydata', /either
 SHIFT_YDATA, plt, delt=delt
 
+;+
 ;- Overplot pre-flare background
 background = mean(A.flux[120:259], dim=1) - delt
-
 for jj = 0, 1 do begin
     hor = plot2( $
         plt[0].xrange, $
@@ -177,6 +205,8 @@ for jj = 0, 1 do begin
         name = 'Background' )
 endfor
 
+;+
+;- Compute inverse transform
 inverseTransform = []
 for cc = 0, 1 do begin
     inverseTransform = [ [inverseTransform], $
@@ -184,7 +214,7 @@ for cc = 0, 1 do begin
 endfor
 
 
-;----
+;+
 ;- overplot smoothed LC on top of raw data (plt)
 
 ;inverseTransform[*,0] = inverseTransform[*,0] + bg[0]
@@ -193,7 +223,6 @@ for ii = 0, 1 do begin
 plt2 = plot2( $
     xdata[*,ii], $
     inverseTransform[*,ii] - delt[ii], $
-    ;thick=1.0, $
     /overplot, $
     yticklen=0.010, $
     yminor=3, $
@@ -224,39 +253,57 @@ ax[3].title = A[1].name + ' (DN s$^{-1}$)'
 ;- bad file name... should START with "lc",
 ;-  plus curves aren't actually detrended yet... (10 May 2019)
 
-;save2, 'lc_filter'
+save2, 'lc_filter'
 ;-  Better file name
 
 
-;dw
+;-----------------------------------------------------------------------------
 
-;----
+
+
+;+
 ;- new plot window with detrended light curves
 ;-   (2nd window, even though variable is plt3... confusing at first b/c
 ;-    assumed there should be 3 windows... )
 ;-
 
-detrended = flux[2:*,*] - inverseTransform[1:*,*]
-;help, xdata
-;help, detrended
-
+;+
+;-
+;- SUBTRACT inverse transfrom
+;detrended = flux[2:*,*] - inverseTransform[1:*,*]
+;title = 'Detrended (flux - inverseTransform)'
+;fname = 'lc_detrended_SUBRACTED'
+;-
+;- DIVIDE inverse transfrom
+detrended = flux[2:*,*] / inverseTransform[1:*,*]
+title = 'Detrended (flux / inverseTransform)'
+fname = 'lc_detrended_DIVIDED'
+;-
+;-
+dw
 plt3 = BATCH_PLOT( $
     ;ind, $
-    xdata[2:*,*], $   ;- xdata defined above as [ [ind], [ind] ] so dimensions match ydata.
-    detrended, $
+    ;xdata[2:*,*], $   ;- xdata defined above as [ [ind], [ind] ] so dimensions match ydata.
+    xdata[10:*,*], $
+    detrended[8:*,*], $
     stairstep=1, $
     ;ytickvalues=[-1.e6, 0, 1e6], $
     ;ytickvalues=[0.0], $
     ;overplot = 1<cc, $
-    title = 'Detrended', $
+    title = title, $
     ;color=['dark orange', 'blue'], $
     color=A.color, $
     wx=wx, wy=wy, $
     left = 0.75, right=0.25, $
     ;thick = 2.0, $
-    buffer=0)
+    buffer=buffer $
+)
+;-
+save2, fname
+;-----------------
 
-;save2, 'lc_detrended'
+
+
 
 ;plt3 = plot2( xdata[*,0], detrended[*,0], buffer=0 )
 ;plt3 = plot2( xdata[*,1], detrended[*,1], /overplot, color='red' )

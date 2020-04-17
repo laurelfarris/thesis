@@ -36,12 +36,14 @@
 ;------------------------------------------------------------------------------
 buffer=1
 
-;------------------------------------------------------------------------------
 ;-
 ;- Flare phase: --> uncomment desired phase.
-;filename = 'before'
-filename = 'during'
+filename = 'before'
+;filename = 'during'
 ;filename = 'after'
+
+
+
 ;------------------------------------------------------------------------------
 ;-
 ;- Define indices for z_start (index corresponding to desired start time)
@@ -81,7 +83,7 @@ print, min(imdata[*,*,0])
 print, min(imdata[*,*,1])
 print, min(imdata[*,*,2])
 print, min(imdata[*,*,3])
-stop
+;stop
 
 ;test = A[0].map[*,*,z_start] * aia1600mask[*,*,z_start]
 ;print, min(test)
@@ -210,20 +212,34 @@ cbar[2].tickinterval=2
 cbar[3].tickinterval=2
 ;-
 ;-
+
 ;- Use same min/max value for all three phases (BDA)
-;im[2].min_value = -3
-;im[3].min_value = -3
+im[2].min_value = -3
+im[3].min_value = -3
+
 ;;im[2].max_value = max(struc.imdata[*,*,2:3])
 ;;im[3].max_value = max(struc.imdata[*,*,2:3])
-;im[2].max_value = max(imdata[*,*,2:3])
-;im[3].max_value = max(imdata[*,*,2:3])
+im[2].max_value = max(imdata[*,*,2:3])
+im[3].max_value = max(imdata[*,*,2:3])
+
+
+;- define min_value to apply when creating image graphics
+;-   (2-elemnt array, one value per channel).
+min_value = alog10( [ min(intensity[*,*,0]), min(intensity[*,*,1]) ] )
+print, min_value
 ;-
+;print, im[0].min_value
+;print, min(imdata[*,*,0])
+;-
+
+im[0].min_value = min_value[0]
+im[1].min_value = min_value[1]
+
 ;-
 ;- Color tables
 im[2].rgb_table = A[0].ct
 im[3].rgb_table = A[1].ct
 ;-
-
 
 
 ;+
@@ -233,10 +249,76 @@ im[3].rgb_table = A[1].ct
 ;-  the minimum value of LOG(map), rather than 0? Can see why this would be
 ;-  confusing to referee... should re-read comments with this in mind.
 ;- (14 April 2020)
-im[2].min_value = 0.0
-im[3].min_value = 0.0
+;im[2].min_value = 0.0
+;im[3].min_value = 0.0
+
+
+;save2, filename
+
+;-----------------------------------------------------------------------------
+;- 17 April 2020
+
+
 
 ;+
-save2, filename
+;--- Overlay ARROW graphic(s) on images,
+;-     using code copied from Notes/2020-03-05.pro and modified as needed.
+;-
+
+;- center coords of ROI
+center = [382,192]
+;-
+;- 'offset' = distance between ROI center and tip of arrow
+offset = 10
+;-
+;- 'arrow_mag' = arrow magnitude, or length of arrow shaft.
+arrow_mag = 25
+;-
+
+;------
+
+
+;- x and y components of arrow, calculated using Pythagorean theorem.
+xycomp = sqrt( (arrow_mag^2)/2 )
+;-
+x0 = center[0]
+y0 = center[1]
+;-
+;- X and Y args for ARROW function (endpoint coords of arrow graphic).
+x2 = x0 + offset
+y2 = y0 - offset
+x1 = x2 + xycomp
+y1 = y2 - xycomp
+;-
+
+
+
+resolve_routine, 'arrow2', /is_function
+;- defaults in arrow2:
+;-   /data
+;-   head_angle = 45
+;-   head_indent = 0
+;-   fill_background = 1
+;-
+myarrow = objarr(2)
+for cc = 0, 1 do begin
+    myarrow[cc] = ARROW2( $
+        [x1,x2], [y1,y2], $
+        target=im[cc+2], $
+        thick=3.0, $
+        ;line_thick=2.0, $
+        head_angle=30, $   ;- default in my subroutine (arrow2) = 45 degrees.
+        head_size=0.5, $    ;- forgot what this is...
+        fill_background=1 )
+endfor
+print, myarrow[0].thick
+print, myarrow[0].line_thick ; IDL default = 1.0
+
+
+
+;-
+stop
+save2, filename + '_arrow'
+;-
 
 end

@@ -66,7 +66,7 @@ function arrow2, xx, yy, $
             ;-
         ;head_size=, $  ;- I have no idea.
         ;thick = 0.5, $ ;- thickness of arrow shaft
-        ;line_thick=, $ ;- thickness of outline surrounding arrow shaft
+        ;line_thick=1, $ ;- 0-10, = thickness of outline surrounding arrow shaft
         fill_background=1, $
         ;fill_color='', $  ;- color of interior
         ;color='',      $  ;- color of outline
