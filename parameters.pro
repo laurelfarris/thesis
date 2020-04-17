@@ -58,13 +58,19 @@ gend   = ['02:06:00', '12:59:00', '13:20:00']
 center = [ [2400,1650], [1675,1600], [2879,1713] ]
 dimensions = [ [500,330], [500,330], [500,330] ]
 
-;----------------------------------------------------------
+
 ;- 17 January 2020
 ;-  BDA start/end times for shaded regions on LC and P_t plots, defined
 ;-  here so that codes can be generalized for multiflare.
-;-  NOTE: still need times for C and M flares.
-my_start = ['01:44']
-my_end = ['02:30']
+;-
+;- 17 April 2020
+;-  NOTE: added values for C and M flares somewhat arbitrarily by simply
+;-    starting 10 minutes prior to official GOES start time
+;-    and ending after 45 minutes, regardless of actual duration of gradual phase.
+
+my_start = [ '01:44', '12:30', '12:21' ]
+my_end   = [ '02:30', '13:16', '13:07' ]
+
 
 utbase = [ $
     '15-Feb-2011 00:00:01.725', $

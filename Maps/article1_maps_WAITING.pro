@@ -1,86 +1,55 @@
 ;+
 ;- LAST MODIFIED:
-;-   08 April 2020
+;-   17 April 2020
 ;-
 ;- PURPOSE:
 ;-   2x2 image of intensity (top) and power maps (bottom) for
 ;-    AIA 1600 (left) and AIA 1700 (right)
 ;-
 ;- USEAGE:
-;-   Uncomment filename of window to be imaged.
-;-   3 separate figures, one for each window.
 ;-
-;- To do:
-;-   Improve procedure for selecting flare phase (aka no hard-coding, or
-;-   sloppy commenting/uncommenting), preferably without re-defining
-;-   contour data (c_data) every time routine runs.
+;- At beginning of new sswidl session, run the following at IDL command line to 
+;- create structure A, restore maps from .sav files and add to struc, and
+;- compute powermap masks by running powermap_mask once, rather than
+;- defining masks in this routine and having to constantly comment and uncomment.
+;-   (17 April 2020)
 ;-
-
-
-
 ;- IDL> .RUN struc_aia
 ;- IDL> .RUN restore_maps
-;-
-;- Compute powermap masks and set A.map = product of maps and masks.
 ;- IDL> .RUN powermap_mask
-;-    sets dz and threshold at ML as well..
+;-    NOTE: dz and threshold are defined at top of ML code in powermap_mask...
+;-     This code is still a bit hacky and ugly, but will have to wait.
 ;-
-;dz = 64
-;threshold = 10000.
-;-   lowered from 15000 to exclude pixels contaminated by bleeding/blooming.
-;-
-;aia1600mask = powermap_mask( A[0].data, dz=dz, threshold=threshold )
-;aia1700mask = powermap_mask( A[1].data, dz=dz, threshold=threshold )
-;stop
 
 
 
-;------------------------------------------------------------------------------
+
 buffer=1
 
-;-
-;- Flare phase: --> uncomment desired phase.
-filename = 'before'
-;filename = 'during'
-;filename = 'after'
-
-
+filename = [ 'before', 'during', 'after' ]
+z_start = [197, 261, 450]
 
 ;------------------------------------------------------------------------------
-;-
-;- Define indices for z_start (index corresponding to desired start time)
-if filename eq 'before' then z_start = [197]
-if filename eq 'during' then z_start = [261]
-if filename eq 'after' then z_start = [450]
-;-
+
+
 time = strmid(A[0].time,0,5)
+
 ;-
 ;----
 ;+
-;- Extract subset of data from each channel over same time period
-;- from which corresponding power map was obtained.
-;- Average intensity through time to get more accurate representation
-;-  of data that generated power maps.
-;-
+;- Extract subset of data from each channel that generated power map at
+;-  z_start, and average over the same time period, where window duration = dz.
 intensity = MEAN( A.data[*,*,z_start:z_start+dz-1, *], dimension=3 )
 ;- = FLOAT Array[500,330,2] (one image for each channel during current phase).
-
-;print, min(intensity[*,*,0])
-;print, max(intensity[*,*,0])
-;print, min(intensity[*,*,1])
-;print, max(intensity[*,*,1])
-
-;------------------------------------------------------------------------------
+;help, intensity
 
 
-;-
-;imdata = [ $
-;    [[ intensity[*,*,0] ]], $
-;    [[ intensity[*,*,1] ]], $
-;    [[ A[0].map[*,*,z_start] ]], $
-;    [[ A[1].map[*,*,z_start] ]]  $
-;]
+foreach zz, z_start, ii do begin
+endforeach
 
+intensity = MEAN( A[0].data[ *, *, z_start : z_start + dz - 1 ], dimension=3 )
+intensity = MEAN( A.data[*,*,z_start[0]:z_start[0]+dz-1, *], dimension=3 )
+help, intensity
 
 ;-
 ;+
@@ -91,11 +60,10 @@ imdata = [ $
     [[ (alog10(A[1].map[*,*,z_start])) * aia1700mask[*,*,z_start] ]]  $
 ]
 
-;test = A[0].map[*,*,z_start] * aia1600mask[*,*,z_start]
-;print, min(test)
-;locs = array_indices( test, where( test gt 0 ) )
-;print, min( test[locs])
 
+BB = { $
+    filename : 'before', $
+    z_start : z_start[0], $
 
 
 ;+
@@ -114,6 +82,14 @@ for cc = 0, 1 do begin
 endfor
 title = [ dat_title, map_title ]
 cbar_title = [ 'log intensity', 'log intensity', 'log power', 'log power' ]
+;struc = { $
+;    imdata : [ $
+;        ;[[ alog10 ( mean( A.data[*,*,z_start:z_start+dz-1, *], dimension=3 ) ) ]], $
+;        [[ intensity ]], $
+;        [[ alog10( A.map[*,*,z_start,*] ) ]] ], $
+;    title : [ dat_title, map_title ], $
+;    cbar_title : [ 'log intensity', 'log intensity', 'log power', 'log power' ] $
+;}
 
 
 ;+
@@ -132,6 +108,7 @@ cols = 2
 dw
 resolve_routine, 'image3', /is_function
 im = image3( $
+    ;struc.imdata, $
     imdata, $
     rows=rows, $
     cols=cols, $
@@ -143,17 +120,12 @@ im = image3( $
     right=1.0, $
     xshowtext=0, $
     yshowtext=0, $
+    ;title = struc.title, $
     title=title, $
     buffer=buffer )
-
 ;-
-;- Color tables
 im[0].rgb_table = A[0].ct
 im[1].rgb_table = A[1].ct
-;-
-im[2].rgb_table = A[0].ct
-im[3].rgb_table = A[1].ct
-;-
 ;-
 ;----------
 ;+
@@ -200,38 +172,33 @@ cbar[3].tickinterval=2
 ;-
 ;-
 
+;- Use same min/max value for all three phases (BDA)
+im[2].min_value = -3
+im[3].min_value = -3
 
-;---------------------------
-;im[2].min_value = -3.12
-;im[3].min_value = -2.30
-;im[2].min_value = -2.29
-;im[3].min_value = -1.13
+;;im[2].max_value = max(struc.imdata[*,*,2:3])
+;;im[3].max_value = max(struc.imdata[*,*,2:3])
+im[2].max_value = max(imdata[*,*,2:3])
+im[3].max_value = max(imdata[*,*,2:3])
 
-;im[2].max_value = 4.15
-;im[3].max_value = 4.69
-;im[2].max_value = 4.77
-;im[3].max_value = 5.48
 
-;---------------------------
-
-;im[2].max_value = max(imdata[*,*,2:3])
-;im[3].max_value = max(imdata[*,*,2:3])
-
-im[0].min_value = 2.2
-im[0].max_value = 3.3
+;- define min_value to apply when creating image graphics
+;-   (2-elemnt array, one value per channel).
+min_value = alog10( [ min(intensity[*,*,0]), min(intensity[*,*,1]) ] )
+print, min_value
 ;-
-im[1].min_value = 2.6
-im[1].max_value = 3.8
+;print, im[0].min_value
+;print, min(imdata[*,*,0])
 ;-
-;-
-im[2].min_value = -2.0
-im[2].max_value = 4.0
-;-
-im[3].min_value = -2.0
-im[3].max_value = 4.0
 
-;---------------------------
+im[0].min_value = min_value[0]
+im[1].min_value = min_value[1]
 
+;-
+;- Color tables
+im[2].rgb_table = A[0].ct
+im[3].rgb_table = A[1].ct
+;-
 
 
 ;+
@@ -309,6 +276,7 @@ print, myarrow[0].line_thick ; IDL default = 1.0
 
 
 ;-
+stop
 save2, filename + '_arrow'
 ;-
 

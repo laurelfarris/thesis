@@ -2,7 +2,7 @@
 ;- 14 April 2020
 ;-
 ;- --> Overlay running average on WA plots <--
-;-
+;-  See Greenie, p. 186
 ;-
 ;- running average LCs to accompany time-freq power plots (aka discrete WA)
 ;- has been on to-do list for way too long, seems like should be relatively simple..
