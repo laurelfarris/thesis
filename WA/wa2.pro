@@ -162,6 +162,7 @@ for cc = 0, 1 do begin
         max_value=alog10(max_value), $
         rgb_table=rgb_table, $
         xtickinterval=75, $
+        xminor=5, $ ;- minor tick interval = 5 minutes (21 April 2020)
         xtitle='image #', $
         ytickvalues=ytickvalues, $
         ytickformat='(F0.1)', $
