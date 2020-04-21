@@ -8,6 +8,8 @@
 ;-     Removed codes from 4/10/2020 defining colortable directly in this routine.
 ;-     Copied lines creating viridis colortable into function "my_viridis",
 ;-     called simply as rgb_table = my_viridis().
+;-   21 April 2020
+;-     Added kw xminor=5 to creation of wa graphic.
 ;-
 ;- PURPOSE:
 ;-   "Wavelet Analysis" (WA) - discrete
