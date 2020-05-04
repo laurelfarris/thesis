@@ -1,7 +1,8 @@
 ;Copied from clipboard
 
 
-save2, filename
+restore, path + 'aia1600new_shifts.sav'
+help, new_shifts
 
 end
 
