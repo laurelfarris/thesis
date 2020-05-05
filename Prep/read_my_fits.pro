@@ -1,5 +1,10 @@
 ;-
 ;- LAST MODIFIED:
+;-
+;- 05 May 2020
+;-   Commented conditional testing STRING data type, since STRTRIM converts
+;-    arg to string anyway.
+;-
 ;-   Wed Mar  6 13:19:46 MST 2019
 ;-     -- added kw "files" to specify filenames for subset of AIA data (new flare)
 ;-
@@ -24,13 +29,14 @@
 ;-   index (and data, if nodata=0), just like READ_SDO
 ;-
 ;- TO DO:
-;-   [] call @parameters instead of specifying year, month, day every time?
-;-   [] see if strtrim converts numbers to string data type.
 ;-   [] Instead of setting "ind" kw, add option to set start/end times.
 ;-        User is more likely to know what time range to read around flare peak,
 ;-         though may use "ind" to get just the first hour of data... I dunno.
 ;-   [] Better way to pad channels with leading zeros
 ;-   [] See code for other tasks marked with "[]"
+;-
+;- User sets z_ind as kw, or better yet, input start/end times, or just a dt if
+;- exact times aren't as important as total duration
 ;-
 
 pro READ_MY_FITS, index, data, fls, $
@@ -65,7 +71,7 @@ pro READ_MY_FITS, index, data, fls, $
     start_time = systime()
 
     ;- Make sure channel is variable stype 'string'
-    if not ( typename(channel) eq 'STRING' ) then begin
+    ;if not ( typename(channel) eq 'STRING' ) then begin
         ;print, 'Illegal typename for channel.'
         channel = strtrim(channel,1)
             ;- [] try using this line without testing input type.
@@ -76,7 +82,10 @@ pro READ_MY_FITS, index, data, fls, $
             ;-     Probably not significant either way...
             ;-   04 April 2020
             ;-
-    endif
+    ;endif
+    ;-  05 May 2020 -- just now commented the if statement.
+    ;-   Should be fine, but make a note in today.pro so I'm aware of recent
+    ;-   changes to what has otherwise been a module called and left alone.
 
     ;- Is the above statement converting channel to string necessary?
     ;-   Or does STRTRIM function take care of this?

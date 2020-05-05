@@ -1,25 +1,77 @@
-;
-; Last modified:   04 June 2018
-;
-; ROUTINE:    align_loop.pro
-;
-; PURPOSE:    Run align_cube3 on a loop until standard deviation
-;              of shifts don't change by a significant amount.
-    ; aligns data to reference image on a loop,
-    ; using standard deviation of shifts as a breaking point
-    ; (when it no longer decreases).
-;
-; SUBROUTINES:  alignoffset.pro
-;               shift_sub.pro
-;               align_cube3.pro
-;
-; Alignment steps (in general):
-;   1. read data
-;   2. image center and locate center coords (x0, y0)
-;   3. crop data to size 750x500 relative to center (for final dims=[500,330])
-;   4. Align
-;   5. save to '*aligned.sav' file
-;
+;+
+;- LAST MODIFIED:
+;-   04 June 2018
+;-    ... riveting.
+;-
+;-  05 May 2020
+;-    • Quest : re-align data cube with images from the 2013-12-28 C3.0 flare,
+;-      (5 hours of observations, processed to level 1.5 with aia_prep).
+;-    •
+;-    
+;-
+;- ROUTINE:
+;-   align_loop.pro
+;-      /is_procedure
+;-
+;- Calling sequence:
+;-   ALIGN_LOOP, cube, ref, allshifts, display=display, buffer=buffer
+;-
+;- INPUT:
+;-   CUBE = 3D data cube of images to align
+;-   REF = 2D image to serve as 'reference' to which
+;-     all other images will bow (align wrt...)
+;-       Center one seems reasonable, minimizes the already long temporal
+;-      gap between ref and the images on the start/end times, at zindex of
+;-     [0] and [-1]. As the sun is quite dynamic (esp. during flares),
+;-      observable features can change quite a bit over the course of a
+;-   single observation run; the more an image differs from the REF, the harder
+;-    it will be to align the two since the external functions that carry out
+;-   these computations do so by locating distinguishing features that are
+;-   recognizable on both images. They don't have  to be mirror images, but
+;-   if something crazy happens like I dunno saturation and bleeding that gives
+;-  the unmistakable impression of a heavenly orb hell-bent on stabbing the shit
+;-   out of those who download the images and then wine about them constantly.
+;-
+;-
+;- OUTPUT:
+;-   ALLSHIFTS = variable defined locally by the procedure, passed back
+;-    to named variable present as argument to align_loop
+;-    though is not required if user has no need of it.
+;-    Shifts can be useful for
+;-
+;-
+;- PURPOSE:
+;-   Run align_cube3 on a loop until standard deviation
+;-   of shifts don't change by a significant amount.
+;-   aligns data to reference image on a loop,
+;-   using standard deviation of shifts as a breaking point
+;-   (when it no longer decreases).
+;-
+;-     A description of what this routine does to obtain the eventual result(s)
+;-     is not the same as the overall PURPOSE of the routine. Why are we
+;-     aligning at all? Why was a new routine needed when standard procedure
+;-    was already making use of THREE sepearate subroutines just to get back
+;-    a cube that has weird edges?
+;-     HINT: science
+;-
+;- EXTERNAL SUBROUTINES:
+;-     alignoffset.pro
+;-     shift_sub.pro
+;-     align_cube3.pro
+;-  NOTE: the author of the present routine, align_loop.pro is NOT the
+;-    author of the external subroutines it utilizes. Please don't sue me.
+;-
+;-
+;- Alignment steps (in general):
+;-   1. read data
+;-   2. image center and locate center coords (x0, y0)
+;-   3. crop data to size 750x500 relative to center (for final dims=[500,330])
+;-   4. Align
+;-   5. save to '*aligned.sav' file
+;- "In general" meaning, probably doesn't actually work? More a conceptual
+;-   outline of what happens than what really happens? I'm so tired.
+;- Note that running struc_aia is NOT required here (I just ran it out of habit).
+;-
 ;- 22 April 2019
 ;- Is there any benefit to have this in a subroutine?
 ;-   Cleans it up a bit, easier to remind myself what the routine does
@@ -38,9 +90,29 @@
 ;-  (23 July 2019)
 ;-
 ;- TO DO:
+;-   [] Find a way to define "instr" and "channel" without manually setting
+;-       them all the time. Def. lines are (or were) in @parameters,
+;-       but are commented..
+;-       After attempt to run code, occurs to me that
+;-       actually these aren't handled exactly the same,
+;-       as a single "instr" is affiliated with multiple channels, and while
+;-       instr can be safely defined as "aia" (assuming no other instrument is
+;-       involved here, and also I'm hardcoding again... surely these values are
+;-       in the original headers fer feck's sake, I just either never thought
+;-       to pull them rather than defining on my own, or I was unable to ID the
+;-       tagnames possessing the information I was looking for.
+;-       After a 2nd attempt of .RUN align_loop, occurred to me that align
+;-         routines operate one data set at a time .. so channel IS defined
+;-         alongside instr..
+;-              meh
 ;-   [] Copy plotting routine to separate subroutine called, e.g. "plot_shifts.pro"
 ;-      That way it can easily be called in the alignment loop AND after procedure is finished.
+;-    05 May 2020 -- this box appears to have been checked off at some point...
+;-        Go me!
 ;-   [] Do st with subroutine for plotting # sat pixels in Align/
+;-        It's like I was conciously trying to make this as vague as possible...
+;-        like maybe if a task is not well-defined, I'll feel better about myself
+;-        for consistently putting it off.
 ;-
 ;+
 
@@ -112,13 +184,13 @@ end
 ;        ind=[ii:ii+149]
 ; endforeach
 
+buffer=1
 
 @parameters
-print, ''
-print, 'instr = ', instr
-print, 'channel = ', channel
-print, ''
 
+instr = 'aia'
+channel = '1600'
+;channel = '1700'
 
 
 ;-
@@ -141,7 +213,7 @@ print, index[-1].date_obs
 
 
 ;-
-;--- § Crop (prepped) data to subset centered on AR
+;--- § Extract subset centered on AR from full disk images by cropping x and y pixels
 
 resolve_routine, 'crop_data', /either
 cube = CROP_DATA( $
@@ -169,38 +241,53 @@ help, ref
 if instr eq 'aia' then begin
     imdata = AIA_INTSCALE( $
         ref, wave=fix(channel), exptime=index[0].exptime )
-    ct = AIA_COLORS(wave=fix(channel))
+    ct = AIA_GCT(wave=fix(channel))
 endif else $
 if instr eq 'hmi' then begin
     imdata = ref
     ct = 0
 endif else print, "variable instr must be 'hmi' or 'aia'."
-im = image2( imdata, buffer=0, rgb_table=ct )
-;save2, 'test_cropped_image'
+im = IMAGE2( imdata, rgb_table=ct, buffer=buffer )
+save2, 'test_cropped_image'
 
-;- If image looks to be centered and cropped nicely, don't need data variable anymore.
 undefine, data
 
+stop
 
 ;-
 ;--- § Align data
 
-;- Call procedure to run ALIGN_CUBE3 on a loop until stddev stops decreasing
-ALIGN_LOOP, cube, ref, shifts, /display
+;-
+;- Run ALIGN_CUBE3 on a loop until stddev stops decreasing
+ALIGN_LOOP, cube, ref, $
+    shifts, $
+    ;/display, $
+    buffer=buffer
+
+;----------------
 
 
+;-
 ;- Check values by showing movie in xstpper, plotting shifts, and/or
 ;-   printing max values (should be ≤ 1 after first loop).
 help, shifts
 print, max( shifts[*,*,0] )
-print, max( shifts[*,*,7] )
+;print, max( shifts[*,*,7] )
+;-  Hardcoded indices? shifts variable builds on itself with each iteration, so
+;-    attempting to access index '7' is pretty much guaranteed to thrrow errors.
+;-   Procedure would be finished looping by now, as this code is below the call
+;-   to align_loop and shifts variable just might have index 7 in the 3rd position.
+;-    But not necessarily.. sometimes maximum alignent is achieved after only
+;-    2 or 3 runs... STOP HARDCODING!!
+;- (05 May 2020)
 
-xstepper2, $
-    CROP_DATA( cube, center=[475,250], dimensions=[200,200] ), $
-    channel=channel, subscripts=[300:500], scale=2.00
-    ;- Does this work while ssh-ed?? --> yes, but very slow.
+if buffer ne 0 then begin
+    xstepper2, $
+        CROP_DATA( cube, center=[475,250], dimensions=[200,200] ), $
+        channel=channel, subscripts=[300:500], scale=2.00
+        ;- Does this work while ssh-ed?? --> yes, but very slow.
+endif
 ;save2, 'align_shifts'
-
 
 
 ;-
@@ -208,35 +295,33 @@ xstepper2, $
 
 path = '/solarstorm/laurel07/' + year + month + day + '/'
 print, path
-
-
 shifts_filename = path + instr + channel + 'shifts.sav'
-print, filename
-
-
-
-;- 1700\AA{} -- seems to have aligned just fine w/o needed interpolation.
-;-  (30 July 2019)
+print, shifts_filename
+;-
 save, shifts, filename=shifts_filename
 
-;- 1600\AA{} -- interpolated shifts to get new_shifts,
-;- then applied new_shifts to align cube. Replaced cube in .sav file.
-;- See interp_shifts.pro for details.
-;-  (30 July 2019)
+
+
+;-
+;- 30 July 2019
+;-
+;- 1700Å images appear to align successfully w/o interpolating
+;-   shifts prior to using them for alignemnt (30 July 2019)
+;save, shifts, filename=shifts_filename
+
+;- 1600Å : aligned using interpolated shifts (new_shifts),
+;-  Replaced cube in .sav file (see interp_shifts.pro for details).
+;- 
 ;save, new_shifts, filename = path + instr + channel + 'new_shifts.sav'
 
 cube_filename = path + instr + channel + 'aligned.sav'
 print, cube_filename
 
+;-
 save, cube, filename=cube_filename
-
-
-
 
 ;restore, '../20131228/aia1600shifts.sav'
 ;help,  aia1600shifts
 ;for ii = 0, 5 do print, stddev( aia1600shifts[0,*,ii] )
-
-
 
 end

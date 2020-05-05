@@ -2,6 +2,8 @@
 ;- 04 May 2020
 ;-   AIA_PREP --> last hour of C3.0 flare on 2013-12-28
 ;-
+;- read_my_fits : commented conditional (STRTRIM ...)
+;-
 
 
 buffer = 1

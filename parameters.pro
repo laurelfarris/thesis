@@ -1,3 +1,19 @@
+;+
+;- 04 May 2020
+;-   Instructions for user:
+;-    uncomment the "flare_num" below to set index of flare you desire to analyze.
+;-    Don't need to change anything else in this file.
+;-
+;flare_num = 0 ; X22
+flare_num = 1 ; C30
+;flare_num = 2 ; M73
+;-
+
+
+
+;===================================================================================
+
+;+
 ;- 21 April 2019
 ;-
 ;- If changes to the contents of this file or its name,
@@ -34,10 +50,6 @@
 ;cadence = 45
 
 ;----------------------------------------------------------
-
-;flare_num = 0 ; X22
-;flare_num = 1 ; C30
-flare_num = 2 ; M73
 
 
 ;AR

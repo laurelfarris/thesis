@@ -1,6 +1,25 @@
-; Last modified:    29 April 2019
-; Programmer:       Laurel Farris
-; Description:      subroutines with custom default configurations
+;+
+;- LAST MODIFIED:
+;-
+;-   29 April 2019
+;-    ... and did what?
+;-
+;-   05 May 2020
+;-     Editing comments... not much else to do.
+;-
+;- PROGRAMMER:
+;-   Laurel Farris
+;-
+;- DESCRIPTION:
+;-   call IDL xstepper routine more or less like normal;
+;-   subroutine written with my general preferences defined within so I
+;-   never need to worry about setting anything except kws that are
+;-   unique to whatever is being movie-ed.
+;-  
+
+
+
+
 
 pro xstepper2, $
     cube, $

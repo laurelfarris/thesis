@@ -202,7 +202,7 @@ imdata = CROP_DATA(cube, center=center, dimensions=dimensions, z_ind=[375] )
 help, imdata
 if instr eq 'aia' then begin
     imdata = AIA_INTSCALE( imdata, wave=fix(channel), exptime=index[0].exptime )
-    ct = AIA_COLORS(wave=fix(channel))
+    ct = AIA_GCT(wave=fix(channel))
 endif else $
 if instr eq 'hmi' then begin
     imdata = ref
