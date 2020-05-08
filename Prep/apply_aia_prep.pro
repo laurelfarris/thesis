@@ -46,6 +46,7 @@
 ;-
 
 
+buffer = 1
 
 ;-- § Read fits files (downloaded, NOT prepped)
 
@@ -59,8 +60,8 @@
 ;- AIA ---
 instr = 'aia'
 ;channel = '304'
-channel = '1600'
-;channel = '1700'
+;channel = '1600'
+channel = '1700'
 
 ;-
 ;- only need data with observation times between 14:00:00 and 14:59:59
@@ -73,7 +74,7 @@ READ_MY_FITS, /syntax
 READ_MY_FITS, old_index, old_data, fls, $
     instr=instr, $
     channel=channel, $
-    nodata=0, $
+    nodata=1, $
     prepped=0
 
 ;- add "ind" kw (z-dimension, effectively) for final 5 hours...
@@ -81,22 +82,29 @@ READ_MY_FITS, old_index, old_data, fls, $
 ;-        Or would overlap tack on a lot of time? Don't want to leave any files out,
 ;-        so seems safe to overlap "ind" to times before 14:00 just in case.
 
-help, fls
-print, fls[0]
-print, fls[-1]
-print, fls[596]
-print, fls[745]
 
+;- 08 May 2020
+print, old_index[-1].date_obs
+print, strmid(old_index[-1].date_obs,11,8)
+print, where( strmid(old_index.date_obs, 11, 5) eq '14:00' )
+z1 =  (where( strmid(old_index.date_obs, 11, 5) eq '14:00' ))[0]
+z2 = n_elements(fls) - 1
+print, z1, z2
+print, old_index[z1].date_obs, old_index[z2].date_obs
+;------
 
 ;-
 ;- Run READ_MY_FITS on files with z_index kw (ind) set to read final hour only
 ;-   (150 observations for AIA 24-cadence channels)
 
 ;final_hour_2013_flare_ind = [596:745]
-ind = [596:745]
-
+;ind = [596:745] -- > hardcoded for aia 1600 ...
+ind = [z1:z2]
+;
 print, n_elements(ind)
 print, (n_elements(ind)*24)/60.
+
+stop
 
 READ_MY_FITS, old_index, old_data, fls, $
     instr=instr, $
@@ -104,7 +112,7 @@ READ_MY_FITS, old_index, old_data, fls, $
     ind=ind, $
     nodata=0, $
     prepped=0
-
+;
 help, old_index
 help, old_data
 
@@ -134,15 +142,13 @@ endif else $
     print, "Must set variable instr to 'hmi' or 'aia'."
 ;aiact = AIA_GCT( wave=fix(1600) )
 ;hmict = im.rgb_table
-
-
+;
 im = image2( $
     imdata, $
     rgb_table=ct, $   ;- Pretty sure 0 is the default
     buffer=buffer )
 ;-  ... pretty cool :)
-
-
+;
 ;filename = 'aia1600image_pre-aia_prep'
 filename = instr + strtrim(channel,1) + '_image_UNprepped'
 ;save2, 'test_final_hour_for_2013_flare'

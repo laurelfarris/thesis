@@ -184,13 +184,15 @@ end
 ;        ind=[ii:ii+149]
 ; endforeach
 
+
+
 buffer=1
 
 @parameters
 
 instr = 'aia'
-channel = '1600'
-;channel = '1700'
+;channel = '1600'
+channel = '1700'
 
 
 ;-
@@ -211,6 +213,7 @@ print, index[0].date_obs
 print, index[-1].date_obs
 
 
+stop
 
 ;-
 ;--- § Extract subset centered on AR from full disk images by cropping x and y pixels
@@ -281,12 +284,11 @@ print, max( shifts[*,*,0] )
 ;-    2 or 3 runs... STOP HARDCODING!!
 ;- (05 May 2020)
 
-if buffer ne 0 then begin
-    xstepper2, $
-        CROP_DATA( cube, center=[475,250], dimensions=[200,200] ), $
-        channel=channel, subscripts=[300:500], scale=2.00
-        ;- Does this work while ssh-ed?? --> yes, but very slow.
-endif
+
+xstepper2, $
+    CROP_DATA( cube, center=[475,250], dimensions=[200,200] ), $
+    channel=channel, subscripts=[300:500], scale=2.00
+    ;- NOTE: xstepper is extremely slow when ssh-ed ...
 ;save2, 'align_shifts'
 
 
