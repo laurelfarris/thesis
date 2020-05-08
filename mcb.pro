@@ -1,8 +1,10 @@
 ;Copied from clipboard
 
 
-restore, '../20131228/aia1700aligned.sav'
-help, cube
+cube_filename = path + instr + channel + 'aligned.sav'
+print, cube_filename
+;-
+save, cube, filename=cube_filename
 
 end
 

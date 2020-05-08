@@ -213,7 +213,6 @@ print, index[0].date_obs
 print, index[-1].date_obs
 
 
-stop
 
 ;-
 ;--- § Extract subset centered on AR from full disk images by cropping x and y pixels
@@ -318,7 +317,6 @@ save, shifts, filename=shifts_filename
 
 cube_filename = path + instr + channel + 'aligned.sav'
 print, cube_filename
-
 ;-
 save, cube, filename=cube_filename
 
