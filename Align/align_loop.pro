@@ -13,6 +13,10 @@
 ;-   align_loop.pro
 ;-      /is_procedure
 ;-
+;- PURPOSE:
+;-   Run align_cube3 on a loop (hence the name of the routine)
+;-   until shifts are so tiny that stddev stops decreasing.
+;-
 ;- Calling sequence:
 ;-   ALIGN_LOOP, cube, ref, allshifts, display=display, buffer=buffer
 ;-
@@ -39,20 +43,6 @@
 ;-    though is not required if user has no need of it.
 ;-    Shifts can be useful for
 ;-
-;-
-;- PURPOSE:
-;-   Run align_cube3 on a loop until standard deviation
-;-   of shifts don't change by a significant amount.
-;-   aligns data to reference image on a loop,
-;-   using standard deviation of shifts as a breaking point
-;-   (when it no longer decreases).
-;-
-;-     A description of what this routine does to obtain the eventual result(s)
-;-     is not the same as the overall PURPOSE of the routine. Why are we
-;-     aligning at all? Why was a new routine needed when standard procedure
-;-    was already making use of THREE sepearate subroutines just to get back
-;-    a cube that has weird edges?
-;-     HINT: science
 ;-
 ;- EXTERNAL SUBROUTINES:
 ;-     alignoffset.pro

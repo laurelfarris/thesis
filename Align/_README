@@ -2,18 +2,25 @@
 
 
 ------------------------------------------------------------------------
-My codes:
 
+My codes:
 
   • align_loop.pro
     - Loops through align_cube3.pro until stddev of shifts stops decreasing
+    - (5/05/2020) --> .sav files created for SHIFTS and modified CUBE
+                    NOTE: see COMMENTS in align_loop.pro for explanation of
+                    extra files (aia1600new_shifts, etc.)
+                    Also, comment block at top of code includes breakdown of
+                    alignment procedure into 5 steps; beginning with reading
+                    the data from fits files and ending with saving aligned
+                    data (and shifts) to .sav files.
+        
   • shift_coords.pro
     - align first and last image in time series and
         use total pixel shift over full dt to calculate estimation of
         distance traveled by the AR across the solar disk, in arcseconds.
     - NOTE: this routine uses main alignment routines to get pixel count,
          but is not required for the actual alignment of data cube
-
 
 For less-than-straightforward alignment (i.e. saturated pixels):
   • align_in_pieces.pro
@@ -31,7 +38,10 @@ For less-than-straightforward alignment (i.e. saturated pixels):
 
 
 ------------------------------------------------------------------------
+
 codes I did NOT write:
   • align_cube3.pro
   • alignoffset.pro
   • shift_sub.pro
+
+------------------------------------------------------------------------
