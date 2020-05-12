@@ -4,8 +4,8 @@
 ;-    uncomment the "flare_num" below to set index of flare you desire to analyze.
 ;-    Don't need to change anything else in this file.
 ;-
-flare_num = 0 ; X22
-;flare_num = 1 ; C30
+;flare_num = 0 ; X22
+flare_num = 1 ; C30
 ;flare_num = 2 ; M73
 ;-
 

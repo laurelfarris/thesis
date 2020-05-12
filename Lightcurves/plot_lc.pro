@@ -240,6 +240,7 @@ leg = LEGEND2( $
     /upperleft, $
     ;/upperright, $
     sample_width=0.25 )
+
 ;-
 ;- NO point in defining these twice (ax[1] and ax[3]) -- 17 January 2020
 ;ymajor = -1
@@ -256,16 +257,21 @@ yminor = 3
 ;-
 ;-
 ;-
+
 ax[1].title = ytitle[0]
 ;ax[1].tickvalues = [2:8:2]*10.^7 ; -- hardcoded, 2011 flare
-ax[1].tickvalues = [2:6:1]*10.^7 ; -- hardcoded, 2011 flare
+;-----ax[1].tickvalues = [2:6:1]*10.^7 ; -- hardcoded, 2011 flare
 ;ax[1].tickname = scinot( ax[1].tickvalues )
 ;ax[1].major = ymajor
 ax[1].minor = yminor
+
+
+
+
 ;-
 ;ax = plt[1].axes
 ax[3].title = ytitle[1]
-ax[3].tickvalues = [2.2:2.8:0.2]*10.^8 ; -- hardcoded, 2011 flare
+;----ax[3].tickvalues = [2.2:2.8:0.2]*10.^8 ; -- hardcoded, 2011 flare
 ;ax[3].tickname = scinot( ax[3].tickvalues )
 ;ax[3].tickinterval = 1e7
 ax[3].major = ymajor
@@ -279,6 +285,25 @@ ax[1].text_color = A[0].color
 ;ax[3].color = A[1].color
 ax[3].text_color = A[1].color
 ;-
+
+save2, filename
+stop
+
+
+print, class
+format = '(e0.2)'
+for cc = 0, 1 do begin
+;    print, min(A[cc].flux), format=format
+;    print, max(A[cc].flux), format=format
+    print, max(A[cc].flux)/min(A[cc].flux), format=format
+endfor
+
+
+;==============================================================================================
+
+;- Shade "During portion of light curve
+
+
 ; Single lines creating each object that can easily be commented.
 ; Then just erase and re-draw.
 ;- --> Put ML stuff into a subroutine that calls all the other subroutines?
@@ -314,9 +339,15 @@ ind = [(where(time eq my_start))[0],(where(time eq my_end))[0]]
 ;----------------------------------------------------------------
 ;-
 ;yrange=[ [plt[0].yrange], [plt[1].yrange] ]
-;yrange = [ $
-;    min( [plt[0].yrange[0], plt[1].yrange[0] ] ), $
-;    max( [plt[0].yrange[1], plt[1].yrange[1] ] ) ]
+
+yrange = [ $
+    min( [plt[0].yrange[0], plt[1].yrange[0] ] ), $
+    max( [plt[0].yrange[1], plt[1].yrange[1] ] ) ]
+
+print, plt[0].yrange
+print, plt[1].yrange
+
+
 ;-
 ;-
 ;-

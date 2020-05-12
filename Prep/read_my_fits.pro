@@ -197,6 +197,12 @@ pro READ_MY_FITS, index, data, fls, $
     ;- Read fits files
     READ_SDO, fls, index, data, nodata=nodata
 
+    ;-
+    ;- 12 May 2020
+    ;-   Do fits files remain open after running read_sdo?
+    ;-   If so, how do I close them?
+    ;-
+
     print, ''
     print, 'start time = ', start_time
     print, 'end time   = ', systime()
