@@ -40,8 +40,8 @@ buffer=1
 
 ;-
 ;- Flare phase: --> uncomment desired phase.
-filename = 'before'
-;filename = 'during'
+;filename = 'before'
+filename = 'during'
 ;filename = 'after'
 
 

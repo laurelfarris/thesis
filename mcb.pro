@@ -1,39 +1,24 @@
 ;Copied from clipboard
 
 
-;+
+t0 = '01:30 15-feb-2011'
+t1 = '02:30 15-feb-2011'
+;ds = 'aia.lev1_euv_12s'
+waves = '1600'
+key = 't_obs, wavelnth, datamean, exptime'
+cadence = '24s'
 ;-
-;- SUBTRACT inverse transfrom
-detrended = flux[2:*,*] - inverseTransform[1:*,*]
-title = 'Detrended (flux - inverseTransform)'
-fname = 'lc_detrended_SUBRACTED'
+ssw_jsoc_time2data, $
+    t0, t1, $  ;- user time range
+    index, $
+    ;ds=ds, $  ;- data series name
+    waves=waves, $
+    key=key, $
+    cadence=cadence
 ;-
-;- DIVIDE inverse transfrom
-;detrended = flux[2:*,*] / inverseTransform[1:*,*]
-;title = 'Detrended (flux / inverseTransform)'
-;fname = 'lc_detrended_DIVIDED'
-;-
-;-
-dw
-plt3 = BATCH_PLOT( $
-    ;ind, $
-    ;xdata[2:*,*], $   ;- xdata defined above as [ [ind], [ind] ] so dimensions match ydata.
-    xdata[10:*,*], $
-    detrended[8:*,*], $
-    stairstep=1, $
-    ;ytickvalues=[-1.e6, 0, 1e6], $
-    ;ytickvalues=[0.0], $
-    ;overplot = 1<cc, $
-    title = title, $
-    ;color=['dark orange', 'blue'], $
-    color=A.color, $
-    wx=wx, wy=wy, $
-    left = 0.75, right=0.25, $
-    ;thick = 2.0, $
-    buffer=buffer $
-)
-;-
-save2, fname
+;help, index[0]
+;
+utplot, index.t_obs, index.datamean/index.exptime;, psym=1
 
 end
 
