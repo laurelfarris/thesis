@@ -88,6 +88,13 @@ pro SHIFT_YDATA, $
         ;- disappears, and have to put it back.
         ax[3].showtext = 1
 
+        ;-
+        ;- 15 May 2020
+        ;- Error at line 89 in shift_ydata... good opportunity to practice using this:
+        help, /traceback
+        ;-   Displays current nesting of procedures and functions :)
+        ;-
+
         if keyword_set(ytitle) then begin
             ax[1].title = ytitle[0]
             ax[3].title = ytitle[1]

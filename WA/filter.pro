@@ -1,5 +1,5 @@
 ;- LAST MODIFIED:
-;-   04/16/2020
+;-   15 May 2020
 ;-
 ;- ROUTINE:
 ;-   filter.pro
@@ -9,17 +9,17 @@
 ;- PURPOSE:
 ;-
 ;- USEAGE:
-;-   result = routine_name( arg1, arg2, kw=kw )
+;-    inverseTransform = FILTER( flux, cadence, cutoff_period )
 ;-
 ;- INPUT:
-;-   arg1   e.g. input time series
-;-   arg2   e.g. time separation (cadence)
+;-   flux
+;-   cadence
+;-   cutoff_period (SECONDS)
 ;-
 ;- KEYWORDS (optional):
-;-   kw     set <kw> to ...
 ;-
 ;- OUTPUT:
-;-   result     blah
+;-   inverse transform
 ;-
 ;- TO DO:
 ;-   [] replace hardcoded cutoff for filter (in function "filter")
@@ -33,50 +33,6 @@
 ;-   Laurel Farris
 ;-
 
-
-pro CALC_FOURIER2, flux, cadence, frequency, power, fmax=fmax, fmin=fmin
-
-;- This is mostly for power maps, not spectra:
-;fcenter = 1./180
-;bandwidth = 0.001
-;fmin = fcenter - (bandwidth/2.)
-;fmax = fcenter + (bandwidth/2.)
-
-
-    sz = size( flux, /dimensions )
-    if n_elements(sz) eq 1 then sz = reform(sz, sz[0], 1, /overwrite)
-
-    result = fourier2( indgen(sz[0]), 24 )
-
-    frequency = reform(result[0,*])
-    if not keyword_set(fmin) then fmin = min(frequency)
-    if not keyword_set(fmax) then fmax = max(frequency)
-
-    ind = where(frequency ge fmin and frequency le fmax)
-    frequency = frequency[ind]
-
-    power = fltarr( n_elements(frequency), sz[1] )
-    for ii = 0, sz[1]-1 do begin
-        result = fourier2( flux[*,ii], 24 )
-        power[*,ii] = (reform(result[1,*]))[ind]
-
-        ;frequency = frequency[ind]
-        ;power = power[ind]
-
-    endfor
-end
-
-;- 21 May 2019
-;- The function "calc_fourier2" defined above was copied from a
-;-  routine also called filter.pro, but not the same as function
-;-  defined below... no idea where the above code came from.
-
-;- ML code:
-;CALC_FOURIER2, A[0].flux, 24, frequency, power
-;threshold = 400 ;- Remove variations on timescales less than this? Or greater?
-
-
-;----------------------------------------------------------------------------------
 
 
 ;- See comp book p. 99-103
@@ -96,8 +52,8 @@ end
 ;"=strftime("%F")<CR>P
 ;2018-11-29
 
-function FILTER, flux, cadence
 
+function FILTER, flux, cadence, cutoff_period
 
     ;- NOTE: if flux is changed here, it will be changed at ML!
 
@@ -130,7 +86,13 @@ function FILTER, flux, cadence
     ;- Want to keep period GT 400 seconds
     ;-  aka, frequency LT 1./400 seconds (0.0025 Hz = 2.5 mHz)
 
-    mask = freq lt 0.0025
+    ;- !!!!!!!!!!!!!!!!!!!!!
+    ;- HARDCCODING !
+    ;mask = freq lt 0.0025
+    ;- !!!!!!!!!!!!!!!!!!!!!
+    mask = freq lt (1./float(cutoff_period))
+    ;- added arg "cutoff_period" to function call
+
     ;mask = REAL_PART(shiftedPower) gt -4
 
     maskedTransform = vv * mask
@@ -143,59 +105,100 @@ end
 
 buffer = 1
 
+;- pass to filter later...
+cutoff_period = 400.
 
-;- 30 August 2019
-;- 1-hour time segment (hardcoded...)
-    ;- X2.2 flare
-        t1_string = '01:30'
-        t2_string = '02:30'
-    ;- M or C flare (I assume)
-        ;t1_string = '12:30'
-        ;t2_string = '13:30'
-    ;- M or C flare ...
-        ;t1_string = '12:15'
-        ;t2_string = '13:15'
+;-------------------
 
+time = strmid(A[0].time,0,5)
+flux = A.flux
+
+;+
+;--- Plot original (raw) light curves
+;-
 wx = 8.0
 wy = 3.0
 
+dw
 
-;------------------------------------------------------------------------------------
+stop
 
+;-
+;- 15 May 2020
+;- IDL> .RUN plot_lc
+;-   to create light curves of raw flux since the following is an old and uncoooperative mess.
+;- Skip to second long horizonal line of "=" signs, and pick up code again.
+;-
 
-time = strmid(A[0].time,0,5)
-    ; to keep consistent array sizes, plus already know that
-    ; the same indices are returned for both channels :)
-t1 = (where(time eq t1_string))[-1]
-t2 = (where(time eq t2_string))[0]
-ind = [t1:t2]
-flux = A.flux[ind]
+;=============================================================================================================
+;=====
+;=
 
-;flux = [ [flux], [A[cc].flux[ind] - min(A[cc].flux[ind])] ]
+;xdata = [ [ind], [ind] ]
+xdata = indgen( size(A.flux, /dimensions) )
 
-;+
-;- Plot original light curves
-xdata = [ [ind], [ind] ]
-resolve_routine, 'batch_plot', /either
-plt = BATCH_PLOT( $
+;resolve_routine, 'batch_plot', /either
+resolve_routine, 'batch_plot_2', /either
+;plt = BATCH_PLOT( $
+plt = BATCH_PLOT_2( $
     xdata, flux, $
     xtickinterval=25, $
+        ;- HARDCODED!!! BAD CODER!!!
+        ;-   This kw is very dependent on the TOTAL duration of flux...
     ;color=[A[0].color, A[1].color], $
     color=A.color, $
     ;name=[A[0].name, A[1].name], $
     name=A.name, $
     wx=wx, wy=wy, $
     yticklen=0.010, $
+        ;- Also HARDCODED! Not sure how much this one matters tho
     stairstep=1, $
     buffer=buffer )
 ;-
-delt = [ min(flux[*,0]), (min(flux[*,1])-1.e7) ]
+save2, "raw_LCs"
+
+
+;-
+;offset = -1.e7
+offset = 0.0
+    ;- --> HARDCODING!!
+
+delt = [ min(flux[*,0]), (min(flux[*,1]) + offset) ]
+    ;- delt = 2-element array
 resolve_routine, 'shift_ydata', /either
 SHIFT_YDATA, plt, delt=delt
+save2, "raw_LCs_shifted"
+
+
+STOP
+
+
+;-
+;-  15 May 2020
+;-  Don't really need to oplot background either, so skip this too.
+;-
+
 
 ;+
-;- Overplot pre-flare background
-background = mean(A.flux[120:259], dim=1) - delt
+;--- Overplot pre-flare background
+;-
+;-
+;- --> HARDCODING!! BAD CODER!
+;zind = [120:259]
+zind = [0:150]
+;- zind = z-indices of pre-flare data from which to extract pre-flare background level
+;-    (doesn't start at zero because of the C-flare that took place in the middle
+;-      of my pre-flare time period before the X2.2 flare on 15 February 2011... rude).
+;-
+;-
+;background = MEAN(A.flux[zind], dim=1) - delt
+;- 15 May 2020
+;-  NOTE: "flux" is a subset extracted from A.flux (z-dimension), so in order to get pre-flare background level,
+;-    have to go back to full time series: A.flux to get the pre-flare flux, 
+;-    which was cropped out when defining "flux"...
+;-    (was initially confused as to why using A.flux here instead of flux... )
+;background = MEAN(A.flux[zind], dim=1)
+background = MEAN(A.flux[zind], dim=1)
 for jj = 0, 1 do begin
     hor = plot2( $
         plt[0].xrange, $
@@ -204,25 +207,48 @@ for jj = 0, 1 do begin
         linestyle=[1, '1111'X], $
         name = 'Background' )
 endfor
+;save2, filename
+
+;=
+;=====
+;=============================================================================================================
+
+
+
+;-
+;- start here:
+;-
+
 
 ;+
-;- Compute inverse transform
+;--- Compute inverse transform
+;-
 inverseTransform = []
 for cc = 0, 1 do begin
-    inverseTransform = [ [inverseTransform], $
-        [FILTER(flux[*,cc], A[cc].cadence)] ]
+    inverseTransform = [ $
+        [ inverseTransform ], $
+        [ FILTER( flux[*,cc], A[cc].cadence, cutoff_period ) ] $
+    ]
 endfor
 
 
+
+
+;=============================================================================================================
+;=== Skip this too
+;=
+
 ;+
-;- overplot smoothed LC on top of raw data (plt)
+;--- Overplot smoothed LC on plot of raw data (plt)
+;-
 
 ;inverseTransform[*,0] = inverseTransform[*,0] + bg[0]
 ;inverseTransform[*,1] = inverseTransform[*,1] + bg[1]
 for ii = 0, 1 do begin
 plt2 = plot2( $
     xdata[*,ii], $
-    inverseTransform[*,ii] - delt[ii], $
+    ;inverseTransform[*,ii] - delt[ii], $
+    inverseTransform[*,ii], $
     /overplot, $
     yticklen=0.010, $
     yminor=3, $
@@ -232,32 +258,26 @@ plt2 = plot2( $
 endfor
 
 resolve_routine, 'legend2', /either
-leg = LEGEND2( $
-    target=[plt, plt2, hor], $
-    ;sample_width=0.13*wy, $
-    /upperleft )
-
-
+leg = LEGEND2( target=[plt, plt2, hor], /upperleft )
+;-
 ax = plt2[0].axes
 ax[0].tickname = time[ax[0].tickvalues]
 ax[3].showtext=1
-
 ;ax[1].tickinterval = 2.e7
 ax[1].major = 5
 ax[1].title = A[0].name + ' (DN s$^{-1}$)'
 ;ax[3].tickinterval = 0.2e8
 ax[3].major = 5
 ax[3].title = A[1].name + ' (DN s$^{-1}$)'
-
-;save2, 'detrendedLC'
-;- bad file name... should START with "lc",
-;-  plus curves aren't actually detrended yet... (10 May 2019)
+;-
 
 save2, 'lc_filter'
-;-  Better file name
 
+STOP
 
-;-----------------------------------------------------------------------------
+;=
+;=====
+;=============================================================================================================
 
 
 
@@ -270,14 +290,14 @@ save2, 'lc_filter'
 ;+
 ;-
 ;- SUBTRACT inverse transfrom
-;detrended = flux[2:*,*] - inverseTransform[1:*,*]
-;title = 'Detrended (flux - inverseTransform)'
-;fname = 'lc_detrended_SUBRACTED'
+detrended = flux[2:*,*] - inverseTransform[1:*,*]
+title = 'Detrended (flux - inverseTransform)'
+fname = 'lc_detrended_SUBRACTED'
 ;-
 ;- DIVIDE inverse transfrom
-detrended = flux[2:*,*] / inverseTransform[1:*,*]
-title = 'Detrended (flux / inverseTransform)'
-fname = 'lc_detrended_DIVIDED'
+;detrended = flux[2:*,*] / inverseTransform[1:*,*]
+;title = 'Detrended (flux / inverseTransform)'
+;fname = 'lc_detrended_DIVIDED'
 ;-
 ;-
 dw
@@ -300,61 +320,5 @@ plt3 = BATCH_PLOT( $
 )
 ;-
 save2, fname
-;-----------------
-
-
-
-
-;plt3 = plot2( xdata[*,0], detrended[*,0], buffer=0 )
-;plt3 = plot2( xdata[*,1], detrended[*,1], /overplot, color='red' )
-
-
-;hor = plot2( $
-;    plt3[0].xrange, [0.0, 0.0], /overplot, linestyle=[1, '5555'X] )
-
-;- Compare results from fourier2 (calc_fourier2) to
-;-  final forms of freq and power above.
-
-
-
-;threshold = 400 ;- Remove variations on timescales less than this? Or greater?
-;- --> less... aka removing frequencies greater than this: setting fmax.
-
-
-
-;power_filtered = fltarr(n_elements([z1:z2]))
-;help, power_filtered
-
-;flux_filtered = real_part( FFT( power_filtered, /inverse, /center ) )
-
-;resolve_routine, 'batch_plot', /either
-;dw
-;plt = BATCH_PLOT( indgen(374), flux_filtered, buffer=1)
-;save2, 'test'
-
-
-
-
-;- Power spectra
-
-;resolve_routine, 'calc_fourier2', /either
-;CALC_FOURIER2, flux, 24, frequency, power
-;CALC_FOURIER2, detrended, 24, frequency2, power2
-
-;resolve_routine, 'plot_spectra', /either
-;plt = PLOT_SPECTRA( $
-    ;frequency, shiftedPower[0:(NN/2)], $
-;    [ [frequency], [frequency2] ], $
-;    [ [power], [power2] ], $
-;    wx=8.0, wy=3.0, $
-;    ylog=1, yminor=4, $
-;    color=['dark orange', 'blue'], $
-;    thick = [3.0, 2.0], $
-;    linestyle=[0, 5], $
-    ;thick=2.0, $
-    ;ytickinterval=1.0, $
-    ;ytickformat='(F0.1)', $
-;    name=['FFT(flux) power', 'FFT(detrended) power'], $
-;    buffer=1 )
 
 end

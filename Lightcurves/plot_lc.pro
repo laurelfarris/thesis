@@ -286,6 +286,9 @@ ax[1].text_color = A[0].color
 ax[3].text_color = A[1].color
 ;-
 
+STOP
+
+
 save2, filename
 stop
 
