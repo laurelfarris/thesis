@@ -10,6 +10,9 @@ Mine:
   • wa.pro & wa2.pro
      (technically not even wavelet analysis... compute a "windowed Fourier transform")
   • filter.pro
+    ° current, updated version
+  • filter_OLD_20200515.pro
+    ° old version, copied to preserve potentially useful code, comments, and date
   • my_wavelet.pro (calls sdbwave)
   • sdbwave2.pro (calls sdbwave)
         NOTE:

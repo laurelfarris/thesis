@@ -2,7 +2,7 @@
 ;-   04/16/2020
 ;-
 ;- ROUTINE:
-;-   filter.pro
+;-   filter.pro (OLD VERSION)
 ;-
 ;- EXTERNAL SUBROUTINES:
 ;-

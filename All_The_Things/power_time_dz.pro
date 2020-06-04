@@ -1,8 +1,8 @@
-
-
-
+;+
 ;- Plot P(t) for several central periods:
 ;- 2-minute power, 3-minute power, and 5-minute power.
+;-
+
 
 cc = 0
 cadence = A[cc].cadence
@@ -38,7 +38,7 @@ for ii = 0, N-1 do begin
 
     ;for zz = 0, 686-1 do begin
     for zz = z_start, z_end, 1 do begin
-    
+
         ;flux = A[cc].flux[zz:zz+dz-1]
         flux = A[cc].data[370,215,zz:zz+dz-1]
 
