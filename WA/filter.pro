@@ -1,5 +1,6 @@
 ;- LAST MODIFIED:
 ;-   15 May 2020
+;-     Added arg "cutoff_period" to function call.
 ;-
 ;- ROUTINE:
 ;-   filter.pro
@@ -7,11 +8,19 @@
 ;- EXTERNAL SUBROUTINES:
 ;-
 ;- PURPOSE:
-;-
+;-   compute SMOOTHED lc:
+;-     1. Perform FFT to transform flux from time domain to frequency domain.
+;-        "Compute a power spectrum and determine threshold to filter out noise"
+;-         --> this should probably be determined independently, then set
+;-             arg "cutoff_period" in call to filter.pro
+;-     2. Apply mask to the FFT-transformed image
+;-        --> removes variations with periods shorter than the cutoff.
+;-     3. Perform inverse FFT to transform flux back to time domain.
+;-   
 ;- USEAGE:
 ;-    inverseTransform = FILTER( flux, cadence, cutoff_period )
 ;-
-;- INPUT:
+;- INPUT ARGS:
 ;-   flux
 ;-   cadence
 ;-   cutoff_period (SECONDS)
@@ -19,7 +28,12 @@
 ;- KEYWORDS (optional):
 ;-
 ;- OUTPUT:
-;-   inverse transform
+;-   inverse transform (smoothed LC)
+;-     NOTE: a detrended LC
+;-       (where the long-period, large-amplitude variations are removed to
+;-         show small-amplitude, rapidly varying oscillations)
+;-       is computed from this output by subtracting or dividing 
+;-       the smoothed data from the raw data.
 ;-
 ;- TO DO:
 ;-   [] replace hardcoded cutoff for filter (in function "filter")
@@ -32,31 +46,16 @@
 ;- AUTHOR:
 ;-   Laurel Farris
 ;-
-
-
-
-;- See comp book p. 99-103
-;-  and Enotes -- "Detrending | FFT filter", "light curves - detrended"
-
-;- Thu Nov 29 08:12:03 MST 2018
-
-;The Fast Fourier Transform (FFT) is used to transform an image from the
-;spatial domain to the frequency domain, most commonly to reduce background
-;noise from the image...
-;* Perform a forward FFT to transform the image to the frequency domain
-;* Compute a power spectrum and determine threshold to filter out noise
-;* Apply a mask to the FFT-transformed image
-;* Perform an inverse FFT to transform the image back to the spatial domain
-
-;And in normal mode this is the same (insert date at current position):
-;"=strftime("%F")<CR>P
-;2018-11-29
+;- See notes in:
+;-   • comp book p. 99-103
+;-   • Enotes "Detrending | FFT filter", "light curves - detrended"
+;-
 
 
 function FILTER, flux, cadence, cutoff_period
 
-    ;- NOTE: if flux is changed here, it will be changed at ML!
-
+    ;- NOTE: use "newflux" for computations to avoid changing
+    ;-   flux value at ML when modified value is passed back to caller.
     ;newflux = flux-(moment(flux))[0]
     newflux = flux
 
@@ -79,19 +78,10 @@ function FILTER, flux, cadence, cutoff_period
 
     ;power = reform(power[1:*])
 
-
     ;logPower = alog10(power)
     ;shiftedPower = logPower - max(logPower)
 
-    ;- Want to keep period GT 400 seconds
-    ;-  aka, frequency LT 1./400 seconds (0.0025 Hz = 2.5 mHz)
-
-    ;- !!!!!!!!!!!!!!!!!!!!!
-    ;- HARDCCODING !
-    ;mask = freq lt 0.0025
-    ;- !!!!!!!!!!!!!!!!!!!!!
     mask = freq lt (1./float(cutoff_period))
-    ;- added arg "cutoff_period" to function call
 
     ;mask = REAL_PART(shiftedPower) gt -4
 
@@ -102,6 +92,8 @@ function FILTER, flux, cadence, cutoff_period
     return, inverseTransform
 
 end
+
+;- Keep period > 400 sec (freq < 2.5 mHz)
 
 buffer = 1
 
@@ -126,7 +118,7 @@ stop
 ;-
 ;- 15 May 2020
 ;- IDL> .RUN plot_lc
-;-   to create light curves of raw flux since the following is an old and uncoooperative mess.
+;-   create LC of raw flux since the following is an old and uncoooperative mess.
 ;- Skip to second long horizonal line of "=" signs, and pick up code again.
 ;-
 
@@ -137,21 +129,14 @@ stop
 ;xdata = [ [ind], [ind] ]
 xdata = indgen( size(A.flux, /dimensions) )
 
-;resolve_routine, 'batch_plot', /either
 resolve_routine, 'batch_plot_2', /either
-;plt = BATCH_PLOT( $
 plt = BATCH_PLOT_2( $
     xdata, flux, $
-    xtickinterval=25, $
-        ;- HARDCODED!!! BAD CODER!!!
-        ;-   This kw is very dependent on the TOTAL duration of flux...
-    ;color=[A[0].color, A[1].color], $
+    xtickinterval=25, $    ;- depends on TOTAL duration of time series.
     color=A.color, $
-    ;name=[A[0].name, A[1].name], $
     name=A.name, $
     wx=wx, wy=wy, $
     yticklen=0.010, $
-        ;- Also HARDCODED! Not sure how much this one matters tho
     stairstep=1, $
     buffer=buffer )
 ;-

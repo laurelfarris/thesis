@@ -179,13 +179,13 @@ xdata = [ [ind], [ind] ]
 resolve_routine, 'batch_plot', /either
 plt = BATCH_PLOT( $
     xdata, flux, $
-    xtickinterval=25, $
+    xtickinterval=25, $                 ;- <== HARDCODED
     ;color=[A[0].color, A[1].color], $
     color=A.color, $
     ;name=[A[0].name, A[1].name], $
     name=A.name, $
     wx=wx, wy=wy, $
-    yticklen=0.010, $
+    yticklen=0.010, $                   ;-  <== HARDCODED
     stairstep=1, $
     buffer=buffer )
 ;-
