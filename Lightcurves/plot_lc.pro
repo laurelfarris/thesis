@@ -98,6 +98,13 @@ xdata = [ [indgen(n_obs)], [indgen(n_obs)] ]
 ;-
 ;xtickinterval = A[0].jd[75] - A[0].jd[0]
 xtickinterval = 75
+
+
+;- From ../WA/plot_filter.pro, though probably don't need to preserve these values
+;xtickinterval = 25
+;yticklen=0.010
+;stairstep=1
+
 xminor = 5
 ytitle=A.name + ' (DN s$^{-1}$)'
 ;-
@@ -114,6 +121,8 @@ plt = BATCH_PLOT_2(  $
     thick=[0.5, 0.8], $
     xtickinterval=xtickinterval, $
     xminor=xminor, $
+    ;yticklen=yticklen, $
+    ;stairstep=stairstep, $
     color=A.color, $
     name=A.name, $
     buffer=buffer )
@@ -215,6 +224,7 @@ ax3 = axis2( 'Y', $
 ax = [ plt[0].axes, plt[1].axes ]
 ;-
 time = strmid( A[0].time, 0, 5 )
+
 ax[0].tickname = time[ax[0].tickvalues]
 ax[0].title = 'Start time (' + date + ' ' + ts_start + ')'
     ;-  date is defined in @parameters

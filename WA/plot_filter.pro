@@ -1,75 +1,58 @@
+;+
 ;- LAST MODIFIED:
+;-   05 June 2020
 ;-
 ;- ROUTINE:
+;-   plot_filter.pro
 ;-
 ;- EXTERNAL SUBROUTINES:
 ;-
 ;- PURPOSE:
-;-   
+;-   Plots raw LCs overlaid with smoothed LCs
+;-   (and maybe pre-flare bg? That should be part of general plotting routines
+;-    since this is specifically for showing filtered data...)
+;-  Smoothed/filtered LCs are obtained from call to the FILTER function.
+;-  Detrended LCs are obtined by subtracting the smoothed LC from the raw LC
+;-     (or do you divide? I dunno...)
+;-
 ;- USEAGE:
 ;-
-;- INPUT ARGS:
-;-
-;- KEYWORDS (optional):
-;-
-;- OUTPUT:
-;-
 ;- TO DO:
-;-
-;- KNOWN BUGS:
-;-   Possible errors, harcoded variables, etc.
+;-   []
 ;-
 ;- AUTHOR:
 ;-   Laurel Farris
-;-
-;-
-
-
-;- Keep period > 400 sec (freq < 2.5 mHz)
-
-buffer = 1
-
-;-------------------
-
-time = strmid(A[0].time,0,5)
-flux = A.flux
-
-;+
-;--- Plot original (raw) light curves
-;-
-wx = 8.0
-wy = 3.0
-
-dw
-
-stop
-
-;-
-;- 15 May 2020
-;- IDL> .RUN plot_lc
-;-   create LC of raw flux since the following is an old and uncoooperative mess.
-;- Skip to second long horizonal line of "=" signs, and pick up code again.
 ;-
 
 ;=============================================================================================================
 ;=====
 ;=
 
-;xdata = [ [ind], [ind] ]
-xdata = indgen( size(A.flux, /dimensions) )
 
-resolve_routine, 'batch_plot_2', /either
-plt = BATCH_PLOT_2( $
-    xdata, flux, $
-    xtickinterval=25, $    ;- depends on TOTAL duration of time series.
-    color=A.color, $
-    name=A.name, $
-    wx=wx, wy=wy, $
-    yticklen=0.010, $
-    stairstep=1, $
-    buffer=buffer )
+buffer = 1
+
+
+;+
+;--- Plot original (raw) light curves
 ;-
-save2, "raw_LCs"
+
+
+;-  Can plot_lc.pro be used for this? No sense in having duplicate code...
+;-   I'm thinking yes...
+
+;- .RUN plot_lc
+;- .RUN plot_background (maybe)
+
+
+
+;time = strmid(A[0].time,0,5)
+;xdata = indgen( size(A.flux, /dimensions) )
+;-  Defined at ML in plot_lc.pro
+
+;- window dimensions
+;-   NOTE: batch_plot_2.pro defaults are wx=8.0 and wy=3.0
+wx = 8.0
+wy = 3.0
 
 
 ;-
@@ -82,39 +65,6 @@ delt = [ min(flux[*,0]), (min(flux[*,1]) + offset) ]
 resolve_routine, 'shift_ydata', /either
 SHIFT_YDATA, plt, delt=delt
 save2, "raw_LCs_shifted"
-
-
-STOP
-
-;+
-;--- Overplot pre-flare background
-;-
-
-;- --> HARDCODING!! BAD CODER!
-;zind = [120:259]
-zind = [0:150]
-;- zind = z-indices of pre-flare data from which to extract pre-flare background level
-;-    (doesn't start at zero because of the C-flare that took place in the middle
-;-      of my pre-flare time period before the X2.2 flare on 15 February 2011... rude).
-;-
-;-
-;background = MEAN(A.flux[zind], dim=1) - delt
-;- 15 May 2020
-;-  NOTE: "flux" is a subset extracted from A.flux (z-dimension), so in order to get pre-flare background level,
-;-    have to go back to full time series: A.flux to get the pre-flare flux, 
-;-    which was cropped out when defining "flux"...
-;-    (was initially confused as to why using A.flux here instead of flux... )
-;background = MEAN(A.flux[zind], dim=1)
-background = MEAN(A.flux[zind], dim=1)
-for jj = 0, 1 do begin
-    hor = plot2( $
-        plt[0].xrange, $
-        [ background[jj], background[jj] ], $
-        /overplot, $
-        linestyle=[1, '1111'X], $
-        name = 'Background' )
-endfor
-;save2, filename
 
 
 ;+
