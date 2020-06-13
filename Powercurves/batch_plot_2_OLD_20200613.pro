@@ -44,7 +44,7 @@
 
 
 
-function WRAP_BATCH_PLOT_2, $
+function WRAP_BATCH_PLOT_2_OLD_20200613, $
     xdata, ydata, $
     wx = wx, $
     wy = wy, $
@@ -62,8 +62,6 @@ function WRAP_BATCH_PLOT_2, $
     symbol=symbol, $
     _EXTRA = e
 
-
-    print, "batch_plot_2_!!!!!!!!!!!!!!!!"
 
 
 ; For single panel, pick margins, and use window dimensions to set width/height
@@ -131,29 +129,40 @@ function WRAP_BATCH_PLOT_2, $
             _EXTRA = e )
     endfor
 
+
+    ;-----------------------------------------------------------------------------
+    ;----
+    ;-
+
     print, plt[0].axis_style
     print, plt[1].axis_style
 
     return, plt
 
-;- Add top and right axes for plt2 (excluded when axis_style=1)
+    ;- Add top and right axes for plt2 (excluded when axis_style=1)
 
-resolve_routine, 'axis2', /is_function
+    resolve_routine, 'axis2', /is_function
 
-;ax2 = axis2( 'X', $
-;    location='top', $
-;    target=plt[0], $
-;    showtext=0 $
-;)
+    ;ax2 = axis2( 'X', $
+    ;    location='top', $
+    ;    target=plt[0], $
+    ;    showtext=0 $
+    ;)
 
-ax3 = axis2( 'Y', $
-    location='right', $
-    target = plt[1], $
-    text_color = color[1], $
-    title = title[1], $
-    showtext=1 $
-)
-    
+    ax3 = axis2( 'Y', $
+        location='right', $
+        target = plt[1], $
+        text_color = color[1], $
+        title = title[1], $
+        showtext=1 $
+    )
+
+    ;-
+    ;----
+    ;------------------------------------------------------------------------------
+
+
+
     ;- Add some extra white space between plot lines and x-axes.
     ;yr = plt[0].yrange
     ;delt = 0.05*(yr[1] - yr[0])
@@ -179,7 +188,7 @@ end
 
 
 
-function BATCH_PLOT_2, $
+function BATCH_PLOT_2_OLD_20200613, $
     xdata, ydata, $
     _EXTRA = e
 
@@ -209,7 +218,7 @@ function BATCH_PLOT_2, $
         left = 1.00, $
         right = 1.10, $
         bottom = 0.5, $
-        top = 0.2, $
+        ;top = 0.2, $
         buffer = 1, $
         ;overplot = 0, $
         name = name, $

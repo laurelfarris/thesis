@@ -70,6 +70,21 @@ function PLOT_PT, time, power, dz, $
     ;plt = BATCH_PLOT( $
     plt = BATCH_PLOT_2( $
         xdata, power, $
+        top=0.2, $
+            ;-------
+            ;- 13 June 2020
+            ;-   By default, top=0.2 in batch_plot_2 wrapper routine (current dir.)
+            ;-   but this line is commented in ../Graphics/batch_plot_2.pro ...
+            ;-   In the interest of making things CONSISTENT (and, you know, not
+            ;-   having multiple copies of the same damn code floating around),
+            ;-   I'm adding kw def here in call to batch_plot_2 so that I can
+            ;-   comment the line defining this kw in batch_plot_2, bringing it
+            ;-   closer to duplicate of ../Graphics/batch_plot_2.
+            ;-   (Goal here is to find all the little differences (there don't
+            ;-   appear to be many), making appropriate changes in CALLER,
+            ;-   and deleting the duplicate code, probably the one in the current
+            ;-   directory, and keeping the one in the Graphics/ directory.
+            ;-------
         ;xrange=[0,748], $
         thick=[0.5, 1.0], $
             ;- NOTE: lines look thicker in pdf than xwindow
@@ -158,7 +173,7 @@ function PLOT_PT, time, power, dz, $
 ;;    ax[3].text_color = color[1]
 
 
-    
+
 ;----------------------------------------------------------------
 
 ;- 17 January 2020

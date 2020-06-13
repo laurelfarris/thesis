@@ -1,3 +1,20 @@
+13 June 2020
+  renamed batch_plot_2.pro to batch_plot_2_OLD_20200613.pro because
+  it's bascially a duplicate of ../Graphics/batch_plot_2.pro with lines
+  added to create 2nd x-axis (ax[2]) and y-axis (ax[3])
+  by calling IDL AXIS function
+  (actually calls my routine AXIS2.pro, but close enough).
+  These axes are now created AFTER call to batch_plot routine
+  in plot_pt.pro, rather than having the same subroutine create them
+  after plotting the main curves on ax[0] and ax[1].
+  Long story short, don't need duplicate batch_plot_2.pro when there's already
+  one in ../Graphics/, and not many modifications were made.
+  Sloppy coding... not even going to start tryign to figure out difference
+  between batch_plot_2.pro and batch_plot.pro, (both in Graphics/).
+  At least not today...
+
+
+
 14 March 2020
 
 plot_pt.pro vs plot_pt_2.pro
