@@ -1,8 +1,8 @@
 ;+
 ;- MODIFIED:
 ;-   29 January 2020
-;-     Made a copy "struc_aia_old.pro" so I could clear old code
-;-      and comments out of this one.
+;-     Made a copy "struc_aia_old.pro" to preserve old codes & comments.
+;-     Cleaned up current code (a lot...).
 ;-
 ;- PURPOSE:
 ;-   Read AIA headers and restore .sav files (data)
@@ -146,14 +146,8 @@ function STRUC_AIA, index, cube, $
     ;cube = float(cube)
     ;flux = fltarr( sz[2] )
     flux = total( total( cube, 1), 1 )
-;    print, max(flux)
-;    print, max( flux / (500.*330.) )
-    ;-
+    ;flux = mean( mean( cube, dimension=1), dimension=1 )
 
-    ;+
-    ;- 18 February 2020
-;    flux = mean( mean( cube, dimension=1), dimension=1 )
-;    print, max(flux)
 
     ;- Standard AIA colors
     AIA_LCT, r, g, b, wave=fix(channel);, /load

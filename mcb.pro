@@ -1,24 +1,34 @@
 ;Copied from clipboard
 
 
-t0 = '01:30 15-feb-2011'
-t1 = '02:30 15-feb-2011'
-;ds = 'aia.lev1_euv_12s'
-waves = '1600'
-key = 't_obs, wavelnth, datamean, exptime'
-cadence = '24s'
 ;-
-ssw_jsoc_time2data, $
-    t0, t1, $  ;- user time range
-    index, $
-    ;ds=ds, $  ;- data series name
-    waves=waves, $
-    key=key, $
-    cadence=cadence
+;- divide by 1000 to convert to Hz
+;fmin = 1.0 / 1000.
+;fmax = 10. / 1000.
 ;-
-;help, index[0]
-;
-utplot, index.t_obs, index.datamean/index.exptime;, psym=1
+;- select min/max PERIOD (seconds), convert to freqeuncy (Hz)
+fmin = 1./400.
+fmax = 1./100.
+;-
+ind = where( frequency[*,0] ge fmin AND frequency le fmax )
+;-
+;-
+dw
+resolve_routine, 'plot_spectra', /either
+plt = PLOT_SPECTRA( $
+    frequency[ind,*], power[ind,*], $
+    name = ['before', 'during', 'after'], $
+    ;xrange = [1.5, 10.0]/1000., $
+    leg=leg, /buffer )
+;-
+;-
+tx = 0.8
+ty = 0.8
+resolve_routine, 'text2', /either
+flare = TEXT2( tx, ty, class + ' ' + date )
+;-
+;-
+save2, 'spectra_BDA_' + class
 
 end
 

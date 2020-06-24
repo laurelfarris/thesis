@@ -3,7 +3,7 @@
 ;-   28 November 2018
 ;-
 ;- ROUTINE:
-;-   routine_name.pro
+;-   plot_spectra.pro
 ;-
 ;- PURPOSE:
 ;-
@@ -11,14 +11,14 @@
 ;-   result=routine_name(arg, kw=kw)
 ;-
 ;- INPUT:
-;-   arg1   input time series
-;-   arg2   time separation (cadence)
+;-   arg1   frequency
+;-   arg2   power
 ;-
 ;- KEYWORDS:
-;-   kw     set to do this
+;-   leg     set to return legend in kw "leg"
 ;-
 ;- OUTPUT:
-;-   result     blah
+;-   plt
 ;-
 ;- TO DO:
 ;-   [] Option to specify freq/period values to mark with vertical lines.
@@ -55,7 +55,14 @@ function PLOT_SPECTRA, frequency, power, $
 ;
     ;- Call general, single-panel plotting routine
     resolve_routine, 'batch_plot', /either
+    ;resolve_routine, 'batch_plot_2', /either
+        ;-
+        ;- 06/19/2020:
+        ;-   Changed from batch_plot to batch_plot_2.
+        ;-   Changed back due to errors when creating/accessing axes in version 2.
+        ;-
     plt = BATCH_PLOT( $
+    ;plt = BATCH_PLOT_2( $
         frequency, power, $
         xtitle = 'frequency (Hz)', $
         ytitle = 'power', $

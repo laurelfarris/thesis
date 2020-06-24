@@ -1,162 +1,105 @@
 ;+
-;- 15 May 2020
-;-
-;- ==>>  Don't forget to either put plot_sdo_lc.pro back in /ss/laurel07/SDO_guide/,
-;-   or add documentation of its re-location.
-;-
-;-
-;- Define three separate array structures
-;-  i.e. A, B, C (or something else)
-;-  Lots of code written to access "A[cc].whatever"...
+;- 19 June 2020
 ;-
 
 
-
-;+
-;- ML code in struc_aia.pro:
-;-
-
-aia1600 = STRUC_AIA( aia1600index, aia1600data, cadence=24., instr='aia', channel='1600' )
-aia1700 = STRUC_AIA( aia1700index, aia1700data, cadence=24., instr='aia', channel='1700' )
-
-
-A = [ aia1600, aia1700 ]
-undefine, aia1600
-undefine, aia1600index
-undefine, aia1600data
-undefine, aia1700
-undefine, aia1700index
-undefine, aia1700data
-A[0].color = 'blue'
-A[1].color = 'red'
-
-
-
-;-
-
-
-
-format = '(e0.4)'
-;-
-cc = 0
-print, ''
-print, A[cc].channel
-;print, max(A[cc].flux), format=format
-print, min(A[cc].flux/A[cc].exptime), format=format
-print, max(A[cc].flux/A[cc].exptime), format=format
-;-
-cc = 1
-print, ''
-print, A[cc].channel
-;print, max(A[cc].flux), format=format
-print, min(A[cc].flux/A[cc].exptime), format=format
-print, max(A[cc].flux/A[cc].exptime), format=format
-
-
-
-
-
-;-
-;-------
-;--- SDO guide
-
-;- aia light curve (exptime-corrected) using DATAMEAN and T_OBS keywords from image headers:
-SSW_JSOC_TIME2DATA, $
-    '2011-02-20', $
-    '2011-03-06', $
-    index, $
-    ds='aia.lev1_euv_12s', $
-    waves='335', $
-    key='t_obs,wavelnth,datamean,exptime', $
-    cadence='1h'
-;-
-UTPLOT, index.t_obs, index.datamean/index.exptime, psym=1
-
-;- plot_map.pro
-result=vso_search(’2011-01-01 1:00’,’2011-01-01 1:01’,inst=’aia’,wave=171,sample=60)
-log=vso_get(result,out_dir=’data’,filenames=fnames,/rice)
-aia_prep,fnames,-1,out_index,out_data
+;aia1600flux_X22 = A[0].flux
+;aia1600flux_C30 = A[0].flux
+;aia1600flux_M73 = A[0].flux
 
 
 ;----
-;- Actualy, already did this once: copied contents of Notes/2020-03-10.pro,
-;-   to which I was pointed by the README file in /solarstorm/laurel07/SDO_guide/
 
-;+
-;- 10 March 2020
-;-
+@parameters
+;- .RUN struc_aia
 
-;+
-;- Guide to SDO data analysis, September 12, 2019
-;-   6  How to process AIA Data
-;-
-;-
-;--
-;-   6.7.4  Plotting an AIA Light Curve
-;--
-;-
-;- "Plot an exposure-time-corrected  (!!)
-;-   LC, using DATAMEAN and T_OBS from headers..."
-;-
+;----
 
-;- documentation for ssw_jsoc_time2data;
-;-   use "which" procedure to show directory containing these routines:
-which, 'ssw_jsoc_time2data'
-;-
+cc = 0
+dz = 150
 
-t0 = '01:30 15-feb-2011'
-t1 = '02:30 15-feb-2011'
-;ds = 'aia.lev1_euv_12s'
-waves = '1600'
-key = 't_obs, wavelnth, datamean, exptime'
-cadence = '24s'
-;-
-ssw_jsoc_time2data, $
-    t0, t1, $  ;- user time range
-    index, $
-    ;ds=ds, $  ;- data series name
-    waves=waves, $
-    key=key, $
-    cadence=cadence
-;-
-;help, index[0]
-;
-utplot, index.t_obs, index.datamean/index.exptime;, psym=1
+;---
+
+time = strmid( A[cc].time, 0, 5 )
+
+;print, gstart
+;print, where( time eq strmid(gstart,0,5) )
+z2 = (where( time eq strmid(gstart,0,5) ))[0]
+z1 = z2 - dz
+z3 = z2 + dz
+zind = [z1, z2, z3]
+
+stop
 
 
-;--
-;-   6.7.5  plot_map.pro
-;--
+;for ii = 0, n_elements(zind)-1 do begin
+;    print, min( [ zind[ii] : zind[ii] + dz -1 ] )
+;    print, max( [ zind[ii] : zind[ii] + dz -1 ] )
+;    print, n_elements( [ zind[ii] : zind[ii] + dz -1 ] )
+;endfor
 
 
+;-----------------
 
-;t0 = '2011-01-01 1:00'
-;t1 = '2011-01-01 1:01'
-t0 = '2011-02-15 1:40'
-t1 = '2011-02-15 1:41'
-;-
-inst = 'aia'
-;wave = 171
-wave = 1600
-;-
-sample = 60
+fname = 'spectra_' + ['before', 'during', 'after']   + '_' + class
+for ii = 0, 2 do print, fname[ii]
+
+dw
+for ii = 0, n_elements(zind)-1 do begin
+    flux = (A[cc].flux[ zind[ii] : zind[ii]+dz-1]) / A[cc].exptime
+    PLOT_FOURIER2, flux, A[cc].cadence, $
+        frequency, power, $
+        /seconds, $
+        /make_plot, /buffer, norm=0
+    save2, fname[ii]
+endfor
+
+;-----------------
+
+frequency = fltarr(75, 3)
+power = fltarr(75, 3)
+for ii = 0, n_elements(zind)-1 do begin
+    flux = (A[cc].flux[ zind[ii] : zind[ii]+dz-1]) / A[cc].exptime
+    result = fourier2( flux, A[cc].cadence )
+    frequency[*,ii] = reform(result[0,*])
+    power[*,ii] = reform(result[1,*])
+endfor
+
+;- min/max frequency to plot (aka xrange)
+;-   trim arrays BEFORE calling plotting subroutines...
+;-   could also have subroutine do the trimming, either hardcoded with values
+;-    used for my research (e.g. 3-minute period ALWAYS "period of interest")
+;-    or set optional kw's in call to plotting routine...
+;-  What is the better way??
 
 
-
+;-
+;- divide by 1000 to convert to Hz
+;fmin = 1.0 / 1000.
+;fmax = 10. / 1000.
+;-
+;- select min/max PERIOD (seconds), convert to freqeuncy (Hz)
+fmin = 1./400.
+fmax = 1./100.
+;-
+ind = where( frequency[*,0] ge fmin AND frequency le fmax )
 ;-
 ;-
-;- query, download, and run aia_prep on test data.
-result = VSO_SEARCH(t0, t1, inst=inst, wave=wave, sample=sample)
-log = VSO_GET(result, out_dir='SDO_guide',filenames=fnames, /rice)
-aia_prep, fnames, -1, out_index, out_data
+dw
+resolve_routine, 'plot_spectra', /either
+plt = PLOT_SPECTRA( $
+    frequency[ind,*], power[ind,*], $
+    name = ['before', 'during', 'after'], $
+    ;xrange = [1.5, 10.0]/1000., $
+    leg=leg, /buffer )
 ;-
 ;-
-;- convert images to a map structure, plot the first one.
-index2map, out_index, out_data, map
-plot_map, map, /log, drange=[1e2, 1e4]
+tx = 0.8
+ty = 0.8
+resolve_routine, 'text2', /either
+flare = TEXT2( tx, ty, class + ' ' + date )
 ;-
 ;-
-;-
-
+save2, 'spectra_BDA_' + class
 
 end
