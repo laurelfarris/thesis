@@ -70,8 +70,10 @@ function PLOT_PT, time, power, dz, $
     ;plt = BATCH_PLOT( $
     plt = BATCH_PLOT_2( $
         xdata, power, $
-        top=0.2, $
+        top=0.3, $
             ;-------
+            ;- 26 June 2020
+            ;-   Increased top to allow room for plot title
             ;- 13 June 2020
             ;-   By default, top=0.2 in batch_plot_2 wrapper routine (current dir.)
             ;-   but this line is commented in ../Graphics/batch_plot_2.pro ...
@@ -90,8 +92,10 @@ function PLOT_PT, time, power, dz, $
             ;- NOTE: lines look thicker in pdf than xwindow
         xrange=[0,sz[0]+dz-2], $
         xtickinterval = 75, $
-        title = class + '-class flare; NOAA AR ' + AR, $
+        title = class + '-class flare; NOAA AR ' + AR + '; ' + date, $
         ytitle='3-minute power', $
+        ;ytitle = name[0] + ' log 3min power', $
+        ;text_color = A[0].color
         color=color, $
         wy = 3.0, $  ; --> still a kw for batch_plot, which is NOT the same thing as plot3.
         buffer = 1, $
@@ -113,9 +117,13 @@ function PLOT_PT, time, power, dz, $
         location='right', $
         target = plt[1], $
         text_color = color[1], $
-        ;title = plt[1].name + ' 3-minute power', $
+        title = plt[1].name + ' 3-minute power', $
+        ;title = name[1] + ' log 3min power', $
+        ;text_color = A[1].color
         showtext=1 $
     )
+
+
 
 ;- Maps only --> power_flux doesn't need to be shifted
     ;resolve_routine, 'shift_ydata', /either

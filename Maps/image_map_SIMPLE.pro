@@ -19,6 +19,9 @@
 
 ;- specific to what exactly is being imaged
 
+buffer = 1
+
+
 cc = 0
 ii = 253
 imdata = map[*,*,ii]
@@ -34,7 +37,9 @@ imdata = map[*,*,ii]
 dw
 im = image2( $
     alog10(imdata), $
-    rgb_table = AIA_COLORS( wave=fix(A[cc].channel) ) )
+    rgb_table = AIA_COLORS( wave=fix(A[cc].channel) ), $
+    buffer=buffer
+)
 
 
 instr='aia'

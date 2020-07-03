@@ -42,12 +42,21 @@ function GET_POWER_FROM_FLUX, $
     z_start = indgen(N-dz)
     power_from_flux = fltarr(N-dz)  ; initialize power array
 
+    new_flux = flux
+        ;- see comments after loop
+
     resolve_routine, 'calc_fourier2', /either
     foreach zz, z_start, ii do begin
         CALC_FOURIER2, new_flux[zz:zz+dz-1], cadence, $
             frequency, power, fmax=fmax, fmin=fmin
         power_from_flux[ii] = mean(power)
     endforeach
+
+    print, where( new_flux ne flux )
+        ;- 26 June 2020
+        ;-  check if flux is modified. If not, probably don't need new_flux,
+        ;-  but maybe keep just in case ( don't want to accidentally return modified
+        ;-  variables to ML without realizing it.
 
     return, power_from_flux
 end
@@ -56,11 +65,17 @@ end
 
 ;- Calculate power from flux (option per pixel).
 
+buffer = 1
+
 dz = 64
 power = fltarr(685, 2)
 fmin=0.005
 fmax=0.006
 n_pix = 500.*330.
+
+;------------
+
+@parameters
 
     ;+
     ;-
@@ -82,7 +97,6 @@ for cc = 0, 1 do begin
 endfor
 
 
-stop
 
 ;stat1 = stats(power, /display)
 ;stat2 = stats(power/n_pix, /display)
@@ -96,22 +110,27 @@ stop
 yrange = [1.e-4, 1.e5]
 ytickvalues = [1.e-4, 1.e-2, 1.e0, 1.e2, 1.e4]
 ;ytickvalues = 10.^[-4:2:2]
+yminor=9
 
-props = { $
-    ylog : 1, $
-    yrange : yrange, $
-    ytickvalues : ytickvalues, $
-    yminor : 9, $
+dw
+resolve_routine, 'plot_pt', /is_function
+plt = PLOT_PT( $
+    A[0].time, power, dz, $
+    ylog=1, $
+    ;yrange=yrange, $
+    ;yminor=yminor, $
+    ;ytickvalues = ytickvalues, $
     ;symbol : 'circle', $
     ;sym_filled : 0, $
     ;sym_size : 0, $  ;; = 0.1 up to... not sure how big.
-    name : A.name }
+    name=A.name, $
+    buffer=buffer $
+)
+;-
 
-filename = 'time-3minpower_flux'
+filename = 'time-3minpower_flux_' + class
+print, filename
 
-resolve_routine, 'plot_pt', /is_function
-plt = PLOT_PT( A[0].time, power, dz, buffer=0);, _EXTRA = props
-
-;save2, filename
+save2, filename
 
 end
