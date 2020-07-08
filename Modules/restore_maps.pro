@@ -42,15 +42,15 @@ if (test ge 0) then begin
 
     print, 'Replace existing map with restored map.'
 
-    ;restore, path + 'aia1600map.sav'
-    restore, path + 'aia1600map_2.sav'
+    restore, path + 'aia1600map.sav'
+    ;restore, path + 'aia1600map_2.sav'
 ;    help, map
 ;    help, A[0].map
     A[0].map = map
     undefine, map
 
-    ;restore, path + 'aia1700map.sav'
-    restore, path + 'aia1700map_2.sav'
+    restore, path + 'aia1700map.sav'
+    ;restore, path + 'aia1700map_2.sav'
     A[1].map = map
     undefine, map
 
@@ -63,13 +63,13 @@ endif else begin
 
     print, 'Adding tag "MAP" to struc array "A", set to restored maps.'
     ;
-    ;restore, path + 'aia1600map.sav'
-    restore, path + 'aia1600map_2.sav'
+    restore, path + 'aia1600map.sav'
+    ;restore, path + 'aia1600map_2.sav'
     aia1600 = A[0]
     aia1600 = create_struct( aia1600, 'map', map )
     ;
-    ;restore, path + 'aia1700map.sav'
-    restore, path + 'aia1700map_2.sav'
+    restore, path + 'aia1700map.sav'
+    ;restore, path + 'aia1700map_2.sav'
     aia1700 = A[1]
     aia1700 = create_struct( aia1700, 'map', map )
     ;

@@ -28,9 +28,11 @@ function image2, data, x, y,  _EXTRA=e
         ytickfont_size = fontsize, $
         xtickfont_size = fontsize, $
         axis_style = 2, $
-           ; = 0 (no axes)
+           ; = 0 (no axes) DEFAULT for images
            ; = 1 (single x and y axes)
-           ; = 2 (box axes)
+           ; = 2 (box axes) DEFAULT for PLOT ...
+           ;-     not what this code does, why did I feel the need to specify this?
+           ;-          --08 July 2020
            ; = 3 (crosshair axes)
            ; = 4 (No axes, but margins as if there were axes)
         xtickdir = 0, $
