@@ -207,16 +207,10 @@ save2, filename
 
 ;=============================================================================
 
-
 ;+
-;-  3-minute power as function of time
-;-    from MAPS instead of integrated flux.
-
-
-
-;- Copied code from Powercurves/get_power_from_maps.pro
-;- b/c too much of a mess even for "bare min" figures.
-
+;-  P_3min(t) from MAPS instead of integrated flux.
+;-    (copied code from Powercurves/get_power_from_maps.pro
+;-      b/c too much of a mess even for "bare min" figures).
 
 
 ;- EXTERNAL SUBROUTINES:
@@ -226,63 +220,69 @@ save2, filename
 ;- PURPOSE:
 ;-   1. Calculate P(t) by summing over power maps.
 ;-   2. Plot P(t) curves for all channels.
-;-  aka does both computations AND graphics... these should be separate codes.
+;-  (aka does both computations AND graphics... these should be separate codes).
 ;-
-
-buffer =1
-
-@parameters
-dz = 64
-
-;-----------
 
 ;- Steps:
 ;-   edit parameters.pro to analyze flare 0, 1, or 2
-;-   IDL> @struc_aia
-;-   IDL> @restore_maps
+;-   IDL> .RUN struc_aia
+;-   IDL> .RUN restore_maps
 ;-
 
+buffer =1
+dz = 64
+
+
+;----
+;- Compute P(t)
+;-
+
+@parameters
+;
 sz = size( A.map, /dimensions )
 print, sz
 power = fltarr( sz[2], sz[3] )
-
-
+;
 for cc = 0, n_elements(A)-1 do begin
     power[*,cc] = (total(total(A[cc].map,1),1))
-;    print, "  min P(t) = ", min(power[*,cc])
-;    print, "  max P(t) = ", max(power[*,cc])
-;    print, "$\Delta$P = ", max(power[*,cc])/min(power[*,cc])
-;    print, max(A[cc].map[*,*,280])
 endfor
-
-
+;
+format='(e0.4)'
+for cc = 0, n_elements(A)-1 do begin
+    print, ""
+    print, "  min P(t) = ", min(power[*,cc])
+    print, "  max P(t) = ", max(power[*,cc])
+    print, "$\Delta$P = ", max(power[*,cc])/min(power[*,cc])
+    print, max(A[cc].map[*,*,280]), format=format
+endfor
+print, ""
+;
 for cc = 0, n_elements(A)-1 do begin
     loc = where( power[*,cc] eq max(power[*,cc]) )
-;    print, loc
-;    print, A[0].time[loc]
-;    print, A[0].time[loc+dz-1]
-    print, loc + (dz/2)
+    ;print, loc
+    ;print, loc + (dz/2)
+    print, A[0].time[loc]
     print, A[0].time[loc+(dz/2)]
+    print, A[0].time[loc+dz-1]
 endfor
 
-;------------------------------------------------------------------------------
 
-
-;+
+;----
 ;- Plot P(t)
 ;-
-;-
-
 
 resolve_routine, 'plot_pt', /is_function
 dw
 plt = PLOT_PT( $
-    A[0].time, power/n_pix, dz, buffer=0, $
+    A[0].time, power, dz, buffer=buffer, $
     stairstep = 1, $
     ;yminor = 4, $
     title = '', $
-    name = A.name )
     ;yrange=[-250,480], $ ; maps
+    name = A.name  $
+)
+;
+;
 ;ax = plt[0].axes
 ;ax[1].tickname = strtrim([68, 91, 114, 137, 160],1)
 ;ax[3].tickname = strtrim([1220, 1384, 1548, 1712, 1876],1)
@@ -293,9 +293,10 @@ ax3 = plt[1].axes
 ax3.title = plt[1].name + " 3-minute power"
 
 
-;fname = 'time-3minpower_maps_' + class; + '_3'
-;fname = 'N_unsaturated_pixels' + class
-fname = 'time-3minpower_maps_per_pixel' + class
+
+
+fname = 'time-3minpower_maps_' + class; + '_3'
+;
 resolve_routine, 'save2', /either
 save2, fname
 
