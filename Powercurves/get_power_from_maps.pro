@@ -40,6 +40,11 @@
 ;-
 
 
+buffer =1
+
+@parameters
+dz = 64
+
 ;----------------------------------------------------------------------------------
 
 
@@ -69,7 +74,6 @@ endfor
 ;-   Correct restored power map for saturation by multiplying by mask.
 
 
-dz = 64
 ;sz = size( A.data, /dimensions )
 sz = size( A.map, /dimensions )
   ;- not sure why I was using data dimensions... esp. since 15-Feb-2011 flare
