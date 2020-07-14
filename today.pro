@@ -1,319 +1,181 @@
 ;+
-;- 09 July 2020
+;- 14 July 2020
+;/*
+; * blah
+; * new way to type comments
+; */
+;
 ;-
-
-
-;+
-;- To do today:
-;-   [] compute saturation masks and re-create P(t) plots.
-;-
-
-
-;+
-;-  P_3min(t) from MAPS instead of integrated flux.
-;-    (copied code from Powercurves/get_power_from_maps.pro
-;-      b/c too much of a mess even for "bare min" figures).
-
-
-;- EXTERNAL SUBROUTINES:
-;-   powermap_mask.pro
-;-   plot_pt.pro
 ;-
 ;- PURPOSE:
-;-   1. Calculate P(t) by summing over power maps.
-;-   2. Plot P(t) curves for all channels.
-;-  (aka does both computations AND graphics... these should be separate codes).
+;-   1. Histogram for each BDA map with number of pixels with 3-minute power between
+;-       N and N+dn, where dn = bin width (depends on max-min of power...
+;-       probably easier to set number of bins instead of bin width in first
+;-        call to IDL's HISTOGRAM function.
+;-
+;-   histogram: # pixels vs. 3-minute power
+;-   xrange = [ MIN(map[*,*,zz]) : MAX(map[*,*,zz]) ]
+;-   where zz = values from last week's BDA maps.
+;-
+;-
+;- To do :
+;-   [] Histograms
+;-   [] remove tags for data and power maps and re-save "headers".
+;-   [] copy code from struc_aia.pro that restores and crops 3D data cube
+;-       and paste into a separate routine.
 ;-
 
-;- Steps:
-;-   edit parameters.pro to analyze flare 0, 1, or 2
-;-   IDL> .RUN struc_aia
-;-   IDL> .RUN restore_maps
-;-   IDL> .RUN today (obviously not for eventually well-written routines...)
-
-
-buffer =1
+buffer = 1
 dz = 64
-threshold=10000.
-;
-@parameters
 
 
-
-;
-sz = size( A.map, /dimensions )
-print, sz
+restore, 'BDAmaps.sav'
 ;
 
-;----
-;- Compute Powermap mask
-;-
-
-
-map_mask = fltarr(sz)
-resolve_routine, 'powermap_mask', /either
-for cc = 0, 1 do begin
-    map_mask[*,*,*,cc] = POWERMAP_MASK( $
-        A[cc].data, $
-        dz=dz, $
-        ;exptime=A[cc].exptime, $
-        threshold=threshold $
-    )
-endfor
-; --> returns FLOAT [500,330,686,2]
-
-
-
-
-;----
-;- Compute P(t)
-;-
-
-
-
-;- Multiply by mask before summing to get P(t) array.
+;restore, "multiflare_structures_X22.sav"
+;restore, "multiflare_structures_M73.sav"
+;restore, "multiflare_structures_C30.sav"
 ;
-help, A.map
-help, map_mask
-
-map = A.map * map_mask
 
 
-power = fltarr( sz[2], sz[3] )
-for cc = 0, n_elements(A)-1 do begin
-    power[*,cc] = (total(total(map[*,*,*,cc],1),1))
-endfor
+imdata = aia1600maps[*,*,0]
 
-;
 format='(e0.4)'
-for cc = 0, n_elements(A)-1 do begin
-    print, ""
-    print, "  min P(t) = ", min(power[*,cc])
-    print, "  max P(t) = ", max(power[*,cc])
-    print, "$\Delta$P = ", max(power[*,cc])/min(power[*,cc])
-    print, max(A[cc].map[*,*,280]), format=format
-endfor
-print, ""
+print, min(imdata), format=format
+print, max(imdata), format=format
+
 ;
-for cc = 0, n_elements(A)-1 do begin
-    loc = where( power[*,cc] eq max(power[*,cc]) )
-    ;print, loc
-    ;print, loc + (dz/2)
-    print, A[0].time[loc]
-    print, A[0].time[loc+(dz/2)]
-    print, A[0].time[loc+dz-1]
-endfor
+;print, xdata, format=format
+;print, result, format=format
+print, max(xdata)
+print, xdata[-1]
+print, min(xdata)
+print, xdata[0]
+print, sort(xdata)
 
-stop
 
-;----
-;- Plot P(t)
-;-
+;- test IDL's SORT function
+test = [5,3,9,1]
+ind = fix(sort(test))
+print, test
+print, ind
+print, test[ind]
 
-resolve_routine, 'plot_pt', /is_function
+
+;---------------------------------------------------------------------------------
+
+;- test best way to set ticklen... NOT IMPORTANT!!!
+
+;wx = 8.0
+;wy = 3.0
+;
+wx = 3.0
+wy = 3.0
+;
 dw
-plt = PLOT_PT( $
-    A[0].time, power, dz, buffer=buffer, $
-    stairstep = 1, $
-    title = '', $
-    name = A.name  $
-)
-;
-ax2 = (plt[0].axes)[1]
-ax2.title = plt[0].name + " 3-minute power"
-ax2.text_color = plt[0].color
-ax3 = plt[1].axes
-ax3.title = plt[1].name + " 3-minute power"
-;
-
-fname = 'time-3minpower_maps_' + class; + '_3'
-;
-resolve_routine, 'save2', /either
-save2, fname
-
-
-;=============================================================================
-
-
-cc = 0
-;cc = 1
-
-;+
-;- Restore power maps and
-;-   create 2 arrays for imaging - one for each AIA channel
-;-
-
-;- Derive BDA z_start values (from 2020-06-19)
-time = strmid( A[cc].time, 0, 5 )
-z2 = (where( time eq strmid(gstart,0,5) ))[0]
-z1 = z2 - dz
-z3 = z2 + dz
-zind = [z1, z2, z3]
-
-
-
-;- IDL> .RUN struc_aia
-;- IDL> .RUN restore_maps
-
-c30_1600_before = A[0].map[*,*,z1]
-c30_1600_during = A[0].map[*,*,z2]
-c30_1600_after  = A[0].map[*,*,z3]
-;
-c30_1700_before = A[1].map[*,*,z1]
-c30_1700_during = A[1].map[*,*,z2]
-c30_1700_after  = A[1].map[*,*,z3]
-
-;---
-
-@parameters
-;- IDL> .RUN struc_aia
-;- IDL> .RUN restore_maps
-;- IDL> .RUN today
-;-   Need to re-compute z-indices for new flare
-
-m73_1600_before = A[0].map[*,*,z1]
-m73_1600_during = A[0].map[*,*,z2]
-m73_1600_after  = A[0].map[*,*,z3]
-;
-m73_1700_before = A[1].map[*,*,z1]
-m73_1700_during = A[1].map[*,*,z2]
-m73_1700_after  = A[1].map[*,*,z3]
-
-;- 14:01 repeating this after renaming power map .sav files for 2011 X2.2 flare
-print, min(x22_1600_during)
-;- IDL> .RUN restore_maps
-;-    ERROR... still not handling existance of 'map' tag in A.  :( :(
-;-    Guess I'll just re-run struc_aia
-;- IDL> undefine, A
-;- IDL> .RUN struc_aia
-;- IDL> .RUN restore_maps
-
-x22_1600_before = A[0].map[*,*,z1]
-x22_1600_during = A[0].map[*,*,z2]
-x22_1600_after  = A[0].map[*,*,z3]
-;
-x22_1700_before = A[1].map[*,*,z1]
-x22_1700_during = A[1].map[*,*,z2]
-x22_1700_after  = A[1].map[*,*,z3]
-;
-print, min(x22_1600_during)
-;-  --> 0.0026... (GT 0.0 !!!!!!!)
-print, min(A.map)
-;-  --> 3.36e-05  ... ALL values are GT 0.0!!!!!!!!
-
-
-
-format = '(e0.5)'
-print, max(c30_1600_during), format=format
-print, max(m73_1600_during), format=format
-print, max(x22_1600_during), format=format
-
-
-aia1600maps = [ $
-    [[ c30_1600_before ]], $
-    [[ c30_1600_during ]], $
-    [[ c30_1600_after ]], $
-    [[ m73_1600_before ]], $
-    [[ m73_1600_during ]], $
-    [[ m73_1600_after ]], $
-    [[ x22_1600_before ]], $
-    [[ x22_1600_during ]], $
-    [[ x22_1600_after ]] $
-]
-help, aia1600maps
-
-aia1700maps = [ $
-    [[ c30_1700_before ]], $
-    [[ c30_1700_during ]], $
-    [[ c30_1700_after ]], $
-    [[ m73_1700_before ]], $
-    [[ m73_1700_during ]], $
-    [[ m73_1700_after ]], $
-    [[ x22_1700_before ]], $
-    [[ x22_1700_during ]], $
-    [[ x22_1700_after ]] $
-]
-help, aia1700maps
-
-
-;- test for potential issues with computing log of power maps
-;print, min(aia1600maps)
-
-;locs = where(aia1600maps le 0.0)
-;locs = where(aia1600maps LT 0.0)
-;help, locs
-;- Lots of pixel values = 0.0 in powermaps, but never LESS than 0.
-
-
-print, max(aia1600maps), format=format
-print, max(aia1700maps), format=format
-
-print, min(aia1600maps), format=format
-print, min(aia1700maps), format=format
-;-  All values now GT 0.0   (14:07)
-
-
-;--------------------------------------------------------
-
-
-;imdata = aia1600maps
-imdata = alog10(aia1600maps)
-;imdata = aia1600maps^-1
-;
-
-
-dw
-resolve_routine, 'image3', /is_function
-im = IMAGE3( $
-    imdata, $
-    cols=3, rows=3, $
-    axis_style=0, $
-    rgb_table=AIA_GCT(wave='1600'), $
+win = window( dimensions=[wx,wy]*dpi, buffer=buffer )
+xdata = findgen(20)
+ydata = sqrt(xdata)
+plt = PLOT2( $
+    xdata, ydata, $
+    /current, $
+    xticklen=0.15/wy, $
+    yticklen=0.15/wx, $
+    color='pink', $
+    symbol='Circle', $
+    ;sym_size=0.5, $
     buffer=buffer $
 )
+
+ax = plt.axes
+print, ax[0].ticklen  --> 0.067
+print, ax[1].ticklen  --> 0.024
 ;
-save2, 'aia1600maps_multiflare'
-
-
-;- axis_style test (sole purpose was to add comment to 'image2.pro'
-;-   specifying which value of axis_sytle dw is default.
-;-  Then became curious as to what default value is for PLOT.
-;plt = plot(indgen(10), buffer=buffer, axis_style=0)
-plt = plot(indgen(10), buffer=buffer)
-help, plt
-;print, plt.axis_style
-;
-save2, 'test'
-
-;--------------------------------------------------------
+print, ax[0].ticklen*wy
+print, ax[1].ticklen*wx
+;-  both ~0.2 for 8x3 inch window
+;-  both ~0.1 for 4x1.5 inch window...
 
 
 
-;+
-;- Image power maps (final)
-;-
+save2, 'test2'
 
+;-------------------------------------------------------------------
 
-;cc = 0
-cc = 1
-;
-;imdata = alog10(aia1600maps)
-imdata = alog10(aia1700maps)
-;
-dw
-resolve_routine, 'image3', /is_function
-im = IMAGE3( $
+imdata = aia1600maps[*,*,4]
+
+nbins = 1000
+result = HISTOGRAM( $
     imdata, $
-    cols=3, rows=3, $
-    axis_style=0, $
-    rgb_table=AIA_GCT(wave=A[cc].channel), $
+    locations=xdata, $
+    nbins=nbins, $
+    min=0.0, $
+    omax=omax, $
+    omin=omin $
+)
+
+print, omin
+print, omax
+;
+
+;
+ind = [nbins/2 : nbins-1]
+print, ind[0]
+print, ind[-1]
+;
+;print, (where(xdata gt 1e4))[0]
+
+
+
+ind = [200:nbins-1]
+;
+wx = 8.0
+wy = 8.0
+dw
+win = window( dimensions=[wx,wy]*dpi, buffer=buffer )
+resolve_routine, 'plot2', /is_function
+plt = plot2( $
+    xdata, result, $
+    ;xdata[ind], result[ind], $
+    /current, $
+    stairstep=1, $
+    ;xlog=1, $
+    ylog=1, $
+    ;xmajor=
+    ;yrange=[0.1, 10^(ceil(alog10(max(result)))) ], $
+    ;yrange=[0,10], $
+    ;min_value=0, $
+    xticklen=(0.10/wy), $
+    yticklen=(0.10/wx), $
+    title='C3.0 pre-flare ' + bda_time[0,0] + '-' + bda_time[1,0], $
+        ;- [] need better multiflare structure setup for this!
+    ytitle='# pixels', $
+    xtitle='3-minute power', $
     buffer=buffer $
 )
+save2, 'histogram'
+
 ;
-filename = 'aia' + A[cc].channel + 'maps_multiflare'
-print, filename
 ;
-save2, filename
+print, plt.xticklen
+print, plt.yticklen
+;
+print, plt.xticklen*wy
+print, plt.yticklen*wx
+
+
+;- Eventually... one histogram for each BDA power map; 
+;-   same layout as figure from 2020-07-10.pdf weekly summary.
+
+
+;===============================================================================
+
+
+
+;- back to power maps
+
+
+
 
 
 end

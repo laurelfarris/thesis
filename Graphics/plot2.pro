@@ -83,7 +83,7 @@ function plot2, xinput, yinput, $
         ythick = 0.5, $
         xtickdir = 0, $
         ytickdir = 0, $
-        ;xticklen = 0.02, $  --> set up ticklen in routine that calls this
+        ;xticklen = 0.02, $   ; --> caller assigns value using window dimensions.
         ;yticklen = 0.02, $
         xsubticklen = 0.5, $
         ysubticklen = 0.5, $
