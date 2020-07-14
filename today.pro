@@ -102,6 +102,7 @@ save2, 'test2'
 
 ;-------------------------------------------------------------------
 
+
 imdata = aia1600maps[*,*,4]
 
 nbins = 1000
@@ -164,7 +165,7 @@ print, plt.xticklen*wy
 print, plt.yticklen*wx
 
 
-;- Eventually... one histogram for each BDA power map; 
+;- Eventually... one histogram for each BDA power map;
 ;-   same layout as figure from 2020-07-10.pdf weekly summary.
 
 
@@ -172,10 +173,116 @@ print, plt.yticklen*wx
 
 
 
-;- back to power maps
+
+;----
+;- Compute Powermap mask
+;-   • edit @parameters
+;-   • restore structure from .sav file for whatever flare uncommented in @params
+;-   • use data in structure to compute mask (one for each channel)
+;-   • restore 'BDAmaps.sav' and use zind to extract BDA masks
+;-   • save mask variable in similar fashion as done for BDAmaps, zind/time, etc.
+;-
+;-
 
 
 
+buffer=1
+dz = 64
+threshold=10000
+;
+@parameters
+;
+
+
+;- restore BDA maps along with zind/time --> need these ind to extract
+;-   the correct mask to multiply by aia1[6|7]00map
+restore, 'BDAmaps.sav'
+
+restore, 'multiflare_structures_C30.sav'
+restore, 'multiflare_structures_X22.sav'
+restore, 'multiflare_structures_M73.sav'
+
+
+
+;+
+;- Start here:
+;-
+
+;
+sz = size(CCC.map)
+print, sz
+;sz = size(MMM.map)
+;print, sz
+;sz = size(XXX.map)
+;print, sz
+
+
+map_mask = fltarr(sz)
+resolve_routine, 'powermap_mask', /either
+for cc = 0, 1 do begin
+    map_mask[*,*,*,cc] = POWERMAP_MASK( $
+        CCC[cc].data, $
+;        MMM[cc].data, $
+;        XXX[cc].data, $
+        dz=dz, $
+        ;exptime=A[cc].exptime, $
+        threshold=threshold $
+    )
+endfor
+; --> returns FLOAT [500,330,686,2]
+
+help, map_mask[ *, *, zind[*,0], * ]
+
+
+
+
+ccc_mask = [ $
+    [[ map_mask[ *,*,zind[0,0] ] ]], $
+    [[ map_mask[ *,*,zind[1,0] ] ]], $
+    [[ map_mask[ *,*,zind[2,0] ] ]] $
+]
+undefine, map_mask
+
+;mmm_mask = ...
+;undefine, map_mask
+
+;xxx_mask = ...
+;undefine, map_mask
+
+;- FINAL (should have dims = aia1600maps
+mask = [ [[ ccc_mask ]], [[ mmm_mask ]], [[ xxx_mask ]] ]
+
+;+
+;- Image power maps again (copy code from 2020-07-08.pro)
+;-   this time scaled to common min/max range in 3-minute power, and/or
+;-   multiplied by saturation mask to set some pixel values = 0.
+;-
+
+
+
+imdata = alog10(aia1600maps)
+;imdata = alog10(aia1700maps)
+
+
+dw
+resolve_routine, 'image3', /is_function
+im = IMAGE3( $
+    imdata, $
+    cols=3, rows=3, $
+    axis_style=0, $
+    rgb_table=AIA_GCT(wave='1600'), $
+    buffer=buffer $
+)
+;
+
+
+
+save2, 'aia1600maps_multiflare'
+;save2, 'aia1700maps_multiflare'
+
+;----
+;-
+;-
 
 
 end
