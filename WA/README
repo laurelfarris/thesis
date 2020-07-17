@@ -9,10 +9,10 @@ NOTE: I did not write most of the codes in this directory
 Mine:
   • wa.pro & wa2.pro
      (technically not even wavelet analysis... compute a "windowed Fourier transform")
-  • filter.pro
-    ° current, updated version
-  • filter_OLD_20200515.pro
-    ° old version, copied to preserve potentially useful code, comments, and date
+  • filter.pro (subroutine; current version)
+    ° "inverseTransform" --> returned by function
+  • filter_OLD_20200515.pro (old version)
+    ° Made copy with "_OLD_yyyymmdd" appended to preserve potentially useful code, comments, and date
   • my_wavelet.pro (calls sdbwave)
   • sdbwave2.pro (calls sdbwave)
         NOTE:

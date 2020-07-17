@@ -100,7 +100,13 @@ print, ax[1].ticklen*wx
 
 save2, 'test2'
 
-;-------------------------------------------------------------------
+
+;===============================================================================
+
+
+;+
+;- Histogram
+;-
 
 
 imdata = aia1600maps[*,*,4]
@@ -172,6 +178,9 @@ print, plt.yticklen*wx
 ;===============================================================================
 
 
+;+
+;- Power maps ...  WITH mask and scaling
+;-
 
 
 ;----
@@ -192,15 +201,14 @@ threshold=10000
 ;
 @parameters
 ;
-
-
+;
 ;- restore BDA maps along with zind/time --> need these ind to extract
 ;-   the correct mask to multiply by aia1[6|7]00map
-restore, 'BDAmaps.sav'
-
-restore, 'multiflare_structures_C30.sav'
-restore, 'multiflare_structures_X22.sav'
-restore, 'multiflare_structures_M73.sav'
+restore, '../BDAmaps.sav'
+;
+restore, '../multiflare_structures_C30.sav'
+restore, '../multiflare_structures_X22.sav'
+restore, '../multiflare_structures_M73.sav'
 
 
 
@@ -209,13 +217,15 @@ restore, 'multiflare_structures_M73.sav'
 ;-
 
 ;
-sz = size(CCC.map)
-print, sz
-;sz = size(MMM.map)
-;print, sz
-;sz = size(XXX.map)
-;print, sz
+;print, size( CCC.map, /dimensions )
+;print, size( MMM.map, /dimensions )
+;print, size( XXX.map, /dimensions )
+;- --> All have the same dimensions
 
+
+sz = size(CCC.map, /dimensions)
+
+;--
 
 map_mask = fltarr(sz)
 resolve_routine, 'powermap_mask', /either
@@ -229,28 +239,83 @@ for cc = 0, 1 do begin
         threshold=threshold $
     )
 endfor
+help, map_mask
 ; --> returns FLOAT [500,330,686,2]
 
-help, map_mask[ *, *, zind[*,0], * ]
+
+
+;---
+;- Replaced lines from 2020-07-09.pro with more concise code to compute masks for each flare
+;-   and extract 3 per flare, per channel, at BDA indices (new to today)
+;-  Still painfully hardcoded...
+
+
+;--
+for cc = 0, 1 do begin
+    map_mask[*,*,*,cc] = POWERMAP_MASK( CCC[cc].data, dz=dz, threshold=threshold )
+endfor
+;
+print, bda_zind[*,0]
+print, bda_time[*,0]
+help, map_mask[ *, *, bda_zind[*,0], * ]
+ccc_mask = map_mask[ *, *, bda_zind[*,0], * ]
 
 
 
+;--
+for cc = 0, 1 do begin
+    map_mask[*,*,*,cc] = POWERMAP_MASK( MMM[cc].data, dz=dz, threshold=threshold )
+endfor
+;
+print, bda_zind[*,1]
+print, bda_time[*,1]
+help, map_mask[ *, *, bda_zind[*,1], * ]
+mmm_mask = map_mask[ *, *, bda_zind[*,1], * ]
 
-ccc_mask = [ $
-    [[ map_mask[ *,*,zind[0,0] ] ]], $
-    [[ map_mask[ *,*,zind[1,0] ] ]], $
-    [[ map_mask[ *,*,zind[2,0] ] ]] $
-]
+
+
+;--
+for cc = 0, 1 do begin
+    map_mask[*,*,*,cc] = POWERMAP_MASK( xxx[cc].data, dz=dz, threshold=threshold )
+endfor
+;
+print, bda_zind[*,2]
+print, bda_time[*,2]
+help, map_mask[ *, *, bda_zind[*,2], * ]
+xxx_mask = map_mask[ *, *, bda_zind[*,2], * ]
+
+help, ccc_mask
+help, mmm_mask
+help, xxx_mask
+
+
+
 undefine, map_mask
-
-;mmm_mask = ...
-;undefine, map_mask
-
-;xxx_mask = ...
-;undefine, map_mask
-
+;
 ;- FINAL (should have dims = aia1600maps
 mask = [ [[ ccc_mask ]], [[ mmm_mask ]], [[ xxx_mask ]] ]
+help, mask
+;-  -->  500, 330, 9, 2
+
+
+;+
+;- --> IMAGE MASKS before multiplying by Power maps!!
+;cc = 0
+cc = 1
+imdata = mask[ *,*,*,cc ]
+resolve_routine, 'image3', /is_function
+dw
+im = IMAGE3( $
+    mask[*,*,*,cc], cols=3, rows=3, axis_style=0, max_value=1, min_value=0, buffer=buffer $
+)
+;
+filename = 'test_masks_' + CCC[cc].channel
+print, filename
+;
+save2, filename
+
+;------------
+
 
 ;+
 ;- Image power maps again (copy code from 2020-07-08.pro)
@@ -258,11 +323,37 @@ mask = [ [[ ccc_mask ]], [[ mmm_mask ]], [[ xxx_mask ]] ]
 ;-   multiplied by saturation mask to set some pixel values = 0.
 ;-
 
+help, aia1600maps
+help, mask
+
+;+
+;- compare max power before and after multiplying by saturation mask.
+;-
+print, max( aia1600maps[*,*,7])
+print, max( mask[*,*,7,0] * aia1600maps[*,*,7] )
+;
+print, (max( aia1600maps[*,*,1])) / (max( mask[*,*,1,0] * aia1600maps[*,*,1] ))
+print, (max( aia1600maps[*,*,4])) / (max( mask[*,*,4,0] * aia1600maps[*,*,4] ))
+print, (max( aia1600maps[*,*,7])) / (max( mask[*,*,7,0] * aia1600maps[*,*,7] ))
+;
+;print, min( aia1600maps[*,*,7])
+;print, min( mask[*,*,7,0] * aia1600maps[*,*,7] )
+;-
+;-
+
+
+;+
+;- For next time (7/15/2020 or later):
+;-   Show images before AND after multiplying by saturation mask, and compare.
+;-   Maybe also compare with and without min_value and max_value.
+;-
 
 
 imdata = alog10(aia1600maps)
 ;imdata = alog10(aia1700maps)
 
+min_value = min(imdata)
+max_value = max(imdata)
 
 dw
 resolve_routine, 'image3', /is_function
@@ -270,11 +361,12 @@ im = IMAGE3( $
     imdata, $
     cols=3, rows=3, $
     axis_style=0, $
-    rgb_table=AIA_GCT(wave='1600'), $
+    min_value=min_value, $
+    max_value=max_value, $
+    rgb_table=AIA_GCT(wave=CCC[cc].channel), $
     buffer=buffer $
 )
 ;
-
 
 
 save2, 'aia1600maps_multiflare'
