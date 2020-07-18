@@ -1,4 +1,15 @@
-;; Last modified:   24 April 2018 16:19:09
+;-
+;- LAST MODIFIED:
+;-   18 July 2020
+;-
+;- CREATED:
+;-   24 April 2018 16:19:09
+;-
+;-
+;- main procedure HIST (the own following test_hist)
+;- calls IDL function HISTOGRAM, which returns data to use for plotting,
+;- but doesn't create any graphics itself.
+;-
 
 
 
@@ -29,25 +40,25 @@ pro HIST, data, _EXTRA=e
 
     ; if using nbins, this will = n_elements(result)
 
-    result = histogram( data, $
+    result = HISTOGRAM( $
+        data, $
         ;binsize = binsize, $
         nbins = nbins, $
         locations = locations, $
-        _EXTRA = e )
-
+        _EXTRA = e $
+    )
 
 
     wx = 5.0
     wy = wx
-
     dw
-    win = window( dimensions=[wx,wy]*dpi, /buffer )
+    win = window( dimensions=[wx,wy]*dpi, buffer=buffer )
 
     plt = objarr(1)
 
     ii = 0
     ;for ii = 0, n-1 do begin
-    
+
         plt[ii] = plot2( $
             locations, result, $
             /current, $
@@ -67,6 +78,31 @@ pro HIST, data, _EXTRA=e
 end
 
 test = aia1600map[*,*,50]
-hist, test
+HIST, test
+
+
+;-------------------------------------------------------------------------------
+
+
+;+
+;- Example code copied from Harris geospatial ref pages for IDL --> PLOTHIST
+;-   (18 July 2020)
+;-
+
+
+;-
+;-  Create a vector of random 1000 values derived from a
+;-    Gaussian of mean 0, and sigma of 1.
+;-  Plot the histogram of these values with a
+;-    binsize of 0.1, and use a box plotting style.
+;-
+a = randomn(seed,1000)
+PLOTHIST, a, bin = 0.1, /boxplot
+
+;-
+;- As before, but fill the plot with diagonal lines at a 45 degree angle
+;-
+PLOTHIST, a, bin=0.1, /fill, /fline, forient=45
+
 
 end
