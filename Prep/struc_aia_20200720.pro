@@ -130,6 +130,14 @@ function STRUC_AIA, index, cube, $
 
     sz = size( cube, /dimensions )
 
+    ;x1 = 2150
+    ;y1 = 1485
+    ; NOTE: Hard coded coords of lower left corner;
+    ;   can't automatically generate these values unless I somehow
+    ;    save them when aligning or prepping the data.
+    ;- UPDATE: Run @parameters to read in all values specific to desired flare
+    ;-  (make sure the proper lines are commented first).
+
     ; X/Y coordinates of AR, converted from pixels to arcseconds
     X = ( (indgen(sz[0]) + x1) - index[0].crpix1 ) * index[0].cdelt1
     Y = ( (indgen(sz[1]) + y1) - index[0].crpix2 ) * index[0].cdelt2
@@ -158,7 +166,7 @@ function STRUC_AIA, index, cube, $
         channel: channel, $
         cadence: cadence, $
         exptime: exptime, $
-        ;data: float(cube), $
+        data: float(cube), $
         X: X, $
         Y: Y, $
         flux: flux, $
@@ -173,26 +181,6 @@ function STRUC_AIA, index, cube, $
 end
 
 
-;+
-;- 21 July 2020
-;-   [] omit large arrays from structures (data, map),
-;-        ... simply commented the line assigned tag/value in final structure
-;-          definition before returning it to ML... should do something better
-;------    eventually.
-;-   [] ADD variables defined in parameters.pro
-;-   [] define all three flare structures at the same time,
-;-   [] create one big multi-flare structure with 3 tags (one for each flare),
-;-       whose values are the structure(s), for that flare
-;-       (2 structures per falre at the moment: one for 1600, one for 1700)...
-;-     ==>> [] what about when I start including HMI data???
-;-   [] SAVE final structure(s) to .sav file(s)
-;-       --> no longer necessary to run STRUC_AIA unless to change someting
-;-           in the structure (hasn't been done in quite a while....)
-;-
-
-
-;- IDL> @parameters
-
 aia1600 = STRUC_AIA( aia1600index, aia1600data, cadence=24., instr='aia', channel='1600' )
 aia1700 = STRUC_AIA( aia1700index, aia1700data, cadence=24., instr='aia', channel='1700' )
 A = [ aia1600, aia1700 ]
@@ -205,20 +193,5 @@ undefine, aia1700data
 A[0].color = 'blue'
 A[1].color = 'red'
 
-stop
-
-help, /memory
-
-help, A[0]
-help, A[1]
-
-
-stop
-
-
-
-
-
-multiflare_struc = { s1:s1, s2:s2, s3:s3 }
 
 end
