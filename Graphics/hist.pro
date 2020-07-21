@@ -77,8 +77,8 @@ pro HIST, data, _EXTRA=e
 
 end
 
-test = aia1600map[*,*,50]
-HIST, test
+;test = aia1600map[*,*,50]
+;HIST, test
 
 
 ;-------------------------------------------------------------------------------
@@ -88,21 +88,28 @@ HIST, test
 ;- Example code copied from Harris geospatial ref pages for IDL --> PLOTHIST
 ;-   (18 July 2020)
 ;-
-
-
 ;-
-;-  Create a vector of random 1000 values derived from a
+;-  "Create a vector of random 1000 values derived from a
 ;-    Gaussian of mean 0, and sigma of 1.
 ;-  Plot the histogram of these values with a
-;-    binsize of 0.1, and use a box plotting style.
+;-    binsize of 0.1, and use a box plotting style."
 ;-
 a = randomn(seed,1000)
 PLOTHIST, a, bin = 0.1, /boxplot
-
 ;-
-;- As before, but fill the plot with diagonal lines at a 45 degree angle
+;-
+;- "As before, but fill the plot with diagonal lines at a 45 degree angle"
 ;-
 PLOTHIST, a, bin=0.1, /fill, /fline, forient=45
+;-
+;-
+;- ... plothist may not be a function like I'm used to, but
+;-  damed if that plot window didn't pop up on my screen almost
+;-  INSTANTANEOUSLY after IDL> .run hist (where "hist" = ML routine above,
+;-    none of my routines defined at top yet).
+;-
+;-  ... crap.
+;-
 
 
 end
