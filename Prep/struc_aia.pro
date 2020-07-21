@@ -158,7 +158,7 @@ function STRUC_AIA, index, cube, $
         channel: channel, $
         cadence: cadence, $
         exptime: exptime, $
-        ;data: float(cube), $
+        data: float(cube), $
         X: X, $
         Y: Y, $
         flux: flux, $
@@ -195,6 +195,8 @@ end
 
 aia1600 = STRUC_AIA( aia1600index, aia1600data, cadence=24., instr='aia', channel='1600' )
 aia1700 = STRUC_AIA( aia1700index, aia1700data, cadence=24., instr='aia', channel='1700' )
+
+
 A = [ aia1600, aia1700 ]
 undefine, aia1600
 undefine, aia1600index
@@ -205,20 +207,26 @@ undefine, aia1700data
 A[0].color = 'blue'
 A[1].color = 'red'
 
+stop ;---------------------------------------------------------
+
+
+;help, /memory
+    ;-  No idea how to interpret the output from this...
+
+print, A.date
+
 stop
 
-help, /memory
-
-help, A[0]
-help, A[1]
-
+;s1 = A
+;s2 = A
+s3 = A
 
 stop
-
-
-
-
 
 multiflare_struc = { s1:s1, s2:s2, s3:s3 }
+
+help, multiflare_struc
+
+save, multiflare_struc, filename='multiflare_struc.sav'
 
 end
