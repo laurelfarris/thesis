@@ -1,28 +1,37 @@
 ;Copied from clipboard
 
 
-wx = 8.0
-wy = 8.0
-dw
-foreach zz, zind, ii do begin
-    imdata = alog10(A[cc].map[*,*,zz])
-    ;help, imdata
-    ;
-    win = window( dimensions=[wx,wy]*dpi, buffer=buffer)
-    ;
-    im = IMAGE2( $
-        imdata, $
-        /current, $
-        margin=0, $ 
-        layout=[1,1,1], $
-        rgb_table=A[cc].ct, $
-        title=A[cc].time[zz], $
-        buffer=buffer $
+format='(e0.2)'
+;
+for ii = 0, 8 do begin
+    ;print, n_elements(where(aia1600mask[*,*,ii] eq 0.0))
+    print, max(aia1700maps[*,*,ii]), format=format
+endfor
+;
+;imdata = aia1600maps * aia1600mask
+;filename = 'aia1600_BDA_histogram'
+imdata = aia1700maps * aia1700mask
+filename = 'aia1700_BDA_histogram'
+;
+nbins = 500
+ydata = LONARR(nbins, 9)
+xdata = LONARR(nbins, 9)
+;help, ydata[0,0]
+;
+;
+for ii = 0, 8 do begin
+    ydata[*,ii] = HISTOGRAM( $
+        ;imdata, $
+        imdata[*,*,ii], $
+        locations=locations, $
+        nbins=nbins, $
+        binsize=binsize, $
+        ;min=0.0, $
+        omax=omax, $
+        omin=omin $
     )
-    ;
-    save2, 'map' + strtrim(ii,1)
-    ;
-endforeach
+    xdata[*,ii] = locations
+endfor
 
 end
 
