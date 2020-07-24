@@ -64,19 +64,9 @@ flare_num = 0 ; X22
 ;----------------------------------------------------------
 
 
-
-restore, 'multiflare_struc.sav'
-S = multiflare_struc
-undefine, multiflare_struc
-help, S
-
-
-stop
-
-;- Add tag/value to existing structure:
-;-   struc = CREATE_STRUCT( struc, 'new_tag', new_value )
-
-S = create_struct( S, 'AR', '11158' )
+;AR
+;AR
+;AR
 
 AR = [ '11158', '11936', '12036' ]
 class = ['X22', 'C30', 'M73']
