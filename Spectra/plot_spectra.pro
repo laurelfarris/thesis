@@ -55,14 +55,7 @@ function PLOT_SPECTRA, frequency, power, $
 ;
     ;- Call general, single-panel plotting routine
     resolve_routine, 'batch_plot', /either
-    ;resolve_routine, 'batch_plot_2', /either
-        ;-
-        ;- 06/19/2020:
-        ;-   Changed from batch_plot to batch_plot_2.
-        ;-   Changed back due to errors when creating/accessing axes in version 2.
-        ;-
     plt = BATCH_PLOT( $
-    ;plt = BATCH_PLOT_2( $
         frequency, power, $
         xtitle = 'frequency (Hz)', $
         ytitle = 'power', $

@@ -69,12 +69,10 @@ function PLOT_PT_2, power, dz, time, $
     ;-   array of values for the axis...
     ;-
 
-    ;resolve_routine, 'batch_plot', /is_function
     resolve_routine, 'batch_plot_2', /is_function
 
     dw
 
-    ;plt = BATCH_PLOT( $
     plt = BATCH_PLOT_2( $
         xdata, power, $
         ;xrange=[0,748], $

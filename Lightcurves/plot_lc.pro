@@ -112,8 +112,6 @@ ytitle=A.name + ' (DN s$^{-1}$)'
 
 dw
 resolve_routine, 'batch_plot_2', /either
-;- What is difference between batch_plot and batch_plot_2 ??
-;-  [] ALWAYS leave comments explaining duplicate codes!
 plt = BATCH_PLOT_2(  $
     xdata, ydata, $
     ystyle=1, $

@@ -34,6 +34,16 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
 function WRAP_BATCH_PLOT, $
     xdata, ydata, $
     wx = wx, $
@@ -87,24 +97,23 @@ function WRAP_BATCH_PLOT, $
 ;    if not keyword_set(ytitle) then ytitle = " "
 ;    if not keyword_set(name) then name = strarr(sz[1])
 
-
-    ;symbol = [ 'Circle', 'Square' ]
-
+    ;s;ymbol = [ 'Circle', 'Square' ]
 
     plt = objarr(sz[1])
 
-
     for ii = 0, sz[1]-1 do begin
 
+        ;- batch_plot_2 modification: axis_style=1 if ii=0 (i.e. first iteration), and
+        ;-   axis_style=4 if ii>0 (no axes, keep margins so multiple graphics are aligned properly).
 
         plt[ii] = PLOT2( $
             xdata[*,ii], ydata[*,ii], $
-            /current, $
-            /device, $
+            /current, /device, $
             overplot = ii<1, $
             position = position, $
             ;xtitle = xtitle, $
             ;ytitle = ytitle, $
+            ;axis_style=axis_style, $  --> set in batch_plot_2
             color = color[ii], $
             symbol = symbol[ii], $
             name = name[ii], $
@@ -118,7 +127,6 @@ function WRAP_BATCH_PLOT, $
             xticklen=0.025, $
             yticklen=0.010, $
             _EXTRA = e )
-
     endfor
 
 
@@ -134,16 +142,15 @@ function WRAP_BATCH_PLOT, $
     ;    ax[2].minor = 4
     ;    ax[2].showtext = 1
 
+    ;- args, modified versions are passed back to caller
     xdata = reform(xdata)
     ydata = reform(ydata)
 
     return, plt
 
-
     ;- Need to do all overplots of flare lines, periods of interest, etc.
     ;- before making legend... unless there's a way to add targts to
     ;- an existing legend.
-
 end
 
 
@@ -179,6 +186,7 @@ function BATCH_PLOT, $
         right = 1.10, $
         bottom = 0.5, $
         top = 0.2, $
+        ;top = 0.3, $  --> batch_plot_2 value ... not a fundamental change.
         buffer = 1, $
         ;overplot = 0, $
         name = name, $
