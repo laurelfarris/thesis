@@ -1,4 +1,4 @@
-+
+;+
 ;- LAST MODIFIED:
 ;-   28 July 2020
 ;-
@@ -97,7 +97,6 @@ restore, '../BDAmaps.sav'
 ;-   BDA_ZIND        LONG    = Array[ 3, 3 ]
 ;-   BDA_TIME      STRING    = Array[ 3, 3 ]
 
-help, mask
 help, map
 
 map = fltarr( [ size(aia1600maps, /dimensions), 2 ] )
@@ -115,6 +114,7 @@ map[*,*,*,1] = aia1700maps
 restore, '../bda_masks.sav'
 ;-   MASK    FLOAT    = Array[ 500, 330, 9, 2 ]
 
+help, mask
 
 ;-----
 ;- MAP and MASK both FLOAT = Array[500, 330, 9, 2]
@@ -123,18 +123,16 @@ restore, '../bda_masks.sav'
 ;-
 
 
-STOP
-
-;=================================================================================
-
 
 ;- Define data array to represent in histogram plots:
 imdata = map * mask
 ;-  IMDATA       FLOAT   = Array[500, 330, 9, 2]
 ;
 sz = size(imdata, /dimensions)
-help, sz
 
+STOP
+
+;=================================================================================
 
 
 ;- Edit this code block to replace channel-specific vars with 4-dimension arrays... later.
@@ -158,84 +156,33 @@ for ii = 0, 8 do print, max(imdata[*,*,ii,1]), format=format
 ;
 
 
-cc = 0
-;cc = 1
 ;
-fname = 'aia' + multiflare_struc.(0)[cc].channel  + '_hist'
-print, fname
-
-fname = 'aia' + multiflare_struc.(0).channel  + '_hist'
-
-help, fname
-
-help, multiflare_struc.(0)[0]
-help, multiflare_struc.(0)[1]
-
 ;---
-
-;-
 ;- Compute histogram data
 ;-
-
-
+;
 ;binsize = 0.1
 nbins = 50
 ;
 ydata = LONARR(nbins, sz[2], sz[3])
 xdata = LONARR(nbins, sz[2], sz[3])
 ;
-;min = 0.0
-;min = 1.e-5
-;min = 10.0
-;
-;max = 1.e3
-;max = 1.e4
-;max = 1.e5
-;
-
-;- AIA 1600:
-;min = 0.0
-;min = 4.45e-3
-min = 1.e2
-;
-;max = 2.52e3
-;max = 1.e5
-max = 1.e4
-
-;- AIA 1700:
-;min = 2.88e-1
-;max = 2.27e4
-
-;--------
-
-
-;-
-;- 8/21/2020
-;-
+;-- Set values for min/max kws for HISTOGRAM function
+;-    [] ==>> see prev. version of HIST code for other values of min and max
 min = 0.1
-max = max(imdata)
-;max = 1.e5
-;max = 1.e4
-;max = 1.e3
-;max = 1.e2
-;max = 1.e1
-
-;-
-;- Array of min/max values for both channels (min[0]=min for 1600, min[1]=min for 1700, ...)
-;-   only needed if the 3-minut power varies too much between channels to scale both histograms
-;-   to the same axes.
-;min = [ 1.e2 , ]
-;max = [ 1.e4 , ]
-
-print, min(imdata)
-print, n_elements( where( imdata lt 0.1 ) )
-
+;max = max(imdata)
+max = 3.5e5
+;-    ("min. max value" on plots -- 08 September 2020)
+;
+;print, min(imdata)
+;print, n_elements( where( imdata lt 0.1 ) )
+;
 for cc = 0, 1 do begin
     for ii = 0, sz[2]-1 do begin
         ydata[*,ii,cc] = HISTOGRAM( $
             imdata[*,*,ii,cc], $
-            min=min, $
-            max=max, $
+            ;min=min, $
+            ;max=max, $
             omin=omin, $
             omax=omax, $
             nbins=nbins, $
@@ -245,12 +192,10 @@ for cc = 0, 1 do begin
         xdata[*,ii] = locations
     endfor
 endfor
-
-
-print, min(ydata[*,*,0])
-print, min(ydata[*,*,1])
-
-
+;
+;- 08 September 2020 -- split dimensions from 9 to 3x3 to separate flares
+xdata = reform(xdata, 50, 3, 3, 2)
+ydata = reform(ydata, 50, 3, 3, 2)
 ;
 ;ind = [1:499]
 ;- 18 August 2020 -- set min and max kws in call to HISTOGRAM function, which should
@@ -258,79 +203,73 @@ print, min(ydata[*,*,1])
 ;
 
 
-
-
+;-
 ;---
 ;- Plot histgram
 ;-
 ;
+;help, multiflare_struc.(0)[0]
+;help, multiflare_struc.(0)[1]
+;
+fname = 'aia' + multiflare_struc.(0).channel  + '_hist'
+;print, fname
+;
+;
 ylog=1
-xlog=0
+xlog=1
 ;
 xtitle='3-min power'
 if xlog then xtitle = 'log ' + xtitle
 ytitle='# pixels'
 if ylog then ytitle = 'log ' + ytitle
 ;
-name = [ $
-    'C3.0 pre-flare ' + bda_time[0], $
-    'C3.0 flare '      + bda_time[1], $
-    'C3.0 post-flare ' + bda_time[2], $
-    'M7.3 pre-flare ' + bda_time[3], $
-    'M7.3 flare '      + bda_time[4], $
-    'M7.3 post-flare ' + bda_time[5], $
-    'X2.2 pre-flare ' + bda_time[6], $
-    'X2.2 flare '      + bda_time[7], $
-    'X2.2 post-flare ' + bda_time[8] $
-]
 ;
-color = [ $
-    'black', 'black', 'black', $
-    'blue', 'blue', 'blue', $
-    'red', 'red', 'red' $
-]
+title = ['pre-flare', 'flare', 'post-flare']
+name = ['C3.0', 'M7.3', 'X2.2']
+color = ['deep sky blue', 'green', 'dark orange', '']
 ;
-wy = 8.5
 wx = 8.5
-dw
-win = window( dimensions=[wx,wy]*dpi, buffer=buffer )
-plt = objarr(sz[2])
+wy = 3.0
 resolve_routine, 'plot2', /is_function
-for ii = 0, sz[2]-1 do begin
-    plt[ii] = plot2( $
-        xdata[*,ii], $
-        ydata[*,ii], $
-        /current, $
-        layout=[3,3,ii+1], $
-        margin=0.12, $
-        overplot=0, $
-        histogram=1, $
-        xlog=xlog, $
-        ylog=ylog, $
-        xtickinterval=2e3, $
-        name=name[ii], $
-        font_size=9, $
-        xtickfont_size=9, $
-        ytickfont_size=9, $
-        title=name[ii], $
-        xtitle=xtitle, $
-        ytitle=ytitle, $
-        color=color[ii], $
-        ;xmajor=4, $
-        xtickunits="scientific", $
-        ytickunits="scientific", $
-        ;yrange=[0.1, 10^(ceil(alog10(max(result)))) ], $
-        xticklen=(0.20/wy), $
-        yticklen=(0.20/wx), $
-        buffer=buffer $
-    )
+;
+for cc = 0, 1 do begin
+    dw
+    win = window( dimensions=[wx,wy]*dpi, buffer=buffer )
+    plt = objarr(3,3)
+    for tt = 0, 2 do begin
+        for ff = 0, 2 do begin
+            plt[tt,ff] = plot2( $
+                xdata[*,tt,ff,cc], $
+                ydata[*,tt,ff,cc], $
+                /current, $
+                layout=[3,1,tt+1], $
+                overplot=ff<1, $
+                margin=0.18, $
+                histogram=1, $
+                xlog=xlog, $
+                ylog=ylog, $
+                ;yrange=[0.1, 10^(ceil(alog10(max(result)))) ], $
+                ;xtickinterval=2e3, $
+                name=name[ff], $
+                color=color[ff], $
+                ;xmajor=2, $
+                xtickunits="scientific", $
+                ytickunits="scientific", $
+                ;xticklen=(0.20/wy), $
+                ;yticklen=(0.20/wx), $
+                title=title[tt], $
+                xtitle=xtitle, $
+                ytitle=ytitle, $
+                font_size=9, $
+                xtickfont_size=9, $
+                ytickfont_size=9, $
+                buffer=buffer $
+            )
+        endfor
+        leg = legend2( target = plt[tt,*], /upperright )
+    endfor
+    save2, fname[cc], /add_timestamp
+    stop
 endfor
-;
-;leg = legend2( target = plt, /upperright )
-;
-save2, fname, /add_timestamp
 
-;plot, xdata[*,4], ydata[*,4]
-
-;- oplot 3 at a time
 end

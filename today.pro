@@ -1,23 +1,26 @@
-;- 21 August 2020
+;- 08 September 2020
 
 
+flare_path = [ '../20131228/', '../20140418/', '../20110215/' ]
+format = '(e0.2)'
 
 
-help, mask
+print, '---------'
+foreach path, flare_path, ii do begin
+    restore, path + 'aia1600map.sav'
+    aia1600power = total(total(map,1),1)
+
+;    print, where( aia1600power eq max(aia1600power) )
+;    print, where( aia1600power eq min(aia1600power) )
+    print, min(aia1600power), format=format
+    print, max(aia1600power), format=format
+    dp = max(aia1600power) - min(aia1600power)
+    print, dp, format=format
+
+    print, '---------'
+
+endforeach
 
 
-im0 = mask[*,*,0]
-im1 = mask[*,*,1]
-im2 = mask[*,*,2]
-im3 = mask[*,*,3]
-;
-help, im3
-
-
-test = [ $
-    [[ im0 ]], $
-    [[ im1 ]], $
-    [[ im2 ]] $
-]
 
 end
