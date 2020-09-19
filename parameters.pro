@@ -16,8 +16,8 @@
 
 
 ;+
-;flare_num = 0 ; X22
-flare_num = 1 ; C30
+flare_num = 0 ; X22
+;flare_num = 1 ; C30
 ;flare_num = 2 ; M73
 ;-
 
