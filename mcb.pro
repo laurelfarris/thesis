@@ -1,8 +1,7 @@
 ;Copied from clipboard
 
 
-title = energy_l + '-' + energy_h + ' keV ' + date_obs
-print, title
+save, x22_1600_header, filename='x22_1600_header.sav'
 
 end
 
