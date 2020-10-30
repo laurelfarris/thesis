@@ -1,43 +1,54 @@
 ;+
-;- 21 October 2020
+;- DATES MODIFIED:
+;-   28 October 2020
 ;-
-;- Make .sav files with "during" power maps (one for each flare)
-;- and with header info for obs. time close to middle of map.
+;- ROUTINE:
+;-   today.pro
+;-
+;- EXTERNAL SUBROUTINES:
+;-
+;- PURPOSE:
+;-   Preserve everything I do: developing new code, trying IDL routines
+;-   and/or kws/args that I've never tried, test codes, etc.
+;-   Almost nothing deleted.. code that doesn't work or is improved is
+;-   commented, but left in file. Eventually copied to yyyy-mm-dd.pro,
+;-   and code that is actually useful is moved to appropriately named
+;-   subroutine, create new routine or add to existing, etc.
+;-
+;- USEAGE:
+;-   result = routine_name( arg1, arg2, kw=kw )
+;-
+;- INPUT:
+;-   arg1   e.g. input time series
+;-   arg2   e.g. time separation (cadence)
+;-
+;- KEYWORDS (optional):
+;-   kw     set <kw> to ...
+;-
+;- OUTPUT:
+;-   result     blah
+;-
+;- TO DO:
+;-   [] item 1
+;-   [] item 2
+;-   [] ...
+;-
+;- KNOWN BUGS:
+;-   Possible errors, harcoded variables, etc.
+;-
+;- AUTHOR:
+;-   Laurel Farris
+;-
+;+
 
 
 
-restore, '../BDAmaps.sav'
+;- Test SAVE routine if file exists
 
-restore, '../multiflare_struc.sav'
-
-c30_1600_powermap = aia1600maps[*,*,1]
-c30_1700_powermap = aia1700maps[*,*,1]
-m73_1600_powermap = aia1600maps[*,*,4]
-m73_1700_powermap = aia1700maps[*,*,4]
-x22_1600_powermap = aia1600maps[*,*,7]
-x22_1700_powermap = aia1700maps[*,*,7]
+var2save = 20191019
+save, var2save, filename='hubby.sav'
 
 
-
-
-read_my_fits, index, data, fls, instr='aia', channel=1600, $
-    ;ind=[200:300], $
-    nodata=1, prepped=1
-
-print, index[300].date_obs
-
-x22_1600_header = index[300]
-help, x22_1600_header
-
-save, x22_1600_powermap, filename='x22_1600_powermap.sav'
-
-save, x22_1600_header, filename='x22_1600_header.sav'
-
-;-----------------
-
-buffer = 1
-im = image(x22_1600_powermap, buffer=buffer )
-save2, 'test_powermap_sav'
 
 
 
