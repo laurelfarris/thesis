@@ -14,18 +14,19 @@
 
 pro SAVE2_PROCEDURE, $
     variables, $
+    filename=filename, $
     _EXTRA=e
 
         
     if FILE_EXIST( filename ) then begin
         print, '===================================================='
-        print, 'WARNING! File already exists! New file NOT written!'
+        print, 'WARNING! File already exists!'
         print, 'Try saving to different filename and/or path.'
         print, '===================================================='
         STOP
     endif
 
-    SAVE, variables, _EXTRA=e
+    SAVE, variables, filename=filename, _EXTRA=e
 
 
 end
