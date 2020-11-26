@@ -16,9 +16,9 @@
 
 
 ;+
-flare_num = 0 ; X22
+;flare_num = 0 ; X22
 ;flare_num = 1 ; C30
-;flare_num = 2 ; M73
+flare_num = 2 ; M73
 ;-
 
 
@@ -80,6 +80,9 @@ gstart = ['01:47:00', '12:40:00', '12:31:00']
 gpeak  = ['01:56:00', '12:47:00', '13:03:00']
 gend   = ['02:06:00', '12:59:00', '13:20:00']
 center = [ [2400,1650], [1675,1600], [2879,1713] ]
+    ;- 09 November 2020
+    ;-   center of which image? Beginning of time series? Reference image used for alignment??
+    ;-     ==>> [] COMMENT EVERYTHING!!
 dimensions = [ [500,330], [500,330], [500,330] ]
 
 

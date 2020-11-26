@@ -1,5 +1,6 @@
 ;+
 ;- 06 November 2020 (copied main code from 2020-10-21.pro)
+;- (also 09 Nov, at bottom)
 ;-
 ;- Make .sav files with "during" power maps (one for each flare)
 ;- and with header info for obs. time close to middle of map.
@@ -99,6 +100,30 @@ SAVE2_PROCEDURE, testvar, filename='testsave.sav'
 ;
 testvar2 = 'blah again'
 SAVE2_PROCEDURE, testvar2, filename='testsave.sav' 
+
+;========================================================================
+;- 09 November 2020
+;-
+
+@parameters
+help, center
+help, dimensions
+print, center
+print, dimensions
+
+
+@parameters
+print, class
+print, date
+print, 'x1 = ', FIX( float(center[0]) - (float(dimensions[0]))/2 )
+print, 'x2 = ', FIX( float(center[0]) + (float(dimensions[0]))/2 )
+print, 'y1 = ', FIX( float(center[1]) - (float(dimensions[1]))/2 )
+print, 'y2 = ', FIX( float(center[1]) + (float(dimensions[1]))/2 )
+
+
+
+
+
 
 
 end

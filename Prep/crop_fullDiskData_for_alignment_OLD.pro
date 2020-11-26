@@ -56,6 +56,11 @@
 ;-
 
 
+;-
+;- 09 November 2020
+;-   Where are variables 'center' and 'align_dimensions' defined??
+;-   This routine doesn't call @parameters, so nothing passed to CROP_DATA above...
+;-   'index' is not defined either...
 
 
 ;- § Crop to variable "cube", subset centered on AR,

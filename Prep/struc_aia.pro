@@ -115,6 +115,10 @@ function STRUC_AIA, index, cube, $
 
     resolve_routine, 'crop_data', /is_function
     cube = CROP_DATA( cube, dimensions=dimensions )
+        ;- 09 November 2020
+        ;-   NOTE: cube is aligned subset centered on AR. No need to pass kw center=[x,y] because
+        ;-     crop_data.pro uses center of input data by default, which is what we want here.
+        ;-
     ;print, max(cube)
 
     ;help, cube ; --> FLOAT [dim[0], dim[1], 600]  (AIA 1600, 2013 flare)

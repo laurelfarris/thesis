@@ -1,14 +1,13 @@
 ;Copied from clipboard
 
 
-;x22_1600_header = index[z_ind]
-x22_1700_header = index[z_ind]
-;help, x22_1600_header
-;help, x22_1700_header
-;save, x22_1600_powermap, filename='x22_1600_powermap.sav'
-;save, x22_1600_header, filename='x22_1600_header.sav'
-save, x22_1700_powermap, filename='x22_1700_powermap.sav'
-save, x22_1700_header, filename='x22_1700_header.sav'
+@parameters
+print, class
+print, date
+print, 'x1 = ', FIX( float(center[0]) - (float(dimensions[0]))/2 )
+print, 'x2 = ', FIX( float(center[0]) + (float(dimensions[0]))/2 )
+print, 'y1 = ', FIX( float(center[1]) - (float(dimensions[1]))/2 )
+print, 'y2 = ', FIX( float(center[1]) + (float(dimensions[1]))/2 )
 
 end
 
