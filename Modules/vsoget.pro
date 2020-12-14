@@ -24,9 +24,12 @@ DLpath = 'AIA/'
 ;------------
 ;- 1600
 
-tstart = '2014/04/18 10:53:00'
-tend   = '2014/04/18 10:55:00'
-
+tstart = '2013/08/30 01:30:00'
+tend   = '2013/08/30 02:30:00'
+;
+;tstart = '2014/04/18 10:53:00'
+;tend   = '2014/04/18 10:55:00'
+;
 ;tstart = '2014/04/18 12:18:00'
 ;tend   = '2014/04/18 12:20:00'
 ;
@@ -39,9 +42,12 @@ tend   = '2014/04/18 10:55:00'
 
 ;- 1700
 
-tstart = '2014/04/18 10:59:00'
-tend   = '2014/04/18 11:01:00'
-
+tstart = '2013/08/30 01:30:00'
+tend   = '2013/08/30 02:30:00'
+;
+;tstart = '2014/04/18 10:59:00'
+;tend   = '2014/04/18 11:01:00'
+;
 ;tstart = '2014/04/18 11:59:00'
 ;tend   = '2014/04/18 12:01:00'
 ;
@@ -70,7 +76,7 @@ tend   = '2014/04/18 11:01:00'
 ;dat211  = vso_search(tstart,tend, instr='aia',sample=sample,wave='211')
 ;dat304  = vso_search(tstart,tend, instr='aia',sample=sample,wave='304')
 ;dat335  = vso_search(tstart,tend, instr='aia',sample=sample,wave='335')
-;dat1600 = vso_search( tstart, tend, instr='aia', sample=sample, wave='1600')
+dat1600 = vso_search( tstart, tend, instr='aia', sample=sample, wave='1600')
 dat1700 = vso_search( tstart, tend, instr='aia', sample=sample, wave='1700')
 
 ;datHMIcont = VSO_SEARCH(tstart, tend, instr='hmi', physobs='intensity')
@@ -106,7 +112,7 @@ dir='/solarstorm/laurel07/Data/' + DLpath
 ;status211 = VSO_GET(dat211, /force, out_dir=dir)
 ;status304 = VSO_GET(dat304, /force, out_dir=dir)
 ;status335 = VSO_GET(dat335, /force, out_dir=dir)
-;status1600 = VSO_GET(dat1600, /force, out_dir=dir)
+status1600 = VSO_GET(dat1600, /force, out_dir=dir)
 status1700 = VSO_GET(dat1700, /force, out_dir=dir)
 
 ;statusHMIcont = VSO_GET(datHMIcont, /force, out_dir=dir)
