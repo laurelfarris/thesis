@@ -1,9 +1,13 @@
 ;+
-;-  MODIFIED:
+;- DATES MODIFIED:
 ;-
-;-    18 December 2020
-;-      Made copy (apply_aia_prep_20201218.pro) and condensed current version,
-;-      modified to be more general.
+;-   04 May 2020
+;-     • Improved comments at top of file
+;-     • Processing 5th and final hour of 2013-12-28 flare (04 May 2020)
+;-
+;-   22 April 2019
+;-     (did something useful I'm sure... perhaps date routine was created?)
+;-
 ;-
 ;- PURPOSE:
 ;-   General routine (ideally):
@@ -44,10 +48,9 @@
 
 buffer = 1
 
+;-- § Read fits files (downloaded, NOT prepped)
 
 @parameters
-;C8.3 2013-08-30 T~02:04:00
-
 
 ;- HMI ---
 ;instr = 'hmi'
@@ -56,18 +59,17 @@ buffer = 1
 
 ;- AIA ---
 instr = 'aia'
-channel = '1600'
-;channel = '1700'
+;channel = '304'
+;channel = '1600'
+channel = '1700'
 
-
-;-- § Read fits files (downloaded, NOT prepped)
 ;-
 ;- only need data with observation times between 14:00:00 and 14:59:59
 ;-  for the 2013-12-28 C3.0 flare ...  (04 May 2020)
 resolve_routine, 'read_my_fits', /either
 
-;- show READ_MY_FITS calling syntax
-;READ_MY_FITS, /syntax
+;- show calling syntax for read_my_fits procedure... author was so smart :)
+READ_MY_FITS, /syntax
 
 READ_MY_FITS, old_index, old_data, fls, $
     instr=instr, $
@@ -75,33 +77,35 @@ READ_MY_FITS, old_index, old_data, fls, $
     nodata=1, $
     prepped=0
 
-
-
 ;- add "ind" kw (z-dimension, effectively) for final 5 hours...
 ;-  --> Does processing data that has already been processed simply skip those files?
 ;-        Or would overlap tack on a lot of time? Don't want to leave any files out,
 ;-        so seems safe to overlap "ind" to times before 14:00 just in case.
 
 
-
+;- 08 May 2020
 print, old_index[-1].date_obs
 print, strmid(old_index[-1].date_obs,11,8)
-
-dz = 64
-z1 = (where( strmid(old_index.date_obs, 11, 5) eq '02:00' ))[0]
-z2 = z1 + dz -1
+print, where( strmid(old_index.date_obs, 11, 5) eq '14:00' )
+z1 =  (where( strmid(old_index.date_obs, 11, 5) eq '14:00' ))[0]
+z2 = n_elements(fls) - 1
 print, z1, z2
-print, old_index[z1].date_obs
-print, old_index[z2].date_obs
-
-stop
+print, old_index[z1].date_obs, old_index[z2].date_obs
 ;------
 
+;-
+;- Run READ_MY_FITS on files with z_index kw (ind) set to read final hour only
+;-   (150 observations for AIA 24-cadence channels)
+
+;final_hour_2013_flare_ind = [596:745]
+;ind = [596:745] -- > hardcoded for aia 1600 ...
 ind = [z1:z2]
 ;
 print, n_elements(ind)
 print, (n_elements(ind)*24)/60.
-;
+
+stop
+
 READ_MY_FITS, old_index, old_data, fls, $
     instr=instr, $
     channel=channel, $
@@ -113,12 +117,12 @@ help, old_index
 help, old_data
 
 
-;- Test start/end times and total number of downloaded files
+;- Test to make sure that all downloaded files were read
+;-  (and no extra files managed to sneak in)
 help, fls
+
 print, old_index[0].date_obs
 print, old_index[-1].date_obs
-
-stop
 
 
 ;-
@@ -151,15 +155,9 @@ filename = instr + strtrim(channel,1) + '_image_UNprepped'
 save2, filename
 
 
-stop
-
-
 ;-- § Run aia_prep.pro on old_index and old_data, read using read_my_fits
 
 outdir="/solarstorm/laurel07/Data/" + strupcase(instr) + "_prepped/"
-print, ""
-print, "saving prepped files to ", outdir
-
 ;-
 start_time = systime(/seconds)
 AIA_PREP, old_index, old_data, $

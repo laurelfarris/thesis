@@ -9,16 +9,46 @@
 ;-   LC, using DATAMEAN and T_OBS from headers.
 ;-
 ;-
-
-
-d_start = '2011-02-14'
-d_end   = '2011-02-16'
-ds = 'aia.lev1_euv_12s'
-key = 't_obs, wavelnth, datamean, exptime'
-cadence = '1h'
+;- 14 December 2020
+;- Examples from source code "ssw_jsoc_time2data.pro":
+;-   ssw_jsoc_time2data, $
+;-     '12:00 10-jun-2010', $
+;-     '13:45 10-jun-2010', $
+;-     index, KEY='wavelnth,exptime,img_type,t_obs,date__obs'
+;-   ssw_jsoc_time2data, $
+;-     '15-dec-2011', '17-dec-2011', $
+;-     drms, urls, /urls_only, cadence='1h', waves='171, 193, 304', /jsoc2
 ;-
-ssw_jsoc_time2data, d_start, d_end, index, ds=ds, $
-    waves=waves, key=key, cadence=cadence
+
+;M1.5 2013-08-12 T~10:21:00
+
+ssw_jsoc_time2data, $
+    ;'01:30 2011-02-15', '02:30 2011-02-15', $
+    '00:00 2013-08-30', '05:00 2013-08-30', $
+    index, $
+    ;ds='aia.lev1_euv_12s',$
+    waves='1600', $
+    key='t_obs,wavelnth,datamean,exptime', $
+    cadence='24s'
+;
+xdata = index.t_obs
+ydata = index.datamean/index.exptime
+UTPLOT, xdata, ydata, psym=1, yrange=[min(ydata),max(ydata)]
+
+print, max( index.datamean/index.exptime )
+
+
+stop
+
+d_start = '01:30 30-aug-2013'
+d_end   = '02:30 30-aug-2013'
+;ds = 'aia.lev1_euv_12s'
+key = 't_obs, wavelnth, datamean, exptime'
+cadence = '24s'
+waves = '1600'
+;-
+
+ssw_jsoc_time2data, d_start, d_end, index, ds=ds, waves=waves, key=key, cadence=cadence
 
 
 utplot, index.t_obs, index.datamean/index.exptime, psym=1
