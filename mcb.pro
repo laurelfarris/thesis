@@ -1,14 +1,12 @@
 ;Copied from clipboard
 
 
-;dir='/solarstorm/laurel07/Data/AIA/'
-;dir='/solarstorm/laurel07/Data/HMI/'
-dir='/solarstorm/laurel07/Data/' + download_dir
-;- Too easy to forget to set the right path when this line is this far
-;-  down in the file (24 July 2019)
-;
-;
-status = VSO_GET(dat, /force, out_dir=dir)
+;- Read fits files whose filename are included in fls
+start_time = systime()
+READ_SDO, fls, old_index, old_data, nodata=0
+;READ_SDO, fls[ind], old_index, old_data, nodata=0
+print, 'start time = ', start_time
+print, 'end time = ', systime()
 
 end
 

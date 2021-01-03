@@ -28,7 +28,11 @@
 ;-   result = MISSING_OBS( jd, cadence, time )
 ;-
 ;- TO DO:
-;-   []
+;-   [] Add kw option for tstart and tend ?
+;-      Currently finds gaps between first and last obs, but doesn't
+;-      account for data missing at beginning or end of time series.
+;-    (03 January 2021)
+;-
 ;-
 ;- AUTHOR:
 ;-   Laurel Farris
@@ -38,11 +42,15 @@
 
 pro MISSING_OBS, $
     cadence, date_obs, $      ; required input
-    gaps, $                   ; main output
-    time, jd, dt              ; potentially interesting output
-    syntax=syntax
-    ;- NOTE: jd and time arrays must be accessible to caller so they can then be
-    ;-   interpolated and updated if needed.
+    gaps, $                   ; OUTPUT (main)
+    time, jd, dt              ; output (optional, potentially interesting)
+    ;syntax=syntax            ;  NOTE: jd and time arrays must be accessible to caller
+                              ;   so they can then be interpolated and updated if needed.
+
+
+    ;- Appears that I have not yet written code to show syntax yet...
+    ;-   (03 January 2021)
+
 
     time = strmid( date_obs, 11, 11 )
 

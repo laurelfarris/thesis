@@ -64,10 +64,33 @@ buffer = 1
 instr = 'aia'
 channel = '1600'
 ;channel = '1700'
+;-
+cadence = 24
+;---
 
-year = 2013
-month = 08
-day = 30
+;year = '2013'
+;month = '08'
+;day = '30'
+;
+year = '2014'
+month = '11'
+day = '07'
+;
+;year = '2013'
+;month = '08'
+;day = '12'
+;
+;year = '2014'
+;month = '10'
+;day = '23'
+;
+
+;- No data DL-ed for this flare b/c probably won't use it.
+;year = '2014'
+;month = '10'
+;day = '22'
+
+;-----
 
 
 ;- z-indices for subset of full time series for given flare:
@@ -83,12 +106,7 @@ month = strtrim( month, 1 )
 day = strtrim( day, 1 )
 
 
-print, ''
-print, 'UNprepped AIA data.'
 path = '/solarstorm/laurel07/Data/' + strupcase(instr) + '/'
-
-
-stop
 
 ;- single string to use when searching for files : concatenation of
 ;-   standard syntax, variables defined with specific values for this flare, and
@@ -98,62 +116,80 @@ files = $
     strlowcase(instr) + '.lev1.' + channel + 'A_' + $
     year + '-' + month + '-' + day + $
     'T' + '*Z.image_lev1.fits'
-help, files
+;help, files
 ;-  Single string, I assume?
+;-     --> yes :)
 ;-  Is this better than using FILE_SEARCH directly?
 ;-   Guess it looks a little cleaner, een tho creating extra variables as
 ;-   intermediate step (as shown in next step).
 
 
-stop
 
-;- Confirm files with user.
+;- Check files
 fls = file_search( path + files )
-if N_elements(ind) ne 0 then fls = fls[ind]
-  ;- Error if "ind" is undefined? Not kw at ML...
-  ;- ==>> [] Test using, e.g. IDL> print, n_elements(undefined_variable)
-print, n_elements(ind)
-print, n_elements(fls), ' file(s) returned, in variable "fls".'
-print, 'Type .c to read files, or RETALL to return to main level.'
+print, ''
+print, year + '-' + month + '-' + day
+print, channel + '\AA'
+help, fls
+print, ''
+
+;stop;----
+
+
+;ind = [0:20]
+;    ;- ind test
+;;if N_elements(ind) ne 0 then fls = fls[ind]
+;;-  =>> Never re-define array w/ subset of itself! If this block of code runs again,
+;;-   will start layered extractions of last subset, not the original.
+;print, n_elements(fls[ind])
+;;-  same as n_elements(ind), obviously...
+;;print, n_elements(fls), ' file(s) returned, in variable "fls".'
+;help, fls[ind]
+;help, fls
+
+;--
+;- Read fits files included in "fls" string array
+;-  Headers only at first, unless no missing obs...
+start_time = systime()
+READ_SDO, fls, index, /nodata
+;READ_SDO, fls[ind], index, /nodata
+print, 'start time = ', start_time
+print, 'end time = ', systime()
+
+MISSING_OBS, cadence, index.date_obs, gaps, time, jd, dt
+;-
+help, gaps
+help, time
+help, jd
+help, dt
+
+print, index[ 0].date_obs
+print, index[-1].date_obs
+
+;print, dt
+;print, time[gaps]
+
+;for ii = 0, n_elements(gaps)-1 do begin
+;    print, gaps[ii], ' ... ', gaps[ii+1]
+;    print, time[gaps[ii]], ' ... ', time[gaps[ii+1]]
+;endfor
 
 STOP
 
+;-- § Read level 1.0 fits files into old_index and old_data;
+;-     to be processed with aia_prep.
+;-
 
-;- Read fits files (and show computation time):
+
+;- Read fits files whose filename are included in fls
 start_time = systime()
+READ_SDO, fls, old_index, old_data, nodata=0
+;READ_SDO, fls[ind], old_index, old_data, nodata=0
 print, 'start time = ', start_time
-READ_SDO, fls, index, data, nodata=nodata
 print, 'end time = ', systime()
 
 
-;- If this isn't working, use @params like before...
-;-  really need to get aia_prep started.
-
 ;=============================================================
-
-
-;-- § Read fits files (downloaded, NOT prepped)
-;-
-;- only need data with observation times between 14:00:00 and 14:59:59
-;-  for the 2013-12-28 C3.0 flare ...  (04 May 2020)
-resolve_routine, 'read_my_fits', /either
-
-;- show READ_MY_FITS calling syntax
-;READ_MY_FITS, /syntax
-
-READ_MY_FITS, old_index, old_data, fls, $
-    instr=instr, $
-    channel=channel, $
-    nodata=1, $
-    prepped=0
-
-
-
-;- add "ind" kw (z-dimension, effectively) for final 5 hours...
-;-  --> Does processing data that has already been processed simply skip those files?
-;-        Or would overlap tack on a lot of time? Don't want to leave any files out,
-;-        so seems safe to overlap "ind" to times before 14:00 just in case.
-
 
 
 print, old_index[-1].date_obs

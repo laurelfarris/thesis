@@ -27,10 +27,26 @@ wave = '1600'
 ;- C8.3 2013-08-30 T~02:04:00
 ;tstart = '2013/08/30 00:00:00'
 ;tend   = '2013/08/30 05:00:00'
+;----
+;-
+;- Missing data (03 January 2021)
+;-
+;- 1600
+;tstart = '2013/08/30 00:00:16'
+;tend   = '2013/08/30 00:03:28'
+;tstart = '2013/08/30 03:57:00'
+;tend   = '2013/08/30 05:00:00'
+;-
+;- 1700
+;tstart = '2013/08/30 00:00:00'
+;tend   = '2013/08/30 00:02:30'
+tstart = '2013/08/30 03:46:00'
+tend   = '2013/08/30 05:00:00'
+;-
 ;-
 ;;- M1.0 2014-11-07 T~10:13:00
-tstart = '2014/11/07 08:15:00'
-tend   = '2014/11/07 13:15:00'
+;tstart = '2014/11/07 08:15:00'
+;tend   = '2014/11/07 13:15:00'
 ;;-
 ;;- M1.5 2013-08-12 T~10:21:00
 ;tstart = '2013/08/12 08:20:00'
@@ -46,7 +62,7 @@ tend   = '2014/11/07 13:15:00'
 ;+
 ;- Search for files
 
-dat = vso_search( tstart, tend, instr=instr, sample=sample, wave=wave )
+dat = VSO_SEARCH( tstart, tend, instr=instr, sample=sample, wave=wave )
 
 
 ;-----
@@ -76,9 +92,7 @@ dir='/solarstorm/laurel07/Data/' + DLpath
 ;- Too easy to forget to set the right path when this line is this far
 ;-  down in the file (24 July 2019)
 
-
-;status1600 = VSO_GET(dat1600, /force, out_dir=dir)
-status1700 = VSO_GET(dat1700, /force, out_dir=dir)
+status = VSO_GET(dat, /force, out_dir=dir)
 
 ;statusHMIcont = VSO_GET(datHMIcont, /force, out_dir=dir)
 ;statusHMIlosB = VSO_GET(datHMIlosB, /force, out_dir=dir)
