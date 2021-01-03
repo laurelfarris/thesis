@@ -1,4 +1,8 @@
 ;+
+;- 03 January 2021
+;-  Time to redo this for reals!!
+;-
+;-
 ;- 04 May 2020
 ;-   Instructions for user:
 ;-    uncomment the "flare_num" below to set index of flare you desire to analyze.

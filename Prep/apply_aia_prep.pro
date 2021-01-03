@@ -1,9 +1,18 @@
 ;+
 ;-  MODIFIED:
 ;-
-;-    18 December 2020
-;-      Made copy (apply_aia_prep_20201218.pro) and condensed current version,
-;-      modified to be more general.
+;-  03 January 2021
+;-    ==>> Make this better!!
+;-
+;-  18 December 2020
+;-    Made copy (apply_aia_prep_20201218.pro) and condensed current version,
+;-    modified to be more general.
+;-
+;-    NOTE:  Copy is actually called apply_aia_prep_20200508.pro ...
+;-    latest DATE in comments toward bottom of file is 08 May 2020, so
+;-    that's probably the "last modified" date, but copy wasn't made until
+;-    18 December 2020.  (03 January 2021)
+;-
 ;-
 ;- PURPOSE:
 ;-   General routine (ideally):
@@ -44,10 +53,7 @@
 
 buffer = 1
 
-
-@parameters
-;C8.3 2013-08-30 T~02:04:00
-
+;@parameters
 
 ;- HMI ---
 ;instr = 'hmi'
@@ -58,6 +64,72 @@ buffer = 1
 instr = 'aia'
 channel = '1600'
 ;channel = '1700'
+
+year = 2013
+month = 08
+day = 30
+
+
+;- z-indices for subset of full time series for given flare:
+;ind = []
+
+
+;- Make sure all values are STRINGS in clase entered as integers
+;-   (which is exactly what I did just now... )
+channel = strtrim( channel, 1 )
+instr = strtrim( instr, 1 )
+year = strtrim( year, 1 )
+month = strtrim( month, 1 )
+day = strtrim( day, 1 )
+
+
+print, ''
+print, 'UNprepped AIA data.'
+path = '/solarstorm/laurel07/Data/' + strupcase(instr) + '/'
+
+
+stop
+
+;- single string to use when searching for files : concatenation of
+;-   standard syntax, variables defined with specific values for this flare, and
+;-   WILDCARDS to include all timestamps (which are different for each file, obv...
+;-   each sep. by cadence for that instr/channel).
+files = $
+    strlowcase(instr) + '.lev1.' + channel + 'A_' + $
+    year + '-' + month + '-' + day + $
+    'T' + '*Z.image_lev1.fits'
+help, files
+;-  Single string, I assume?
+;-  Is this better than using FILE_SEARCH directly?
+;-   Guess it looks a little cleaner, een tho creating extra variables as
+;-   intermediate step (as shown in next step).
+
+
+stop
+
+;- Confirm files with user.
+fls = file_search( path + files )
+if N_elements(ind) ne 0 then fls = fls[ind]
+  ;- Error if "ind" is undefined? Not kw at ML...
+  ;- ==>> [] Test using, e.g. IDL> print, n_elements(undefined_variable)
+print, n_elements(ind)
+print, n_elements(fls), ' file(s) returned, in variable "fls".'
+print, 'Type .c to read files, or RETALL to return to main level.'
+
+STOP
+
+
+;- Read fits files (and show computation time):
+start_time = systime()
+print, 'start time = ', start_time
+READ_SDO, fls, index, data, nodata=nodata
+print, 'end time = ', systime()
+
+
+;- If this isn't working, use @params like before...
+;-  really need to get aia_prep started.
+
+;=============================================================
 
 
 ;-- § Read fits files (downloaded, NOT prepped)
