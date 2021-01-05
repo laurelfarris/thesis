@@ -1,7 +1,15 @@
-23 July 2019
 
 
 ------------------------------------------------------------------------
+05 January 2021
+  Deleted codes I didn't write... they're in ~/idl/Modules/ if I need
+  to look at the code.
+  Also deleted directory Original_codes/ because everything was a duplicate
+  of files in ~/idl/original_files/
+
+
+------------------------------------------------------------------------
+23 July 2019
 
 My codes:
 
@@ -36,12 +44,5 @@ For less-than-straightforward alignment (i.e. saturated pixels):
   • spikes.pro
     - IMAGE saturated images (bleeding looks "spiky"
 
-
-------------------------------------------------------------------------
-
-codes I did NOT write:
-  • align_cube3.pro
-  • alignoffset.pro
-  • shift_sub.pro
 
 ------------------------------------------------------------------------
