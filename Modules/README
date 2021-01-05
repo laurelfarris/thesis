@@ -1,4 +1,12 @@
 
+04 January 2021
+  deleted copy of aia_prep.pro since my local directories come before system dirs
+  in IDL path. If this is UPDATED, latest version won't run because IDL will find
+  the old version that I copied and run it instead... don't want that!
+  Easy enough to find source code online if I need it.
+
+
+
 Mon Apr 29 08:52:01 MDT 2019
 
 
