@@ -51,11 +51,11 @@ function CROP_DATA, data, $
 
         ;- Added 15 to coords in each dimension for 2011 flare,
         ;-   don't remember why. Should have added a comment explaining this...
-        x_center = sz[0]/2 + 15
-        y_center = sz[1]/2 + 15
+;        x_center = sz[0]/2 + 15
+;        y_center = sz[1]/2 + 15
 
-        ;x_center = sz[0]/2
-        ;y_center = sz[1]/2
+        x_center = sz[0]/2
+        y_center = sz[1]/2
 
         ; Use these for MISaligned data, aia_####_misaligned.sav
         ; (the above values are for properly aligned data,
