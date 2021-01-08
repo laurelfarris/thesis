@@ -1,12 +1,30 @@
+07 January 2021
 
+.../Align/
+
+  • align_in_pieces
+  • align_interp
+  • align_loop
+  • apply_shifts
+  • calculate_shifts
+  • correct_shifts
+  • interp_shifts
+  • plot_all_shifts
+  • plot_num_saturated_pixels
+  • plots_shifts
+  • shift_coords
+  • spikes
+
+See ~/idl/original_files/ for main alignment routines
+(aka the ones I didn't write). 
 
 ------------------------------------------------------------------------
+
 05 January 2021
   Deleted codes I didn't write... they're in ~/idl/Modules/ if I need
   to look at the code.
   Also deleted directory Original_codes/ because everything was a duplicate
   of files in ~/idl/original_files/
-
 
 ------------------------------------------------------------------------
 23 July 2019

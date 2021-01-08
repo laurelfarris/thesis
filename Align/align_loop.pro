@@ -107,7 +107,7 @@
 ;+
 
 
-pro ALIGN_LOOP, cube, ref, allshifts, display=display, buffer=buffer
+pro ALIGN_LOOP, cube, ref, allshifts=allshifts, display=display, buffer=buffer
 
     ; save shifts calculated for every iteration.
     sz = size(cube, /dimensions)

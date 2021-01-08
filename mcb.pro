@@ -1,9 +1,8 @@
 ;Copied from clipboard
 
 
-help, cube
-sz = size(cube, /dimensions)
-print, sz
+imdata = AIA_INTSCALE(maps, exptime=exptime, wave=channel )
+print, imdata[ 228, 139, 0]
 
 end
 
