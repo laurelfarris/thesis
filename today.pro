@@ -123,9 +123,9 @@ channel = 1600
 ;channel = 1700
 
 flare_index = 0  ; M1.5
-flare_index = 1  ; C8.3
-flare_index = 2  ; C4.6
-flare_index = 3  ; M1.0
+;flare_index = 1  ; C8.3
+;flare_index = 2  ; C4.6
+;flare_index = 3  ; M1.0
 
 ;----------------------------------------------------
 
@@ -142,7 +142,8 @@ flare_index = 3  ; M1.0
 
 
 ;flare = multiflare.m15
-flare = multiflare.(0)
+;flare = multiflare.(0)
+flare = multiflare.(flare_index)
 
 
 date = flare.year + flare.month + flare.day
@@ -158,41 +159,44 @@ fnames = strupcase(instr) + $
 
 
 fls = FILE_SEARCH( path + fnames )
+
 help, fls
-
-
-AIA_LCT, r, g, b, wave=fix(channel)
-rgb_table = [ [r], [g], [b] ]
-
 
 
 stop;---------------------------------------------------------------------------------------------
 
 
-READ_SDO, fls, index, data
+
+mem = memory( $
+    /current $
+    /highwater $
+    /num_alloc $
+    /num_free $
+    /structure $
+    ;/L64 $
+)
+;- kws are all mutually exclusive
 
 
 
-;help, index
-;help, data
+ind = [   0:199 ]
 
-tags = tag_names(index[0])
-print, n_tags(index)
-tags = tag_names(index)
-print, n_tags(index)
-;- same in both cases : tags is NOT duplicated 750 times...
+start_time = systime()
+;READ_SDO, fls, index, data
+READ_SDO, fls[ind], index, data
+print, "Started at ", start_time
+print, "Finished at ",  systime()
+;undefine, data
 
-print, where( tags eq 'EXPTIME' )
-;print, where( index[0] eq 4096 )
-;-  ==>> ERROR :
-;-    can't search for structure values this way...
-;-  How CAN you search for a particular value if tagname is unknown??
+
+
+;---
+print, array_equal( index.exptime, index[0].exptime )
 ;-
 
 
 spatial_scale = index[0].cdelt1
 exptime = index[0].exptime
-;
 
 print, index[0].naxis1
 print, index[0].naxis2
@@ -241,7 +245,13 @@ title = index[zz].date_obs
 stop;-----------------------------------------------------------------------------
 
 ;+
-;- Image
+;- Image data
+;-
+
+
+AIA_LCT, r, g, b, wave=fix(channel)
+rgb_table = [ [r], [g], [b] ]
+
 
 im = objarr(n_elements(zz))
 for ii = 0, n_elements(im)-1 do begin
