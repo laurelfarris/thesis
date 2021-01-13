@@ -1,177 +1,50 @@
 ;+
+;- 06 January 2021
 ;-
-;- 13 January 2021
+;- []  Align data
 ;-
-;- Tasks for today:
-;-
-;-   []  Run AIA_PREP on HMI data for all four flares
-;-    ---> COMPLETE
-;-
-;-   []  Align AIA data (without help from HMI images --> need power maps by Friday, 1/15 !)
-;-    --> INCOMPLETE
+;-      Steps:  
+;-       • read level 1.5 (PREPPED) fits : index + data
+;-       • crop to subset centered on AR
+;-       • save to .sav file? If read_sdo takes forever...
+;-       • align to center image
+;-       • Def. save aligned data cube...
 ;-
 ;- [] copy today.pro to some Module generalized for running alingment
 ;-    on any group of level 1.5 fits files (or level 1.0, shouldn't matter)
 ;-
-;===================================================================================
-;- "tomorrow.pro" :
-;-
-;- 14 May 2020
-;-
-;-
-;- [] Prep for new science by commenting and outlining potential codes,
-;-      new analysis methods, re-structure old methods (not just the science
-;-      part, but also improve genearality of subroutines (can use for any flare),
-;-      sort stand-alone bits into (or out of) subroutines, depending on
-;-      computational efficiency, memory useage, and most importantly,
-;-     ease with which poor simple-minded user (me) is able to ascertain the
-;-     purpose, input/output, calling syntax, etc. VERY quickly and can use
-;-     it immediately after a long hiatus, preferably with no errors due to
-;-     use of variable names/types or filenames that have since been changed,
-;-     calls to routines that don't even exist anymore or were absorbed into
-;-     another file, kws/args added or taken away, pros changed to funcs or
-;-     vice versa... always something.
-;-     -
-;-     -
-;-
-;-  What TYPE of results do I want to show for next research article?
-;-  Depends on what I'm trying to accomplish, or what science questions
-;-  I want to answer. So sort that out, THEN decide what figures to make at first.
-;-  Answer the following questions (maybe a writing prompt or two?):
-;-    • How will the science Qs posed in this study (and thesis in general)
-;-      be answered by the values derived, relationships revealed in plots,
-;-      or patterns displayed over images?
-;-    •
-;-    •
-;-
-;- TO DO:
-;-  [] see @Lit for tons of ideas
-;-  [] Enote with collection of figure screenshots from variety of @Lit:
-;-     can be relevant to my research/methods or just nice graphics.
-;-  [] Codes/ATT/, other Figure ideas written in Enote, Greenie, wherever,
-;-     then generate as MANY as possible with sense of urgency.
-;-     GOAL is to have ugly-ass graphics plagued by IDL's horrendous defaults,
-;-       ~ podcast about forcing yourself NOT to run farther than the edge
-;-          of your lawn if you're one of those all-or-nothing perfectionists.
-;-
-;===================================================================================
 
 
 
-;+
-;- Naming convention of fits files for, e.g. AIA 1600\AA{}
-;
-;
-;    AIA
-;      UNprepped fits (level 1.0):
-;        'aia.lev1.1600A_2013-12-28T10_00_00.00Z.image_lev1.fits'
-;        'aia.lev1.304A_2013-12-28T10_00_00.00Z.image_lev1.fits'
-;
-;      PREPPED fits (level 1.5):
-;        'AIA20131228_100000_1600.fits'
-;        'AIA20131228_100000_0304.fits'
-;
-;
-;    HMI
-;      UNprepped (level 1.0):
-;        'hmi.ic_45s.yyyy.mm.dd_hh_mm_ss_TAI.continuum.fits'
-;        'hmi.m_720s.yyyy.mm.dd_hh_mm_ss_TAI.magnetogram.fits'
-;        'hmi.m_45s.yyyy.mm.dd_hh_mm_ss_TAI.magnetogram.fits'
-;        'hmi.v_45s.yyyy.mm.dd_hh_mm_ss_TAI.Dopplergram.fits'
-;
-;      PREPPED fits (level 1.5)
-;        'HMIyyyymmdd_hhmmss_cont.fits'
-;        'HMIyyyymmdd_hhmmss_*?*.fits'
-;        'HMIyyyymmdd_hhmmss_mag.fits'
-;        'HMIyyyymmdd_hhmmss_dop.fits'
-;
-;
-;---
+
+;-   C8.3 2013-08-30 T~02:04:00
+;-   M1.0 2014-11-07 T~10:13:00
+;-   M1.5 2013-08-12 T~10:21:00
+;-   C4.6 2014-10-23 T~13:20:00
 ;-
 
-
-
-;+
-;- Alignment -- broken down into detailed steps:
-;-   • read level 1.5 (PREPPED) fits : index + data
-;-   • crop to subset centered on AR
-;-   • save to .sav file? If read_sdo takes forever...
-;-   • align to center image
-;-   • Def. save aligned data cube...
-
-
-;+
-;- Current collection in multiflare project:
-;-   • C8.3 2013-08-30 T~02:04:00  (1)
-;-   • M1.0 2014-11-07 T~10:13:00  (3)
-;-   • M1.5 2013-08-12 T~10:21:00  (0)
-;-   • C4.6 2014-10-23 T~13:20:00  (2)
-;-  multiflare.(N) --> structure of structures
-;-    current index order is as listed to the right of each flare
-;-    (chronological order).
-;-
-;-
-
-
-
-
-;----------------------------------------------------
 buffer = 1
+
+@par2
+help, multiflare
+flare = multiflare.m15
+
+stop;-----------------------------------------------------------------------------
 
 instr = 'aia'
 channel = 1600
 ;channel = 1700
-
-flare_index = 0  ; M1.5
-flare_index = 1  ; C8.3
-flare_index = 2  ; C4.6
-flare_index = 3  ; M1.0
-
-;----------------------------------------------------
-
-;for ii = 0, 3 do print, multiflare.(ii).year, multiflare.(ii).month, multiflare.(ii).day
-
-@par2
-;- defines structure of structures:
-;;-   IDL>   multiflare = { m15:m15, c83:c83, c46:c46, m10:m10 }
-;help, multiflare
-;help, multiflare.m15
-;help, multiflare.c83
-;help, multiflare.c46
-;help, multiflare.m10
-
-
-;flare = multiflare.m15
-flare = multiflare.(0)
-
-
-date = flare.year + flare.month + flare.day
-print, date
-
-;- 'AIAyyyymmdd_hhmmss_wave.fits'
-
-path = '/solarstorm/laurel07/Data/' + strupcase(instr) + '_prepped/'
-fnames = strupcase(instr) + $
-    ;flare.year + flare.month + flare.day + $
-    date + $
-    '*' + strtrim(channel,1) + '.fits'
-
-
-fls = FILE_SEARCH( path + fnames )
-help, fls
-
-
 AIA_LCT, r, g, b, wave=fix(channel)
 rgb_table = [ [r], [g], [b] ]
 
+path = '/solarstorm/laurel07/Data/' + strupcase(instr) + '_prepped/'
+fnames = strupcase(instr) + $
+    flare.year + flare.month + flare.day + '*' + strtrim(channel,1) + '.fits'
+fls = FILE_SEARCH( path + fnames )
 
-
-stop;---------------------------------------------------------------------------------------------
-
+stop;-----------------------------------------------------------------------------
 
 READ_SDO, fls, index, data
-
-
 
 ;help, index
 ;help, data
@@ -217,7 +90,7 @@ center =  (half_dimensions)  +  ([ flare.xcen, flare.ycen ] / spatial_scale)
 print, center
 
 
-;([ flare.xcen, flare.ycen ] / spatial_scale)
+([ flare.xcen, flare.ycen ] / spatial_scale)
 ;- [] get full disk pixel dimensions from headers instead of hard-coding. Also spatial scale.
 ;-
 cube = CROP_DATA( data, dimensions=dimensions, center=center )

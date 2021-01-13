@@ -135,6 +135,21 @@ pro ALIGN_LOOP, cube, ref, allshifts=allshifts, display=display, buffer=buffer
         print, "stddev(X) = ", sdv[k-1], format='(F0.8)'
         ;- "Type conversion error: Unable to convert given STRING to Double"...
         ;-   Is this a problem?
+        ;-
+        ;- 13 January 2021 -- Error caused by print having TWO arguments... Quick fix:
+        print, "stddev(X) = "
+        print, sdv[k-1], format='(F0.8)'
+        ;----
+        ;- OR, could get fancy :
+        ;-
+        ;- Example from IDL reference pages:
+        stars = 3
+        print, FORMAT='("Detected ", I2, " stars")', stars
+        ;- My attempt to reproduce this syntax with my own values:
+        print, FORMAT='("stddev(X) = ", F0.8 )', sdv[k-1]
+        ;-
+        ;----
+
 
         if k eq 10 then break
     endrep until ( k ge 2 && sdv[k-1] gt sdv[k-2] )

@@ -1,4 +1,10 @@
-README for Lightcurves/
+.../Lightcurves/_README
+
+---------------------------------------------------------------------------------
+
+2021 January 13 : moved "plot_aia_lc.pro" here from main working dir (one level up).
+  Uses plotting procedures and routines from SDO guide examples.
+
 
 ---------------------------------------------------------------------------------
 General routine for plotting a light curve:
