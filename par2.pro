@@ -74,8 +74,8 @@ c46 = { $
     tstart : '13:20', $
     tpeak  : '00:00', $
     tend   : '00:00', $
-    xcen   : 0.00, $
-    ycen   : 0.00 $
+    xcen   : 0, $
+    ycen   : 0 $
 }
 ;
 c83 = { $
@@ -140,7 +140,7 @@ multiflare = { m15:m15, c83:c83, c46:c46, m10:m10 }
 ;+
 ;- OLD @params
 ;-
-
+;
 
 ;flare_num = 0 ; X22
 ;flare_num = 1 ; C30
