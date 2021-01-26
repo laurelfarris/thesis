@@ -1,5 +1,9 @@
 ;+
 ;-
+;- 22 January 2021
+;-   Finished extraction of subset "cube" + "index" --> .sav files
+;-    (except flare without xcen and ycen values)
+;-
 ;- 13 January 2021
 ;-
 ;- Tasks for today:
@@ -13,82 +17,6 @@
 ;- [] copy today.pro to some Module generalized for running alingment
 ;-    on any group of level 1.5 fits files (or level 1.0, shouldn't matter)
 ;-
-;===================================================================================
-;- "tomorrow.pro" :
-;-
-;- 14 May 2020
-;-
-;-
-;- [] Prep for new science by commenting and outlining potential codes,
-;-      new analysis methods, re-structure old methods (not just the science
-;-      part, but also improve genearality of subroutines (can use for any flare),
-;-      sort stand-alone bits into (or out of) subroutines, depending on
-;-      computational efficiency, memory useage, and most importantly,
-;-     ease with which poor simple-minded user (me) is able to ascertain the
-;-     purpose, input/output, calling syntax, etc. VERY quickly and can use
-;-     it immediately after a long hiatus, preferably with no errors due to
-;-     use of variable names/types or filenames that have since been changed,
-;-     calls to routines that don't even exist anymore or were absorbed into
-;-     another file, kws/args added or taken away, pros changed to funcs or
-;-     vice versa... always something.
-;-     -
-;-     -
-;-
-;-  What TYPE of results do I want to show for next research article?
-;-  Depends on what I'm trying to accomplish, or what science questions
-;-  I want to answer. So sort that out, THEN decide what figures to make at first.
-;-  Answer the following questions (maybe a writing prompt or two?):
-;-    • How will the science Qs posed in this study (and thesis in general)
-;-      be answered by the values derived, relationships revealed in plots,
-;-      or patterns displayed over images?
-;-    •
-;-    •
-;-
-;- TO DO:
-;-  [] see @Lit for tons of ideas
-;-  [] Enote with collection of figure screenshots from variety of @Lit:
-;-     can be relevant to my research/methods or just nice graphics.
-;-  [] Codes/ATT/, other Figure ideas written in Enote, Greenie, wherever,
-;-     then generate as MANY as possible with sense of urgency.
-;-     GOAL is to have ugly-ass graphics plagued by IDL's horrendous defaults,
-;-       ~ podcast about forcing yourself NOT to run farther than the edge
-;-          of your lawn if you're one of those all-or-nothing perfectionists.
-;-
-;===================================================================================
-
-
-
-;+
-;- Naming convention of fits files for, e.g. AIA 1600\AA{}
-;
-;
-;    AIA
-;      UNprepped fits (level 1.0):
-;        'aia.lev1.1600A_2013-12-28T10_00_00.00Z.image_lev1.fits'
-;        'aia.lev1.304A_2013-12-28T10_00_00.00Z.image_lev1.fits'
-;
-;      PREPPED fits (level 1.5):
-;        'AIA20131228_100000_1600.fits'
-;        'AIA20131228_100000_0304.fits'
-;
-;
-;    HMI
-;      UNprepped (level 1.0):
-;        'hmi.ic_45s.yyyy.mm.dd_hh_mm_ss_TAI.continuum.fits'
-;        'hmi.m_720s.yyyy.mm.dd_hh_mm_ss_TAI.magnetogram.fits'
-;        'hmi.m_45s.yyyy.mm.dd_hh_mm_ss_TAI.magnetogram.fits'
-;        'hmi.v_45s.yyyy.mm.dd_hh_mm_ss_TAI.Dopplergram.fits'
-;
-;      PREPPED fits (level 1.5)
-;        'HMIyyyymmdd_hhmmss_cont.fits'
-;        'HMIyyyymmdd_hhmmss_*?*.fits'
-;        'HMIyyyymmdd_hhmmss_mag.fits'
-;        'HMIyyyymmdd_hhmmss_dop.fits'
-;
-;
-;---
-;-
-
 
 
 ;+
