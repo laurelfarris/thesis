@@ -1,10 +1,7 @@
 ;+
-;- 25 January 2021
+;- 29 January 2021
 ;-
 ;- TO DO:
-;-
-;-  [] prep HMI data with aia_prep (hmi_prep??).
-;-    --> COMPLETE
 ;-
 ;-  []  Save subset (and header!) centered on [xcen,ycen]; PADDED dimensions.
 ;-    --> INCOMPLETE
@@ -24,15 +21,6 @@
 
 
 ;-- 
-;- HMI level 1.5 (PREPPED fits) :
-;-
-;-   'HMIyyyymmdd_hhmmss_cont.fits'
-;-   'HMIyyyymmdd_hhmmss_*?*.fits'
-;-   'HMIyyyymmdd_hhmmss_mag.fits'
-;-   'HMIyyyymmdd_hhmmss_dop.fits'
-;--
-
-
 
 ;+
 ;- Alignment -- broken down into detailed steps:
@@ -84,11 +72,11 @@
 
 buffer = 1
 
-;instr = 'aia'
+instr = 'aia'
 ;channel = 1600
 ;channel = 1700
 
-instr = 'hmi'
+;instr = 'hmi'
 
 
 flare_index = 0  ; M1.5

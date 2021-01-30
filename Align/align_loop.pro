@@ -196,8 +196,8 @@ buffer=1
 @parameters
 
 instr = 'aia'
-;channel = '1600'
-channel = '1700'
+channel = '1600'
+;channel = '1700'
 
 
 ;-
