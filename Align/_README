@@ -1,6 +1,7 @@
+
 07 January 2021
 
-.../Align/
+"work"/Align/
 
   • align_in_pieces
   • align_interp
@@ -14,6 +15,11 @@
   • plots_shifts
   • shift_coords
   • spikes
+
+lots of code here... need to merge, move to OLD/, or something...
+[] ==>> at least comment and explain what each one does!
+
+------------------------------------------------------------------------
 
 See ~/idl/original_files/ for main alignment routines
 (aka the ones I didn't write). 

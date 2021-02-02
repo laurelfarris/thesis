@@ -39,5 +39,24 @@
 ;-
 
 
+;+
+;- 30 January 2021
+;-
+;-   IDEA for possibly making my life so much easier:
+;-     Modify INDEX returned from READ_SDO instead of defining my own structures
+;-     from scratch? Retain the few tags I need:
+;-       • -> SAFER! No risk of entering incorrect numbers
+;-           (like reversing the exptime for 1600 and 1700 ...)
+;-       • Will save so much time w/o repeatedly looking up fits filename syntax,
+;-         read_my_fits syntax, high CPU and memory useage to read large files,
+;-         (even with /nodata set, still takes forever.)
+;-
+;-  [] Learn how to modify/update structures,  tho?
+;-      Remove tags, add new tags,
+;-      Combine multiple strucs into one master struc or array, 
+;-      Syntax to access tags/values using tagnames OR index, eg "struc.(ii)"
+;-      
+;-
+
 
 end

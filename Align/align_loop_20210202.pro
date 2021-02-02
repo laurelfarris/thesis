@@ -1,54 +1,108 @@
 ;+
 ;- LAST MODIFIED:
-;-   02 February 2021
+;-   04 June 2018
+;-    ... riveting.
+;-
+;-  05 May 2020
+;-    • Quest : re-align data cube with images from the 2013-12-28 C3.0 flare,
+;-      (5 hours of observations, processed to level 1.5 with aia_prep).
+;-    •
+;-    
 ;-
 ;- ROUTINE:
 ;-   align_loop.pro
+;-      /is_procedure
 ;-
 ;- PURPOSE:
-;-   Apply align_cube3 on data cube;
-;-   repeat until stddev stops decreasing from one iteration to the next.
+;-   Run align_cube3 on a loop (hence the name of the routine)
+;-   until shifts are so tiny that stddev stops decreasing.
 ;-
 ;- Calling sequence:
 ;-   ALIGN_LOOP, cube, ref, allshifts, display=display, buffer=buffer
 ;-
 ;- INPUT:
-;-   CUBE = 3D data cube of images to align to common reference image:
-;-   REF = 2D image
+;-   CUBE = 3D data cube of images to align
+;-   REF = 2D image to serve as 'reference' to which
+;-     all other images will bow (align wrt...)
+;-       Center one seems reasonable, minimizes the already long temporal
+;-      gap between ref and the images on the start/end times, at zindex of
+;-     [0] and [-1]. As the sun is quite dynamic (esp. during flares),
+;-      observable features can change quite a bit over the course of a
+;-   single observation run; the more an image differs from the REF, the harder
+;-    it will be to align the two since the external functions that carry out
+;-   these computations do so by locating distinguishing features that are
+;-   recognizable on both images. They don't have  to be mirror images, but
+;-   if something crazy happens like I dunno saturation and bleeding that gives
+;-  the unmistakable impression of a heavenly orb hell-bent on stabbing the shit
+;-   out of those who download the images and then wine about them constantly.
+;-
 ;-
 ;- OUTPUT:
-;-   ALLSHIFTS = optional named variable whose return value is a
-;-     3D array with shifts in X and Y for each iteration of align_loop.
+;-   ALLSHIFTS = variable defined locally by the procedure, passed back
+;-    to named variable present as argument to align_loop
+;-    though is not required if user has no need of it.
+;-    Shifts can be useful for
+;-
 ;-
 ;- EXTERNAL SUBROUTINES:
 ;-     alignoffset.pro
 ;-     shift_sub.pro
 ;-     align_cube3.pro
-;-  (NOTE : I did not write these)
+;-  NOTE: the author of the present routine, align_loop.pro is NOT the
+;-    author of the external subroutines it utilizes. Please don't sue me.
+;-
 ;-
 ;- Alignment steps (in general):
-;-    1. read data/headers from level 1.5 data (processed with aia_prep.pro)
-;-    2. extract subset centered on AR with dimensions padded with enough pixels beyond
-;-       boundaries of AR to allow room for edge effects due to shifting
-;-       (maximum shift most likely x-direction, ~70 pixels at the most for a 5-hr ts.
-;-    3. SAVE subset (cube) + index from lvl 1.5 data to file.sav
-;-    4. Align cube.
-;-    5. save to '*aligned.sav' file, along with REF and SHIFTS.
-;-  NOTE : steps 1-3 are now in a separate routine (see extract_subset.pro).
+;-   1. read data
+;-   2. image center and locate center coords (x0, y0)
+;-   3. crop data to size 750x500 relative to center (for final dims=[500,330])
+;-   4. Align
+;-   5. save to '*aligned.sav' file
+;- "In general" meaning, probably doesn't actually work? More a conceptual
+;-   outline of what happens than what really happens? I'm so tired.
+;- Note that running struc_aia is NOT required here (I just ran it out of habit).
 ;-
+;- 22 April 2019
+;- Is there any benefit to have this in a subroutine?
+;-   Cleans it up a bit, easier to remind myself what the routine does
+;-   if I haven't looked at it in a while (25 July 2019)
+;-
+;- TEST: check n_elements(fls) and TIME portion of each filename.
+;-    596 for AIA 1600
+;-    594 for AIA 1700
+;-    1195 for AIA 1700
+;-  NOTE: previous 3 lines are for a specific event.. don't remember which one
+;-   (25 July 2019)
+;-
+;- NOTE:
+;-   "align_loop" procedure is duplicate of subroutine in "align_in_pieces";
+;-   see top of "align_in_pieces.pro" for similar comments.
+;-  (23 July 2019)
 ;-
 ;- TO DO:
+;-   [] Find a way to define "instr" and "channel" without manually setting
+;-       them all the time. Def. lines are (or were) in @parameters,
+;-       but are commented..
+;-       After attempt to run code, occurs to me that
+;-       actually these aren't handled exactly the same,
+;-       as a single "instr" is affiliated with multiple channels, and while
+;-       instr can be safely defined as "aia" (assuming no other instrument is
+;-       involved here, and also I'm hardcoding again... surely these values are
+;-       in the original headers fer feck's sake, I just either never thought
+;-       to pull them rather than defining on my own, or I was unable to ID the
+;-       tagnames possessing the information I was looking for.
+;-       After a 2nd attempt of .RUN align_loop, occurred to me that align
+;-         routines operate one data set at a time .. so channel IS defined
+;-         alongside instr..
+;-              meh
 ;-   [] Copy plotting routine to separate subroutine called, e.g. "plot_shifts.pro"
 ;-      That way it can easily be called in the alignment loop AND after procedure is finished.
-;-      05 May 2020 -- this box appears to have been checked off at some point...
+;-    05 May 2020 -- this box appears to have been checked off at some point...
 ;-        Go me!
 ;-   [] Do st with subroutine for plotting # sat pixels in Align/
-;-      It's like I was conciously trying to make this as vague as possible...
-;-      like maybe if a task is not well-defined, I'll feel better about myself
-;-      for consistently putting it off.
-;-   [] "align_loop" procedure is duplicate of subroutine in "align_in_pieces";
-;-      see top of "align_in_pieces.pro" for similar comments.
-;-      And maybe consolidate... (23 July 2019)
+;-        It's like I was conciously trying to make this as vague as possible...
+;-        like maybe if a task is not well-defined, I'll feel better about myself
+;-        for consistently putting it off.
 ;-
 ;+
 
@@ -105,17 +159,19 @@ pro ALIGN_LOOP, cube, ref, allshifts=allshifts, display=display, buffer=buffer
     print, format='(F0.2, " minutes")', (systime(/seconds)-start_time)/60.
 end
 
+;--- § Read PREPPED fits files
 
-
-buffer=1
-;
-instr = 'aia'
-channel = '1600'
-;channel = '1700'
-
-
-@par2
-
+;- Memory issues: Read subsets of data and crop individually.
+;-   start_ind = [0:nn]
+;-     nn needs to be based on FULL size of fls (no subsets).
+;-   Append each cropped subset to cube.
+;-  Last: comment "ind" again, set nodata=1, and re-read to get full index back.
+;- (Add loop later).
+;-
+;- Passing huge data cube to crop_data.pro and having a
+;-  (slightly less huge) subset passed back
+;-  may be much slower than cropping right here at ML...
+;-
 
 ;cube = []
 ;ind = [0:999]
@@ -137,6 +193,13 @@ channel = '1600'
 
 
 
+buffer=1
+
+@parameters
+
+instr = 'aia'
+channel = '1600'
+;channel = '1700'
 
 
 ;-

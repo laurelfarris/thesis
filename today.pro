@@ -1,26 +1,68 @@
 ;+
-;- 29 January 2021
+;- 02 February 2021 (Tuesday)
+;-   Part 2: align only. Remove clutter code.
 ;-
+
+
+;===
+;==========================================================================
+;=
+;= FIRST : Naming convention of fits files for, e.g. AIA 1600\AA{}
+;=  (tired of looking this up all the time...)
+;=
+;=
+;=    AIA
+;=      UNprepped fits (level 1.0):
+;=        'aia.lev1.1600A_2013-12-28T10_00_00.00Z.image_lev1.fits'
+;=        'aia.lev1.304A_2013-12-28T10_00_00.00Z.image_lev1.fits'
+;=
+;=      PREPPED fits (level 1.5):
+;=        'AIA20131228_100000_1600.fits'
+;=        'AIA20131228_100000_0304.fits'
+;=
+;=
+;=    HMI
+;=      UNprepped (level 1.0):
+;=        'hmi.ic_45s.yyyy.mm.dd_hh_mm_ss_TAI.continuum.fits'
+;=        'hmi.m_720s.yyyy.mm.dd_hh_mm_ss_TAI.magnetogram.fits'
+;=        'hmi.m_45s.yyyy.mm.dd_hh_mm_ss_TAI.magnetogram.fits'
+;=        'hmi.v_45s.yyyy.mm.dd_hh_mm_ss_TAI.Dopplergram.fits'
+;=
+;=      PREPPED fits (level 1.5)
+;=        'HMIyyyymmdd_hhmmss_cont.fits'
+;=        'HMIyyyymmdd_hhmmss_*?*.fits'
+;=        'HMIyyyymmdd_hhmmss_mag.fits'
+;=        'HMIyyyymmdd_hhmmss_dop.fits'
+;=
+;=
+;==========================================================================
+;===
+
+
+;+
 ;- TO DO:
 ;-
-;-  []  Save subset (and header!) centered on [xcen,ycen]; PADDED dimensions.
+;-  []  Find coords of 20141023 flare, save cube and index to .sav files:
+;-            20141023_aia1600cube.sav
+;-            20141023_aia1700cube.sav
 ;-    --> INCOMPLETE
 ;-
 ;-  []  ALIGN data
 ;-    --> INCOMPLETE
 ;-
-;-  []  IMAGE alongside concurrent AIA obs; check relative AR position.
+;-  []  Image HMI alongside concurrent AIA obs; check relative AR position.
 ;-    --> INCOMPLETE
+;-          Read HMI level 1.5 fits
+;-           Image full disk, 6 panels like yesterday
+;-              scale continuum and/or mag ... otherwise, just get white, washed out disk...
+;-           Eyeball center coords of AR
+;-           Extract subset with same center and dimensions as AIA, e.g. --> "M10_hmi_mag_cube.sav"
 ;-
 ;- [] copy today.pro to some Module generalized for running alignment
 ;-    on any group of level 1.5 fits files (or level 1.0, shouldn't matter)
 ;-    --> INCOMPLETE
 ;-
-;
 
-
-
-;-- 
 
 ;+
 ;- Alignment -- broken down into detailed steps:
@@ -34,24 +76,6 @@
 ;-
 
 
-;-
-;- IDEA for possibly making my life so much easier:
-;-   Modify INDEX returned from READ_SDO instead of defining my own structures
-;-   from scratch? Retain the few tags I need:
-;-     • -> SAFER! No risk of entering incorrect numbers
-;-           (like reversing the exptime for 1600 and 1700 ...)
-;-     • Will save so much time w/o repeatedly looking up fits filename syntax,
-;-         read_my_fits syntax, high CPU and memory useage to read large files,
-;-         (even with /nodata set, still takes forever.)
-;-
-;-  [] Learn how to modify/update structures,  tho?
-;-      Remove tags, add new tags,
-;-      Combine multiple strucs into one master struc or array, 
-;-      Syntax to access tags/values using tagnames OR index, eg "struc.(ii)"
-;-      
-;-
-
-
 ;+
 ;- Current collection in multiflare project:
 ;-   • C8.3 2013-08-30 T~02:04:00  (1)
@@ -62,143 +86,210 @@
 ;-    current index order is as listed to the right of each flare
 ;-    (chronological order).
 ;-
+;flare_index = 0  ; M1.5
+flare_index = 1  ; C8.3
+;flare_index = 2  ; C4.6 ==>> No center coords (xcen,ycen)!!
+;flare_index = 3  ; M1.0
 ;-
-
-;-
-;maxmin, variable
-
-;--------
 
 
 buffer = 1
 
 instr = 'aia'
 ;channel = 1600
-;channel = 1700
+channel = 1700
 
-;instr = 'hmi'
-
-
-flare_index = 0  ; M1.5
-;flare_index = 1  ; C8.3
-;flare_index = 2  ; C4.6
-;flare_index = 3  ; M1.0
-
-;--------
-
+;
 
 @par2
-;- defines structure of structures:
-;;-   IDL>   multiflare = { m15:m15, c83:c83, c46:c46, m10:m10 }
+;- multiflare = { m15:m15, c83:c83, c46:c46, m10:m10 }
 ;help, multiflare
-
 flare = multiflare.(flare_index)
-date = flare.year + flare.month + flare.day
 
-;- 'AIAyyyymmdd_hhmmss_wave.fits'
+date = flare.year + flare.month + flare.day
+path = '/solarstorm/laurel07/flares/' + date + '/'
+print, path
+
+
+
+;+
+;========================================================================================
+;== Alignment
+;-
+
+filename = date + '_' + strlowcase(instr) + strtrim(channel,1) + 'cube.sav'
+print, filename
+restore, path + filename
+
+
+stop
+
+
+sz = size(cube, /dimensions)
+ref = cube[*,*,sz[2]/2]
+help, ref
+
+
+display = 0 ;- need to refresh on what PLOT_SHIFTS does before using this.
+;
+resolve_routine, 'align_loop', /either
+ALIGN_LOOP, cube, ref, allshifts=allshifts, display=display, buffer=buffer
+
+fname = strsplit( flare.class, '.', /extract )
+savfile = fname[0] + fname[1] + '_' +  $
+    strlowcase(instr) + strtrim(channel,1) + 'aligned.sav'
+print, savfile
+
+
+SAVE, cube, ref, allshifts, filename=savfile
+;-  [] include INDEX in saved variables?
+
+
+;- REMEMBER : cube is MODIFIED when returned to caller! May want to make a
+;-  second variable to duplicate the original, especially if full-disk data
+;-  is undefined to free up memory. Otherwise, will have to start over with
+;-  READ_SDO, crop data, blah blah blah.
+
+
+;+
+;========================================================================================
+;== Power maps
+;-
+
 
 path = '/solarstorm/laurel07/Data/' + strupcase(instr) + '_prepped/'
 fnames = strupcase(instr) + date + '*' + strtrim(channel,1) + '.fits'
-
 fls = FILE_SEARCH( path + fnames )
-
 help, fls
 
-;start_time = systime()
-;for ii = 0, n_elements(index)-1 do begin
-;    ind = [ii:ii+increment-1]
-;    READ_SDO, fls[ind], index, data
-;endfor
-
-
-stop;---------------------------------------------------------------------------------------------
-
-
-
-;!CPU
-
-;for ii = 50, 745, 50 do begin
-;    ind = [ ii-50 : ii-1 ]
-;    print,  ii-50, ii-1
-;endfor
-;ind = [ 0 : n_elements(fls)-1 : 1 ]
-;help, ind
-;print, ind[0:4]
-;print, ind[-5 : -1]
-;while ii = 0,  do
-
-
-;-----------------------------------------------
-;- START HERE ----------------------------------
-;-----------------------------------------------
-
-
-dimensions = [800,800]
 READ_SDO, fls, index, data, /nodata
-spatial_scale = index[0].cdelt1
-exptime = index[0].exptime
-;print, array_equal( index.exptime, index[0].exptime )
-;print, index[0].pixlunit
+
+SAVE, cube, ref, allshifts, filename=savfile
+
+
+stop;-----
+
+;- --> restore .sav file that was WRITTEN just before this step (like 20 lines up)
+;filename = date + '_' + strlowcase(instr) + strtrim(channel,1) + 'aligned.sav'
+class = strsplit(flare.class, '.', /extract)
+filename = class[0] + class[1] + '_' + strlowcase(instr) + strtrim(channel,1) + 'aligned.sav'
+print, path + filename
+;restore, path + filename
+
+print,  COMPUTE_POWERMAPS( /syntax )
+
+cadence = 24
+dz = 64
+
+
+;print, where( index.nsatpix ne 0 )
+;satlocs = where( index.nsatpix gt 0 )
+
+
+sz = size(cube, /dimensions)
+
+;-
+;z_start = [0:sz[2]-dz]
+;-  indices for full ts, which I don't need right now...
+
+;- indices to compute power map from time series of length dz, starting at flare start.
+z_start = (where( strmid(index.date_obs,11,5) eq flare.tstart ))[0]
+
+print, z_start
+print, z_start + dz -1
+print, index[z_start].date_obs
+print, flare.tstart
+print, index[z_start+dz-1].date_obs
+print, flare.tend
+
+;====
+map = COMPUTE_POWERMAPS( cube/exptime, cadence, dz=dz, z_start=z_start )
+;====
+
+
+;save, map, map2, filename='M10_aia1600map.sav'
+save, map, filename='M10_aia1600map.sav'
+
+
+print, max(cube2) / (max( cube2/exptime) )
+print, ( max(cube2) / (max( cube2/exptime) ) )^2
+
+print, exptime^2
+
+print, max(map) / max(map2)
+;print, min(map) / min(map2)
+;-  same factor whether min or max or in between, just like every pixel
+;-   in data cubes differes
+;-  by factor = exptime ... because one was divided by exptime... der.
+
+
+;- ===>>>  NO LONGER setting threshold. Compute power for ALL pixels,
+;-   Can easily compute MASK using threshold and original pixel values
+;-    (where "original" pixel values are the ones used to compute the map
+;-   in the first place).
+
+maps = [ [[map]], [[map2]] ]
+
+undefine, map
+undefine, map2
+   ;-  don't like these variable names anyway; espeically confusing when
+   ;-   concurrent with "cube" and "cube2", but DO NOT correspond to each
+   ;-  other AT ALL.
+
+
+title = [ 'raw data', 'exptime-corrected' ]
 ;
-;half_dimensions = [ index[0].crpix1, index[0].crpix2 ]
-;center =  half_dimensions + ([flare.xcen, flare.ycen]/spatial_scale)
-full_dimensions = [ index[0].naxis1, index[0].naxis2 ]
-center = FIX( (full_dimensions/2) + ([flare.xcen, flare.ycen]/spatial_scale) )
-;-  "full_dimensions" avoids fractional pixel coords, if it matters...
-;print, 'center coords = ',  center, ' (pixels)'
+im = objarr(2)
+dw
+win = window(/buffer)
 
-;ind = indgen(7)*100
+imdata = maps
+locs = where( imdata gt 950 and imdata lt 1000 )
 
-cube = []
+help, array_indices( imdata, locs )
+print, imdata[(array_indices( imdata, locs ))[*,0]]
 
-stop;---------------------------------------------------------------------------------------------
+print, imdata[ 228, 139, 0]
 
-
-;for ii = 0, n_elements(fls), 100 do begin
-;    if ii+100-1 GE n_elements(fls) then begin
-;        ind = [ii:n_elements(fls)-1]
-;    endif else begin
-;        ind = [ii:ii+100-1]
-;    endelse
-;    READ_SDO, fls[ind], index, data
-;    cube = [ [[ cube ]], $
-;        [[ CROP_DATA( data, dimensions=dimensions, center=center ) ]] ]
-;    help, cube
-;    undefine, index
-;    undefine, data
-;endfor
-
-;cube = fltarr( dimensions[0], dimensions[1], n_elements(fls) )
-
-start_time = systime()
+print, ''
+print, min(imdata[*,*,0]), format=format
+print, min(imdata[*,*,1]), format=format
+print, max(imdata[*,*,0]), format=format
+print, max(imdata[*,*,1]), format=format
+print, ''
 ;
-for ii = 0, n_elements(fls)-1 do begin
-    READ_SDO, fls[ii], index, data
-    cube = [ [[ cube ]], $
-        [[ CROP_DATA( data, dimensions=dimensions, center=center ) ]] ]
-    ;cube[*,*,ii] = CROP_DATA( data, dimensions=dimensions, center=center )
-    ;help, cube
-    undefine, index
-    undefine, data
+
+imdata = AIA_INTSCALE(maps, exptime=exptime, wave=channel )
+print, imdata[ 228, 139, 0]
+
+print, min(imdata[*,*,0]), format=format
+print, min(imdata[*,*,1]), format=format
+print, max(imdata[*,*,0]), format=format
+print, max(imdata[*,*,1]), format=format
+print, ''
+
+for ii = 0, 1 do begin
+    im[ii] = IMAGE2( $
+        imdata[*,*,ii], $
+        /current, $
+        layout=[2, 1, ii+1], $
+        margin=0.05, $
+        title=title[ii], $
+        rgb_table=rgb_table, $
+        /buffer $
+    )
 endfor
 ;
-print, "Started at ", start_time
-print, "Finished at ",  systime()
+save2, 'M10_aia1600map', /timestamp
 
-stop;---------------------------------------------------------------------------------------------
 
-READ_SDO, fls, index, data, /nodata
-help, index
-;- [] check that n_elements(index) matches sz[2] of cube.
-;
-;help, flare
-;savefile = 'm15_' + instr + strtrim(channel,1) + 'cube.sav'
-savefile = date + '_' + instr + strtrim(channel,1) + 'cube.sav'
-print, savefile
-;
-
-SAVE, index, cube, filename=savefile
-
+print, ''
+format='(e0.4)'
+for ii = 0, 1 do begin
+    print, min(maps[*,*,ii]), max(maps[*,*,ii]), format=format
+    print, ''
+endfor
+print, ''
 
 
 end

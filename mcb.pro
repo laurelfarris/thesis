@@ -1,7 +1,7 @@
 ;Copied from clipboard
 
 
-SAVE, index, cube, filename=savefile
+READ_SDO, fls, index, data, /nodata
 
 end
 
