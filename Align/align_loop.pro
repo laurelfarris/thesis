@@ -80,19 +80,19 @@ pro ALIGN_LOOP, cube, ref, allshifts=allshifts, display=display, buffer=buffer
         sdv = [ sdv, stddev( shifts[0,*] ) ]
         k = n_elements(sdv)
 
-        print, "stddev(X) = ", sdv[k-1], format='(F0.8)'
+;        print, "stddev(X) = ", sdv[k-1], format='(F0.8)'
         ;- "Type conversion error: Unable to convert given STRING to Double"...
         ;-   Is this a problem?
         ;-
         ;- 13 January 2021 -- Error caused by print having TWO arguments... Quick fix:
-        print, "stddev(X) = "
-        print, sdv[k-1], format='(F0.8)'
+;        print, "stddev(X) = "
+;        print, sdv[k-1], format='(F0.8)'
         ;----
         ;- OR, could get fancy :
         ;-
         ;- Example from IDL reference pages:
-        stars = 3
-        print, FORMAT='("Detected ", I2, " stars")', stars
+;        stars = 3
+;        print, FORMAT='("Detected ", I2, " stars")', stars
         ;- My attempt to reproduce this syntax with my own values:
         print, FORMAT='("stddev(X) = ", F0.8 )', sdv[k-1]
         ;-
@@ -108,35 +108,69 @@ end
 
 
 buffer=1
-;
-instr = 'aia'
-channel = '1600'
-;channel = '1700'
+display = 0
 
+;flare_index = 0 ; M1.5  2013-08-12
+flare_index = 1 ; C8.3  2013-08-30
+;;;flare_index = 2 ; C4.6  2014-10-23
+;flare_index = 3 ; M1.0  2014-11-07
+
+
+instr = 'aia'
+;channel = '1600'
+channel = '1700'
 
 @par2
+flare = multiflare.(flare_index)
+date = flare.year + flare.month + flare.day
+
+path = '/solarstorm/laurel07/flares/' + date + '/'
+filename = date + '_' + strlowcase(instr) + strtrim(channel,1) + 'cube.sav'
+newfilename = date + '_' + strlowcase(instr) + strtrim(channel,1) + 'aligned.sav'
+
+restore, path + filename
+oldcube = cube
+restore, path + newfilename
 
 
-;cube = []
-;ind = [0:999]
-;ind = [1000:1194]
-;ind = [0:1194]
+;-  COMPARE after alignment runs..
 
-;start_ind = [0, 150, 300, 450, 700]
-; OR
-;start_ind = [ $
-;    [  0:299], $
-;    [300:599], $
-;    [600:749] $
-;    ]
-
-; foreach ii, start_ind do begin
-;    read_my_fits, index, data, fls, $
-;        ind=[ii:ii+149]
-; endforeach
+;sz = size(cube, /dimensions)
+;ref = cube[*,*,sz[2]/2]
+;help, ref
+;ALIGN_LOOP, cube, ref, allshifts=allshifts, display=display, buffer=buffer
 
 
+locs = where( cube ne oldcube )
+help, locs
 
+plot, allshifts[0,*,0]
+oplot, allshifts[1,*,0]
+
+;+
+;- AFTER confirming successful alignment:
+;-
+SAVE, cube, index, ref, allshifts, filename=newfilename
+
+
+
+stop
+
+;;im = image2( sqrt(oldcube[*,*,0]), buffer=buffer )
+;im = image2( oldcube[*,*,200], max_value=1000, buffer=buffer )
+;save2, 'test1'
+;dw
+;;im = image2( sqrt(cube[*,*,0]), buffer=buffer )
+;im = image2( cube[*,*,200], max_value=1000, buffer=buffer )
+;save2, 'test2'
+;dw
+
+
+
+
+
+
+stop;=====================================================================================
 
 
 ;-

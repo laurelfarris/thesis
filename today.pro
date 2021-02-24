@@ -1,6 +1,5 @@
 ;+
-;- 02 February 2021 (Tuesday)
-;-   Part 2: align only. Remove clutter code.
+;- 04 February 2021 (Thursday)
 ;-
 
 
@@ -42,16 +41,13 @@
 ;+
 ;- TO DO:
 ;-
+;-  []  Power maps "during"
+;-
 ;-  []  Find coords of 20141023 flare, save cube and index to .sav files:
 ;-            20141023_aia1600cube.sav
 ;-            20141023_aia1700cube.sav
-;-    --> INCOMPLETE
-;-
-;-  []  ALIGN data
-;-    --> INCOMPLETE
 ;-
 ;-  []  Image HMI alongside concurrent AIA obs; check relative AR position.
-;-    --> INCOMPLETE
 ;-          Read HMI level 1.5 fits
 ;-           Image full disk, 6 panels like yesterday
 ;-              scale continuum and/or mag ... otherwise, just get white, washed out disk...
@@ -60,19 +56,6 @@
 ;-
 ;- [] copy today.pro to some Module generalized for running alignment
 ;-    on any group of level 1.5 fits files (or level 1.0, shouldn't matter)
-;-    --> INCOMPLETE
-;-
-
-
-;+
-;- Alignment -- broken down into detailed steps:
-;-   • read level 1.5 (PREPPED) fits : index + data
-;-   • crop to subset centered on AR
-;-   • padded CUBE + INDEX -> fileame.sav
-;-       (read_sdo takes too long and bogs system down to where nothing gets done
-;-   • align cube to reference image (center of time series)
-;-   • aligned_cube + INDEX -> filename2.sav
-;-       index still the same, only data has changed...
 ;-
 
 
@@ -86,8 +69,9 @@
 ;-    current index order is as listed to the right of each flare
 ;-    (chronological order).
 ;-
-;flare_index = 0  ; M1.5
-flare_index = 1  ; C8.3
+
+flare_index = 0  ; M1.5
+;flare_index = 1  ; C8.3
 ;flare_index = 2  ; C4.6 ==>> No center coords (xcen,ycen)!!
 ;flare_index = 3  ; M1.0
 ;-
@@ -99,7 +83,6 @@ instr = 'aia'
 ;channel = 1600
 channel = 1700
 
-;
 
 @par2
 ;- multiflare = { m15:m15, c83:c83, c46:c46, m10:m10 }
@@ -110,45 +93,27 @@ date = flare.year + flare.month + flare.day
 path = '/solarstorm/laurel07/flares/' + date + '/'
 print, path
 
+;filename = date + '_' + strlowcase(instr) + strtrim(channel,1) + 'aligned.sav'
+class = strsplit(flare.class, '.', /extract)
 
 
-;+
-;========================================================================================
-;== Alignment
-;-
-
-filename = date + '_' + strlowcase(instr) + strtrim(channel,1) + 'cube.sav'
-print, filename
-restore, path + filename
-
-
-stop
-
-
-sz = size(cube, /dimensions)
-ref = cube[*,*,sz[2]/2]
-help, ref
-
-
-display = 0 ;- need to refresh on what PLOT_SHIFTS does before using this.
+;filename1 = date + '_' + strlowcase(instr) + strtrim(channel,1) + 'cube.sav'
+;restore, path + filename1
+;im = image2( sqrt(cube[*,*,0]), buffer=buffer )
+;save2, 'test1'
+;dw
+;undefine, cube
+;;
+;filename2 = class[0] + class[1] + '_' + strlowcase(instr) + strtrim(channel,1) + 'aligned.sav'
+;restore, path + filename1
+;im = image2( sqrt(cube[*,*,0]), buffer=buffer )
+;save2, 'test2'
+;dw
 ;
-resolve_routine, 'align_loop', /either
-ALIGN_LOOP, cube, ref, allshifts=allshifts, display=display, buffer=buffer
-
-fname = strsplit( flare.class, '.', /extract )
-savfile = fname[0] + fname[1] + '_' +  $
-    strlowcase(instr) + strtrim(channel,1) + 'aligned.sav'
-print, savfile
 
 
-SAVE, cube, ref, allshifts, filename=savfile
-;-  [] include INDEX in saved variables?
 
 
-;- REMEMBER : cube is MODIFIED when returned to caller! May want to make a
-;-  second variable to duplicate the original, especially if full-disk data
-;-  is undefined to free up memory. Otherwise, will have to start over with
-;-  READ_SDO, crop data, blah blah blah.
 
 
 ;+
@@ -156,37 +121,26 @@ SAVE, cube, ref, allshifts, filename=savfile
 ;== Power maps
 ;-
 
-
-path = '/solarstorm/laurel07/Data/' + strupcase(instr) + '_prepped/'
-fnames = strupcase(instr) + date + '*' + strtrim(channel,1) + '.fits'
-fls = FILE_SEARCH( path + fnames )
-help, fls
-
-READ_SDO, fls, index, data, /nodata
-
-SAVE, cube, ref, allshifts, filename=savfile
-
-
-stop;-----
-
-;- --> restore .sav file that was WRITTEN just before this step (like 20 lines up)
-;filename = date + '_' + strlowcase(instr) + strtrim(channel,1) + 'aligned.sav'
-class = strsplit(flare.class, '.', /extract)
-filename = class[0] + class[1] + '_' + strlowcase(instr) + strtrim(channel,1) + 'aligned.sav'
-print, path + filename
-;restore, path + filename
-
-print,  COMPUTE_POWERMAPS( /syntax )
-
 cadence = 24
 dz = 64
 
 
-;print, where( index.nsatpix ne 0 )
-;satlocs = where( index.nsatpix gt 0 )
+filename = date + '_' + strlowcase(instr) + strtrim(channel,1) + 'aligned.sav'
+restore, filename
 
+oldcube = cube
+cube = crop_data( oldcube, dimensions=[400,400], center=[ 400, 400 ] )
 
+;print, array_equal( index.exptime, index[0].exptime )
+exptime = 1.0
 sz = size(cube, /dimensions)
+
+;satlocs = where( index.nsatpix gt 0 )
+;print, index[satlocs].nsatpix
+
+
+time = strmid(index.date_obs, 11, 8)
+print, time[0]
 
 ;-
 ;z_start = [0:sz[2]-dz]
@@ -194,7 +148,7 @@ sz = size(cube, /dimensions)
 
 ;- indices to compute power map from time series of length dz, starting at flare start.
 z_start = (where( strmid(index.date_obs,11,5) eq flare.tstart ))[0]
-
+;
 print, z_start
 print, z_start + dz -1
 print, index[z_start].date_obs
@@ -202,13 +156,72 @@ print, flare.tstart
 print, index[z_start+dz-1].date_obs
 print, flare.tend
 
+;aia_lct, rr, gg, bb, wavelnth=channel, /load
+rgb_table=AIA_GCT( wave=channel )
+
+dw
+;imdata = cube[*,*,z_start]
+
+z_peak = (where( strmid(index.date_obs,11,5) eq flare.tpeak ))[0]
+print, z_start
+print, z_peak
+
 ;====
+;print,  COMPUTE_POWERMAPS( /syntax )
 map = COMPUTE_POWERMAPS( cube/exptime, cadence, dz=dz, z_start=z_start )
 ;====
 
+imdata = [ $
+    [[ AIA_INTSCALE( cube[*,*,z_peak], wave=channel, exptime=exptime ) ]], $
+    [[ AIA_INTSCALE( map, wave=channel, exptime=exptime ) ]] $
+]
+
+
+
+title = flare.class + '  ' + flare.year + '-' + flare.month + '-' + flare.day + '  '  $
+    + [ time[z_peak]+ ' (intensity) ' , time[z_start] + '-' + time[z_start+dz-1] + ' (power map)' ]
+;
+
+dw
+wx = 8.5
+wy = wx/2
+win=window( dimensions=[wx,wy]*dpi, buffer=buffer )
+im = objarr(2)
+for ii = 0, 1 do begin
+    im[ii] = image2( $
+        imdata[*,*,ii], $
+        /current, $
+        layout=[2,1,ii+1], $
+        margin=0.10, $
+        title=title[ii], $
+        rgb_table=rgb_table, $
+        buffer=buffer $
+    )
+endfor
+save2, 'test'
+
+
+stop;---------------------
+
+
 
 ;save, map, map2, filename='M10_aia1600map.sav'
-save, map, filename='M10_aia1600map.sav'
+;save, map, filename='M10_aia1600map.sav'
+
+filename = class + '_' + date + '_' + strlowcase(instr) + strtrim(channel,1)  + 'map.sav'
+print, filename
+
+save, map, filename=filename
+
+
+
+
+
+
+
+;-
+;==
+;============================================================================================
 
 
 print, max(cube2) / (max( cube2/exptime) )
