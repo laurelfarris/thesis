@@ -1,21 +1,106 @@
+01 March 2021
+  Added filenames + descriptions for every code in /Maps/.
+
+
 05 March 2020
-
-PROBLEM:
-    I have no idea what IDL code produced the power map figures
-    presented in article1. This is a problem.
-    I assume they came from one of the codes in this directory (Maps/),
-    but need to maintain up-to-date README file with descriptions of every code.
-    (for ALL major analyses that warrant their own dir., not just maps).
-    Also need to document this information with the figures themselves in E-note.
-
-TASKS:
-    [] Go through all codes and organize/consolidate,
-        remove old/duplicate code, add info to E-note if possible.
-    [] Add description of each Map routine below (this file).
+  PROBLEM:
+    No idea what IDL code produced power map figures presented in A1,
+      assuming one or more of "article1*.pro" played a role.
+    --> according to comment from December 2018 ( > 2 years ago... ),
+      powermap figures in A1 were generated using "image_bda_powermaps.pro"
 
 
-name_of_powermap_routine.pro
-  This routine does: ___
+To Do:
+  [] Organize, consolidate, & rename (if nec.) all codes in /Maps/
+     • remove old/duplicate code
+     • add to E-note if possible.
+
+@Routine (RT):
+  [] Update README file REGULARLY!, for every major dir in "Work/".
+  [] Update ENOTE regularly with scrnshots of figures, coding snippets,
+     .pro filenames (IDL codes), .pdf filenames (figure files)
 
 
-and so on..
+===============================================================================
+=
+
+
+---
+
+No idea...
+  • single_pix_power_spec.pro
+  • prep_flare_data_cube.pro
+  • network_powermaps.pro
+
+---
+
+compute_powermaps.pro
+  • FUNCTION : general subroutine for computing maps.
+compute_powermaps_main.pro
+  • ML for defining specific values / hardcoding; calls function above.
+
+---
+
+
+article1_maps.pro
+  • ML
+article1_maps_OLD_20200408.pro
+  •
+article1_maps_WAITING.pro
+  • ??? ....
+     ML, hardcoding, appears to be mostly for IMAGING...
+   "WAITING" for what???
+
+bda_powermaps.pro
+  • FUNCTION + ML code
+  • computes powermaps from A[cc].data; z-indices defined in ML code
+  • IMAGES powermaps
+  • GOTO statements  --> OLD!!
+
+
+new_powermaps.pro
+  • ML, hard-coded values and GOTO statements... must be pretty old. Also includes
+      imaging code and savefile toward the end. Last modified in July 2019.
+
+
+---
+
+calc_fourier2.pro
+  Procedure (no ML code), last modified April 2019, sets up a lot of code often
+  repeated, then finally > result = FOURIER2( ... ) where args to fourier2 func
+  are passed and/or set by default within subroutine.
+  [] check ../Spectra/ for similar routines (this one includes comment that
+        "this is mostly for power maps, not spectra")
+
+central_freq_powermaps.pro
+  • ATT perhaps? Playing with different central freq values, ~Rez2012 maybe?
+
+---
+
+Saturation mask, involves some combination of readng/restoring DATA whose values
+will determine whether mask pixels are set =0 or =1, threshold values, exptime
+value (+ whether data has been corrected or not.. may need to divide threshold by
+exptime), SAVE mask to .sav file, ...
+  • mask.pro
+  • powermap_mask.pro
+  • powermap_mask_EDITED_ON_PLANE.pro
+
+
+---
+
+When working remotely, periodically save maps so don't lose entire thing:
+  • save_maps_in_chunks.pro
+
+
+---
+
+Imaging routines (generalized, or at least that's the goal...):
+  • image_any_powermaps.pro
+  • image_bda_powermaps.pro
+  • image_map_SIMPLE.pro
+  • image_powermaps.pro
+
+
+
+==
+===============================================================================

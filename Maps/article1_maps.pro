@@ -2,6 +2,23 @@
 ;- LAST MODIFIED:
 ;-   08 April 2020
 ;-
+;-    Previous version : article1_maps_OLD_20200408.pro
+;-
+
+
+;-------------
+;-  01 March 2021
+;-     (Appears that I made a copy for version control, modified current version
+;-      the same day, and haven't made any changes since).
+;-     Actually the last modified date was 15 May 2020,
+;-      but the last recorded modified date at top here was 08 April 2020.
+;-    May have made tiny edits that did nothing to change the meat of the
+;-   code, but should probably still update date mod, or don't make changes
+;-   unless truly necessary).
+;-------------
+
+;-
+;-
 ;- PURPOSE:
 ;-   2x2 image of intensity (top) and power maps (bottom) for
 ;-    AIA 1600 (left) and AIA 1700 (right)

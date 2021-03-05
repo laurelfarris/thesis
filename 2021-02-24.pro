@@ -1,6 +1,7 @@
 ;+
-;- 01 March 2021 (Monday)
+;- 24 February 2021 (Thursday)
 ;-
+
 
 ;===
 ;==========================================================================
@@ -39,37 +40,92 @@
 ;+
 ;- TO DO:
 ;-
-;-  []  Full power map cube for ONE flare (no saturation, proper alignment)
+;-  []  Power maps "during"
+;-
+;-  []  Find coords of 20141023 flare, save cube and index to .sav files:
+;-            20141023_aia1600cube.sav
+;-            20141023_aia1700cube.sav
+;-
+;-  []  Image HMI alongside concurrent AIA obs; check relative AR position.
+;-          Read HMI level 1.5 fits
+;-           Image full disk, 6 panels like yesterday
+;-              scale continuum and/or mag ... otherwise, just get white, washed out disk...
+;-           Eyeball center coords of AR
+;-           Extract subset with same center and dimensions as AIA, e.g. --> "M10_hmi_mag_cube.sav"
+;-
+;- [] copy today.pro to some Module generalized for running alignment
+;-    on any group of level 1.5 fits files (or level 1.0, shouldn't matter)
 ;-
 
 
-;- C8.3 2013-08-30 T~02:04:00  (1)
-flare_index = 1  ; C8.3
+;+
+;- Current collection in multiflare project:
+;-   • C8.3 2013-08-30 T~02:04:00  (1)
+;-   • M1.0 2014-11-07 T~10:13:00  (3)
+;-   • M1.5 2013-08-12 T~10:21:00  (0)
+;-   • C4.6 2014-10-23 T~13:20:00  (2)
+;-  multiflare.(N) --> structure of structures
+;-    current index order is as listed to the right of each flare
+;-    (chronological order).
+;-
+
+flare_index = 0  ; M1.5
+;flare_index = 1  ; C8.3
+;flare_index = 2  ; C4.6 ==>> No center coords (xcen,ycen)!!
+;flare_index = 3  ; M1.0
 ;-
 
 
 buffer = 1
 
 instr = 'aia'
-channel = 1600
-;channel = 1700
+;channel = 1600
+channel = 1700
 
-;-------------------------------------------------------------------------------
 
 @par2
+;- multiflare = { m15:m15, c83:c83, c46:c46, m10:m10 }
+;help, multiflare
 flare = multiflare.(flare_index)
 
 date = flare.year + flare.month + flare.day
 path = '/solarstorm/laurel07/flares/' + date + '/'
-filename = date + '_' + strlowcase(instr) + strtrim(channel,1) + 'aligned.sav'
-restore, path + filename
+print, path
 
-stop
-
+;filename = date + '_' + strlowcase(instr) + strtrim(channel,1) + 'aligned.sav'
 class = strsplit(flare.class, '.', /extract)
+
+
+;filename1 = date + '_' + strlowcase(instr) + strtrim(channel,1) + 'cube.sav'
+;restore, path + filename1
+;im = image2( sqrt(cube[*,*,0]), buffer=buffer )
+;save2, 'test1'
+;dw
+;undefine, cube
+;;
+;filename2 = class[0] + class[1] + '_' + strlowcase(instr) + strtrim(channel,1) + 'aligned.sav'
+;restore, path + filename1
+;im = image2( sqrt(cube[*,*,0]), buffer=buffer )
+;save2, 'test2'
+;dw
+;
+
+
+
+
+
+
+;+
+;========================================================================================
+;== Power maps
+;-
 
 cadence = 24
 dz = 64
+
+
+filename = date + '_' + strlowcase(instr) + strtrim(channel,1) + 'aligned.sav'
+restore, filename
 
 oldcube = cube
 cube = crop_data( oldcube, dimensions=[400,400], center=[ 400, 400 ] )
