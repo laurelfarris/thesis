@@ -1,6 +1,11 @@
 ;+
 ;- LAST MODIFIED:
-;-   05 March 2021
+;-   18 February 2020
+;-     Attempting to create light curves for ROIs ...
+;-
+;-   03 August 2019
+;-     Bare Min: needs to produce lc figures for ANY flare.
+;-     (see plot_lc_GENERAL.pro for early attempts at a nice subroutine)
 ;-
 ;- PURPOSE:
 ;-   Plot light curves.
@@ -12,45 +17,57 @@
 ;- OUTPUT:
 ;-
 ;- TO DO:
-;-   [] Generalize variables currently hardcoded:
+;-   Generalize variables currently hardcoded:
 ;-     * filename
 ;-     * ydata
 ;-     * xtickinterval
-;-   [] Generalize entire routine for ANY lightcurve
-;-     (see plot_lc_GENERAL.pro for early attempts)
+;-
 ;-
 
 
-@par2
-flare = multiflare.C83
+;@parameters
+;- uncomment the flare to plot LCs for.
 
-date = flare.year + flare.month + flare.day
-print, date
+;IDL> .RUN struc_aia
 
-;channel = ['1600', '1700']
-;foreach cc, channel, ii do begin
-;    filename = date + '_aia' + cc + 'aligned.sav'
-;    restore, filename
-;endforeach
+;-----------------------------------------------------------
+;+
+;- ROI LCs ... sorta hijacked this code, now having a hard time
+;-   re-creating original LCs over entire AR.. (14 March 2020)
+;-
+;-
+;- 18 February 2020
+;filename = 'lc_ROI'
+;ydata = roi_flux
+;-   NOTE: roi_flux already divided by exptime in today.pro
+;-    (or whatever code it's defined in the future).
+;+
+;-
+;- 21 February 2020
+;filename = 'lc_ROI_running_avg'
+;ydata = roi_flux/lc_avg
+;- --> See today.pro for def of ydata
+;-
+;-----------------------------------------------------------
 
+;----
+;- sloppy normalizing... can probably delete these lines
+;ydata1 = A[0].flux
+;ydata2 = A[1].flux
+;ydata1 = ( ydata1 - min(ydata1) )/(max(ydata1)-min(ydata1))
+;ydata2 = ( ydata2 - min(ydata2) )/(max(ydata2)-min(ydata2)); + 0.1
+;ydata = [ [ydata1], [ydata2] ]
+;----
 
-channel = '1600'
-filename = date + '_aia' + channel + 'aligned.sav'
-restore, filename
-aia1600flux = total(total( cube, 1 ), 1)
-help, aia1600flux
-;
-channel = '1700'
-filename = date + '_aia' + channel + 'aligned.sav'
-restore, filename
-aia1700flux = total(total( cube, 1 ), 1)
+;help, ydata
+;format = '(e0.2)'
+;-
+;print, max(ydata[*,0]), format=format
+;print, max(ydata[*,1]), format=format
+;-
+;print, max(ydata[*,0]) - min(ydata[*,0]), format=format
+;print, max(ydata[*,1]) - min(ydata[*,1]), format=format
 
-;--
-help, index
-help, cube
-help, allshifts
-plot, allshifts[0,*,0]
-;- [] move this to "today.pro" (05 March 2021)
 
 
 
@@ -61,12 +78,11 @@ plot, allshifts[0,*,0]
 
 
 buffer=1
-
-class =  (tag_names( multiflare ))[1]
-print, class
-
+;@parameters
+@par2
+;-
+;- 'class' defined in @parameters (30 August 2019)
 filename = 'lc_' + class
-
 ;-
 ;ydata = A.flux
 ydata = [ $
@@ -382,50 +398,5 @@ shaded.Order, /send_to_back
 ;-
 ;-
 save2, filename
-
-stop
-
-;===============================================================================
-
-;IDL> .RUN struc_aia
-
-;-----------------------------------------------------------
-;+
-;- ROI LCs ... sorta hijacked this code, now having a hard time
-;-   re-creating original LCs over entire AR.. (14 March 2020)
-;-
-;-
-;- 18 February 2020
-;filename = 'lc_ROI'
-;ydata = roi_flux
-;-   NOTE: roi_flux already divided by exptime in today.pro
-;-    (or whatever code it's defined in the future).
-;+
-;-
-;- 21 February 2020
-;filename = 'lc_ROI_running_avg'
-;ydata = roi_flux/lc_avg
-;- --> See today.pro for def of ydata
-;-
-;-----------------------------------------------------------
-
-;----
-;- sloppy normalizing... can probably delete these lines
-;ydata1 = A[0].flux
-;ydata2 = A[1].flux
-;ydata1 = ( ydata1 - min(ydata1) )/(max(ydata1)-min(ydata1))
-;ydata2 = ( ydata2 - min(ydata2) )/(max(ydata2)-min(ydata2)); + 0.1
-;ydata = [ [ydata1], [ydata2] ]
-;----
-
-;help, ydata
-;format = '(e0.2)'
-;-
-;print, max(ydata[*,0]), format=format
-;print, max(ydata[*,1]), format=format
-;-
-;print, max(ydata[*,0]) - min(ydata[*,0]), format=format
-;print, max(ydata[*,1]) - min(ydata[*,1]), format=format
-
 
 end

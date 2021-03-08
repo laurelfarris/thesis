@@ -225,7 +225,13 @@ function COMPUTE_POWERMAPS, $
         endfor
     endelse
 
-    print, format='("Power maps calculated in ~", F0.1, " minutes.")', $
+    print, '===---'
+
+    print, format='("Power maps calculated in ~", F0.2, " minutes")', $
         (systime(/seconds) - start_time)/60
+    print, format='( "(", F0.2, " hours.")', $
+        (systime(/seconds) - start_time)/3660
+
+    print, '===---'
     return, map
 end

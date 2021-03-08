@@ -20,7 +20,18 @@
 ;-     drms, urls, /urls_only, cadence='1h', waves='171, 193, 304', /jsoc2
 ;-
 
+
 ;M1.5 2013-08-12 T~10:21:00
+
+
+;=========================================================================
+;= 05 March 2021
+;=
+
+;- C8.3, 2013-08-30,  2:04, 2:46, 4:06
+@par2
+flare = multiflare.C83
+
 
 ssw_jsoc_time2data, $
     ;'01:30 2011-02-15', '02:30 2011-02-15', $
@@ -33,9 +44,14 @@ ssw_jsoc_time2data, $
 ;
 xdata = index.t_obs
 ydata = index.datamean/index.exptime
-UTPLOT, xdata, ydata, psym=1, yrange=[min(ydata),max(ydata)]
+
 
 print, max( index.datamean/index.exptime )
+
+stop;----
+
+UTPLOT, xdata, ydata, psym=1, yrange=[min(ydata),max(ydata)]
+
 
 
 stop

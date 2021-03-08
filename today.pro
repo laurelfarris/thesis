@@ -1,5 +1,5 @@
 ;+
-;- 01 March 2021 (Monday)
+;- 04 March 2021
 ;-
 
 ;===
@@ -42,77 +42,179 @@
 ;-  []  Full power map cube for ONE flare (no saturation, proper alignment)
 ;-
 
+@par2
 
 ;- C8.3 2013-08-30 T~02:04:00  (1)
-flare_index = 1  ; C8.3
+
+;flare_index = 1  ; C8.3
+;flare = multiflare.(flare_index)
 ;-
+;- OR, since flare_index is not used anywhere else, just use the TAGNAME:
+flare = multiflare.C83
+;-
+
+
 
 
 buffer = 1
-
+;
 instr = 'aia'
-channel = 1600
-;channel = 1700
+;channel = 1600
+channel = 1700
+;
+date = flare.year + flare.month + flare.day
+class = strsplit(flare.class, '.', /extract)
 
 ;-------------------------------------------------------------------------------
+;- 04 March 2021 : re-saving align.sav with "index" included.
 
-@par2
-flare = multiflare.(flare_index)
-
-date = flare.year + flare.month + flare.day
 path = '/solarstorm/laurel07/flares/' + date + '/'
 filename = date + '_' + strlowcase(instr) + strtrim(channel,1) + 'aligned.sav'
+;
 restore, path + filename
+;
+help, index
+  ;-  not saved in aligned.sav files..
+help, cube
+help, allshifts
 
 stop
 
-class = strsplit(flare.class, '.', /extract)
+;- temporary cube to preserve ALIGNED cube
+cube2 = cube
 
+filename = date + '_' + strlowcase(instr) + strtrim(channel,1) + 'cube.sav'
+restore, path + filename
+
+;- confirm that cube and cube2 are not the same anymore, cube restored from
+;-    cube.sav files is same size, but pre-alignment.
+print, cube[0,0,0]
+print, cube2[0,0,0]
+
+;- return ALIGNED cube values to cube variable and get rid of backup.
+cube = cube2
+undefine, cube2
+
+
+filename = date + '_' + strlowcase(instr) + strtrim(channel,1) + 'aligned.sav'
+save, index, cube, allshifts, filename=filename
+
+
+stop;--------------------------------------------------------------------------
+
+;- new idl session, restore .sav file I just made and make sure all variables are there
+filename = date + '_' + strlowcase(instr) + strtrim(channel,1) + 'aligned.sav'
+restore, filename
+help, cube
+help, index
+help, allshifts
+
+
+
+
+;
 cadence = 24
 dz = 64
-
+;
 oldcube = cube
 cube = crop_data( oldcube, dimensions=[400,400], center=[ 400, 400 ] )
+help, cube
 
+undefine, oldcube
+
+;
 ;print, array_equal( index.exptime, index[0].exptime )
-exptime = 1.0
+;
+;print, where( index.exptime le 2.90 )
+;print, where( index.exptime ge 2.91 )
+;-  -1 in both cases (04 March 2021)
+;exptime = 1.0
+exptime = index[0].exptime
+;print, exptime
+;
 sz = size(cube, /dimensions)
-
+;
 ;satlocs = where( index.nsatpix gt 0 )
 ;print, index[satlocs].nsatpix
-
-
+;
+;
 time = strmid(index.date_obs, 11, 8)
-print, time[0]
+;print, time[0]
+
+
+;============================================================
 
 ;-
-;z_start = [0:sz[2]-dz]
-;-  indices for full ts, which I don't need right now...
+z_start = [0:sz[2]-dz]
+;-  indices for full ts
 
 ;- indices to compute power map from time series of length dz, starting at flare start.
-z_start = (where( strmid(index.date_obs,11,5) eq flare.tstart ))[0]
-;
-print, z_start
-print, z_start + dz -1
-print, index[z_start].date_obs
+;z_start = (where( strmid(index.date_obs,11,5) eq flare.tstart ))[0]
+
+print, z_start[-1]
+print, z_start[-1] + dz -1
+
+;print, index[z_start].date_obs
 print, flare.tstart
-print, index[z_start+dz-1].date_obs
+print, index[z_start[-1]+dz-1].date_obs
 print, flare.tend
 
 ;aia_lct, rr, gg, bb, wavelnth=channel, /load
-rgb_table=AIA_GCT( wave=channel )
-
-dw
+;rgb_table=AIA_GCT( wave=channel )
+;
+;dw
 ;imdata = cube[*,*,z_start]
 
-z_peak = (where( strmid(index.date_obs,11,5) eq flare.tpeak ))[0]
-print, z_start
-print, z_peak
+;z_peak = (where( strmid(index.date_obs,11,5) eq flare.tpeak ))[0]
+;print, z_start
+;print, z_peak
+
+
+STOP
+
 
 ;====
 ;print,  COMPUTE_POWERMAPS( /syntax )
 map = COMPUTE_POWERMAPS( cube/exptime, cadence, dz=dz, z_start=z_start )
+save, map, filename='1700map.sav'
+;-  started 23:58 04 March (Eastern time) for 1600Å, 2:52 05 March for 1700Å
+;-    Only put in "save" command for the latter... hopefully won't crash
+;-    before I get a chance to save 1600 map..
 ;====
+
+
+print, '===---'
+;
+start_time = systime(/seconds)
+wait, 5.5
+minutes = (systime(/seconds) - start_time)/60
+hours = (systime(/seconds) - start_time)/3660
+format='( "Power maps calculated in ~", F0.2, " minutes (", F0.4, " hours)" )'
+print, format=format, minutes, hours
+;print, format='( "Power maps calculated in ~", F0.2, " minutes (", F0.4, " hours)" )', minutes, hours
+;print, format='( "    (", F0.4, " hours)." )', hours
+;
+print, '===---'
+
+
+;+
+;- IMAGE power maps
+;-
+
+impulsive_phase = (where( strmid(time,0,5) eq flare.tpeak ))[0] - dz
+decay_phase = impulsive_phase + dz
+
+;before = impulsive_phase - 
+before = (where( strmid(time,0,5) eq flare.tstart ))[0] - dz
+print, time[before]
+
+
+z_ind = [ $
+    (where( strmid(time,0,5) eq flare.tpeak ))[0], $
+]
+print, z_ind
+print, time[z_ind]
+print, flare.tpeak
 
 imdata = [ $
     [[ AIA_INTSCALE( cube[*,*,z_peak], wave=channel, exptime=exptime ) ]], $
