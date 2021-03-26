@@ -1,8 +1,10 @@
 ;Copied from clipboard
 
 
-class =  (tag_names( multiflare ))[1]
-print, class
+help, c83_aia1600header
+help, c83_aia1700header
+help, c83_aia1600powermap
+help, c83_aia1700powermap
 
 end
 

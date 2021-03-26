@@ -1,6 +1,39 @@
 ;+
-;- 15 March 2021
+;- 11 March 2021
 ;-
+
+;===
+;==========================================================================
+;=
+;=  fits filenames for, e.g. AIA 1600\AA{}
+;=
+;=
+;=    AIA
+;=      UNprepped fits (level 1.0):
+;=        'aia.lev1.1600A_2013-12-28T10_00_00.00Z.image_lev1.fits'
+;=        'aia.lev1.304A_2013-12-28T10_00_00.00Z.image_lev1.fits'
+;=
+;=      PREPPED fits (level 1.5):
+;=        'AIA20131228_100000_1600.fits'
+;=        'AIA20131228_100000_0304.fits'
+;=
+;=
+;=    HMI
+;=      UNprepped (level 1.0):
+;=        'hmi.ic_45s.yyyy.mm.dd_hh_mm_ss_TAI.continuum.fits'
+;=        'hmi.m_720s.yyyy.mm.dd_hh_mm_ss_TAI.magnetogram.fits'
+;=        'hmi.m_45s.yyyy.mm.dd_hh_mm_ss_TAI.magnetogram.fits'
+;=        'hmi.v_45s.yyyy.mm.dd_hh_mm_ss_TAI.Dopplergram.fits'
+;=
+;=      PREPPED fits (level 1.5)
+;=        'HMIyyyymmdd_hhmmss_cont.fits'
+;=        'HMIyyyymmdd_hhmmss_*?*.fits'
+;=        'HMIyyyymmdd_hhmmss_mag.fits'
+;=        'HMIyyyymmdd_hhmmss_dop.fits'
+;=
+;=
+;==========================================================================
+;===
 
 
 ;+
@@ -8,6 +41,7 @@
 ;-
 ;-  [] Re-name files to start with GOES class instead of yyyymmdd.
 ;-  [] Headers for .sav files created for C8.3 flare, send all to Sean S.
+;-  []
 ;-  []
 ;-
 
@@ -22,124 +56,51 @@
 flare = multiflare.C83
 ;-
 
-; Time in seconds since 1 January 1970
-;mtime = FILE_MODTIME(FILEPATH('dist.pro', SUBDIR = 'lib'))
-mtime = FILE_MODTIME('today.pro')
-print, mtime
-;
-; Convert to a date/time string
-PRINT, SYSTIME(0, mtime)
-
 
 
 
 buffer = 1
 ;
 instr = 'aia'
-;channel = 1600
-channel = 1700
+channel = 1600
+;channel = 1700
 ;
 date = flare.year + flare.month + flare.day
 class = strsplit(flare.class, '.', /extract)
-class = strlowcase(class[0] + class[1])
+class = class[0] + class[1]
 
-path = '/solarstorm/laurel07/flares/' + class + '_' + date + '/'
-filename = class + '_' + date + '_' + strlowcase(instr) + strtrim(channel,1) + 'aligned.sav'
+print, class
+print, strupcase(class)
+print, strlowcase(class)
+
+stop
+
+;-------------------------------------------------------------------------------
+;- 04 March 2021 : re-saving align.sav with "index" included.
+
+path = '/solarstorm/laurel07/flares/' + strlowcase(class) + '_' + date + '/'
+filename = date + '_' + strlowcase(instr) + strtrim(channel,1) + 'aligned.sav'
+;filename = class + '_' + date + '_' + strlowcase(instr) + strtrim(channel,1) + 'aligned.sav'
+;-  not changing files yet, just directories... easier for now.
 restore, path + filename
 
-print, index[0].wavelnth
 
-stop
 
-c83_aia1700header = index
-save, c83_aia1700header, filename = 'c83_aia1700header.sav'
-
-;----
-;channel = 1600
-channel = 1700
-path = './c83_20130830/'
-mapfile = 'c83_aia' + strtrim(channel,1) + 'map.sav'
-print, path + mapfile
+filename_OLD = date + '_' + strlowcase(instr) + strtrim(channel,1) + 'aligned_OLD.sav'
+restore, path + filename_OLD
 ;
-
-restore, path + mapfile
-help, map
-print, max(map)
-
-c83_aia1700powermap = map
-help, c83_aia1700powermap
-
-print, max(c83_aia1700powermap)
-
-save, c83_aia1700powermap, filename = mapfile
-
+filename_OLD_2 = date + '_' + strlowcase(instr) + strtrim(channel,1) + 'aligned_OLD_2.sav'
+restore, path + filename_OLD_2
 
 ;
-;==================================================================================
-
-channel = 1600
-;channel = 1700
-
 ;
-path = './c83_20130830/'
 
-headerfile = 'c83_aia' + strtrim(channel,1) + 'header.sav'
-
-mapfile = 'c83_aia' + strtrim(channel,1) + 'powermap.sav'
-;
-restore, path + headerfile
-
-help, c83_aia1700header
-
-
-restore, '../flares/c83_20130830/20130830_aia' + strtrim(channel,1) + 'cube.sav'
 help, index
-
-print, index[0].wavelnth
-
-c83_aia1600header = index
-help, c83_aia1600header
-
-save, c83_aia1600header, filename=headerfile
-
-;===========
-
-;channel = '1600'
-channel = '1700'
-;
-headerfile = 'c83_aia' + channel + 'header.sav'
-mapfile = 'c83_aia' + channel + 'powermap.sav'
-path = './c83_20130830/'
-
-
-help, c83_aia1600header
-help, c83_aia1700header
-help, c83_aia1600powermap
-help, c83_aia1700powermap
-
-restore, path + headerfile
-restore, path + mapfile
-
-
-undefine, c83_aia1600header
-undefine, c83_aia1600powermap
+  ;-  not saved in aligned.sav files..
+help, cube
+help, allshifts
 
 stop
-
-
-;------
-basename = FILE_BASENAME(filename, '.sav')
-;
-filename2 = basename + '_OLD.sav'
-filename3 = basename + '_OLD_2.sav'
-;
-print, filename
-print, filename2
-print, filename3
-;------
-
-
-
 
 ;- temporary cube to preserve ALIGNED cube
 cube2 = cube
