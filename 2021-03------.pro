@@ -28,9 +28,6 @@ flare = multiflare.M15
 
 STOP
 
-;___________________________________________________
-;- IDL fun times --> Enote
-;-
 ; Time in seconds since 1 January 1970
 ;mtime = FILE_MODTIME(FILEPATH('dist.pro', SUBDIR = 'lib'))
 mtime = FILE_MODTIME('today.pro')
@@ -38,7 +35,6 @@ print, mtime
 ;
 ; Convert to a date/time string
 PRINT, SYSTIME(0, mtime)
-;___________________________________________________
 
 
 
@@ -48,6 +44,7 @@ buffer = 1
 instr = 'aia'
 channel = 1600
 ;channel = 1700
+
 ;
 date = flare.year + flare.month + flare.day
 print, date
@@ -55,26 +52,19 @@ print, date
 class = strsplit(flare.class, '.', /extract)
 class = strlowcase(class[0] + class[1])
 print, class
-;
+
 path = '/solarstorm/laurel07/flares/' + class + '_' + date + '/'
 ;filename = class + '_' + date + '_' + strlowcase(instr) + strtrim(channel,1) + 'aligned.sav'
 filename = class + '_' + strlowcase(instr) + strtrim(channel,1) + 'aligned.sav'
-;print, file_exist(path + filename)
-;
+print, file_exist(path + filename)
+
 restore, path + filename
 
 ;- confirm channel is what I want it to be.
-;print, index[0].wavelnth
+print, index[0].wavelnth
 
-;----------------------------
 
-;- Active Variables :
-;-  index, cube, allshifts, ref, 
-;-
 
-plot, allshifts[0,*,0]
-
-oplot, allshifts[1,*,0]
 
 
 

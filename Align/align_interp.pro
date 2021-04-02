@@ -35,7 +35,7 @@ shifts = interpolate_shifts( shifts )
 shifts[*,250:330] = 0.0
 shifts[*,450:510] = 0.0
 shifts[*,600:*] = 0.0
-plot_all_shifts, shifts
+plot_allshifts, shifts
 
 ;--------------------------------------------------------------------------------------
 

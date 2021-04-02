@@ -1,4 +1,29 @@
-pro plot_all_shifts, shifts
+;+
+;- LAST MODIFIED:
+;-   02 April 2021
+;-
+;- ROUTINE:
+;-    plot_allshifts.pro
+;-
+;- USEAGE:
+;-   PLOT_ALLSHIFTS, allshifts[*,*,0]
+;-    --> assuming "allshifts" is 2x750xN, or x|y shifts x 750 images in 5-hr ts x N alignment loops,
+;-      and only interesting in plotting the first set of shifts, cuz after all, if they're fucked
+;-      up, the rest don't matter. Could also use w/ 2D "shifts" after each alignment loop, not
+;-      the set of all shifts).
+;-
+;-
+;- INPUT:
+;-
+;- OUTPUT:
+;-
+;- TO DO:
+;-   []
+;-
+
+
+
+pro PLOT_ALLSHIFTS, shifts
 
 
     ;; shifts should be 2xN array.

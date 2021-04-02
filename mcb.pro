@@ -1,10 +1,7 @@
 ;Copied from clipboard
 
 
-help, c83_aia1600header
-help, c83_aia1700header
-help, c83_aia1600powermap
-help, c83_aia1700powermap
+plot, allshifts[0,*,0]
 
 end
 
