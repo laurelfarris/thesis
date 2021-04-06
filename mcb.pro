@@ -1,7 +1,8 @@
 ;Copied from clipboard
 
 
-plot, allshifts[0,*,0]
+;- Saved updated cube, plus LATEST shifts (don't have 3D "allshifts" here..)
+save, cube, shifts, filename=alignedfilename
 
 end
 
