@@ -1,6 +1,6 @@
 ;+
 ;- LAST MODIFIED:
-;-   05 March 2021
+;-   06 April 2021
 ;-
 ;- PURPOSE:
 ;-   Plot light curves.
@@ -20,12 +20,22 @@
 ;-     (see plot_lc_GENERAL.pro for early attempts)
 ;-
 
-
+buffer=1
+;
 @par2
-flare = multiflare.C83
+flare = multiflare.M15
+;
+class = 'm15'
+;-  --->> [] generalize code later
+
+
+
 
 date = flare.year + flare.month + flare.day
 print, date
+;
+;class =  (tag_names( multiflare ))[1]
+;print, class
 
 ;channel = ['1600', '1700']
 ;foreach cc, channel, ii do begin
@@ -33,21 +43,154 @@ print, date
 ;    restore, filename
 ;endforeach
 
+instr = 'aia'
+;channel = '1600'
+channel = '1700'
+;
+help, channel
+help, strtrim(channel,1)
 
-channel = '1600'
+path = '/solarstorm/laurel07/flares/' + class + '_' + date + '/'
+;filename = class + '_' + instr + strtrim(channel,1) + 'cube.sav'
+filename = class + '_' + instr + strtrim(channel,1) + 'aligned.sav'
+print, file_exist(path+filename)
+;
+
+stop
+
+
+;print, cube[0,0,0]
+restore, path + filename
+print, cube[0,0,0]
+
+;aia1600index = index
+;aia1600cube = cube   ;- if ALIGNED
+;
+;aia1700index = index
+;aia1700cube = cube   ;- if ALIGNED
+
+;undefine, index
+;undefine, cube
+
+;-------------
+;- TESTING stuff
+
+index = aia1600index[0]
+im = aia1600cube[*,*,0]
+;
+print, index.date_obs
+print, index.t_obs
+;
+print, index.datamax
+print, max(im)
+;
+print, index.datamean
+print, mean( mean( im, dimension=1 ), dimension=1 )
+;
+help, index.wavelnth ;- LONG
+help, index.wave_str ;- STRING
+;-----------
+
+;print, filename
+;index = aia1700index
+;cube = aia1700cube
+
+save, index, cube, allshifts, filename=filename
+;undefine, index
+;undefine, cube
+
+;-    [] may need to save again with "allshifts", but only if alignment has to be re-done yet again.
+
+;+
+;- INTERP 1700 (must do this first to get dimensions to match 1600)
+
+
+
+
+
+;+
+;- structure for each channel
+;-    ==>> [] doesn't go here!
+
+aia1600 = { $
+    channel : 1600, $
+    ;channel : aia1600index[0].wavelnth, $
+    exptime : aia1600index[0].exptime, $
+    t_obs : aia1600index.t_obs, $ 
+    flux : total(total(aia1600cube,1),1), $
+    color : 'blue', $
+    ;ct : ct, $
+    name : 'AIA 1600\AA' $
+}
+aia1700 = { $
+    channel : 1700, $
+    ;channel : aia1700index[0].wavelnth, $
+    exptime : aia1700index[0].exptime, $
+    t_obs : aia1700index.t_obs, $ 
+    flux : total(total(aia1700cube,1),1), $
+    color : 'red', $
+    ;ct : ct, $
+    name : 'AIA 1700\AA' $
+}
+
+
+;=
+;======================================================================
+;= Compute 1D FLUX array for each channel
+
+
+
+;test
+
+A = [ aia1600, aia1700 ]
+
+help, flare
+help, A[0]
+help, A[1]
+
+sz = size(cube,/dimensions)
+print, sz
+
+flux = fltarr( sz[2], 2 )
+help, flux
+;- chose order of flux array dimensions to match A.flux, where A = [ aia1600struc, aia1700struc ]
+
+test = 1600
+help, test
+
+print, string(test); eq '1600'
+
+if string(channel) eq '1600' then print, 'woo!'
+;-  --> no whitespace in string conversion
+;-     .... because already defined as string in this code. Derp.
+
+if strtrim(channel,1) eq '1600' then cc = 0
+if strtrim(channel,1) eq '1700' then cc = 1
+print, cc
+
+exptime = index[0].exptime
+;
+;aia1700flux = total(total( cube, 1 ), 1)
+flux[ *, cc ] = (total( total( cube, 1), 1))/exptime
+;
+print, max(flux)
+
+;--
+
+
+
+
 filename = date + '_aia' + channel + 'aligned.sav'
-restore, filename
+restore, path + filename
+help, cube
+help, index
+
+
 aia1600flux = total(total( cube, 1 ), 1)
 help, aia1600flux
 ;
-channel = '1700'
-filename = date + '_aia' + channel + 'aligned.sav'
-restore, filename
-aia1700flux = total(total( cube, 1 ), 1)
 
 ;--
-help, index
-help, cube
 help, allshifts
 plot, allshifts[0,*,0]
 ;- [] move this to "today.pro" (05 March 2021)
@@ -60,10 +203,6 @@ plot, allshifts[0,*,0]
 ;=
 
 
-buffer=1
-
-class =  (tag_names( multiflare ))[1]
-print, class
 
 filename = 'lc_' + class
 

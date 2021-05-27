@@ -177,6 +177,8 @@ function COMPUTE_POWERMAPS, $
 
     start_time = systime(/seconds)
 
+    print, '===---'
+    print, 'Powermap computation started ', systime()
 
     ;-
     ;-- Skip saturated pixels
@@ -225,12 +227,12 @@ function COMPUTE_POWERMAPS, $
         endfor
     endelse
 
-    print, '===---'
-
-    print, format='("Power maps calculated in ~", F0.2, " minutes")', $
+;    print, format='("Power maps calculated in ~", F0.2, " minutes")', $
+    print, format='("Total runtime ~", F0.2, " minutes")', $
         (systime(/seconds) - start_time)/60
     print, format='( "(", F0.2, " hours.")', $
         (systime(/seconds) - start_time)/3660
+
 
     print, '===---'
     return, map
