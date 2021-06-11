@@ -15,17 +15,20 @@
 ;-
 
 
-;+
-;flare_num = 0 ; X22
-;flare_num = 1 ; C30
-;flare_num = 2 ; M73
-flare_num = 3 ; C8.3
-flare_num = 4 ; M1.0
-flare_num = 5 ; M1.5
-flare_num = 6 ; C4.6
-;flare_num = 7 ; X1.0
-;-
+flare_num = 0 ; X22
+;- .sav files for Sean S. -- 28 May 2021
 
+;;+
+;;flare_num = 0 ; X22
+;;flare_num = 1 ; C30
+;;flare_num = 2 ; M73
+;flare_num = 3 ; C8.3
+;flare_num = 4 ; M1.0
+;flare_num = 5 ; M1.5
+;flare_num = 6 ; C4.6
+;;flare_num = 7 ; X1.0
+;;-
+;
 
 ;===================================================================================
 

@@ -1,17 +1,50 @@
 ;+
 ;- MODIFIED:
+;-
+
+;+
+;- 11 June 2021
+;-   Added kw flare; defined at ML by calling @par2 and extracting single flare.
+;-
+;-   [] .run mcb as a SCRIPT, so it can be done within a subroutine.
+;-   [] linear_interp begins with if statement to check if interp_coords is defined...
+;-         may make more sense to do this here, before calling subroutine.
+;-         Would change this now, except I may have set it up htis way for a reason, and
+;-         probably doesn't take much computation time to check for 1600
+;-
+
+
 ;-   29 January 2020
 ;-     Made a copy "struc_aia_old.pro" to preserve old codes & comments.
 ;-     Cleaned up current code (a lot...).
+
+;+
+;- 21 July 2020
+;-   [] omit large arrays from structures (data, map),
+;-        ... simply commented the line assigned tag/value in final structure
+;-          definition before returning it to ML... should do something better
+;------    eventually.
+;-   [] ADD variables defined in parameters.pro
+;-   [] define all three flare structures at the same time,
+;-   [] create one big multi-flare structure with 3 tags (one for each flare),
+;-       whose values are the structure(s), for that flare
+;-       (2 structures per falre at the moment: one for 1600, one for 1700)...
+;-     ==>> [] what about when I start including HMI data???
+;-   [] SAVE final structure(s) to .sav file(s)
+;-       --> no longer necessary to run STRUC_AIA unless to change someting
+;-           in the structure (hasn't been done in quite a while....)
+;-
+
 ;-
 ;- PURPOSE:
 ;-   Read AIA headers and restore .sav files (data)
 ;-
 ;- EXTERNAL SUBROUTINES
 ;-   read_my_fits.pro
-;-   crop_data.pro
+;-   get_jd.pro
 ;-   missing_obs.pro
 ;-   linear_interp.pro
+;-   crop_data.pro
 ;-
 ;-
 ;- INPUT:
@@ -28,7 +61,10 @@
 ;+
 
 
-function STRUC_AIA, index, cube, $
+function STRUC_AIA, $
+    index, $
+    cube, $
+    flare=flare, $
     cadence=cadence, $
     instr=instr, $
     channel=channel, $
@@ -43,6 +79,7 @@ function STRUC_AIA, index, cube, $
     if n_elements(index) eq 0 then begin
         resolve_routine, 'read_my_fits'
         READ_MY_FITS, index, $
+            flare=flare, $
             instr=instr, $
             channel=channel, $
             nodata=1, $
@@ -72,12 +109,26 @@ function STRUC_AIA, index, cube, $
       ;-  that crops and interpolates cube.
       ;-  Maybe those should be two separate routines... not top priority right now.
 
-    path = '/solarstorm/laurel07/' + year + month + day + '/'
-    restore, path + instr + channel + 'aligned.sav'
+
+    class = strlowcase(strjoin(strsplit(flare.class, '.', /extract)))
+    year = flare.year
+    month = flare.month
+    day = flare.day
+
+    ;path = '/solarstorm/laurel07/' + year + month + day + '/'
+    path = '/solarstorm/laurel07/flares/' + class + '_' + year + month + day + '/'
+    file = class + '_' + instr + channel + 'aligned.sav'
+    print, FILE_EXIST( path + file )
+    restore, path + file
+
     help, cube ; --> INT [1000, 800, 596]  (AIA 1600, 2013 flare)
 
+    stop
+
     time = strmid(index.date_obs,11,11)
+    resolve_routine, 'get_jd', /is_function
     jd = GET_JD( index.date_obs + 'Z' )
+
 
     ;- Restore shifts to be interpolated
     ;restore, path + instr + channel + 'shifts.sav'
@@ -98,12 +149,17 @@ function STRUC_AIA, index, cube, $
     resolve_routine, 'missing_obs'
     MISSING_OBS, cadence, index.date_obs, interp_coords, time, jd, dt
 
+    help, interp_coords
+    stop
+
     ;- interpolate to get missing data and corresponding timestamp
     resolve_routine, 'linear_interp'
     ;LINEAR_INTERP, cube, jd, cadence, time;, shifts=shifts
     LINEAR_INTERP, cube, jd, time, interp_coords;, shifts=shifts
     ;- NOTE: cadence is an input argument to this code :)
     ;help, cube ; --> FLOAT [1000, 800, 600]  (AIA 1600, 2013 flare)
+
+    stop
 
     ;- NOTE: original center coords should NOT be used for cropped data.
     ;-  (will be "out of range"). This keyword is more useful when starting with
@@ -177,29 +233,24 @@ function STRUC_AIA, index, cube, $
 end
 
 
-;+
-;- 21 July 2020
-;-   [] omit large arrays from structures (data, map),
-;-        ... simply commented the line assigned tag/value in final structure
-;-          definition before returning it to ML... should do something better
-;------    eventually.
-;-   [] ADD variables defined in parameters.pro
-;-   [] define all three flare structures at the same time,
-;-   [] create one big multi-flare structure with 3 tags (one for each flare),
-;-       whose values are the structure(s), for that flare
-;-       (2 structures per falre at the moment: one for 1600, one for 1700)...
-;-     ==>> [] what about when I start including HMI data???
-;-   [] SAVE final structure(s) to .sav file(s)
-;-       --> no longer necessary to run STRUC_AIA unless to change someting
-;-           in the structure (hasn't been done in quite a while....)
-;-
-
-
 ;- IDL> @parameters
 
-aia1600 = STRUC_AIA( aia1600index, aia1600data, cadence=24., instr='aia', channel='1600' )
-aia1700 = STRUC_AIA( aia1700index, aia1700data, cadence=24., instr='aia', channel='1700' )
+@par2
+;
+;flare = multiflare.m10
+flare = multiflare.m15
+;flare = multiflare.x22
 
+
+
+aia1600 = STRUC_AIA( $
+    aia1600index, aia1600data, $
+    flare=flare, $
+    cadence=24., instr='aia', channel='1600' )
+
+;aia1700 = STRUC_AIA( aia1700index, aia1700data, cadence=24., instr='aia', channel='1700' )
+
+stop
 
 A = [ aia1600, aia1700 ]
 undefine, aia1600

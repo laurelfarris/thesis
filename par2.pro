@@ -119,6 +119,20 @@ m15 = { $
     xcen : -268.8, $
     ycen : -422.4 $
 }
+;
+;x22 = { $
+;    ;flare, $
+;    ;m15, $
+;    class : 'X2.2', $
+;    year : '2011', $
+;    month : '02', $
+;    day : '15', $
+;    tstart : '01:47', $
+;    tpeak  : '01:56', $
+;    tend   : '02:06', $
+;    xcen : !NULL, $
+;    ycen : !NULL $
+;}
 ;testflare = { $
 ;    ;m15, $
 ;    class : 'M1.5', $
@@ -133,6 +147,7 @@ m15 = { $
 ;}
 
 multiflare = { m15:m15, c83:c83, c46:c46, m10:m10 }
+;multiflare = { m15:m15, c83:c83, c46:c46, m10:m10, x22:x22 }
 ;help, multiflare
 
 

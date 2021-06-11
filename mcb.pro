@@ -1,7 +1,7 @@
 ;Copied from clipboard
 
 
-A = [ aia1600, aia1700 ]
+center = FIX( ( [aia1600index[0].naxis1,aia1600index[0].naxis2]/2 ) + ( [flare.xcen,flare.ycen]/aia1600index[0].cdelt1 ) )
 
 end
 

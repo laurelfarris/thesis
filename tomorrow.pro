@@ -2,6 +2,11 @@
 ;- 14 May 2020
 ;-
 ;-
+;-
+;-  [] Clean up code, write module, move to ./Align/ with GOOD DOCUMENTATION!
+;-         ==>>  comments, update README, etc.
+;-
+;-
 ;- [] Prep for new science by commenting and outlining potential codes,
 ;-      new analysis methods, re-structure old methods (not just the science
 ;-      part, but also improve genearality of subroutines (can use for any flare),

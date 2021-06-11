@@ -1,6 +1,6 @@
 ;+
 ;- LAST MODIFIED:
-;-   06 April 2021
+;-   10 June 2021
 ;-
 ;- PURPOSE:
 ;-   Plot light curves.
@@ -20,22 +20,25 @@
 ;-     (see plot_lc_GENERAL.pro for early attempts)
 ;-
 
+
+
 buffer=1
-;
+
 @par2
 flare = multiflare.M15
+
+instr = 'aia'
 ;
-class = 'm15'
-;-  --->> [] generalize code later
+;channel = '1600'
+channel = '1700'
 
+;----
 
-
-
-date = flare.year + flare.month + flare.day
-print, date
-;
 ;class =  (tag_names( multiflare ))[1]
-;print, class
+class = strlowcase(strjoin(strsplit(flare.class, '.', /extract)))
+date = flare.year + flare.month + flare.day
+
+center = FIX( ( [aia1600index[0].naxis1,aia1600index[0].naxis2]/2 ) + ( [flare.xcen,flare.ycen]/aia1600index[0].cdelt1 ) )
 
 ;channel = ['1600', '1700']
 ;foreach cc, channel, ii do begin
@@ -43,9 +46,6 @@ print, date
 ;    restore, filename
 ;endforeach
 
-instr = 'aia'
-;channel = '1600'
-channel = '1700'
 ;
 help, channel
 help, strtrim(channel,1)

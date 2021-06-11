@@ -1,34 +1,23 @@
-17 April 2019
-Subroutines in GOES directory
+03 June 2021
 
-------------------------------------------------------------------------
+"work"/GOES/
 
-    goes.pro --> NOT MINE! This was copied from the internet.
-                   I should try to make my filenames more unique...
-                   Or move stuff I didn't write to a common directory that doesn't
-                   contain any of my own stuff.
-    CORRECTION: I did write this, but copied a bunch of text from the webpage
-       explaining how to use it and commented it all out.
-     "OGOES()" is the name of the external routine.
-       Useful reference, but possibly misleading.
+    goes.pro
+        Copied code from interwebs, along with explanations of how to use it (commented)
+        OGOES() --> external routine.
 
-
-
-------------------------------------------------------------------------
-
-The following subroutines definitely are mine :)
-
-    plot_goes_2.pro
-
-    plot_goes_subroutine.pro
-        This is from the time I consolidated a bunch of codes together,
-        many of which contained a lot of ML code. That code was placed
-        in a subroutine, and any routine called by the previously ML code
-        was appended with "_subroutine" so I would know it was a subroutine
-        even when that bit of code was separated out from everything else.
+    plot_goes.pro
+        function definition plus ML code, which calls function defined above:
+            plt = PLOT_GOES( gdata, buffer=buffer )
 
     oplot_goes.pro
-        This is never actually called from the ML code in the same file...
-        I think I tried using IDL's plot procedure rather than functions
-        when first learning how to plot data with GOES, then got fed up
-        with it and went back to the object-oriented style.
+        procedure definition only (no ML code),
+        not called from any other routine in this directory.
+        This is probably not needed.
+
+    plot_goes_OLD_20210603.pro
+        Copied to preserve old stuff since last modified date was over two years ago... 
+        
+
+
+----------------------------------------------------

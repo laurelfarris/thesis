@@ -40,6 +40,7 @@
 ;-
 
 pro READ_MY_FITS, index, data, fls, $
+    flare=flare, $ ;- Added to replace values obtained from @parameters (11 June 2021)
     instr=instr, $
     channel=channel, $
     ind=ind, $
@@ -65,7 +66,7 @@ pro READ_MY_FITS, index, data, fls, $
     endif
 
 
-    @parameters
+    ;@parameters
 
 
     start_time = systime()
@@ -93,9 +94,12 @@ pro READ_MY_FITS, index, data, fls, $
     channel = strtrim(channel, 1)
 
 
-    year = strtrim(year, 1)
-    month = strtrim(month, 1)
-    day = strtrim(day, 1)
+;    year = strtrim(year, 1)
+;    month = strtrim(month, 1)
+;    day = strtrim(day, 1)
+    year = flare.year
+    month = flare.month
+    day = flare.day
 
     ;- Set up variables
 
