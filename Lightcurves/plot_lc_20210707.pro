@@ -1,12 +1,6 @@
 ;+
 ;- LAST MODIFIED:
-;-   07 July 2021
-;-     copied to plot_lc_20210707.pro to remove ML code that has nothing to do with LCs,
-;-     but may be important and needs to be copied to more relevant routines, including:
-;-       • ALIGNMENT routines: restoring and saving w/ extra variables (shifts, allshifts,..)
-;-       • computes FLUX for each channel (wrote code here for this before modifying struc_aia
-;-         to work with multiflare structure / @par2
-;-       •
+;-   10 June 2021
 ;-
 ;- PURPOSE:
 ;-   Plot light curves.
@@ -31,35 +25,186 @@
 buffer=1
 
 @par2
+flare = multiflare.M15
 
-;instr = 'aia'
+instr = 'aia'
+;
 ;channel = '1600'
-;channel = '1700'
-;cc = 0
-;cc = 1
-;channel = A[cc].channel
+channel = '1700'
 
-;- NOTE : flare is defined at top of ML in Prep/struc_aia.pro
+;----
 
-;+
-;--- create string variables to use in filenames (I guess)
+;class =  (tag_names( multiflare ))[1]
 class = strlowcase(strjoin(strsplit(flare.class, '.', /extract)))
-;- flare.class = M1.5 --> class = m15
 date = flare.year + flare.month + flare.day
-;- flare.date = 12-Aug-2013 --> date = 20130812
-;------
 
+center = FIX( ( [aia1600index[0].naxis1,aia1600index[0].naxis2]/2 ) + ( [flare.xcen,flare.ycen]/aia1600index[0].cdelt1 ) )
 
-filename = class + '_lightcurve'
-print, filename
+;channel = ['1600', '1700']
+;foreach cc, channel, ii do begin
+;    filename = date + '_aia' + cc + 'aligned.sav'
+;    restore, filename
+;endforeach
+
+;
+help, channel
+help, strtrim(channel,1)
+
+path = '/solarstorm/laurel07/flares/' + class + '_' + date + '/'
+;filename = class + '_' + instr + strtrim(channel,1) + 'cube.sav'
+filename = class + '_' + instr + strtrim(channel,1) + 'aligned.sav'
+print, file_exist(path+filename)
+;
 
 stop
+
+
+;print, cube[0,0,0]
+restore, path + filename
+print, cube[0,0,0]
+
+;aia1600index = index
+;aia1600cube = cube   ;- if ALIGNED
+;
+;aia1700index = index
+;aia1700cube = cube   ;- if ALIGNED
+
+;undefine, index
+;undefine, cube
+
+;-------------
+;- TESTING stuff
+
+index = aia1600index[0]
+im = aia1600cube[*,*,0]
+;
+print, index.date_obs
+print, index.t_obs
+;
+print, index.datamax
+print, max(im)
+;
+print, index.datamean
+print, mean( mean( im, dimension=1 ), dimension=1 )
+;
+help, index.wavelnth ;- LONG
+help, index.wave_str ;- STRING
+;-----------
+
+;print, filename
+;index = aia1700index
+;cube = aia1700cube
+
+save, index, cube, allshifts, filename=filename
+;undefine, index
+;undefine, cube
+
+;-    [] may need to save again with "allshifts", but only if alignment has to be re-done yet again.
+
+;+
+;- INTERP 1700 (must do this first to get dimensions to match 1600)
+
+
+
+
+
+;+
+;- structure for each channel
+;-    ==>> [] doesn't go here!
+
+aia1600 = { $
+    channel : 1600, $
+    ;channel : aia1600index[0].wavelnth, $
+    exptime : aia1600index[0].exptime, $
+    t_obs : aia1600index.t_obs, $ 
+    flux : total(total(aia1600cube,1),1), $
+    color : 'blue', $
+    ;ct : ct, $
+    name : 'AIA 1600\AA' $
+}
+aia1700 = { $
+    channel : 1700, $
+    ;channel : aia1700index[0].wavelnth, $
+    exptime : aia1700index[0].exptime, $
+    t_obs : aia1700index.t_obs, $ 
+    flux : total(total(aia1700cube,1),1), $
+    color : 'red', $
+    ;ct : ct, $
+    name : 'AIA 1700\AA' $
+}
+
+
+;=
+;======================================================================
+;= Compute 1D FLUX array for each channel
+
+
+
+;test
+
+A = [ aia1600, aia1700 ]
+
+help, flare
+help, A[0]
+help, A[1]
+
+sz = size(cube,/dimensions)
+print, sz
+
+flux = fltarr( sz[2], 2 )
+help, flux
+;- chose order of flux array dimensions to match A.flux, where A = [ aia1600struc, aia1700struc ]
+
+test = 1600
+help, test
+
+print, string(test); eq '1600'
+
+if string(channel) eq '1600' then print, 'woo!'
+;-  --> no whitespace in string conversion
+;-     .... because already defined as string in this code. Derp.
+
+if strtrim(channel,1) eq '1600' then cc = 0
+if strtrim(channel,1) eq '1700' then cc = 1
+print, cc
+
+exptime = index[0].exptime
+;
+;aia1700flux = total(total( cube, 1 ), 1)
+flux[ *, cc ] = (total( total( cube, 1), 1))/exptime
+;
+print, max(flux)
+
+;--
+
+
+
+
+filename = date + '_aia' + channel + 'aligned.sav'
+restore, path + filename
+help, cube
+help, index
+
+
+aia1600flux = total(total( cube, 1 ), 1)
+help, aia1600flux
+;
+
+;--
+help, allshifts
+plot, allshifts[0,*,0]
+;- [] move this to "today.pro" (05 March 2021)
+
+
 
 ;=
 ;======================================================================
 ;= plot light curves for integrated emission (the original)
 ;=
 
+
+
+filename = 'lc_' + class
 
 ;-
 ;ydata = A.flux
@@ -72,14 +217,11 @@ ydata = [ $
 n_obs = (size(ydata, /dimensions))[0]
 ;xdata = A.jd
 ;-
-
 xdata = [ [indgen(n_obs)], [indgen(n_obs)] ]
-;-  see today.pro (21 Feb 2020)
+;-  see today.pro (21 feb 2020)
 ;-
-
-
-;;xtickinterval = A[0].jd[75] - A[0].jd[0]
-;xtickinterval = 75
+;xtickinterval = A[0].jd[75] - A[0].jd[0]
+xtickinterval = 75
 
 
 ;- From ../WA/plot_filter.pro, though probably don't need to preserve these values
@@ -87,11 +229,10 @@ xdata = [ [indgen(n_obs)], [indgen(n_obs)] ]
 ;yticklen=0.010
 ;stairstep=1
 
-;xminor = 5
+xminor = 5
 ytitle=A.name + ' (DN s$^{-1}$)'
 ;-
 
-stop
 
 dw
 resolve_routine, 'batch_plot_2', /either
@@ -108,7 +249,8 @@ plt = BATCH_PLOT_2(  $
     name=A.name, $
     buffer=buffer )
 print, plt[0].xminor
-;
+
+
 ;-
 ;-  30 August 2019
 ;yoffset = 0.10
@@ -136,7 +278,7 @@ plt[1].yrange = [ $
 ]
 ;-
 ;-
-;
+
 ;-
 ;- 14 March 2020
 ;-  hardcoding padding for yrange, for now..
@@ -154,11 +296,11 @@ dy1700 = plt[1].yrange[1] - plt[1].yrange[0]
 ;plt[0].yrange = plt[0].yrange + [-0.2e7, 0.0]
 ;plt[1].yrange = plt[1].yrange + [0.0, 0.05e8]
 ;-  same function as previous two lines, but looks cleaner.
-;
+
 plt[0].yrange = plt[0].yrange + [-(dy1600*0.05), 0.0]
 plt[1].yrange = plt[1].yrange + [0.0, dy1700*0.05]
-;
-;
+
+
 ;-
 ;-
 ;-----------------------------------------------------
@@ -204,16 +346,10 @@ ax3 = axis2( 'Y', $
 ax = [ plt[0].axes, plt[1].axes ]
 ;-
 time = strmid( A[0].time, 0, 5 )
-;
-ax[0].tickname = time[ax[0].tickvalues]
-;
-;ax[0].title = 'Start time (' + date + ' ' + ts_start + ')'
-    ;-  date is defined in @parameters
-;ax[0].title = 'Start time (' + flare.date + ' ' + A[0].time[0] + ')'
-    ;- ==>> need better way to do this!
-ax[0].title = 'Start time (' + ANYTIM( aia1600index[0].t_obs, /stime ) + ')'
 
-;
+ax[0].tickname = time[ax[0].tickvalues]
+ax[0].title = 'Start time (' + date + ' ' + ts_start + ')'
+    ;-  date is defined in @parameters
 ;-
 ;resolve_routine, 'label_time', /either
 ;LABEL_TIME, plt, time=A.time;, jd=A.jd
@@ -236,7 +372,7 @@ leg = LEGEND2( $
     /upperleft, $
     ;/upperright, $
     sample_width=0.25 )
-;
+
 ;-
 ;- NO point in defining these twice (ax[1] and ax[3]) -- 17 January 2020
 ;ymajor = -1
@@ -253,7 +389,7 @@ yminor = 3
 ;-
 ;-
 ;-
-;
+
 ax[1].title = ytitle[0]
 ;ax[1].tickvalues = [2:8:2]*10.^7 ; -- hardcoded, 2011 flare
 ;-----ax[1].tickvalues = [2:6:1]*10.^7 ; -- hardcoded, 2011 flare
@@ -282,10 +418,10 @@ ax[1].text_color = A[0].color
 ax[3].text_color = A[1].color
 ;-
 
+STOP
 
 
 save2, filename
-
 stop
 
 

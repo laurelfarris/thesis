@@ -150,3 +150,6 @@ utbase = utbase[ flare_num ]
 ;- lower left corner (used to get X, Y image coords)
 x1 = center[0] - dimensions[0]/2
 y1 = center[1] - dimensions[1]/2
+
+
+;- EOF ----------------

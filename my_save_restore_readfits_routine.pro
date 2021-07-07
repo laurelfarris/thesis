@@ -1,8 +1,5 @@
 ;+
 ;- 02 July 2021
-;-   • Restored powermaps for M7.3 flare, renamed variables (map + index), saved new .sav files,
-;-       & compressed into .tar.gz file in flare subdirectory to send to Sean S.
-;-   • 
 ;-
 ;- TO DO:
 ;-  [] Lightcurves for all flares! (one at a time... deal with multiflare structures later)
@@ -17,33 +14,6 @@
 ;- M1.0 2014-11-07 T~10:13:00
 ;- M1.5 2013-08-12 T~10:21:00
 ;-
-;+
-;- Select flare in ML of struc_aia prior to creating array of structures 'A',
-;- then shouldn't have to define 'flare' as one of the structure elements in multiflare
-;- in any other routine.. already defined at ML by struc_aia.pro at beggining of ssw session.
-;-
-
-
-
-buffer = 1
-@par2
-
-instr = 'aia'
-;
-channel = '1600'
-;channel = '1700'
-
-
-class = 'm15'
-date = flare.year + flare.month + flare.day
-print, date
-
-path = '/solarstorm/laurel07/flares/' + class + '_' + date + '/'
-filename = class + '_' + strlowcase(instr) + strtrim(channel,1) + 'aligned.sav'
-;
-print, file_exist(path+filename)
-
-restore, path + filename
 
 
 ;--- quick hardcoding just to restore maps & headers for Sean
@@ -63,6 +33,11 @@ print, path + header_file
 print, FILE_EXIST( path + header_file )
 
 
+
+stop
+
+
+
 restore, path + header_file
 
 m73_aia1600header = index
@@ -74,6 +49,8 @@ if channel eq '1700' then save, m73_aia1700header, filename = './' + header_file
 
 
 stop
+
+
 
 ;+
 ;- Define POWERMAP filename,
@@ -111,46 +88,49 @@ endif
 
 
 
-;========================================================================
 
-;+
-;- IDL_Savefile => get information about .sav file without restoring
+
+
+stop
+
+
+buffer = 1
+@par2
+
+
+;-
+;flare = multiflare.C83
+;flare = multiflare.M10
+flare = multiflare.M15
+;flare = multiflare.X22
 ;-
 
 
-savefile = '/solarstorm/laurel07/flares/m73_20140418/m73_aia1700header.sav'
-sObj = OBJ_NEW( 'IDL_Savefile', savefile )
+help, flare
 
 
-sContents = sObj->Contents()
-;sContents = sObj.Contents() ... same thing, I think
-help, sContents
-;- => structure
 
-help, sContents.N_VAR
-;- => LONG64 = 1
+instr = 'aia'
+channel = 1600
+;channel = 1700
+;
+class = 'm15'
+date = flare.year + flare.month + flare.day
+print, date
 
-help, sObj.Contents();.N_VAR
-;-  Structure
+path = '/solarstorm/laurel07/flares/' + class + '_' + date + '/'
+filename = class + '_' + strlowcase(instr) + strtrim(channel,1) + 'aligned.sav'
+;
+print, file_exist(path+filename)
 
-help, sContents
-;- => Structure! with lots of info
-print, n_tags(sContents)
-print, tag_names(sContents)
+restore, path + filename
 
-sNames = sObj->Names()
-print, sNames
+flux = total(total(cube,1),1)
+help, flux
 
+plt = plot2 ( flux, buffer=buffer )
 
-;- The class 'IDL_Savefile' has the following Methods:
-;-   • Cleanup
-;-   • Contents
-;-   • Init
-;-   • Names
-;-   • Restore
-;-   • Size
-
-;========================================================================
+save2, "m15_lightcurve", /timestamp, idl_code="today.pro"
 
 
 end

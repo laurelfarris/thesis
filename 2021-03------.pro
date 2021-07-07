@@ -178,6 +178,14 @@ print, cube2[0,0,0]
 cube = cube2
 undefine, cube2
 
+;++++++++++++++++++++++++++++++++++++++++++++++++++++
+;- from plot_lc_20210707.pro:
+help, allshifts
+plot, allshifts[0,*,0]
+;- [] move this to "today.pro" (05 March 2021)
+;-    Done! (07 July 2021)
+;++++++++++++++++++++++++++++++++++++++++++++++++++++
+
 
 filename = date + '_' + strlowcase(instr) + strtrim(channel,1) + 'aligned.sav'
 save, index, cube, allshifts, filename=filename

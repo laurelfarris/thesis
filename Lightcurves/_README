@@ -4,6 +4,7 @@
 
 2021 January 13 : moved "plot_aia_lc.pro" here from main working dir (one level up).
   Uses plotting procedures and routines from SDO guide examples.
+2021 July 07 : renamed to "plot_lc_SDO-GUIDE.pro" ??
 
 
 ---------------------------------------------------------------------------------

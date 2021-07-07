@@ -6,24 +6,19 @@
 ;- 11 June 2021
 ;-   Added kw flare; defined at ML by calling @par2 and extracting single flare.
 ;-
-;-   [] .run mcb as a SCRIPT, so it can be done within a subroutine.
-;-   [] linear_interp begins with if statement to check if interp_coords is defined...
-;-         may make more sense to do this here, before calling subroutine.
-;-         Would change this now, except I may have set it up htis way for a reason, and
-;-         probably doesn't take much computation time to check for 1600
-;-
-
-
+;-  [] Find a way to avoid restoring cube if already done so (need jd, time, etc. ??)
+;-  [] .run mcb as a SCRIPT, so it can be done within a subroutine.
+;-  [] Comment 'if' statement in linear_interp? Copied to test before calling,
+;-        but shouldn't cause any problems if test twice (just means that inside linear_interp,
+;-        condition will always be true, at least when called from struc_aia).
+;+
 ;-   29 January 2020
-;-     Made a copy "struc_aia_old.pro" to preserve old codes & comments.
-;-     Cleaned up current code (a lot...).
-
+;-     Made a copy "struc_aia_OLD.pro", cleaned up current version (a lot...).
 ;+
 ;- 21 July 2020
 ;-   [] omit large arrays from structures (data, map),
 ;-        ... simply commented the line assigned tag/value in final structure
-;-          definition before returning it to ML... should do something better
-;------    eventually.
+;-          definition before returning it to ML... should do s/t better, eventually
 ;-   [] ADD variables defined in parameters.pro
 ;-   [] define all three flare structures at the same time,
 ;-   [] create one big multi-flare structure with 3 tags (one for each flare),
@@ -34,6 +29,7 @@
 ;-       --> no longer necessary to run STRUC_AIA unless to change someting
 ;-           in the structure (hasn't been done in quite a while....)
 ;-
+
 
 ;-
 ;- PURPOSE:
@@ -72,25 +68,67 @@ function STRUC_AIA, $
 
 
     ;- Parameters specific to individual flare
-    @parameters
+    ;@parameters
 
-    ;- Read headers only from Prepped fits files,
-    ;-   return as variable "index"
+    class = strlowcase(strjoin(strsplit(flare.class, '.', /extract)))
+    year = flare.year
+    month = flare.month
+    day = flare.day
+
+    ;path = '/solarstorm/laurel07/' + year + month + day + '/'
+    path = '/solarstorm/laurel07/flares/' + class + '_' + year + month + day + '/'
+
+    ;=============================================================================
+    ;===
+
+    ;+
+    ;- Restore HEADERS
+
     if n_elements(index) eq 0 then begin
-        resolve_routine, 'read_my_fits'
-        READ_MY_FITS, index, $
-            flare=flare, $
-            instr=instr, $
-            channel=channel, $
-            nodata=1, $
-            prepped=1  ;, $
-            ;year=year, $ month=month, $ day=day
+
+        index_file = class + '_' + instr + channel + 'header.sav'
+
+        if FILE_EXIST( path + index_file ) then begin
+            print, ''
+            print, 'Restore EXISTING header file: ', path+index_file
+            print, ''
+            restore, path + index_file
+        endif else begin
+
+            print, ''
+            print, 'Call READ_MY_FITS and save header to file: ', path+index_file
+            print, ''
+
+            resolve_routine, 'read_my_fits'
+            READ_MY_FITS, index, $
+                flare=flare, $
+                instr=instr, $
+                channel=channel, $
+                nodata=1, $
+                prepped=1  ;, $
+                ;year=year, $ month=month, $ day=day
+
+            ;- 15 June 2021
+            ;-   Save index to .sav file in same location as aligned cube .sav files;
+            ;-   much more straightforward to retrieve headers this way.
+            save, index, filename=path + index_file
+
+        endelse
+
+        ;- If saving header to file is the only thing I need to do, return to ML now.
+        ;return, 0
+
     endif
 
+    ;- confirm level 1.5, not 1.0
     print, ''
-    print, 'Reading header for level ', $
+    print, 'FITS headers are for level ', $
         strtrim(index[0].lvl_num,1), ' data.'
     print, ''
+
+
+    ;+
+    ;- Restore (aligned) DATA CUBE
 
     ;- Restore data in variable "cube", with pixel dimensions:
     ;- 2011-02-15
@@ -110,72 +148,65 @@ function STRUC_AIA, $
       ;-  Maybe those should be two separate routines... not top priority right now.
 
 
-    class = strlowcase(strjoin(strsplit(flare.class, '.', /extract)))
-    year = flare.year
-    month = flare.month
-    day = flare.day
-
-    ;path = '/solarstorm/laurel07/' + year + month + day + '/'
-    path = '/solarstorm/laurel07/flares/' + class + '_' + year + month + day + '/'
-    file = class + '_' + instr + channel + 'aligned.sav'
-    print, FILE_EXIST( path + file )
-    restore, path + file
+    data_file  = class + '_' + instr + channel + 'aligned.sav'
+    if FILE_EXIST( path + data_file ) then begin
+        restore, path + data_file
+    endif else begin
+        print, '=========================================================='
+        print, '>>> aligned data cube file:'
+        print, '   ', path+data_file
+        print, ' not found!!  <<<'
+        print, '=========================================================='
+        stop
+    endelse
 
     help, cube ; --> INT [1000, 800, 596]  (AIA 1600, 2013 flare)
 
-    stop
+
+    ;===
+    ;=============================================================================
 
     time = strmid(index.date_obs,11,11)
     resolve_routine, 'get_jd', /is_function
     jd = GET_JD( index.date_obs + 'Z' )
 
-
-    ;- Restore shifts to be interpolated
+    ;- Restore shifts to be interpolated (variable name = "shifts" or "aia1600shifts")
     ;restore, path + instr + channel + 'shifts.sav'
-    ;- is variable "shifts", or "aia1600shifts" ?
-    ;help, shifts
-    ;help, aia1600shifts
-    ;stop
 
     ;+
-    ;- 23 July 2019:
-    ;-  Split linear_interp.pro into two routines:
-    ;-   1. calculate interp_coords, then 2. apply interpolation to array(s).
-    ;- Removed "cadence" arg from calling sequence of interpolation routine.
-    ;-  (NOTE: still haven't written code to apply interpolation to shifts).
-    ;-
-
-    ;- Find INDICES of missing data (if any)
+    ;- Check for MISSING DATA, compute INDICES where dt NE cadence
     resolve_routine, 'missing_obs'
-    MISSING_OBS, cadence, index.date_obs, interp_coords, time, jd, dt
-
-    help, interp_coords
-    stop
+    MISSING_OBS, cadence, index.date_obs, $
+        interp_coords, time, jd, dt
 
     ;- interpolate to get missing data and corresponding timestamp
-    resolve_routine, 'linear_interp'
-    ;LINEAR_INTERP, cube, jd, cadence, time;, shifts=shifts
-    LINEAR_INTERP, cube, jd, time, interp_coords;, shifts=shifts
-    ;- NOTE: cadence is an input argument to this code :)
-    ;help, cube ; --> FLOAT [1000, 800, 600]  (AIA 1600, 2013 flare)
+    if interp_coords[0] ne -1 then begin
+        print, "Missing observations! Interpolation needed."
+        resolve_routine, 'linear_interp'
+        LINEAR_INTERP, cube, jd, time, interp_coords;, shifts=shifts
+        ;-  (NOTE: still need to write code to apply interpolation to shifts).
 
-    stop
+        ;cube --> FLOAT [1000, 800, 600]  (AIA 1600, 2013 flare)
 
-    ;- NOTE: original center coords should NOT be used for cropped data.
-    ;-  (will be "out of range"). This keyword is more useful when starting with
-    ;-  full disk, or zooming in on ROIs within AR.
-    ;- If not provided, crop_data.pro computes center using provided dimensions,
-    ;-   which is what we want here.
-    ;- If dimensions are not provided, default = [500,330,*] (2011 flare dimensions).
+    endif
 
 
+    ;+
+    ;- Trim excess pixels from cube (leftover from alignment process)
     resolve_routine, 'crop_data', /is_function
-    cube = CROP_DATA( cube, dimensions=dimensions )
-        ;- 09 November 2020
-        ;-   NOTE: cube is aligned subset centered on AR. No need to pass kw center=[x,y] because
-        ;-     crop_data.pro uses center of input data by default, which is what we want here.
-        ;-
-    ;print, max(cube)
+    print, '============================================='
+    print, 'cube prior to cropping:'
+    help, cube
+    cube = CROP_DATA( cube, dimensions=dimensions ); , center=center )
+        ;- kw DIMENSIONS = [500,330,*] by default if undefined
+        ;-   (same outcome if set but not defined, or not present in call to subroutine at all).
+        ;- kw CENTER [x,y] = center of cube by default
+        ;-   Aligned cube is already centered, so default is what we want.
+        ;-   (If "out of range" error occurs, may have set dims = AR coords relative to full disk.
+        ;-   Only need to set center when, e.g. extracting from full disk, or locating ROIs.
+    print, 'cube after cropping:'
+    help, cube
+    print, '============================================='
 
     ;help, cube ; --> FLOAT [dim[0], dim[1], 600]  (AIA 1600, 2013 flare)
     ;cube = fix( round( cube ) )
@@ -190,15 +221,34 @@ function STRUC_AIA, $
 
     sz = size( cube, /dimensions )
 
-    ; X/Y coordinates of AR, converted from pixels to arcseconds
-    X = ( (indgen(sz[0]) + x1) - index[0].crpix1 ) * index[0].cdelt1
-    Y = ( (indgen(sz[1]) + y1) - index[0].crpix2 ) * index[0].cdelt2
 
-    ;- Calculate total flux over AR
+    ;+
+    ;- Lower left corner of AR (arcsec)
+    x1 = flare.xcen - (sz[0]/2)*index[0].cdelt1
+    y1 = flare.ycen - (sz[1]/2)*index[0].cdelt2
+
+    ;+
+    ;- Create ARRAY of AR coordinates using subset dimensions, relative to lower left corner (x1,y1),
+    ;-   then convert from pixels to arcseconds.
+    ;X = (  ( x1 + indgen(sz[0]) ) - index[0].crpix1  ) * index[0].cdelt1
+    ;Y = (  ( y1 + indgen(sz[1]) ) - index[0].crpix2  ) * index[0].cdelt2
+
+    ;- 15 June 2021:
+    ;-   [x1,y1] already in arcsec, just need to convert array values (originally sep by 1)
+    X = x1 + findgen(sz[0])*index[0].cdelt1
+    Y = y1 + findgen(sz[1])*index[0].cdelt2
+
+
+    ;+
+    ;- Calculate TOTAL FLUX over AR (integrated emission) --> Lightcurves!
+    
     ;cube = float(cube)
     ;flux = fltarr( sz[2] )
+
     flux = total( total( cube, 1), 1 )
-    ;flux = mean( mean( cube, dimension=1), dimension=1 )
+        ;- NOTE: function "TOTAL" returns FLOAT data type, even if array is INT.
+    flux_avg = mean( mean( cube, dimension=1), dimension=1 )
+        ;- ditto for MEAN
 
 
     ;- Standard AIA colors
@@ -214,7 +264,7 @@ function STRUC_AIA, $
 
     ;- MEMORY - Is this making copies of everything?
     struc = { $
-        date: date, $  ;- from @parameters (03 Aug 2019)
+        date: flare.date, $  ;- from @parameters (03 Aug 2019)
         channel: channel, $
         cadence: cadence, $
         exptime: exptime, $
@@ -229,6 +279,8 @@ function STRUC_AIA, $
         ;map: map, $
         name: name $
     }
+
+
     return, struc
 end
 
@@ -237,30 +289,35 @@ end
 
 @par2
 ;
-;flare = multiflare.m10
-flare = multiflare.m15
+;flare = multiflare.c30
+;flare = multiflare.c46
+;flare = multiflare.c83
+flare = multiflare.m10
+;flare = multiflare.m15
+;flare = multiflare.m73
 ;flare = multiflare.x22
 
 
 
-aia1600 = STRUC_AIA( $
-    aia1600index, aia1600data, $
-    flare=flare, $
-    cadence=24., instr='aia', channel='1600' )
+aia1600 = STRUC_AIA( aia1600index, aia1600data, cadence=24., instr='aia', channel='1600', $
+    flare=flare )
 
-;aia1700 = STRUC_AIA( aia1700index, aia1700data, cadence=24., instr='aia', channel='1700' )
+aia1700 = STRUC_AIA( aia1700index, aia1700data, cadence=24., instr='aia', channel='1700', $
+    flare=flare )
 
-stop
 
 A = [ aia1600, aia1700 ]
-undefine, aia1600
-undefine, aia1600index
-undefine, aia1600data
-undefine, aia1700
-undefine, aia1700index
-undefine, aia1700data
+
 A[0].color = 'blue'
 A[1].color = 'red'
+
+undefine, aia1600
+;undefine, aia1600index
+undefine, aia1600data
+undefine, aia1700
+;undefine, aia1700index
+undefine, aia1700data
+
 
 stop ;---------------------------------------------------------
 

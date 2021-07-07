@@ -127,7 +127,8 @@ end
 
 ;=================================================================
 
-@parameters
+;@parameters
+@par2
 
 ;- GOES() contains commented lines from website explaining keywords and such.
 ;- Creates object, sets parameters (defaults are for the 2011-Feb-15 flare), and
