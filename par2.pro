@@ -66,6 +66,25 @@
 
 
 
+; Fill this in later (09 July 2021)
+c30 = { $
+    ;flare, $
+    ;name : 'c46', $
+    ;AR     : '', $
+    class  : 'C4.6', $
+    date   : '23-Oct-2014', $
+    year   : '2014', $
+    month  : '10', $
+    day    : '23', $
+    tstart : '13:20', $
+    tpeak  : '00:00', $
+    tend   : '00:00', $
+    xcen   : 0, $
+    ycen   : 0 $
+}
+
+
+;
 c46 = { $
     ;flare, $
     ;name : 'c46', $
@@ -107,6 +126,8 @@ m10 = { $
     year : '2014', $
     month : '11', $
     day : '07', $
+;    ts_start : '08:15:00', $
+;    ts_end : '13:14:59', $
     tstart : '10:13', $
     tpeak  : '10:22', $
     tend   : '10:30', $

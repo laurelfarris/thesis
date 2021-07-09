@@ -1,3 +1,14 @@
+;+
+;-
+;- 08 July 2021
+;-   Subroutine that calls OGOES(), external routine that creates goes object.
+;-   Don't really need a subroutine for this, mostly commented, but maybe useful
+;-   for playing with different date/times or whatever else it can be used for.
+;-
+
+
+;----------------------------------------------------------------------------------------
+
 ;--+
 ; Created:       07 August 2018
 ; Last Modified: 12 August 2018
@@ -70,14 +81,13 @@
 
 function GOES, tstart=tstart, tend=tend, sat=sat
 
-
     ;TVLCT, 255, 255, 255, 254
     ;TVLCT, 0, 0, 0, 253
     ;!P.Color = 253
     ;!P.Background = 254
 
-;    !P.Color = '000000'x
-;    !P.Background = 'ffffff'x
+    ;!P.Color = '000000'x
+    ;!P.Background = 'ffffff'x
 
     ; GOES satellite preference (15 is the latest, at the time of writing).
     if not keyword_set(sat) then sat = 'goes15'
@@ -104,11 +114,9 @@ function GOES, tstart=tstart, tend=tend, sat=sat
     ; Show current parameter values
     a->help
 
-
     ;-- extract data and derived quantities into a structure
     data = a->getdata(/struct)
-    ;- PROBLEM: nothing is being returned here.
-    ;-  "No GOES/Yohkoh data available for specfied times"...
+    ;- PROBLEM: "No GOES/Yohkoh data available for specfied times"...
 
     ;xst0 = data.utbase
     ;ex2int, anytim2ex(xst0), xst_msod, xst_ds79
@@ -116,7 +124,6 @@ function GOES, tstart=tstart, tend=tend, sat=sat
     ;utstring = anytim2utplot(xst)
 
     ;utplot, data.tarray, data.ydata[*,0], data.utbase, /sav
-
 
     ;help, data, /struct
     ;return, data
@@ -144,18 +151,5 @@ function GOES, tstart=tstart, tend=tend, sat=sat
     ;TOGGLE
 
     return, data
-
-end
-
-
-d = GOES( $
-    tstart = date + ' ' + '10:00:00', $
-    tend = date + ' ' + '14:59:59' $
-    )
-help, d
-
-;- Alternative variable name I commonly use.
-;-   I really need to be more consistent...
-;gdata = GOES()
 
 end

@@ -14,10 +14,3 @@
         procedure definition only (no ML code),
         not called from any other routine in this directory.
         This is probably not needed.
-
-    plot_goes_OLD_20210603.pro
-        Copied to preserve old stuff since last modified date was over two years ago... 
-        
-
-
-----------------------------------------------------

@@ -34,6 +34,10 @@
 ;-         though may use "ind" to get just the first hour of data... I dunno.
 ;-   [] Better way to pad channels with leading zeros
 ;-   [] See code for other tasks marked with "[]"
+;-   [] From Todoist :
+;-       "Improve process of reading data/headers w/ read_sdo (aka read_my_fits)"
+;-         - option to have multi-flares and/or multi-*inst* (HMI, ...) active at the same time,
+;-           but only total flux (undefine variables containing 3D data cubes).
 ;-
 ;- User sets z_ind as kw, or better yet, input start/end times, or just a dt if
 ;- exact times aren't as important as total duration

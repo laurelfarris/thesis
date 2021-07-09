@@ -292,7 +292,7 @@ end
 ;flare = multiflare.c30
 ;flare = multiflare.c46
 ;flare = multiflare.c83
-flare = multiflare.m10
+;flare = multiflare.m10
 ;flare = multiflare.m15
 ;flare = multiflare.m73
 ;flare = multiflare.x22
@@ -306,8 +306,13 @@ aia1700 = STRUC_AIA( aia1700index, aia1700data, cadence=24., instr='aia', channe
     flare=flare )
 
 
-A = [ aia1600, aia1700 ]
+print, aia1600index[0].t_obs
+print, aia1700index[0].t_obs
+print, aia1600index[-1].t_obs
+print, aia1700index[-1].t_obs
 
+A = [ aia1600, aia1700 ]
+;
 A[0].color = 'blue'
 A[1].color = 'red'
 

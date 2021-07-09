@@ -1,29 +1,20 @@
 ;+
 ;- LAST MODIFIED:
-;-   03 June 2021
+;-   08 July 2021
 ;-
 ;- PURPOSE:
+;-   Plot GOES data using my pretty plotting adjustments.
 ;-
 ;- INPUT:
+;-   gdata = goesdata, retrieved from OGOES()
 ;-
 ;- KEYWORDS:
+;-   buffer = 0|1 (set = 1 if working remotely!)
 ;-
 ;- OUTPUT:
+;-   IDL graphics object 'plt'
 ;-
 ;- TO DO:
-;-
-;- NOTE:
-;-    Didn't really change any of the fundamentals of the code,
-;-      just copied content from file "plot_goes.pro" (subroutine and ML code)
-;-      into this file (plot_goes_2.pro) to declutter and de-confuse.
-;-    Also renamed to PLOT_GOES to more easily tell my routines apart
-;-      from ones I downloaded.
-;-    Original file was deleted, and probably don't need to keep the subroutine
-;-    in here, but of course I'm reluctant to permanently delete codes...
-;- NOTE AGAIN:
-;-   Original file and subroutine names were quoted above
-;-    (since they were current at the time of merging),
-;-    but names have since been modified.
 ;-
 
 
@@ -102,126 +93,4 @@ function PLOT_GOES, gdata, buffer=buffer
     ;print, plt[0].xtickvalues
     ;print, plt[0].xtickname
     return, plt
-end
-
-
-
-;=================================================================
-
-;- ML code used for PLOT_GOES procedure:
-;!P.Color = '000000'x
-;!P.Background = 'ffffff'x
-;gdata = GOES()
-;PLOT_GOES_old, A, gdata
-;xdata = gdata.tarray
-;ydata = gdata.ydata
-;ytitle = gdata.utbase
-;ylog = 1
-;win = window(dimensions=[8.0,4.0]*dpi )
-;plt = plot2( xdata, ydata[*,0], /current, ylog=ylog )
-;-
-;-
-;- PLOT_GOES function (not procedure)
-;-   is most current version --> use that one.
-;-
-
-;=================================================================
-
-;@parameters
-@par2
-
-;- GOES() contains commented lines from website explaining keywords and such.
-;- Creates object, sets parameters (defaults are for the 2011-Feb-15 flare), and
-;- returns structure with data and derived quantities.
-;-    (see goes.pro for details).
-;gdata = GOES()
-
-;- 20 April 2019
-;-  Multiple flares now... need to specify date/times.
-;tstart = '28-Dec-2013 10:00:00'
-;tend   = '28-Dec-2013 13:59:59'
-;gdata = GOES( tstart=tstart, tend=tend )
-
-;tstart = date + ' 10:00:00'
-;tend = date + ' 14:59:59'
-tstart = date + ' ' + ts_start
-tend = date + ' ' + ts_end
-if typename(gdata) eq "UNDEFINED" then $
-    gdata = GOES( tstart=tstart, tend=tend )
-
-;- UTPLOT procedure:
-;-   set /SAV kw to save system variables: !x.tickv and !x.tickname
-;-   (used for xtickvalues and xtickname in PLOT_GOES routine above).
-;UTPLOT, gdata.tarray, gdata.ydata[*,0], gdata.utbase, /sav
-;oplot, gdata.tarray, gdata.ydata[*,1], color='FF0000'X
-;- --> oplot the other GOES channel.
-
-dw
-plt = PLOT_GOES(gdata, buffer=0)
-
-resolve_routine, 'oplot_flare_lines', /is_function
-    ;-  currently residing in '../Lightcurves/'
-vert = OPLOT_FLARE_LINES( $
-    plt, t_obs=A[0].time, $
-    /goes, $
-    utbase=date + ' ' + A[0].time[0] + '0', $
-    /send_to_back )
-
-
-
-ax = plt[0].axes
-ax[3].tickname = ['A', 'B', 'C', 'M', 'X']
-ax[3].title = ''
-ax[3].showtext = 1
-leg = legend2( target=plt, /upperleft, sample_width=0.25 )
-
-file = 'lc_goes_C30'
-save2, file
-stop
-
-
-
-
-;- 04 August 2019
-;- Shaded region:
-;-  compare to code in oplot_flare_lines, runs if kw "shaded" is set
-;-   (tho pretty sure that version is old, based on the comments)
-
-yrange = plt[0].yrange
-x_indices = [150,300]
-p = plot( x_indices, [yrange[0],yrange[0]], /overplot, $
-    /fill_background, $
-    fill_color = 'white smoke', $
-    fill_level = yrange[1] )
-p.Order, /send_to_back
-
-
-;- Vertical lines dividing up BDA.
-;- See oplot_flare_lines.pro for comments on this.
-BDA_times = '15-Feb-2011 ' + ['01:46:00', '02:30:00']
-nn = n_elements(BDA_times)
-x_indices = fltarr(nn)
-utbase = '15-Feb-2011 00:00:01.725'
-ex2int, anytim2ex(utbase), msod_ref, ds79_ref
-for ii = 0, nn-1 do begin
-    ex2int, anytim2ex( BDA_times[ii] ), msod, ds79
-    x_indices[ii] = int2secarr( [msod,ds79], [msod_ref,ds79_ref] )
-endfor
-yrange = plt[0].yrange
-vert = objarr(nn)
-linestyle = '-'
-foreach vx, x_indices, jj do begin
-    vert[jj] = plot( $
-        [vx,vx], $
-        yrange, $
-        ;/current, $
-        /overplot, $
-        ;thick = 0.5, $
-        thick = 4.0, $
-        linestyle = linestyle, $
-        color = 'white smoke', $
-        ystyle = 1 )
-    vert[jj].Order, /SEND_TO_BACK
-endforeach
-
 end
