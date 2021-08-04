@@ -262,6 +262,7 @@ function STRUC_AIA, $
     ;map = make_array( sz[0], sz[1], 686, /float, /nozero )
     ;- Not sure if /nozero helps free up memory, but worth a shot.
 
+
     ;- MEMORY - Is this making copies of everything?
     struc = { $
         date: flare.date, $  ;- from @parameters (03 Aug 2019)
@@ -269,11 +270,15 @@ function STRUC_AIA, $
         cadence: cadence, $
         exptime: exptime, $
         data: float(cube), $
+        ;data: (float(cube))[*,*,0:-2], $
         X: X, $
         Y: Y, $
         flux: flux, $
+        ;flux: flux[0:-2], $
         time: time, $
+        ;time: time[0:-2], $
         jd: jd, $
+        ;jd: jd[0:-2], $
         color: '', $
         ct: ct, $
         ;map: map, $
@@ -291,7 +296,7 @@ end
 ;
 ;flare = multiflare.c30
 ;flare = multiflare.c46
-;flare = multiflare.c83
+flare = multiflare.c83
 ;flare = multiflare.m10
 ;flare = multiflare.m15
 ;flare = multiflare.m73
@@ -301,9 +306,13 @@ end
 
 aia1600 = STRUC_AIA( aia1600index, aia1600data, cadence=24., instr='aia', channel='1600', $
     flare=flare )
+help, aia1600
+
+stop
 
 aia1700 = STRUC_AIA( aia1700index, aia1700data, cadence=24., instr='aia', channel='1700', $
     flare=flare )
+help, aia1700
 
 
 print, aia1600index[0].t_obs
@@ -312,6 +321,7 @@ print, aia1600index[-1].t_obs
 print, aia1700index[-1].t_obs
 
 A = [ aia1600, aia1700 ]
+
 ;
 A[0].color = 'blue'
 A[1].color = 'red'

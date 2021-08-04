@@ -10,11 +10,16 @@
 ;-
 
 
+;- Need to rename varialbe saved in these files for C8.3 flare...
+restore, '../flares/c83_20130830/c83_aia1700header.sav'
+index = c83_aia1700header
+save, index, filename='c83_aia1700header.sav'
+
 
 buffer = 1
 @par2
 ;
-flare = multiflare.m15
+flare = multiflare.c83
 
 print, flare.class
 class = strlowcase((flare.class).Replace('.',''))

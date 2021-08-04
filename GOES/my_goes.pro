@@ -37,7 +37,7 @@
 
 ;@parameters
 @par2
-flare = multiflare.c30
+;flare = multiflare.c30
 ;- IDL> .run struc_aia
 ;-   Actuallyshouldn't have to... values in multiflare structure(s) should suffice, since only
 ;0    need start/end times of time series and flare phases, nothing from AIA is needed here.
@@ -104,13 +104,6 @@ help, goesdata
 
 stop
 
-print, ''
-print, 'Seriously, stop.'
-print, ''
-
-stop
-
-
 ;gdata = GOES()
 
 ;- 20 April 2019
@@ -146,14 +139,18 @@ stop
 filename = strlowcase( (flare.class).Replace('.','') ) + '_lc_goes'
 print, filename
 ;
+
 dw
 plt = PLOT_GOES(goesdata, buffer=buffer)
+save2, filename
+
 ;
 ax = plt[0].axes
 ax[3].tickname = ['A', 'B', 'C', 'M', 'X']
 ax[3].title = ''
 ax[3].showtext = 1
 leg = legend2( target=plt, /upperleft, sample_width=0.25 )
+
 ;
 save2, filename
 
