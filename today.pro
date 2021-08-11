@@ -13,6 +13,8 @@
 ;- Need to rename varialbe saved in these files for C8.3 flare...
 restore, '../flares/c83_20130830/c83_aia1700header.sav'
 index = c83_aia1700header
+help, index
+
 save, index, filename='c83_aia1700header.sav'
 
 
