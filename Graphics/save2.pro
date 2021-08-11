@@ -32,7 +32,10 @@
 ;-
 ;- TO DO:
 ;-   [] for filenames that exist, append "_1", "_2", etc.
-;-
+;-   [] better name than "save2"? Clearly module is used to save graphics
+;-        in current window to pdf files, as opposed to
+;-        IDL's "save" procedure, which creates .sav files.
+;-       This actually uses the save METHOD --> win.save, arg, kw=kw, ...
 ;-
 ;-
 
@@ -168,9 +171,9 @@ pro SAVE2, filename, $
     ;- How to append next number
     ;-  (e.g. if file.pdf and file_2.pdf exist,
     ;-   update current filename to file_3.pdf).
-    ;-  
+    ;-
     ;- Lots of string operations that could be used here.
-    ;-  
+    ;-
     ;-
     ;- Ideas:
     ;-   while fls ne ""
@@ -185,7 +188,7 @@ pro SAVE2, filename, $
     ;-   (if filename = 'blah_2.pdf', counter should be set to 2).
     ;- updated_filename = STRJOIN( [filename, counter+1], '_'  )
     ;-   ( underscore '_' is the "delimiter", only need to worry about
-    ;-       numerical value following it.) 
+    ;-       numerical value following it.)
     ;-
 
     win.SAVE, path + new_filename, $
