@@ -117,7 +117,8 @@ pro READ_MY_FITS, index, data, fls, $
 
 
     ;'aia': begin
-    (instr eq 'aia') OR (instr eq 'AIA'): begin
+    ;(instr eq 'aia') OR (instr eq 'AIA'): begin
+    strupcase(instr) eq 'AIA': begin
         if keyword_set(prepped) then begin
             print, 'NOTE: Reading PREPPED data from AIA.'
             ;path = '/solarstorm/laurel07/Data/AIA_prepped/'
@@ -150,12 +151,15 @@ pro READ_MY_FITS, index, data, fls, $
 
 
     ;'hmi': begin
-    (instr eq 'hmi') OR (instr eq 'HMI'): begin
+    ;(instr eq 'hmi') OR (instr eq 'HMI'): begin
+    strupcase(instr) eq 'HMI': begin
 
         if keyword_set(prepped) then begin
             print, 'NOTE: Reading PREPPED data from HMI.'
             ;path = '/solarstorm/laurel07/Data/HMI_prepped/'
-            path = '/solarstorm/laurel07/Data/' + strupcase(instr) + '_prepped/'
+            ;path = '/solarstorm/laurel07/Data/' + strupcase(instr) + '_prepped/'
+            path = '/home/astrobackup3/preupgradebackups/solarstorm/laurel07/Data/'+ strupcase(instr) + '_prepped/'
+
             files = strupcase(instr) + year + month + day + '_*_' + channel + '.fits'
 
         endif else begin
@@ -186,10 +190,16 @@ pro READ_MY_FITS, index, data, fls, $
 
     end ;- end of "case" statements
 
+    if not file_test( path + files ) then begin
+        print, '==========================================='
+        print, 'FILES NOT FOUND! (check path ...)'
+        stop
+    endif
 
     ;- Confirm files with user.
 
     fls = file_search( path + files )
+
     if N_elements(ind) ne 0 then fls = fls[ind]
     print, '------------------------------------'
     print, n_elements(ind)

@@ -76,7 +76,10 @@ function STRUC_AIA, $
     day = flare.day
 
     ;path = '/solarstorm/laurel07/' + year + month + day + '/'
-    path = '/solarstorm/laurel07/flares/' + class + '_' + year + month + day + '/'
+
+    ;path = '/solarstorm/laurel07/flares/' + class + '_' + year + month + day + '/'
+    path = '../flares/' + class + '_' + year + month + day + '/'
+    ;- 14 August 2021 relative path while solarstorm is down (usually not ideal...)
 
     ;=============================================================================
     ;===
@@ -296,7 +299,7 @@ end
 ;
 ;flare = multiflare.c30
 ;flare = multiflare.c46
-flare = multiflare.c83
+;flare = multiflare.c83
 ;flare = multiflare.m10
 ;flare = multiflare.m15
 ;flare = multiflare.m73
@@ -306,13 +309,9 @@ flare = multiflare.c83
 
 aia1600 = STRUC_AIA( aia1600index, aia1600data, cadence=24., instr='aia', channel='1600', $
     flare=flare )
-help, aia1600
-
-stop
 
 aia1700 = STRUC_AIA( aia1700index, aia1700data, cadence=24., instr='aia', channel='1700', $
     flare=flare )
-help, aia1700
 
 
 print, aia1600index[0].t_obs
@@ -325,6 +324,8 @@ A = [ aia1600, aia1700 ]
 ;
 A[0].color = 'blue'
 A[1].color = 'red'
+
+stop
 
 undefine, aia1600
 ;undefine, aia1600index

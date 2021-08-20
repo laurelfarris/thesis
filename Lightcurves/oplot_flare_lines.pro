@@ -190,6 +190,7 @@ function OPLOT_FLARE_LINES, $
 
     ; ....................
     ;vert[0].linestyle = [1, '5555'X]
+    ;- dots are way too close together (14 August 2021)
 
 
     ; __  __  __  __  __

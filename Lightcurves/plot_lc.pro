@@ -27,10 +27,11 @@
 ;-
 
 
-
 buffer=1
 
 @par2
+
+flare = multiflare.m73
 
 ;instr = 'aia'
 ;channel = '1600'

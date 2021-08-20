@@ -61,9 +61,9 @@ function PLOT_SPECTRA, frequency, power, $
         ytitle = 'power', $
         margin=margin, $
         left   = 1.00, $
-        bottom = 1.00, $
-        top    = 1.00, $
-        right  = 1.00, $
+        bottom = 0.50, $
+        top    = 0.50, $
+        right  = 0.50, $
         _EXTRA=e )
     ;help, plt --> 1 element so far...
 
@@ -71,16 +71,28 @@ function PLOT_SPECTRA, frequency, power, $
     ax = plt[0].axes
 
     ;- oplot vertical lines at periods of interest.
-    period = [120, 180, 200]
+    period = [120, 180, 300]
 
     vert = objarr(n_elements(period))
     foreach xx, period, ii do begin
         vert[ii] = plot2( $
-            1./[xx,xx], plt[0].yrange, /overplot, $
-            ystyle=1, linestyle=ii+1, thick=0.5, $
-            name=strtrim(period[ii],1) + ' s')
+            1./[xx,xx], $
+            plt[0].yrange, $
+            /overplot, $
+            ystyle=1, $
+            ;linestyle=ii+1, $
+            linestyle=ii, $
+            color='gray', $
+            thick=0.5, $
+            name=strtrim(period[ii],1) + ' s' $
+        )
         vert[ii].Order, /send_to_back
     endforeach
+
+    vert[0].linestyle = [1, 'F0F0'X]
+    vert[1].linestyle = 0
+    vert[2].linestyle = [1, '1111'X]
+
     plt = [ plt, vert ]
 
     ax[2].tickvalues = 1./period

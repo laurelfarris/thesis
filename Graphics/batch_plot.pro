@@ -1,4 +1,4 @@
-
+;+
 ;- Last modified:    26 April 2019
 ;-   Added symbol kw
 
@@ -31,17 +31,6 @@
 ;- TO DO:
 ;-   If x dimensions don't match y, replicate the array over dimension=2 so
 ;-     it's the same size as y.
-
-
-
-
-
-
-
-
-
-
-
 
 
 function WRAP_BATCH_PLOT, $
