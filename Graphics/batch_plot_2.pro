@@ -95,6 +95,7 @@ function WRAP_BATCH_PLOT_2, $
     thick = thick, $
     buffer=buffer, $
     symbol=symbol, $
+    overplot=overplot, $
     _EXTRA = e
 
 
@@ -138,13 +139,16 @@ function WRAP_BATCH_PLOT_2, $
 
     for ii = 0, sz[1]-1 do begin
 
-        if ii eq 0 then axis_style = 1 ; left/bottom
-        if ii gt 0 then axis_style = 4 ; No axes, same margins
+        if not keyword_set( overplot ) then begin
+            if ii eq 0 then axis_style = 1 else axis_style = 4 ; left/bottom | No axes, same margins
+        endif else begin
+            axis_style = 2
+        endelse
 
         plt[ii] = PLOT2( $
             xdata[*,ii], ydata[*,ii], $
             /current, /device, $
-            overplot=0, $
+            overplot=overplot, $
             position = position, $
             ;xtitle = xtitle, $
             ;ytitle = ytitle, $
@@ -223,7 +227,7 @@ function BATCH_PLOT_2, $
         ;top = 0.2, $
         top = 0.3, $
         buffer = 1, $
-        ;overplot = 0, $
+        overplot = 0, $
         name = name, $
         color = color, $
         linestyle = linestyle, $

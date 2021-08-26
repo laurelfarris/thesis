@@ -51,10 +51,58 @@ date = flare.year + flare.month + flare.day
 ;------
 
 
-filename = class + '_lightcurve'
-print, filename
-
 stop
+
+
+infile = class + '_rhessi_lightcurve_corr.txt'
+
+;width = 7
+;head_length = 1
+;READ_MY_DATAFILE, infile, data, width, head_length=head_length
+;- help, data -> FLOAT  = Array[7, 902]
+;print, data[*,0:4]
+
+;- The better way:
+READCOL, infile, time, v1, v2, v3, v4, atten, eclipse, $
+    format='A,F,F,F,F,I,I', delimiter=','
+;
+
+starttime = time[0]
+xtitle = 'Start Time (' + starttime + ')'
+ytitle = 'Counts s$^{-1}$ detector$^{-1}$'
+
+;ydata = [ [v1], [v2], [v3], [v4] ]
+;name = ['6-12', '12-25', '25-50', '50-100'] + ' keV'
+;color = ['black', 'gray', 'blue', 'red']
+
+ydata = [ [v3], [v4] ]
+name = ['25-50', '50-100'] + ' keV'
+color = ['black', 'gray']
+
+
+dw
+plt = objarr( (size(ydata,/dimensions))[1] )
+for ii = 0, n_elements(plt)-1 do begin
+    plt[ii] = plot2( $
+        ydata[*,ii], $
+        overplot=ii<1, $
+        ytitle=ytitle, $
+        name=name[ii], $
+        color=color[ii], $
+        buffer=buffer $
+    )
+endfor
+;
+;print, plt[0].xtickvalues
+;print, time[ plt[0].xtickvalues ]
+;
+plt[0].xtickname = strmid( time[ plt[0].xtickvalues ], 11, 5 )
+;print, plt[0].xtickname
+;
+leg = legend2( target=plt, /upperright )
+;
+rhessi_filename = class + '_rhessi_lightcurve'
+save2, rhessi_filename
 
 ;=
 ;======================================================================
