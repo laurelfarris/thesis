@@ -199,6 +199,33 @@ multiflare = { m15:m15, c83:c83, c46:c46, m10:m10, m73:m73, x22:x22 }
 ;help, multiflare
 
 
+stop
+
+;flare = multiflare.c46
+;flare = multiflare.m10
+;flare = multiflare.m15
+;
+;flare = multiflare.c83
+;flare = multiflare.m73
+flare = multiflare.x22
+
+class = strlowcase(strjoin(strsplit(flare.class, '.', /extract)))
+;- flare.class = M1.5 --> class = m15
+
+date = flare.year + flare.month + flare.day
+;- flare.date = 12-Aug-2013 --> date = 20130812
+
+;IDL> .run struc_aia
+
+
+
+buffer = 1
+
+
+
+
+
+
 ;--------------------------------------------------------------------------------
 ;+
 ;- OLD @params

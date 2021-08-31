@@ -1,6 +1,9 @@
 ;+
 ;- LAST MODIFIED:
+;-   30 August 2021
+;-
 ;-   20 August 2021
+;-      First LC's with RHESSI data, GOES overplotted, vertical lines
 ;-
 ;- PURPOSE:
 ;-   Plot RHESSI light curves, oplot GOES maybe
@@ -12,29 +15,15 @@
 ;- OUTPUT:
 ;-
 ;- TO DO:
+;-   [] Change RHESSI lightcurves to log scale, add remaining E-ranges, ...
+;-          COMPLETE for A2
 ;-   []
 ;-
 
 
-buffer=1
 
-@par2
-
-flare = multiflare.C83
-;flare = multiflare.M73
-;flare = multiflare.X22
-;
-;IDL> .run struc_aia
-
-
-;+
-;--- create string variables to use in filenames (I guess)
-class = strlowcase(strjoin(strsplit(flare.class, '.', /extract)))
-;- flare.class = M1.5 --> class = m15
-;
-;date = flare.year + flare.month + flare.day
-;- flare.date = 12-Aug-2013 --> date = 20130812
-
+;- 30 August 2021
+;- Usual definnitions (buffer, class, date, flare, ... ) now in par2.pro
 
 
 ;= RHESSI
