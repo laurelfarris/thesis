@@ -70,7 +70,7 @@
 c30 = { $
     ;flare, $
     ;name : 'c46', $
-    ;AR     : '', $
+    AR     : '', $
     class  : 'C4.6', $
     date   : '23-Oct-2014', $
     year   : '2014', $
@@ -88,7 +88,7 @@ c30 = { $
 c46 = { $
     ;flare, $
     ;name : 'c46', $
-    ;AR     : '', $
+    AR     : '', $
     class  : 'C4.6', $
     date   : '23-Oct-2014', $
     year   : '2014', $
@@ -104,7 +104,7 @@ c46 = { $
 c83 = { $
     ;flare, $
     ;c83, $
-    ;AR     : '', $
+    AR     : '', $
     class : 'C8.3', $
     date  : '30-Aug-2013' , $
     year : '2013', $
@@ -120,7 +120,7 @@ c83 = { $
 m10 = { $
     ;flare, $
     ;m10, $
-    ;AR     : '', $
+    AR     : '', $
     class : 'M1.0', $
     date  : '07-Nov-2014' , $
     year : '2014', $
@@ -138,7 +138,7 @@ m10 = { $
 m15 = { $
     ;flare, $
     ;m15, $
-    ;AR     : '', $
+    AR     : '', $
     class : 'M1.5', $
     date  : '12-Aug-2013' , $
     year : '2013', $
@@ -153,8 +153,8 @@ m15 = { $
 ;
 m73 = { $
     ;flare, $
-    ;m15, $
-    ;AR     : '12036', $
+    ;m73, $
+    AR     : '12036', $
     class : 'M7.3', $
     date  : '18-Apr-2014' , $
     year : '2014', $
@@ -169,8 +169,8 @@ m73 = { $
 ;
 x22 = { $
     ;flare, $
-    ;m15, $
-    ;AR     : '11158', $
+    ;x22, $
+    AR     : '11158', $
     class : 'X2.2', $
     date : '15-Feb-2011', $
     year : '2011', $
@@ -199,15 +199,14 @@ multiflare = { m15:m15, c83:c83, c46:c46, m10:m10, m73:m73, x22:x22 }
 ;help, multiflare
 
 
-stop
 
 ;flare = multiflare.c46
 ;flare = multiflare.m10
 ;flare = multiflare.m15
 ;
 ;flare = multiflare.c83
-;flare = multiflare.m73
-flare = multiflare.x22
+flare = multiflare.m73
+;flare = multiflare.x22
 
 class = strlowcase(strjoin(strsplit(flare.class, '.', /extract)))
 ;- flare.class = M1.5 --> class = m15

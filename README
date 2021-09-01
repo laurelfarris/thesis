@@ -1,3 +1,18 @@
+file: README in main working directory for thesis (alias "work")
+
+
+--------------------------------
+01 September 2021
+
+==>> no longer commenting with ';-' ... just using ';' like a normal person.
+ Too tedious and too many typos constantly reaching for the '-' key and more often
+ than not, hitting the wrong key. If comment symbol would automatically appear
+ like every other filetype this wouldn't be a problem, but for some reason, doesn't
+ work with IDL the way it does with latex and normal .sh files
+
+-----------------------------
+
+
 07 Janurary 2021
   m10_aligned.sav --> 2014-11-07 ; AR 12205
     • cube = INT Array [ 800, 600, 750 ]

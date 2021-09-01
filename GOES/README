@@ -6,9 +6,13 @@
         Copied code from interwebs, along with explanations of how to use it (commented)
         OGOES() --> external routine.
 
+    my_goes.pro
+        ML code only, 
+        plt = PLOT_GOES( gdata, buffer=buffer )
+
     plot_goes.pro
-        function definition plus ML code, which calls function defined above:
-            plt = PLOT_GOES( gdata, buffer=buffer )
+        function definition ONLY (no ML code);
+        called by my_goes.pro
 
     oplot_goes.pro
         procedure definition only (no ML code),

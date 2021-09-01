@@ -17,32 +17,46 @@
 ;- TO DO:
 ;-   [] Change RHESSI lightcurves to log scale, add remaining E-ranges, ...
 ;-          COMPLETE for A2
-;-   []
+;-   [] Separate GOES routine from RHESSI
+;-   [] Define time series start/end INDEPENDENTLY, instead of pulling obs times
+;-        from headers of specific instruments (shouldn't have to run struc_aia
+;-        or waste time defining paths, fits file names, etc. just so I can reference
+;-        index.date_obs or w/e... MAKE THINGS AS EASY AS POSSIBLE!
+
 ;-
 
 
 
 ;- 30 August 2021
-;- Usual definnitions (buffer, class, date, flare, ... ) now in par2.pro
+;- Usual definitions (buffer, class, date, flare, ... ) now in par2.pro
 
 
 ;= RHESSI
 
 ;- text file with rhessi data
-infile = class + '_rhessi_lightcurve_corr.txt'
+infile = './Lightcurves/' + class + '_rhessi_lightcurve_corr.txt'
 
 READCOL, infile, time, v1, v2, v3, v4, atten, eclipse, $
     format='A,F,F,F,F,I,I', delimiter=','
+stop
 
-
+;================================================
 ;= GOES
 
+; uses 'time' var defined by reading RHESSI data from text files
+;   (i.e. can't put GOES code above RHESSI, unless define tstart and tend
+;   INDEPENDENTLY from any one instrument's time series.
+
+sat = 'goes15'
 goesobj = OGOES()
-goesobj->SET, tstart=time[0], tend=time[-1], sat=15
+goesobj->SET, tstart=time[0], tend=time[-1], sat=sat
 goesobj->help
 
 goesdata = goesobj->getdata(/struct)
 ;help, goesdata
+
+;=
+;================================================
 
 print, time[0]
 
