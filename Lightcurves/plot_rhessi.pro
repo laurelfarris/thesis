@@ -77,11 +77,30 @@ print, goesdata.utbase
 stop
 
 ;- HARDCODING: matched correct format, filled in START TIME for goes
-if class eq 'c83' then jdbase_hardcopied = GET_JD('2013-08-30T02:03:26.089Z')
-if class eq 'm73' then jdbase_hardcopied = GET_JD('2014-04-18T12:50:02.815Z')
-if class eq 'x22' then jdbase_hardcopied = GET_JD('2011-02-15T01:26:37.429Z')
+if class eq 'c83' then begin
+    jdbase_hardcopied = GET_JD('2013-08-30T02:03:26.089Z')
+    impulsive = ['02:06:14','02:15:55']
+    peak = ['02:15:57','02:19:55']
+    decay = ['02:24:53','02:28:47']
+endif
+if class eq 'm73' then begin
+    jdbase_hardcopied = GET_JD('2014-04-18T12:50:02.815Z')
+    impulsive = ['12:50:32','12:54:48'] + '.000'
+    peak = ['12:54:48','12:59:04'] + '.000'
+    decay = ['13:03:20','13:07:36'] + '.000'
+endif
+if class eq 'x22' then begin
+    jdbase_hardcopied = GET_JD('2011-02-15T01:26:37.429Z')
+    impulsive = ['01:48:08','01:52:28']
+    peak = ['01:52:28','01:57:12']
+    decay = ['02:06:44','02:13:23']
+endif
 ;
-goesjd = goesdata.tarray/(60.*60.*24.) + jdbase_hardcopied
+goesjd = goesdata.tarray/(60.*60.*24.) + jdbase_hardcopied[0]
+;help, goesjd
+; ==>> get_jd returns ARRAY now instead of single value since I changed it
+;   to allow array of timestrings as input... Adding array of 1 caused goesjd to
+;   be an array of 1 ... not what we want.  -- 07 September 2021
 
 
 ;====
@@ -92,11 +111,11 @@ r3 = { ydata:v3, name:'25-50 keV', color:'orange' }
 r4 = { ydata:v4, name:'50-100 keV', color:'red' }
 ;
 rhessi = [ r1, r2, r3, r4 ]
-
-
-ydata = rhessi.ydata
+rhessi_ydata = rhessi.ydata
+sz = size(rhessi_ydata,/dimensions)
+;
 ;  Array [902,4] ==> Correct dimensions! same as ydata=[[v1],[v2],...]
-
+;
 ;== PLOT lightcurves
 ; [] NEW subroutine here? START with new plot, then easier to run bits at a time,
 ;     or all the way through w/o constantly breaking up into individ parts for
@@ -104,36 +123,34 @@ ydata = rhessi.ydata
 ;  source of error or whatever... too tedious. Create data, manipulate it, group
 ;  into a structure, sort out TIME arrays, etc. as a sepaerate thing, THEN
 ;  make pretty plots
-
-
-sz = size(ydata,/dimensions)
 ;
-;starttime = strmid( time[0], 11, 8 )
-;xtitle = 'Start Time (' + flare.date + ' ' + starttime + ')'
+rhessi_xdata = GET_JD( time + 'Z' )
+rhessi_xdata = rebin(rhessi_xdata, sz[0], sz[1])
+
+;
+; added line to batch_plot_2 to rebin rhessi_xdata so it matches ydata (02 Sep 2021)
+;  May not have worked, or changed after this... [] double check and update comments.
+;   (03 Sep 2021)
+;
+;format = '(F0.9)'
+;print, goesjd[0], format=format
+;print, rhessi_xdata[0,0], format=format
+;print, rhessi_xdata[0,1], format=format
+;
+;
+
+xtickformat = '(C(CHI2.2, ":", CMI2.2))'
+;
 xtitle = 'Start Time (' + goesdata.utbase + ')'
 ytitle = 'Count rate (s$^{-1}$ detector$^{-1}$)'
 ;
 
-xdata = GET_JD( time + 'Z' )
-xdata = rebin(xdata, sz[0], sz[1])
-
-; added line to batch_plot_2 to rebin xdata so it matches ydata (02 Sep 2021)
-;  May not have worked, or changed after this... [] double check and update comments.
-;   (03 Sep 2021)
-
-xtickformat = '(C(CHI2.2, ":", CMI2.2))'
 
 
-;format = '(F0.9)'
-;print, goesjd[0], format=format
-;print, xdata[0,0], format=format
-;print, xdata[0,1], format=format
-
-
-resolve_routine, 'batch_plot_2', /either
 dw
+resolve_routine, 'batch_plot_2', /either
 plt = BATCH_PLOT_2(  $
-    xdata, ydata, $
+    rhessi_xdata, rhessi_ydata, $
     axis_style=1, $
     overplot=1, $
     ylog=1, $
@@ -143,18 +160,78 @@ plt = BATCH_PLOT_2(  $
 ;    xminor=xminor, $
     ;yticklen=yticklen, $
     xtickformat=xtickformat, $
-    xtickinterval=10, $
+    xtickinterval=5, $
     xtitle=xtitle, $
     ytitle=ytitle, $
     color=rhessi.color, $
     name=rhessi.name, $
     buffer=buffer $
 )
-
+;
 ;
 ;== OPLOT vertical lines for flare phases
-resolve_routine, 'oplot_flare_lines_2', /is_function
-vert = OPLOT_FLARE_LINES_2( flare, plt, start_ind=1 )
+;resolve_routine, 'oplot_flare_lines_2', /is_function
+;vert = OPLOT_FLARE_LINES_2( flare, plt, start_ind=1 )
+;
+;testvar='THATCHED ROOF COTTAGEEESSSS!!!!'
+;for testtest = 0, n_elements(testvar)-1 do print, testvar[0]
+;
+yrange = plt[0].yrange
+;
+;
+format = '(F0.15)'
+resolve_routine, 'get_jd', /is_function
+x_vertices = [ $
+    [GET_JD(flare.year+'-'+flare.month+'-'+flare.day+'T'+impulsive+'Z')], $
+    [GET_JD(flare.year+'-'+flare.month+'-'+flare.day+'T'+peak+'Z')], $
+    [GET_JD(flare.year+'-'+flare.month+'-'+flare.day+'T'+decay+'Z')] $
+]
+;help, x_vertices
+;print, x_vertices
+;
+;
+;fill_color=['yellow', 'green', 'indigo']
+;fill_color=['pale goldenrod', 'pale green', 'light sky blue']
+;fill_color=['white smoke', 'light yellow', 'light blue']
+;fill_color=['eeeeee'X, 'e4e4e4'X, 'dadada'X]
+;fill_color=['ffffdf'X, 'dfffdf'X, 'afffff'X]
+color=['ffaf5f'X, '87d7af'X, '5f5fd7'X]
+name = ['impulsive', 'peak', 'decay']
+;
+shaded = objarr(3)
+for ii = 0, n_elements(shaded)-1 do begin
+    x1 = x_vertices[0,ii]
+    x2 = x_vertices[1,ii]
+    y1 = yrange[0]
+    y2 = yrange[1]
+    shaded[ii] = POLYGON( $
+        [x1,x2,x2,x1], $
+        [y1,y1,y2,y2], $
+        target=plt, $
+        /data, $
+        thick=0.5, $
+        linestyle=[1,'5555'X], $
+        color=color[ii], $
+        /fill_background, $
+        ;fill_color=fill_color[ii], $
+        fill_color='eeeeee'X, $
+        ;fill_transparency=50, $
+        name = name[ii] $
+    )
+    shaded[ii].Order, /SEND_TO_BACK
+endfor
+;
+;for ii = 0, n_elements(shaded)-1 do begin
+;    shaded[ii] = plot( [ x_vertices[0,ii], x_vertices[1,ii] ], $
+;        [ yrange[0], yrange[0] ], $
+;        /overplot, linestyle='', xstyle=1, ystyle=1, $
+;        /fill_background, fill_level=yrange[1], fill_color=fill_color[ii] )
+;    shaded[ii].Order, /send_to_back
+;endfor
+;
+;
+;win = GetWindows(/current)
+;win.save, '~/Figures/' + rhessi_filename + ".png"
 ;
 ;
 ;== OPLOT GOES lightcurve
@@ -192,11 +269,33 @@ ax2 = axis2( 'X', location='top', target=plt[0], showtext=0 )
 plt = [plt, pltg]
 ;plt = [plt, pltg, vert]
 ;
-
-leg.delete
+;leg.delete
 leg = legend2( target=plt, /upperright )
 ;leg = legend2( target=plt, /upperleft )
+;leg = legend2( target=plt, /lowerright )
 ;
 save2, rhessi_filename
+
+
+;== AIA lightcurves below RHESSI/GOES (share x-axis)
+
+
+;aia_ydata = [ $
+;    [ A[0].flux / A[0].exptime ], $
+;    [ A[1].flux / A[1].exptime ] $
+;]
+;
+;aia1600ind = where( A[0].jd ge rhessi_xdata[0,0] AND A[0].jd le rhessi_xdata[-1,0] )
+;aia1700ind = where( A[1].jd ge rhessi_xdata[0,0] AND A[1].jd le rhessi_xdata[-1,0] )
+;  Not same size; 150 and 151... may not play nice. Fix later.
+
+;aia_xdata = [ [A[0].jd[aia1600ind]], [A[0].jd[aia1600ind]]  ]
+
+
+
+
+;== 
+
+
 
 end

@@ -3,6 +3,11 @@
 
 ;function OPLOT_GOES, plt, goes, _EXTRA=e
 
+
+; 07 September 2021
+; NOTE: ==> HARDCODED VALUES! From 2011 Feb 15 flare.
+;  Guess it has been awhile..
+
 pro OPLOT_GOES, plt, goes, $
         _EXTRA=e
 

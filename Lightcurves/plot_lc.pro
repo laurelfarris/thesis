@@ -28,10 +28,15 @@
 
 
 buffer=1
-
 @par2
+;
 
-flare = multiflare.m73
+aia_lc_filename = class + '_aia_lightcurve'
+print, aia_lc_filename
+
+;flare = multiflare.m73
+; Set flare at end of par2.pro, after multiflare structure def.
+;  ( 07 September 2021 )
 
 ;instr = 'aia'
 ;channel = '1600'
@@ -40,123 +45,90 @@ flare = multiflare.m73
 ;cc = 1
 ;channel = A[cc].channel
 
-;- NOTE : flare is defined at top of ML in Prep/struc_aia.pro
 
 ;+
 ;--- create string variables to use in filenames (I guess)
-class = strlowcase(strjoin(strsplit(flare.class, '.', /extract)))
+;class = strlowcase(strjoin(strsplit(flare.class, '.', /extract)))
 ;- flare.class = M1.5 --> class = m15
-date = flare.year + flare.month + flare.day
+;date = flare.year + flare.month + flare.day
 ;- flare.date = 12-Aug-2013 --> date = 20130812
+;==>> class and date both defined in par2.pro
+;       (07 Sep 2021)
 ;------
 
 
 stop
 
-
-infile = class + '_rhessi_lightcurve_corr.txt'
-
-;width = 7
-;head_length = 1
-;READ_MY_DATAFILE, infile, data, width, head_length=head_length
-;- help, data -> FLOAT  = Array[7, 902]
-;print, data[*,0:4]
-
-;- The better way:
-READCOL, infile, time, v1, v2, v3, v4, atten, eclipse, $
-    format='A,F,F,F,F,I,I', delimiter=','
-;
-
-starttime = time[0]
-xtitle = 'Start Time (' + starttime + ')'
-ytitle = 'Counts s$^{-1}$ detector$^{-1}$'
-
-;ydata = [ [v1], [v2], [v3], [v4] ]
-;name = ['6-12', '12-25', '25-50', '50-100'] + ' keV'
-;color = ['black', 'gray', 'blue', 'red']
-
-ydata = [ [v3], [v4] ]
-name = ['25-50', '50-100'] + ' keV'
-color = ['black', 'gray']
-
-
-dw
-plt = objarr( (size(ydata,/dimensions))[1] )
-for ii = 0, n_elements(plt)-1 do begin
-    plt[ii] = plot2( $
-        ydata[*,ii], $
-        overplot=ii<1, $
-        ytitle=ytitle, $
-        name=name[ii], $
-        color=color[ii], $
-        buffer=buffer $
-    )
-endfor
-;
-;print, plt[0].xtickvalues
-;print, time[ plt[0].xtickvalues ]
-;
-plt[0].xtickname = strmid( time[ plt[0].xtickvalues ], 11, 5 )
-;print, plt[0].xtickname
-;
-leg = legend2( target=plt, /upperright )
-;
-rhessi_filename = class + '_rhessi_lightcurve'
-save2, rhessi_filename
-
 ;=
 ;======================================================================
-;= plot light curves for integrated emission (the original)
+;= plot light curves for integrated AIA emission (the original)
 ;=
 
 
-;-
+; 07 September 2021 - use jd instead of integers
+loc1 = (where( A[0].jd ge rhessi_xdata[0,0] ))[0]
+loc2 = (where( A[0].jd le rhessi_xdata[-1,0] ))[-1]
+aia1600ind = [loc1:loc2]
+
+;AND A[0].jd le rhessi_xdata[-1,0] )
+;aia1700ind = where( A[1].jd ge rhessi_xdata[0,0] AND A[1].jd le rhessi_xdata[-1,0] )
+;  Not same size; 150 and 151... may not play nice. Fix later.
+;   Using 1600 jd for both channels... close enough.
+;
 ;ydata = A.flux
-ydata = [ $
-    [ A[0].flux / A[0].exptime ], $
-    [ A[1].flux / A[1].exptime ] $
+
+aia_ydata = [ $
+    [ A[0].flux[aia1600ind] / A[0].exptime ], $
+    [ A[1].flux[aia1600ind] / A[1].exptime ] $
 ]
-;-
-
-n_obs = (size(ydata, /dimensions))[0]
-;xdata = A.jd
-;-
-
-xdata = [ [indgen(n_obs)], [indgen(n_obs)] ]
+;
+n_obs = (size(aia_ydata, /dimensions))[0]
+;xdata = [ [indgen(n_obs)], [indgen(n_obs)] ]
 ;-  see today.pro (21 Feb 2020)
-;-
-
-
+;
+;xdata = [ [A[0].jd[aia1600ind]], [A[0].jd[aia1600ind]]  ]
+;aia_xdata = [ [(indgen(n_obs))[aia1600ind]], [(indgen(n_obs))[aia1600ind]] ]
+;
+aia_xdata = FIX( [ [aia1600ind], [aia1600ind] ] )
+;
+;
+;help, xdata
+;help, ydata
+;
+;xdata = A.jd
+;
 ;;xtickinterval = A[0].jd[75] - A[0].jd[0]
 ;xtickinterval = 75
-
-
+;
+xtickinterval = 5
+;
 ;- From ../WA/plot_filter.pro, though probably don't need to preserve these values
 ;xtickinterval = 25
 ;yticklen=0.010
-;stairstep=1
-
+stairstep=1
+;
 ;xminor = 5
 ytitle=A.name + ' (DN s$^{-1}$)'
-;-
+;
+;stop
+;
 
-stop
+
 
 dw
 resolve_routine, 'batch_plot_2', /either
 plt = BATCH_PLOT_2(  $
-    xdata, ydata, $
+    aia_xdata, aia_ydata, $
     ystyle=1, $
-    xrange=[0,n_obs-1], $
+    ;xrange=[0,n_obs-1], $
     thick=[0.5, 0.8], $
-    xtickinterval=xtickinterval, $
-    xminor=xminor, $
+    ;xtickinterval=xtickinterval, $
+    ;xminor=xminor, $
     ;yticklen=yticklen, $
-    ;stairstep=stairstep, $
+    stairstep=stairstep, $
     color=A.color, $
     name=A.name, $
     buffer=buffer )
-print, plt[0].xminor
 ;
 ;-
 ;-  30 August 2019
@@ -183,9 +155,6 @@ plt[1].yrange = [ $
     ( plt[1].yrange[0] - (dy*0.2) ), $
     plt[1].yrange[1]  $
 ]
-;-
-;-
-;
 ;-
 ;- 14 March 2020
 ;-  hardcoding padding for yrange, for now..
@@ -261,7 +230,6 @@ ax[0].tickname = time[ax[0].tickvalues]
 ;ax[0].title = 'Start time (' + flare.date + ' ' + A[0].time[0] + ')'
     ;- ==>> need better way to do this!
 ax[0].title = 'Start time (' + ANYTIM( aia1600index[0].t_obs, /stime ) + ')'
-
 ;
 ;-
 ;resolve_routine, 'label_time', /either
@@ -270,20 +238,64 @@ ax[0].title = 'Start time (' + ANYTIM( aia1600index[0].t_obs, /stime ) + ')'
 ;resolve_routine, 'shift_ydata', /either
 ;SHIFT_YDATA, plt
 ;-
-resolve_routine, 'oplot_flare_lines', /is_function
-vert = OPLOT_FLARE_LINES( $
-    plt, $
-    ;color='magenta', $
-      ;- confirming that kw value set when calling subroutine
-      ;-  overrides the value set when subroutine calls PLOT.
-    t_obs=A[0].time, $
-    send_to_back=1 )
+;resolve_routine, 'oplot_flare_lines', /is_function
+;vert = OPLOT_FLARE_LINES( $
+;    plt, t_obs=A[0].time, send_to_back=1 )
 ;-
+;
+;
+;fill_color=['yellow', 'green', 'indigo']
+;fill_color=['pale goldenrod', 'pale green', 'light sky blue']
+;fill_color=['white smoke', 'light yellow', 'light blue']
+;fill_color=['eeeeee'X, 'e4e4e4'X, 'dadada'X]
+;fill_color=['ffffdf'X, 'dfffdf'X, 'afffff'X]
+color=['ffaf5f'X, '87d7af'X, '5f5fd7'X]
+name = ['impulsive', 'peak', 'decay']
+;
+x_vertices=[ $
+    [ $
+        (where( strmid(A[0].time,0,5) eq strmid(impulsive[0],0,5)))[0], $
+        (where( strmid(A[0].time,0,5) eq strmid(impulsive[1],0,5)))[0] $
+    ], [ $
+        (where( strmid(A[0].time,0,5) eq strmid(peak[0],0,5)))[0], $
+        (where( strmid(A[0].time,0,5) eq strmid(peak[1],0,5)))[0] $
+    ], [ $
+        (where( strmid(A[0].time,0,5) eq strmid(decay[0],0,5)))[0], $
+        (where( strmid(A[0].time,0,5) eq strmid(decay[1],0,5)))[0] $
+    ] $
+]
+;
+print, x_vertices
+;
+y2 = max( [plt[0].yrange, plt[1].yrange])
+y1 = min( [plt[0].yrange, plt[1].yrange])
+;
+shaded = objarr(3)
+for ii = 0, n_elements(shaded)-1 do begin
+    x1 = x_vertices[0,ii]
+    x2 = x_vertices[1,ii]
+    shaded[ii] = POLYGON( $
+        [x1,x2,x2,x1], $
+        [y1,y1,y2,y2], $
+        target=plt, $
+        /data, $
+        thick=0.5, $
+        linestyle=[1,'5555'X], $
+        color=color[ii], $
+        /fill_background, $
+        ;fill_color=fill_color[ii], $
+        fill_color='eeeeee'X, $
+        ;fill_transparency=50, $
+        name = name[ii] $
+    )
+    shaded[ii].Order, /SEND_TO_BACK
+endfor
+;
 resolve_routine, 'legend2', /either
 leg = LEGEND2( $
     target=plt, $
-    /upperleft, $
-    ;/upperright, $
+    ;/upperleft, $
+    /upperright, $
     sample_width=0.25 )
 ;
 ;-
@@ -309,10 +321,7 @@ ax[1].title = ytitle[0]
 ;ax[1].tickname = scinot( ax[1].tickvalues )
 ;ax[1].major = ymajor
 ax[1].minor = yminor
-
-
-
-
+;
 ;-
 ;ax = plt[1].axes
 ax[3].title = ytitle[1]
@@ -330,11 +339,8 @@ ax[1].text_color = A[0].color
 ;ax[3].color = A[1].color
 ax[3].text_color = A[1].color
 ;-
-
-
-
-save2, filename
-
+save2, aia_lc_filename
+;
 stop
 
 
@@ -390,14 +396,12 @@ ind = [(where(time eq my_start))[0],(where(time eq my_end))[0]]
 
 yrange = [ $
     min( [plt[0].yrange[0], plt[1].yrange[0] ] ), $
-    max( [plt[0].yrange[1], plt[1].yrange[1] ] ) ]
-
-print, plt[0].yrange
-print, plt[1].yrange
+    max( [plt[0].yrange[1], plt[1].yrange[1] ] ) $
+]
 
 
-;-
-;-
+stop ; ==> use same shading as RHESSI lightcurves instead of this
+
 ;-
 shaded = plot( $
     [ind[0], ind[1]], $
@@ -433,9 +437,8 @@ shaded.Order, /send_to_back
 ;stop
 ;-
 ;-
-save2, filename
+save2, aia_lc_filename
 
-stop
 
 ;===============================================================================
 

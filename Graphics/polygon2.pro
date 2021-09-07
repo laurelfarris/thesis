@@ -46,6 +46,14 @@ function POLYGON2, $
         color='red', $
         _EXTRA=e )
 
+    ; Fill is solid color by default,
+    ;  setting any of the following will fill polygon with line pattern
+        ;pattern_orientation=  ; degrees, counterclockwise from horizontal
+        ;pattern_spacing = distance between lines (pts)
+        ;pattern_thick= thickness of lines filling polygon,
+        ;    set to float between 0.0 and 10.0 (default=1.0)
+
+        ; transparency
     return, pol
 
 end

@@ -7,6 +7,8 @@
 ;-   04 April 2020
 ;-     Updated comments/documentation at top of file... was terrible.
 ;-     (same for get_time.pro).
+;-   02 September 2021
+;-     Added loop so input can be array of many timestamp strings..
 ;-
 ;- ROUTINE:
 ;-   get_jd.pro
@@ -32,17 +34,23 @@
 
 function GET_JD, timestampstring
 
-    TIMESTAMPTOVALUES, timestampstring, $
-        day=day, $
-        hour=hour, $
-        minute=minute, $
-        month=month, $
-        second=second, $
-        year=year, $
-        offset=offset
+    
+    jd = []
+    for ii = 0, n_elements(timestampstring)-1 do begin
 
-    ; Covert observations times to JD
-    jd = JULDAY(month, day, year, hour, minute, second)
+        TIMESTAMPTOVALUES, timestampstring[ii], $
+            day=day, $
+            hour=hour, $
+            minute=minute, $
+            month=month, $
+            second=second, $
+            year=year, $
+            offset=offset
+
+        ; Covert observations times to JD
+        jd = [jd, JULDAY(month, day, year, hour, minute, second)]
+
+    endfor
 
     return, jd
 end

@@ -173,8 +173,8 @@ m73 = { $
     tstart : '12:31', $
     tpeak  : '13:03', $
     tend   : '13:20', $
-    xcen : -268.8, $
-    ycen : -422.4 $
+    xcen : 0, $
+    ycen : 0 $
 }
 
 x22 = { $
@@ -188,9 +188,9 @@ x22 = { $
     day : '15', $
     tstart : '01:47', $
     tpeak  : '01:56', $
-    tend   : '02:06' $
-;    xcen : !NULL, $
-;    ycen : !NULL $
+    tend   : '02:06', $
+    xcen : 0, $
+    ycen : 0 $
 }
 
 
@@ -205,9 +205,9 @@ print, ''
 ;flare = multiflare.m10
 ;flare = multiflare.m15
 ;
-flare = multiflare.c83
+;flare = multiflare.c83
 ;flare = multiflare.m73
-;flare = multiflare.x22
+flare = multiflare.x22
 
 class = strlowcase(strjoin(strsplit(flare.class, '.', /extract)))
 ;- flare.class = M1.5 --> class = m15

@@ -192,8 +192,18 @@ pro SAVE2, filename, $
     ;-
 
     win.SAVE, path + new_filename, $
+        ;/antialias, $
+        ;/append, /memory, /close, $
+        ;/bit_depth={0|1|2}, $
+        ;/bitmap, $
+        ;resolution=integer, $ ;= dpi (default=600)
+        ;transparent=array , $
+        height=wy, width=wx, $
+        ;border=0, $
+        ;landscape, $
         page_size=[wx,wy], $
-        width=wx, height=wy, _EXTRA=e
+        ;xmargin=integer, ymargin=integer, $
+        _EXTRA=e
 
     print, ''
     print, 'Saved file '

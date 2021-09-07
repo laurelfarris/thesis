@@ -4,6 +4,9 @@
 ;-
 ;- PURPOSE:
 ;-   Plot GOES data using my pretty plotting adjustments.
+;-   NOTE: currently written to create new window and plot GOES lightcurve
+;-     as the primary plot (i.e. not to overplot on an existing lc for
+;-     RHESSI or AIA or whatev.
 ;-
 ;- INPUT:
 ;-   gdata = goesdata, retrieved from OGOES()

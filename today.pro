@@ -34,6 +34,10 @@ buffer = 1
 flare = multiflare.m73
 
 
+testplt = plot2( A[0].flux, buffer=buffer )
+save2, 'testagain'
+
+
 
 ; 02 Sep 2021 -- Testing plotting to screen instead of buffer!
 ;  Works, but very slow.. not worth it.
