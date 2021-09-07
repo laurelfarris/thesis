@@ -65,6 +65,18 @@
 ;-  probably have the same name, I guess...
 
 
+;testflare = { $
+;    ;m15, $
+;    class : 'M1.5', $
+;    year : '2013', $
+;    month : '08', $
+;    day : '12', $
+;    tstart : '10:21', $
+;    tpeak  : '10:41', $
+;    tend   : '10:47', $
+;    xcen : -268.8, $
+;    ycen : -422.4 $
+;}
 
 ; Fill this in later (09 July 2021)
 c30 = { $
@@ -83,8 +95,6 @@ c30 = { $
     ycen   : 0 $
 }
 
-
-;
 c46 = { $
     ;flare, $
     ;name : 'c46', $
@@ -100,7 +110,7 @@ c46 = { $
     xcen   : 0, $
     ycen   : 0 $
 }
-;
+
 c83 = { $
     ;flare, $
     ;c83, $
@@ -116,7 +126,7 @@ c83 = { $
     xcen : -633.276, $
     ycen : 128.0748 $
 }
-;
+
 m10 = { $
     ;flare, $
     ;m10, $
@@ -134,7 +144,7 @@ m10 = { $
     xcen : -639.624, $
     ycen :  206.1222 $
 }
-;
+
 m15 = { $
     ;flare, $
     ;m15, $
@@ -150,7 +160,7 @@ m15 = { $
     xcen : -268.8, $
     ycen : -422.4 $
 }
-;
+
 m73 = { $
     ;flare, $
     ;m73, $
@@ -166,7 +176,7 @@ m73 = { $
     xcen : -268.8, $
     ycen : -422.4 $
 }
-;
+
 x22 = { $
     ;flare, $
     ;x22, $
@@ -182,30 +192,21 @@ x22 = { $
 ;    xcen : !NULL, $
 ;    ycen : !NULL $
 }
-;testflare = { $
-;    ;m15, $
-;    class : 'M1.5', $
-;    year : '2013', $
-;    month : '08', $
-;    day : '12', $
-;    tstart : '10:21', $
-;    tpeak  : '10:41', $
-;    tend   : '10:47', $
-;    xcen : -268.8, $
-;    ycen : -422.4 $
-;}
+
 
 multiflare = { m15:m15, c83:c83, c46:c46, m10:m10, m73:m73, x22:x22 }
-;help, multiflare
 
-
+print, ''
+print, '==-- Multiflare structure --===================='
+help, multiflare
+print, ''
 
 ;flare = multiflare.c46
 ;flare = multiflare.m10
 ;flare = multiflare.m15
 ;
-;flare = multiflare.c83
-flare = multiflare.m73
+flare = multiflare.c83
+;flare = multiflare.m73
 ;flare = multiflare.x22
 
 class = strlowcase(strjoin(strsplit(flare.class, '.', /extract)))
@@ -216,14 +217,10 @@ date = flare.year + flare.month + flare.day
 
 ;IDL> .run struc_aia
 
-
-
 buffer = 1
 
 
-
-
-
+;== End of latest version ==============================
 
 ;--------------------------------------------------------------------------------
 ;+

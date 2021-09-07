@@ -22,14 +22,17 @@
 ;-        from headers of specific instruments (shouldn't have to run struc_aia
 ;-        or waste time defining paths, fits file names, etc. just so I can reference
 ;-        index.date_obs or w/e... MAKE THINGS AS EASY AS POSSIBLE!
-
+;-   [] Replace hardcoded crap with something better
+;-   []
+;-   []
+;-   []
 ;-
 
 
+@par2
 
 ;- 30 August 2021
 ;- Usual definitions (buffer, class, date, flare, ... ) now in par2.pro
-
 
 ;= RHESSI
 
@@ -38,6 +41,13 @@ infile = './Lightcurves/' + class + '_rhessi_lightcurve_corr.txt'
 
 READCOL, infile, time, v1, v2, v3, v4, atten, eclipse, $
     format='A,F,F,F,F,I,I', delimiter=','
+
+help, time
+
+rhessi_filename = class + '_rhessi_lightcurve'
+; NOTE: class is defined in @par2
+
+
 stop
 
 ;================================================
@@ -51,95 +61,109 @@ sat = 'goes15'
 goesobj = OGOES()
 goesobj->SET, tstart=time[0], tend=time[-1], sat=sat
 goesobj->help
-
+;
 goesdata = goesobj->getdata(/struct)
 ;help, goesdata
+
+print, 'Start time = ', time[ 0]
+print, '  End time = ', time[-1]
+
+print, goesdata.utbase
 
 ;=
 ;================================================
 
-print, time[0]
-
-print, goesdata.utbase
 
 stop
 
 ;- HARDCODING: matched correct format, filled in START TIME for goes
-if class eq 'c83' then utbase_hardcopied = get_jd('2013-08-30T02:03:26.089Z')
-if class eq 'm73' then utbase_hardcopied = get_jd('2014-04-18T12:50:02.815Z')
-if class eq 'x22' then utbase_hardcopied = get_jd('2011-02-15T01:26:37.429Z')
+if class eq 'c83' then jdbase_hardcopied = GET_JD('2013-08-30T02:03:26.089Z')
+if class eq 'm73' then jdbase_hardcopied = GET_JD('2014-04-18T12:50:02.815Z')
+if class eq 'x22' then jdbase_hardcopied = GET_JD('2011-02-15T01:26:37.429Z')
 ;
-goesjd = goesdata.tarray/(60.*60.*24.) + utbase_hardcopied
+goesjd = goesdata.tarray/(60.*60.*24.) + jdbase_hardcopied
 
+
+;====
+
+r1 = { ydata:v1, name:'6-12 keV', color:'blue' }
+r2 = { ydata:v2, name:'12-25 keV', color:'green' }
+r3 = { ydata:v3, name:'25-50 keV', color:'orange' }
+r4 = { ydata:v4, name:'50-100 keV', color:'red' }
+;
+rhessi = [ r1, r2, r3, r4 ]
+
+
+ydata = rhessi.ydata
+;  Array [902,4] ==> Correct dimensions! same as ydata=[[v1],[v2],...]
+
+;== PLOT lightcurves
+; [] NEW subroutine here? START with new plot, then easier to run bits at a time,
+;     or all the way through w/o constantly breaking up into individ parts for
+;  mcb and then going through and merging again, then breaking up again to find
+;  source of error or whatever... too tedious. Create data, manipulate it, group
+;  into a structure, sort out TIME arrays, etc. as a sepaerate thing, THEN
+;  make pretty plots
+
+
+sz = size(ydata,/dimensions)
+;
 ;starttime = strmid( time[0], 11, 8 )
 ;xtitle = 'Start Time (' + flare.date + ' ' + starttime + ')'
 xtitle = 'Start Time (' + goesdata.utbase + ')'
-ytitle = 'Counts s$^{-1}$ detector$^{-1}$'
+ytitle = 'Count rate (s$^{-1}$ detector$^{-1}$)'
 ;
-;ydata = [ [v1], [v2], [v3], [v4] ]
-;name = ['6-12', '12-25', '25-50', '50-100'] + ' keV'
-;color = ['black', 'gray', 'blue', 'red']
-;
-ydata = [ [v3], [v4] ]
-sz = size(ydata,/dimensions)
-;
-name = ['25-50', '50-100'] + ' keV'
-color = ['gray', 'black']
-;
-xdata = get_jd( time + 'Z' )
-xdata = [ [xdata], [xdata] ]
-;
+
+xdata = GET_JD( time + 'Z' )
+xdata = rebin(xdata, sz[0], sz[1])
+
+; added line to batch_plot_2 to rebin xdata so it matches ydata (02 Sep 2021)
+;  May not have worked, or changed after this... [] double check and update comments.
+;   (03 Sep 2021)
+
 xtickformat = '(C(CHI2.2, ":", CMI2.2))'
 
 
+;format = '(F0.9)'
+;print, goesjd[0], format=format
+;print, xdata[0,0], format=format
+;print, xdata[0,1], format=format
+
+
 resolve_routine, 'batch_plot_2', /either
+dw
 plt = BATCH_PLOT_2(  $
     xdata, ydata, $
     axis_style=1, $
     overplot=1, $
+    ylog=1, $
 ;    xrange=[0,n_obs-1], $
 ;    thick=[0.5, 0.8], $
 ;    xtickinterval=xtickinterval, $
 ;    xminor=xminor, $
     ;yticklen=yticklen, $
     xtickformat=xtickformat, $
-    xtickinterval=5, $
+    xtickinterval=10, $
     xtitle=xtitle, $
     ytitle=ytitle, $
-    color=color, $
-    name=name, $
+    color=rhessi.color, $
+    name=rhessi.name, $
     buffer=buffer $
 )
+
 ;
-vx = GET_JD( $
-    flare.year + '-' + flare.month + '-' + flare.day + 'T' + $
-    [flare.tstart, flare.tpeak, flare.tend] + $
-    ':00.000Z' $
-)
+;== OPLOT vertical lines for flare phases
+resolve_routine, 'oplot_flare_lines_2', /is_function
+vert = OPLOT_FLARE_LINES_2( flare, plt, start_ind=1 )
 ;
-vertname = ['start', 'peak', 'end']
-vert = objarr(3)
-for ii = 0, n_elements(vert)-1 do begin
-    vert[ii] = plot( $
-        [vx[ii], vx[ii]], $
-        plt[0].yrange, $
-        /current, $
-        /overplot, $
-        ystyle=1, $
-        thick=0.5, $
-        color='gainsboro', $
-        name=vertname[ii], $
-        buffer=buffer $
-    )
-endfor
 ;
+;== OPLOT GOES lightcurve
 ;
 ;plt[0].xtickname = strmid( time[ plt[0].xtickvalues ], 11, 5 )
 ;
 ;result = label_date( date_format='%H:%I' )
 ;plot, time, v1, xtickformat='label_date'
 ;plt[0].xtickunits = 'time'
-;
 ;
 pltg = plot2( $
     goesjd, $
@@ -148,8 +172,7 @@ pltg = plot2( $
     position=plt[0].position, $
     xstyle=1, $
     ystyle=1, $
-    axis_style=4, $
-    ;color='red', $
+    axis_style=4, $  ; No axes (want curve on top of RHESSI w/o actually "overplotting")
     linestyle=[1,'3C3C'X], $
     name='GOES 1-8$\AA$', $
     buffer=buffer $
@@ -158,15 +181,22 @@ pltg = plot2( $
 ax = axis2( 'Y', $
     location='right', $
     target=pltg, $
+    title='W m$^{-2}$', $
     showtext=1 $
     ;buffer=buffer $
 )
 ;
+; Add top axis to complete the square grid (no extra data here tho)
 ax2 = axis2( 'X', location='top', target=plt[0], showtext=0 )
 ;
-leg = legend2( target=[plt,pltg,vert], /upperright )
+plt = [plt, pltg]
+;plt = [plt, pltg, vert]
 ;
-rhessi_filename = class + '_rhessi_lightcurve'
+
+leg.delete
+leg = legend2( target=plt, /upperright )
+;leg = legend2( target=plt, /upperleft )
+;
 save2, rhessi_filename
 
 end

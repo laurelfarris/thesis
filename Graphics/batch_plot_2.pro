@@ -122,16 +122,41 @@ function WRAP_BATCH_PLOT_2, $
     y2 = wy - top
     position = [x1,y1,x2,y2]*dpi
 
-    sz = size(ydata, /dimensions)
+
+
+    ; ---------------------------------------------------------------
+
+    ;- transpose(xdata) -- in case, e.g. [2,1000] instead of [1000,2]
+
+;    ;If ydata only contains one plot (no oplots):
+;    sz = size(ydata, /dimensions)
 ;    if n_elements(sz) eq 1 then begin
 ;        ydata = reform(ydata, sz[0], 1, /overwrite)
 ;        xdata = reform(xdata, sz[0], 1, /overwrite)
 ;        sz = size(ydata, /dimensions)
 ;    endif
-;
-;    if not keyword_set(xtitle) then xtitle = " "
-;    if not keyword_set(ytitle) then ytitle = " "
-;    if not keyword_set(name) then name = strarr(sz[1])
+
+    ; -- Better way (02 Sep. 2021)
+
+    sz = size(ydata, /dimensions)
+
+    ; f-ing REBIN! Why was this so hard to find???
+    ; Duplicate xdata if ydata contains multiple plots (2D)
+    ;  (if xdata dims already match sz, this shouldn't change anything)
+    ; Still seems a waste of memory to duplicate array when should just
+    ;  use the same xdata for each iteration of plotting loop below,
+    ;  but not sure how to do that and not high priority right now...
+;    if size(xdata,/n_dim) ne size(ydata,/n_dim) then begin
+;        xdata = rebin( xdata, sz[0], sz[1] )
+;    endif
+
+    ;if size(ydata, /n_dimensions) eq 1 then begin
+    ; NOTE: (size(array))[0] == size(array, /n_dimensions)
+
+    ; REFORM(arr) w/ no args or kws : dim =1 is removed otherwise NO CHANGE
+    ;   (if statement above is not necessary... I think)
+    xdata = reform(xdata)
+    ydata = reform(ydata)
 
     ;symbol = [ 'Circle', 'Square' ]
 
@@ -198,16 +223,9 @@ function BATCH_PLOT_2, $
     xdata, ydata, $
     _EXTRA = e
 
-    ;- transpose(xdata) -- in case, e.g. [2,1000] instead of [1000,2]
-
+    ; "wrapper" called by user - used to set default keywords
 
     sz = size(ydata, /dimensions)
-    ;- If ydata only contains one plot (no oplots):
-    if n_elements(sz) eq 1 then begin
-        ydata = reform(ydata, sz[0], 1, /overwrite)
-        xdata = reform(xdata, sz[0], 1, /overwrite)
-        sz = size(ydata, /dimensions)
-    endif
 
     @color
 

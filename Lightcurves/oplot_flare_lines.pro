@@ -194,11 +194,9 @@ function OPLOT_FLARE_LINES, $
 
 
     ; __  __  __  __  __
-    ;vert[1].linestyle = [1, 'F0F0'X]
-    ;vert[1].linestyle = [1, '6666'X]
-    vert[1].linestyle = [1, '3C3C'X] ;- shift 'F0F0' so it's symmetric
-
-
+    ;vert[1].linestyle = [1, '6666'X] ; very short dashes
+    ;vert[1].linestyle = [1, 'F0F0'X] ; better..
+    vert[1].linestyle = [1, '3C3C'X] ; same as F0F0, but shifted for symmetry
 
     ; __ . __ . __ . __ . __ .
     ;vert[2].linestyle = [1, '4FF2'X]
@@ -208,7 +206,6 @@ function OPLOT_FLARE_LINES, $
 
     ; ___ .. ___ .. ___ .. ___
     vert[2].linestyle = [1, '47E2'X]
-
 
     ; __  . . .  __  . . .  __
     ;vert[2].linestyle = [1, '48E2'X]

@@ -16,12 +16,8 @@ pro OPLOT_GOES, plt, goes, $
     ;-   goes.ydata[*,1] = 0.5-4.0 Angstroms
     yy = goes.ydata[*,0]
 
-
-
     ;- Subtract min instead of mean to avoid problems with ylog=1
     ;yy = yy - min(yy)
-
-
 
     ;- Normalize y values
     yy = yy - min(yy)
