@@ -9,7 +9,6 @@
 ;-   [] fourier2( signal, /NORM ) -> should have same pattern, but smaller numbers on y-axis
 ;-   [] fourier2( signal ) / "spectral maximum"
 ;-   []
-;-   []
 ;-
 ;- C8.3 2013-08-30 T~02:04:00
 ;- M1.0 2014-11-07 T~10:13:00
