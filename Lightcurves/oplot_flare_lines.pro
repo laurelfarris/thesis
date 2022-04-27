@@ -185,63 +185,10 @@ function OPLOT_FLARE_LINES, $
     endforeach
     ;return, vert
 
-    ; . . . . . . . . . . .
-    vert[0].linestyle = [1, '1111'X]
 
-    ; ....................
-    ;vert[0].linestyle = [1, '5555'X]
-    ;- dots are way too close together (14 August 2021)
-
-
-    ; __  __  __  __  __
-    ;vert[1].linestyle = [1, '6666'X] ; very short dashes
-    ;vert[1].linestyle = [1, 'F0F0'X] ; better..
-    vert[1].linestyle = [1, '3C3C'X] ; same as F0F0, but shifted for symmetry
-
-    ; __ . __ . __ . __ . __ .
-    ;vert[2].linestyle = [1, '4FF2'X]
-
-    ; __ . . __ . . __ . . __
-    ;vert[2].linestyle = [1, '23E2'X]
-
-    ; ___ .. ___ .. ___ .. ___
-    vert[2].linestyle = [1, '47E2'X]
-
-    ; __  . . .  __  . . .  __
-    ;vert[2].linestyle = [1, '48E2'X]
-
-
-    ; 1  0001
-    ; 2  0010
-    ; 3  0011
-    ; 4  0100
-    ; 5  0101
-    ; 6  0110
-    ; 7  0111
-
-    ; C  1100
-    ; D  1101
-    ; E  1110
-    ; F  1111
-
-
-    ;- Dots:
-    ; 1111 - spread out
-    ; 5555 - closer together
-
-    ;- Dashes
-    ; 3333
-    ; F0F0
-
-    ;- Dash dot
-    ; 7272
-
-    ;- Dash dot dot (IDL doesn't have a linestyle option for this...)
-    ; 7F92
-    ; 4FF2 --> symmetry
-
-    ;- Dash dot dot dot
-    ; 7C92
+    ; 27 April 2022
+    ;   Moved examples of line patterns to Evernote:
+    ;   "IDL graphics - linestyle" in IDL notebook.
 
 
     plt = [ plt, vert ]

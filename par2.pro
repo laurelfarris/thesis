@@ -13,9 +13,7 @@
 ;- To do:
 ;-   [] Make easier way to switch flares without commenting/uncommenting.
 ;-
-
 ;================================================================================
-
 ;- Naming convention of fits files for, e.g. AIA 1600\AA{}
 ;     UNprepped fits:
 ;        'aia.lev1.1600A_2013-12-28T10_00_00.00Z.image_lev1.fits'
@@ -23,21 +21,16 @@
 ;     PREPPED fits:
 ;        'AIA20131228_100000_1600.fits'
 ;        'AIA20131228_100000_0304.fits'
-
-
 ;+
 ;- NEW @params
 ;-
-
-
 ;--------------------------------------------------------------------------------
 ;- 03 January 2021
 ;-
 ;- TEST : playing with structures
 ;-
-
 ;REPLICATE can also be used to create arrays of structures.
-
+;-
 ;- create structure named "emp" that contains a
 ;- string name field and a long integer employee ID field:
 ;-   NOTE: don't confuse VARIABLE name (employee) with STRUCTURE name (emp),
@@ -55,9 +48,6 @@
 ;-
 
 ;STOP
-
-;---------------------------------------
-
 
 ;--------------------------------------------------------------------------------
 ;- 07 January 2021
@@ -105,8 +95,8 @@ c46 = { $
     month  : '10', $
     day    : '23', $
     tstart : '13:20', $
-    tpeak  : '00:00', $
-    tend   : '00:00', $
+    tpeak  : '', $
+    tend   : '', $
     xcen   : 0, $
     ycen   : 0 $
 }
@@ -114,7 +104,7 @@ c46 = { $
 c83 = { $
     ;flare, $
     ;c83, $
-    AR     : '', $
+    AR     : '11836', $
     class : 'C8.3', $
     date  : '30-Aug-2013' , $
     year : '2013', $
@@ -123,14 +113,14 @@ c83 = { $
     tstart : '02:04', $
     tpeak  : '02:46', $
     tend   : '04:06', $
-    xcen : -633.276, $
-    ycen : 128.0748 $
+    xcen : -633.276, $ ; -43 degrees
+    ycen : 128.0748 $  ;  13 degrees
 }
 
 m10 = { $
     ;flare, $
     ;m10, $
-    AR     : '', $
+    AR     : '12205', $
     class : 'M1.0', $
     date  : '07-Nov-2014' , $
     year : '2014', $
@@ -141,14 +131,14 @@ m10 = { $
     tstart : '10:13', $
     tpeak  : '10:22', $
     tend   : '10:30', $
-    xcen : -639.624, $
-    ycen :  206.1222 $
+    xcen : -639.624, $  ; -43 degrees (? double check this..)
+    ycen :  206.1222 $  ; 15 degrees
 }
 
 m15 = { $
     ;flare, $
     ;m15, $
-    AR     : '', $
+    AR     : '11817', $
     class : 'M1.5', $
     date  : '12-Aug-2013' , $
     year : '2013', $
@@ -157,8 +147,8 @@ m15 = { $
     tstart : '10:21', $
     tpeak  : '10:41', $
     tend   : '10:47', $
-    xcen : -268.8, $
-    ycen : -422.4 $
+    xcen : -268.8, $  ; -19 degrees
+    ycen : -422.4 $   ; -17 degrees
 }
 
 m73 = { $
@@ -193,8 +183,15 @@ x22 = { $
     ycen : 0 $
 }
 
+; 27 April 2022
+;   COORDS (xcen, ycen) = loc of AR [center/corner] at flare [start/peak] time,
+;   in units of [arcsec/degrees/pixels] relative to [disk center/origin]
+;
+; xcen, ycen assumed to be in ARCSEC (see ./Prep/struc_aia.pro)
 
 multiflare = { m15:m15, c83:c83, c46:c46, m10:m10, m73:m73, x22:x22 }
+
+
 
 print, ''
 print, '==-- Multiflare structure --===================='

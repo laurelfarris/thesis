@@ -36,7 +36,9 @@
 ;-        in current window to pdf files, as opposed to
 ;-        IDL's "save" procedure, which creates .sav files.
 ;-       This actually uses the save METHOD --> win.save, arg, kw=kw, ...
-;-
+;-   [] scp figures directly to mac from astronomy,
+;-        rather than separate command to run from mac (if possible)
+;-   []
 ;-
 
 pro SAVE2, filename, $

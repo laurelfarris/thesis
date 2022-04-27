@@ -1,19 +1,17 @@
 ;+
-;- 22 April 2022
-;-  (Last modified 07 September 2021)
+;- 26 April 2022
 ;-
 ;- TO DO:
-;-   [] image flare at z[0]
-;-   [] plot pre-flare LCs (~2 hours) -> center of umbra (single pixel to start)
-;-   [] zoom in to LC to see small-amplitude variations
-;-   [] fourier2( signal )
-;-   [] fourier2( signal, /NORM ) -> should have same pattern, but smaller numbers on y-axis
-;-   [] fourier2( signal ) / "spectral maximum"
 ;-   []
 ;-
-;- C8.3 2013-08-30 T~02:04:00
-;- M1.0 2014-11-07 T~10:13:00
-;- M1.5 2013-08-12 T~10:21:00
+;- A2 flares:
+;-   C8.3 2013-08-30 T~02:04:00
+;-   M7.3
+;-   X2.2
+;-
+;- Other flares:
+;-   M1.0 2014-11-07 T~10:13:00
+;-   M1.5 2013-08-12 T~10:21:00
 ;-
 
 
@@ -31,23 +29,9 @@
 buffer = 1
 @par2
 ;
+;flare = multiflare.c83
 flare = multiflare.m73
-
-
-;-------------------------------------------------------------------------------------------
-;- NEW content since > cp today.pro ./Notes/2021-08-14.pro
-
-testplt = plot2( A[0].flux, buffer=buffer )
-save2, 'testagain'
-
-; 02 Sep 2021 -- Testing plotting to screen instead of buffer!
-;  Works, but very slow.. not worth it.
-dw
-plt = plot2(A[0].flux, buffer=1)
-save2, 'test_save2screen', /timestamp, idl_code='today.pro'
-
-;-------------------------------------------------------------------------------------------
-;- Back to OLD
+;flare = multiflare.x22
 
 
 print, flare.class
@@ -56,211 +40,457 @@ print, class
 
 ;path_temp = '/home/astrobackup3/preupgradebackups' + path
 
-dims = [300,300]
 
-;========
-;= HMI
-
-;hmi_channel = 'cont'
-hmi_channel = 'mag'
-;
-READ_MY_FITS, hmiindex, hmidata, fls, flare=flare, instr='hmi', channel=hmi_channel, ind=0, nodata=0, prepped=1
-;
-hmifilename = class + '_HMI_' + hmichannel
-print, hmifilename
-
-;
-;center = ([flare.xcen, flare.ycen] / [hmiindex.cdelt1, hmiindex.cdelt2]) + 2048.
-center = [2890, 1700]
-;
-x1 = fix(center[0] - (dims[0]/2))
-x2 = fix(center[0] + (dims[0]/2))
-y1 = fix(center[1] - (dims[1]/2))
-y2 = fix(center[1] + (dims[1]/2))
-;
-imdata = hmidata[ x1:x2, y1:y2 ]
-;
-dw
-im = image2( imdata, buffer=buffer )
-save2, hmifilename
+; PLAN for completing A2 / Chapter 5: "Multi-flare"
+; 
 
 
-;========
-;= AIA
 
+
+;=====================================================================================================================
+;- 27 April 2022
+;-   Everything below this point copied from 'tomorrow_powermaps.pro'
+;=====================================================================================================================
+
+; [] path_temp.pro
+;      Is this referenced or used somehow?
+; [] use 'main.pro' or something similar to define common ML variables that change too often to be in common
+;    block from startup files that I never look at.
+; [] Merge _README.pro with other references (i.e. aia_hmi_fits_filenames.pro, ToDo.pro, etc.)
+
+;-
+;- 05->06 April 2021
+;-
+;- TO DO:
+;-
+;-  [] re-align images
+;-       • interpolate
+;-       • align in pieces
+;-       • use subset outside flare to compute alignment for all pixels
+;-  [] interpolate to fill in missing 1700 images
+;-  [] compute powermaps
+;-
+
+
+
+;- IDL fun times --> Enote
+;-
+; Time in seconds since 1 January 1970
+;mtime = FILE_MODTIME(FILEPATH('dist.pro', SUBDIR = 'lib'))
+mtime = FILE_MODTIME('today.pro')
+print, mtime
+;
+; Convert to a date/time string
+PRINT, SYSTIME(0, mtime)
+
+
+
+@par2
+
+;- C8.3 2013-08-30 T~02:04:00  (1)
+;- M1.5 2013-08-30 T~02:04:00  (1)
+
+;flare_index = 1  ; C8.3
+;flare = multiflare.(flare_index)
+;-
+;- OR, since flare_index is not used anywhere else, just use the TAGNAME:
+;flare = multiflare.C83
+flare = multiflare.M15
+;-
+
+buffer = 1
+;
 instr = 'aia'
-cc = 0
-;cc = 1
+channel = 1600
+;channel = 1700
 ;
-aiafilename = class + '_' + instr + A[cc].channel + '_intensity'
+date = flare.year + flare.month + flare.day
+print, date
 ;
-dims=[200,200]
-center = [370,170]
-x1 = fix(center[0] - (dims[0]/2))
-x2 = fix(center[0] + (dims[0]/2))
-y1 = fix(center[1] - (dims[1]/2))
-y2 = fix(center[1] + (dims[1]/2))
+class = strsplit(flare.class, '.', /extract)
+class = strlowcase(class[0] + class[1])
+print, class
 ;
-subset = aia1600data[x1:x2,y1:y2,0]
+path = '/solarstorm/laurel07/flares/' + class + '_' + date + '/'
+;filename = class + '_' + date + '_' + strlowcase(instr) + strtrim(channel,1) + 'aligned.sav'
+filename = class + '_' + strlowcase(instr) + strtrim(channel,1) + 'aligned.sav'
+;print, file_exist(path + filename)
 ;
-imdata = aia_intscale( $
-    subset, $
-    wave=fix(A[cc].channel), $
-    exptime=A[cc].exptime $
-)
+restore, path + filename
 
-;x_arcsec = ([x1:x2] - 2048.) * 0.6
-;print, x_arcsec[0]
-;print, x_arcsec[-1]
+;- confirm channel is what I want it to be.
+;print, index[0].wavelnth
+
+STOP
+
+;----------------------------
+
+;- Active Variables :
+;-  index, cube, allshifts, ref, 
+;-
+
+
+
+
+;==================================================================================
+
+
+
+c83_aia1700header = index
+
+headersavfile = class + '_aia' + strtrim(channel,1) + 'header.sav'
+print, headersavfile
+;save, c83_aia1700header, filename = headersavfile
+
+
+
+;----
+
+path = './c83_20130830/'
+mapfile = 'c83_aia' + strtrim(channel,1) + 'map.sav'
+print, path + mapfile
 ;
 
-loc = [105, 95]
+restore, path + mapfile
+help, map
+print, max(map)
+
+c83_aia1700powermap = map
+help, c83_aia1700powermap
+
+print, max(c83_aia1700powermap)
+
+save, c83_aia1700powermap, filename = mapfile
+
+
 ;
+;==================================================================================
+
+channel = 1600
+;channel = 1700
+
+;
+path = './c83_20130830/'
+
+headerfile = 'c83_aia' + strtrim(channel,1) + 'header.sav'
+
+mapfile = 'c83_aia' + strtrim(channel,1) + 'powermap.sav'
+;
+restore, path + headerfile
+
+help, c83_aia1700header
+
+
+restore, '../flares/c83_20130830/20130830_aia' + strtrim(channel,1) + 'cube.sav'
+help, index
+
+print, index[0].wavelnth
+
+c83_aia1600header = index
+help, c83_aia1600header
+
+save, c83_aia1600header, filename=headerfile
+
+;===========
+
+;channel = '1600'
+channel = '1700'
+;
+headerfile = 'c83_aia' + channel + 'header.sav'
+mapfile = 'c83_aia' + channel + 'powermap.sav'
+path = './c83_20130830/'
+
+
+help, c83_aia1600header
+help, c83_aia1700header
+help, c83_aia1600powermap
+help, c83_aia1700powermap
+
+restore, path + headerfile
+restore, path + mapfile
+
+
+undefine, c83_aia1600header
+undefine, c83_aia1600powermap
+
+stop
+
+
+;------
+basename = FILE_BASENAME(filename, '.sav')
+;
+filename2 = basename + '_OLD.sav'
+filename3 = basename + '_OLD_2.sav'
+;
+print, filename
+print, filename2
+print, filename3
+;------
+
+
+
+
+;- temporary cube to preserve ALIGNED cube
+cube2 = cube
+
+filename = date + '_' + strlowcase(instr) + strtrim(channel,1) + 'cube.sav'
+restore, path + filename
+
+;- confirm that cube and cube2 are not the same anymore, cube restored from
+;-    cube.sav files is same size, but pre-alignment.
+print, cube[0,0,0]
+print, cube2[0,0,0]
+
+;- return ALIGNED cube values to cube variable and get rid of backup.
+cube = cube2
+undefine, cube2
+
+
+filename = date + '_' + strlowcase(instr) + strtrim(channel,1) + 'aligned.sav'
+save, index, cube, allshifts, filename=filename
+
+
+stop;--------------------------------------------------------------------------
+
+;- new idl session, restore .sav file I just made and make sure all variables are there
+filename = date + '_' + strlowcase(instr) + strtrim(channel,1) + 'aligned.sav'
+restore, filename
+help, cube
+help, index
+help, allshifts
+
+
+
+
+;
+cadence = 24
+dz = 64
+;
+oldcube = cube
+cube = crop_data( oldcube, dimensions=[400,400], center=[ 400, 400 ] )
+help, cube
+
+undefine, oldcube
+
+;
+;print, array_equal( index.exptime, index[0].exptime )
+;
+;print, where( index.exptime le 2.90 )
+;print, where( index.exptime ge 2.91 )
+;-  -1 in both cases (04 March 2021)
+;exptime = 1.0
+exptime = index[0].exptime
+;print, exptime
+;
+sz = size(cube, /dimensions)
+;
+;satlocs = where( index.nsatpix gt 0 )
+;print, index[satlocs].nsatpix
+;
+;
+time = strmid(index.date_obs, 11, 8)
+;print, time[0]
+
+
+;============================================================
+
+;-
+z_start = [0:sz[2]-dz]
+;-  indices for full ts
+
+;- indices to compute power map from time series of length dz, starting at flare start.
+;z_start = (where( strmid(index.date_obs,11,5) eq flare.tstart ))[0]
+
+print, z_start[-1]
+print, z_start[-1] + dz -1
+
+;print, index[z_start].date_obs
+print, flare.tstart
+print, index[z_start[-1]+dz-1].date_obs
+print, flare.tend
+
+;aia_lct, rr, gg, bb, wavelnth=channel, /load
+;rgb_table=AIA_GCT( wave=channel )
+;
+;dw
+;imdata = cube[*,*,z_start]
+
+;z_peak = (where( strmid(index.date_obs,11,5) eq flare.tpeak ))[0]
+;print, z_start
+;print, z_peak
+
+
+STOP
+
+
+;====
+;print,  COMPUTE_POWERMAPS( /syntax )
+map = COMPUTE_POWERMAPS( cube/exptime, cadence, dz=dz, z_start=z_start )
+save, map, filename='1700map.sav'
+;-  started 23:58 04 March (Eastern time) for 1600Å, 2:52 05 March for 1700Å
+;-    Only put in "save" command for the latter... hopefully won't crash
+;-    before I get a chance to save 1600 map..
+;====
+
+
+print, '===---'
+;
+start_time = systime(/seconds)
+wait, 5.5
+minutes = (systime(/seconds) - start_time)/60
+hours = (systime(/seconds) - start_time)/3660
+format='( "Power maps calculated in ~", F0.2, " minutes (", F0.4, " hours)" )'
+print, format=format, minutes, hours
+;print, format='( "Power maps calculated in ~", F0.2, " minutes (", F0.4, " hours)" )', minutes, hours
+;print, format='( "    (", F0.4, " hours)." )', hours
+;
+print, '===---'
+
+
+;+
+;- IMAGE power maps
+;-
+
+impulsive_phase = (where( strmid(time,0,5) eq flare.tpeak ))[0] - dz
+decay_phase = impulsive_phase + dz
+
+;before = impulsive_phase - 
+before = (where( strmid(time,0,5) eq flare.tstart ))[0] - dz
+print, time[before]
+
+
+z_ind = [ $
+    (where( strmid(time,0,5) eq flare.tpeak ))[0] $
+]
+print, z_ind
+print, time[z_ind]
+print, flare.tpeak
+
+imdata = [ $
+    [[ AIA_INTSCALE( cube[*,*,z_peak], wave=channel, exptime=exptime ) ]], $
+    [[ AIA_INTSCALE( map, wave=channel, exptime=exptime ) ]] $
+]
+
+
+
+title = flare.class + '  ' + flare.year + '-' + flare.month + '-' + flare.day + '  '  $
+    + [ time[z_peak]+ ' (intensity) ' , time[z_start] + '-' + time[z_start+dz-1] + ' (power map)' ]
+;
+
 dw
-im = image2( imdata, rgb_table=A[cc].ct, buffer=buffer )
-;sym = symbol( center[0], center[1], 'asterisk' )
-sym = symbol( loc[0], loc[1], 'plus', /data, sym_color='white', sym_size=1 )
-;
-save2, aiafilename
-
-
-
-;============================
-;= plot LCs
-
-
-cc = 0
-
-lcfilename = class + '_' + instr + A[cc].channel + '_umbra_intensity'
-
-trange = [0:149]
-;
-subset = aia1600data[x1:x2,y1:y2,*]
-;
-npix = 2
-flux = reform( total( total(subset[ (loc[0]-npix):(loc[0]+npix), (loc[1]-npix):(loc[1]+npix), trange ], 1), 1 ) )
-help, flux
-;
-xtickname=aia1600index[trange].date_obs
-;
-dw
-plt = plot2( $
-    flux, $
-    color=A[cc].color, $
-    buffer=buffer $
-)
-;
-plt.xtickname = strmid(aia1600index[fix(plt.xtickvalues)].date_obs,11,5)
-;
-save2, lcfilename
-
-;============
-;= plot FFT
-
-cc = 0
-;
-flux = A[cc].flux
-delt = 24
-norm = 0
-;norm = 1
-;
-result1 = fourier2( flux[  0:349], delt, norm=norm )
-result2 = fourier2( flux[350:699], delt, norm=norm )
-;
-frequency = reform(result1[0,*])
-;frequency = 1000.*reform(result1[0,*])
-power1 = reform(result1[1,*])
-power2 = reform(result2[1,*])
-;
-fftfilename = class + '_' + instr + A[cc].channel + '_powerspec'
-;fftfilename = class + '_' + instr + A[cc].channel + '_umbra_powerspec'
-;fftfilename = [ $
-;    class + '_' + instr + A[cc].channel + '_powerspec_before', $
-;    class + '_' + instr + A[cc].channel + '_powerspec_during' $
-;]
-;
-;
-;power_3min = power2[where(frequency gt 5.2 and frequency lt 5.8)]
-;print, power_3min
-;
-;ind = [20:n_elements(frequency)-1]
-;ind = where( (frequency gt 4.0) and (frequency lt 10.0))
-;ydata = [ [power1[ind]], [power2[ind]] ]
-;xdata = [ [frequency[ind]], [frequency[ind]] ]
-;
-ydata = [ [power1], [power2] ]
-xdata = [ [frequency], [frequency] ]
-;
-color=['purple','orange']
-name=['pre-flare', 'flare']
-;
-dw
-plt = objarr(2)
+wx = 8.5
+wy = wx/2
+win=window( dimensions=[wx,wy]*dpi, buffer=buffer )
+im = objarr(2)
 for ii = 0, 1 do begin
-    plt[ii] = plot2( $
-        xdata, $
-        ydata[*,ii], $
-        overplot=ii<1, $
-        ylog=1, $
-        xtitle='frequency (mHz)', $
-        ytitle='power', $
-        color=color[ii], $
-        name=name[ii], $
+    im[ii] = image2( $
+        imdata[*,*,ii], $
+        /current, $
+        layout=[2,1,ii+1], $
+        margin=0.10, $
+        title=title[ii], $
+        rgb_table=rgb_table, $
         buffer=buffer $
     )
-    ;save2, fftfilename[ii]
+endfor
+save2, 'test'
+
+
+stop;---------------------
+
+;save, map, map2, filename='M10_aia1600map.sav'
+;save, map, filename='M10_aia1600map.sav'
+
+filename = class + '_' + date + '_' + strlowcase(instr) + strtrim(channel,1)  + 'map.sav'
+print, filename
+
+save, map, filename=filename
+
+
+;-
+;==
+;============================================================================================
+
+
+print, max(cube2) / (max( cube2/exptime) )
+print, ( max(cube2) / (max( cube2/exptime) ) )^2
+
+print, exptime^2
+
+print, max(map) / max(map2)
+;print, min(map) / min(map2)
+;-  same factor whether min or max or in between, just like every pixel
+;-   in data cubes differes
+;-  by factor = exptime ... because one was divided by exptime... der.
+
+
+;- ===>>>  NO LONGER setting threshold. Compute power for ALL pixels,
+;-   Can easily compute MASK using threshold and original pixel values
+;-    (where "original" pixel values are the ones used to compute the map
+;-   in the first place).
+
+maps = [ [[map]], [[map2]] ]
+
+undefine, map
+undefine, map2
+   ;-  don't like these variable names anyway; espeically confusing when
+   ;-   concurrent with "cube" and "cube2", but DO NOT correspond to each
+   ;-  other AT ALL.
+
+
+title = [ 'raw data', 'exptime-corrected' ]
+;
+im = objarr(2)
+dw
+win = window(/buffer)
+
+imdata = maps
+locs = where( imdata gt 950 and imdata lt 1000 )
+
+help, array_indices( imdata, locs )
+print, imdata[(array_indices( imdata, locs ))[*,0]]
+
+print, imdata[ 228, 139, 0]
+
+print, ''
+print, min(imdata[*,*,0]), format=format
+print, min(imdata[*,*,1]), format=format
+print, max(imdata[*,*,0]), format=format
+print, max(imdata[*,*,1]), format=format
+print, ''
+;
+
+imdata = AIA_INTSCALE(maps, exptime=exptime, wave=channel )
+print, imdata[ 228, 139, 0]
+
+print, min(imdata[*,*,0]), format=format
+print, min(imdata[*,*,1]), format=format
+print, max(imdata[*,*,0]), format=format
+print, max(imdata[*,*,1]), format=format
+print, ''
+
+for ii = 0, 1 do begin
+    im[ii] = IMAGE2( $
+        imdata[*,*,ii], $
+        /current, $
+        layout=[2, 1, ii+1], $
+        margin=0.05, $
+        title=title[ii], $
+        rgb_table=rgb_table, $
+        /buffer $
+    )
 endfor
 ;
-leg = legend2(target=plt, /upperright)
-;
-save2, fftfilename
-;
-
-ydata = [ [power1], [power2] ]
-;ydata = [ [power1/max(power1)], [power2/max(power2)] ]
-resolve_routine, 'plot_spectra', /is_function
-plt = PLOT_SPECTRA( $
-    xdata, $
-    ydata, $
-    leg=leg, $
-    name=name, $
-    ylog=1, $
-    buffer=buffer $
-)
-;
-leg[0].label=name[0]
-leg[1].label=name[1]
-;
-save2, 'testOldSubroutine'
-;save2, 'testOldSubroutine_norm'
+save2, 'M10_aia1600map', /timestamp
 
 
+print, ''
+format='(e0.4)'
+for ii = 0, 1 do begin
+    print, min(maps[*,*,ii]), max(maps[*,*,ii]), format=format
+    print, ''
+endfor
+print, ''
 
-
-print, moment(flux)
-
-print, max(flux - mean(flux))
-print, max(power)
-
-
-;==================
-;-
-;- compute dP (before vs during) for 3-minute power, plus  a couple other periods with noticable
-;-   power changes or peaks at either time.
-;- Compare dP in each frequency to same values for other flares.
-;-    => does change in 3-minute power stay roughly the same, regardless of flare size, while other
-;-     frequencies (possibly those that reflect energy deposition rates in HXR data??) have perhaps
-;-    a greater increase in power for larger flares... ??
-;-
-
-
-;power_5min = where( frequency gt 0.0032 and frequency lt 0.0036 )
-print, 1./frequency[power_5min]
-;print, power_5min
-
-loc_3min = where( frequency gt 0.0054 and frequency lt 0.0058 )
-print, frequency[loc_3min]
-print, mean(power1[loc_3min])
-print, mean(power2[loc_3min])
 
 end

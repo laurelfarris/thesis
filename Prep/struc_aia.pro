@@ -238,6 +238,7 @@ function STRUC_AIA, $
 
     ;- 15 June 2021:
     ;-   [x1,y1] already in arcsec, just need to convert array values (originally sep by 1)
+    ;- Define ARRAY of coords (still arcsec) for image x/y tick labels
     X = x1 + findgen(sz[0])*index[0].cdelt1
     Y = y1 + findgen(sz[1])*index[0].cdelt2
 

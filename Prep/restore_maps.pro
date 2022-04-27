@@ -1,3 +1,8 @@
+; This is probably obsolete now that I don't think it makes sense to read huge data
+;  arrays into structure every IDL session, especially if not even using maps. 
+
+
+
 ;+
 ;- LAST MODIFIED:
 ;-   13 August 2019

@@ -33,6 +33,21 @@ buffer = 1
 flare = multiflare.m73
 
 
+;-------------------------------------------------------------------------------------------
+;- NEW content since > cp today.pro ./Notes/2021-08-14.pro
+
+testplt = plot2( A[0].flux, buffer=buffer )
+save2, 'testagain'
+
+; 02 Sep 2021 -- Testing plotting to screen instead of buffer!
+;  Works, but very slow.. not worth it.
+dw
+plt = plot2(A[0].flux, buffer=1)
+save2, 'test_save2screen', /timestamp, idl_code='today.pro'
+
+;-------------------------------------------------------------------------------------------
+;- Back to OLD
+
 
 print, flare.class
 class = strlowcase((flare.class).Replace('.',''))
