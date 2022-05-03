@@ -2,7 +2,6 @@
 ;- LAST MODIFIED:
 ;-   19 July 2019
 ;-
-;-
 ;- ROUTINE:
 ;-   compute_powermaps.pro
 ;-
@@ -10,13 +9,12 @@
 ;-   fourier2.pro (not mine)
 ;-
 ;- PURPOSE:
-;-   compute powermaps at input start times through input dt
-;-   for input data cube
+;-   compute powermaps from 3D data cube
 ;-
 ;- USEAGE:
-;-   map = compute_powermaps( data, cadence,
+;-   map = COMPUTE_POWERMAPS( data, cadence,
 ;-     fcenter=fcenter, bandwidth=bandwidth, threshold=threshold,
-;-     z_start=z_start, dz=dz, norm=norm
+;-     z_start=z_start, dz=dz, norm=norm )
 ;-
 ;- INPUT:
 ;-   data      3D data cube
@@ -31,24 +29,22 @@
 ;-   norm        sets /NORM kw when computing power using fourier2.pro
 ;-
 ;- OUTPUT:
-;-   3D power map (cube)
+;-   3D array of power maps (unless z_start only has one element,
+;-      then get 2D image of single map obtained over window specified by dz)
 ;-
 ;- TO DO:
 ;-   [] Make another level of subroutines for all the specifics below,
 ;-      one for several different situations. Each of them call the
 ;-      general routine above, and all return essentially the same thing.
+;-   [] Compute several power maps centered on 3-min with increasingly wide 𝝙𝝼
 ;-
-;- KNOWN BUGS:
-;-   Possible errors, harcoded variables, etc.
 ;-
 ;- NOTES:     (May 11 2018) Added /NORM keyword to fourier2.
 ;-            (May 13 2018) switched from TOTAL to MEAN power.
 ;-
 ;- AUTHOR:
 ;-   Laurel Farris
-;-
 ;+
-
 
 
 
@@ -105,12 +101,13 @@ function COMPUTE_POWERMAPS, $
 
 
     sz = size( data, /dimensions )
-    ;------------------
-    ;if ( n_elements(sz) eq 2 ) then sz = reform(sz, sz[0], sz[1], 1, /overwrite)
-    ;-  -->  sz should ALWAYS have 3 dimensions, otherwise nothing to compute
-    ;-             FFT over!
-    ;-   23 March 2020
-    ;------------------
+
+    ;- Make sure input is 3D (can't compute FFT otherwise...) -- 28 April 2022
+    if ( n_elements(sz) eq 2 ) then begin
+        print, 'Input data has insufficient dimensions (must be 3D to compute FFT in z-direction).'
+        return, 0
+    endif
+
 
     ;- Number of elements in zz (z_start) will be the number of
     ;-  maps returned (just 1 by default, starting at beginning of data).

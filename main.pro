@@ -11,5 +11,7 @@
 ;-   IDL> @main
 
 
+;- [] Merge with all the things? reference to filenames (aia/hmi, level 1.0 and 1.5),
+;-     parameters, temp_path, ...
 
 buffer = 1

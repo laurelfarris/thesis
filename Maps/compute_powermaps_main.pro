@@ -5,18 +5,9 @@
 ;- ROUTINE:
 ;-   compute_powermaps_main.pro
 ;-
-;-
-;----
-;-
-;- NOTE: this routine includes a LOT of steps prior to powermaps... needs to
-;-    be organized and split somehow ... is probably from last time I was
-;-    working on multi-flare data prep and transition to analysis.
-;-   (23 March 2020)
-;-
-;----
-;-
 ;- PURPOSE:
-;-   ML code for COMPUTING (not imaging!) power maps from aligned data. Steps:
+;-   ML code for COMPUTING (not imaging!) power maps from aligned data.
+;-    Steps:
 ;-     * restore aligned data cubes from, e.g. aia1600aligned.sav files
 ;-     * define time segments: start indices, length of each (T), ...
 ;-     * save maps to, e.g. aia1600maps.sav if long computation time is required.
@@ -28,7 +19,10 @@
 ;-      This could also be ML code in same file as compute_powermaps.pro,
 ;-      not sure if I want to do that... gets sloppy real fast.
 ;-
-;- KNOWN BUGS:
+;- NOTE: this routine includes a LOT of steps prior to powermaps... needs to
+;-    be organized and split somehow ... is probably from last time I was
+;-    working on multi-flare data prep and transition to analysis.
+;-   (23 March 2020)
 ;-
 ;- AUTHOR:
 ;-   Laurel Farris
