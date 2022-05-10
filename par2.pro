@@ -194,8 +194,9 @@ multiflare = { m15:m15, c83:c83, c46:c46, m10:m10, m73:m73, x22:x22 }
 
 
 print, ''
-print, '==-- Multiflare structure --===================='
+print, '==-- Multiflare structure --=========================================='
 help, multiflare
+print, '======================================================================'
 print, ''
 
 ;flare = multiflare.c46

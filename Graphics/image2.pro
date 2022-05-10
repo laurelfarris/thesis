@@ -10,6 +10,7 @@ function image2, data, x, y,  _EXTRA=e
 
     graphics
     common defaults
+    print, fontsize
 
     sz = size(data, /dimensions)
     ;if n_elements(sz) eq 2 then $

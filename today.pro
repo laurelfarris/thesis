@@ -27,29 +27,193 @@
 ;if not file_test(path + testfiles) then print, 'files not found'
 
 buffer = 1
+
 @par2
-;
+
+; Define flare using index instead of tagname... confusing.
+;flare = multiflare.(1) ; index 1 => C8.3
+
 ;flare = multiflare.c83
 flare = multiflare.m73
 ;flare = multiflare.x22
 
 
-print, flare.class
+; Define variable for class (to use in filenames, I think...)
+;
+help, flare.class
+;
+; 1) Extract class into 2-element string array (without period)
+; 2) Combine elements into one (lowercase) string
+class = strsplit(flare.class, '.', /extract)
+class = strlowcase(class[0] + class[1])
+help, class
+;
+; OR do it in a single step using IDL's "Replace" method for strings:
 class = strlowcase((flare.class).Replace('.',''))
-print, class
+help, class
+;
 
+
+date = flare.year + flare.month + flare.day
+print, date
+;
+
+instr = 'aia'
+channel = 1600
+;channel = 1700
+
+cadence = 24
+
+
+;
+; define TEMPORARY path (solarstorm still under maintenance?)
 ;path_temp = '/home/astrobackup3/preupgradebackups' + path
+;path = '/solarstorm/laurel07/flares/' + class + '_' + date + '/'
+;
+; OR (alternate way to define temp path):
+@path_temp
+path = path_temp + 'flares/' + class + '_' + date + '/'
+print, path
+
+
+;filename = class + '_' + date + '_' + strlowcase(instr) + strtrim(channel,1) + 'aligned.sav'
+;   includes date in the form yyyymmdd ... should filenames be changed to include this??
+filename = class + '_' + strlowcase(instr) + strtrim(channel,1) + 'aligned.sav'
+print, filename
+;   m73_aia1600aligned.sav
+;
+if FILE_EXIST(path + filename) then begin
+    restore, path + filename
+endif else begin
+    print, path + filename, ' does not exist.'
+    STOP
+endelse
+
+
+; Create a savefile object.
+sObj = OBJ_NEW('IDL_Savefile', path + filename)
+;
+; Retrieve the names of the variables in the SAVE file.
+sNames = sObj->Names()
+;
+print, sNames ; => 'CUBE'
+help, sNames  ; => SNAMES   STRING  = Array[1]
+help, cube    ; => CUBE   INT  = Array[700, 500, 749]
+;
+; Can variable name be pulled straight from string?
+;  help, sNames[0] ==  IDL> help, "cube"  ... not IDL> help, cube
+
+
+; [] Restore HEADER from level 1.5 fits and re-save .sav file to include both 'cube' AND 'index'
+header_file = 'm73_aia1600header.sav'
+
+if FILE_EXIST(path + header_file) then restore, path + header_file else print, "Header file does not exist."
+
+
+sObj = OBJ_NEW('IDL_Savefile', path + header_file)
+sNames = sObj->Names()
+print, sNames  ; => 'INDEX'
+help, sNames  ; => SNAMES   STRING  = Array[1]
+help, index    ; =>  INDEX   STRUCT =  -> <Anonymous>  Array[749]
+
+
+;- confirm channel is what I want it to be.
+print, index[0].wavelnth
+
+
+
+; Compute Powermap from pre-flare data
+
+z_ind = (where( strmid(index.date_obs, 11, 5 ) EQ flare.tstart ))[0]
+;  [] Need faster way to retrieve z-index of flare.tstart
+print, z_ind
+; NOTE: M7.3 flare has ~2.5 hours of pre-flare data..
+
+help, cube
+cube = CROP_DATA(cube)
+help, cube
+; [] crops to 500 x 330 by default... is this okay for M7.3 flare?
+
+; Check for missing images
+;   -> see ./Maps/compute_powermaps_main.pro
+
+; syntax (refernce)
+map = COMPUTE_POWERMAPS( /syntax )
+
+
+
+map = COMPUTE_POWERMAPS( $
+    cube[*,*,0:z_ind], cadence $
+)
+
+map_norm = COMPUTE_POWERMAPS( $
+    cube[*,*,0:z_ind], cadence, $
+    /norm $
+)
+
+
+;print, min(map), max(map)
+;print, min(map_norm), max(map_norm)
+
+; Image INTENSITY (context)
+imdata = AIA_INTSCALE( cube[*,*,z_ind], wave=channel, exptime=index[z_ind].exptime )
+;print, index[0].exptime
+;print, index[z_ind].exptime
+
+; Image map
+
+;imdata = alog10(map)
+;imdata = map_norm
+
+;print, min(cube[*,*,z_ind]), max(cube[*,*,z_ind])
+;print, min(imdata), max(imdata)
+
+
+dw
+im = image2( $
+    imdata, $
+    rgb_table = AIA_GCT( wave=fix(channel)), $
+    buffer=buffer $
+)
+
+;
+; Chage axis labels from pixels to arcsec
+im.xtickname = string( fix(im.xtickvalues * index[0].cdelt1 ))
+im.ytickname = string( fix(im.ytickvalues * index[0].cdelt2 ))
+im.xtitle = 'X (arcsec)'
+im.ytitle = 'Y (arcsec)'
+;
+;- Intensity image title
+im.title = strupcase(instr) + ' ' + strtrim(channel,1) + "$\AA$ " + strmid(index[z_ind].date_obs,11,8) + ' UT'
+;
+savefile = class + '_' + instr + strtrim(channel,1) + 'intensity'
+save2, savefile
+
+
+
+;- Maps
+im.title = strupcase(instr) + ' ' + strtrim(channel,1) + "$\AA$ " + $
+    flare.date + $
+    ' (' + strmid(index[0].date_obs,11,5) + '-' + strmid(index[z_ind].date_obs,11,5) + ')'
+
+
+
+; Save image to pdf file
+savefile = class + '_' + instr + strtrim(channel,1) + 'map_preflare'
+save2, savefile
+
+; save NORMALIZED map..
+savefile_norm = class + '_' + instr + strtrim(channel,1) + 'map_preflare_norm'
+save2, savefile_norm
+
+
+
 
 
 ; PLAN for completing A2 / Chapter 5: "Multi-flare"
-; 
-
-
-
-
 ;=====================================================================================================================
 ;- 27 April 2022
-;-   Everything below this point copied from 'tomorrow_powermaps.pro'
+;-   Everything from here to EOF copied from 'tomorrow_powermaps.pro'
 ;=====================================================================================================================
 
 ; [] path_temp.pro
@@ -62,7 +226,6 @@ print, class
 ;- 05->06 April 2021
 ;-
 ;- TO DO:
-;-
 ;-  [] re-align images
 ;-       • interpolate
 ;-       • align in pieces
@@ -70,7 +233,6 @@ print, class
 ;-  [] interpolate to fill in missing 1700 images
 ;-  [] compute powermaps
 ;-
-
 
 
 ;- IDL fun times --> Enote
@@ -85,41 +247,6 @@ PRINT, SYSTIME(0, mtime)
 
 
 
-@par2
-
-;- C8.3 2013-08-30 T~02:04:00  (1)
-;- M1.5 2013-08-30 T~02:04:00  (1)
-
-;flare_index = 1  ; C8.3
-;flare = multiflare.(flare_index)
-;-
-;- OR, since flare_index is not used anywhere else, just use the TAGNAME:
-;flare = multiflare.C83
-flare = multiflare.M15
-;-
-
-buffer = 1
-;
-instr = 'aia'
-channel = 1600
-;channel = 1700
-;
-date = flare.year + flare.month + flare.day
-print, date
-;
-class = strsplit(flare.class, '.', /extract)
-class = strlowcase(class[0] + class[1])
-print, class
-;
-path = '/solarstorm/laurel07/flares/' + class + '_' + date + '/'
-;filename = class + '_' + date + '_' + strlowcase(instr) + strtrim(channel,1) + 'aligned.sav'
-filename = class + '_' + strlowcase(instr) + strtrim(channel,1) + 'aligned.sav'
-;print, file_exist(path + filename)
-;
-restore, path + filename
-
-;- confirm channel is what I want it to be.
-;print, index[0].wavelnth
 
 STOP
 

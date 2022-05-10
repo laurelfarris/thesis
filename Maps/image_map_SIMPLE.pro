@@ -38,7 +38,7 @@ dw
 im = image2( $
     alog10(imdata), $
     rgb_table = AIA_COLORS( wave=fix(A[cc].channel) ), $
-    buffer=buffer
+    buffer=buffer $
 )
 
 

@@ -20,7 +20,7 @@
 ;-   data      3D data cube
 ;-   cadence   instrumental cadence at which data was sampled (seconds)
 ;-
-;- KEYWORDS:
+;- KEYWORDS (optional; subroutine defines default values):
 ;-   fcenter     central frequency (Hz)
 ;-   bandwidth   freq width (centered on fcenter) that will contribute to power
 ;-   threshold*  skip pixels w/ values higher than threshold (sat)

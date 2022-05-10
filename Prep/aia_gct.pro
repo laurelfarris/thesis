@@ -36,16 +36,17 @@
 ;-   color table that can be used as input kws for IMAGE function, or whatev.
 ;-
 ;- TO DO:
-;-   [] item 1
-;-   [] item 2
-;-   [] ...
+;-   [] Remove "color_table_array" argument from function def once confirm it's not used..
 ;-
 ;- AUTHOR:
 ;-   Laurel Farris
 ;-
 
 
-function AIA_GCT, color_table_array, wave=wave, load=load; , $
+function AIA_GCT, $
+    color_table_array, $  ; ... What's this for ??
+    wave=wave, $
+    load=load; , $
     ;syntax=syntax
 
 ;+
