@@ -1,122 +1,42 @@
 ;+
-;- 26 April 2022
-;- 10 May 2022 (??)
-;-   (pretty sure any figures saved are from May, not April)
-;-
-;- TO DO:
-;-   []
+;- 22 June 2022
+;-   copied "today.pro", in anticipation of sloppy hardcoding just to finish
+;-     A2 and/or SHINE poster
 ;-
 ;- A2 flares:
 ;-   C8.3 2013-08-30 T~02:04:00
-;-   M7.3
-;-   X2.2
+;-   M7.3 2014-04-18 T~
+;-   X2.2 2011-02-11 T~01:43:00
 ;-
-;- Other flares:
-;-   M1.0 2014-11-07 T~10:13:00
-;-   M1.5 2013-08-12 T~10:21:00
 ;-
+;- TO DO:
+;-
+;-   [] FIRST: ensure HEADERS (index) and aligned data subsets (data) are saved in .sav file
+;-        for each flare. Can be same file or separate, just needs to be CONSISTENT.
+;-      RESTORE .sav files, save headers / data in one file, easy to resotre in future.
+;-
+;-   [] AIA & GOES  LCs during flare only, dt covered by RHESSI (for CORRECT flares)
+;-   [] Detrended LCs showing QPPs
+;-
+;-   [] Power maps (see "today.pro")
+;-
+;-   [] FFTs -> power spectra showing power as function of freqeunciews between ~1 and 20 mHz (or w/e)
+;-       to compare BDA for individual flares, or same phase for different flares in one plot
+;-       (first one then the other... comparing flares to each other is followup / discussion section)
 
 
-;- Need to rename variable saved in these files for C8.3 flare...
-;restore, '../flares/c83_20130830/c83_aia1700header.sav'
-;index = c83_aia1700header
-;help, index
-;save, index, filename='c83_aia1700header.sav'
 
-;path='/home/astrobackup3/preupgradebackups/solarstorm/laurel07/'
-;path='/solarstorm/laurel07/'
-;testfiles = 'Data/HMI_prepped/*20140418*.fits'
-;if not file_test(path + testfiles) then print, 'files not found'
+; What .sav files currently exist for each flare?
+; '../flares/c83_20140418/*.sav'
+; '../flares/m73_20140418/*.sav'
+; '../flares/x22_20140418/*.sav'
 
-buffer = 1
-
-@par2
-
-; Define flare using index instead of tagname... confusing.
-;flare = multiflare.(1) ; index 1 => C8.3
-
-;flare = multiflare.c83
-flare = multiflare.m73
-;flare = multiflare.x22
+; restore, '.../.sav'
 
 
-; Define variable for class (to use in filenames, I think...)
-;
-help, flare.class
-;
-; 1) Extract class into 2-element string array (without period)
-; 2) Combine elements into one (lowercase) string
-class = strsplit(flare.class, '.', /extract)
-class = strlowcase(class[0] + class[1])
-help, class
-;
-; OR do it in a single step using IDL's "Replace" method for strings:
-class = strlowcase((flare.class).Replace('.',''))
-help, class
-;
+; "main" code to set path (SS or astro/backup), cadence, instr, flare, run @par,  ...
+@main
 
-
-date = flare.year + flare.month + flare.day
-print, date
-;
-
-instr = 'aia'
-channel = 1600
-;channel = 1700
-
-cadence = 24
-
-
-;
-; define TEMPORARY path (solarstorm still under maintenance?)
-;path_temp = '/home/astrobackup3/preupgradebackups' + path
-;path = '/solarstorm/laurel07/flares/' + class + '_' + date + '/'
-;
-; OR (alternate way to define temp path):
-@path_temp
-path = path_temp + 'flares/' + class + '_' + date + '/'
-print, path
-
-
-;filename = class + '_' + date + '_' + strlowcase(instr) + strtrim(channel,1) + 'aligned.sav'
-;   includes date in the form yyyymmdd ... should filenames be changed to include this??
-filename = class + '_' + strlowcase(instr) + strtrim(channel,1) + 'aligned.sav'
-print, filename
-;   m73_aia1600aligned.sav
-;
-if FILE_EXIST(path + filename) then begin
-    restore, path + filename
-endif else begin
-    print, path + filename, ' does not exist.'
-    STOP
-endelse
-
-
-; Create a savefile object.
-sObj = OBJ_NEW('IDL_Savefile', path + filename)
-;
-; Retrieve the names of the variables in the SAVE file.
-sNames = sObj->Names()
-;
-print, sNames ; => 'CUBE'
-help, sNames  ; => SNAMES   STRING  = Array[1]
-help, cube    ; => CUBE   INT  = Array[700, 500, 749]
-;
-; Can variable name be pulled straight from string?
-;  help, sNames[0] ==  IDL> help, "cube"  ... not IDL> help, cube
-
-
-; [] Restore HEADER from level 1.5 fits and re-save .sav file to include both 'cube' AND 'index'
-header_file = 'm73_aia1600header.sav'
-
-if FILE_EXIST(path + header_file) then restore, path + header_file else print, "Header file does not exist."
-
-
-sObj = OBJ_NEW('IDL_Savefile', path + header_file)
-sNames = sObj->Names()
-print, sNames  ; => 'INDEX'
-help, sNames  ; => SNAMES   STRING  = Array[1]
-help, index    ; =>  INDEX   STRUCT =  -> <Anonymous>  Array[749]
 
 
 ;- confirm channel is what I want it to be.
@@ -124,7 +44,20 @@ print, index[0].wavelnth
 
 
 
+; • save headers (index) and aligned subsets ('data') to .sav files
+; • Choose flare and run @main
+; • Re-create AIA lightcurves using ./Lightcurves/plot_lc.pro (I think...)
+;    ==>> Every sub-directory under "work" should have easily identifiable "main" code that calls
+;            all the other modules / subroutines
+; • Re-plot  AIA LCs, over dt covered by RHESSI
+; • Re-plot GOES LCs, over dt covered by RHESSI
+; •
+; •
+; •
+
+
 ; Compute Powermap from pre-flare data
+;  --> see notes from 10 May 2022
 
 z_ind = (where( strmid(index.date_obs, 11, 5 ) EQ flare.tstart ))[0]
 ;  [] Need faster way to retrieve z-index of flare.tstart
@@ -141,7 +74,6 @@ help, cube
 
 ; syntax (refernce)
 map = COMPUTE_POWERMAPS( /syntax )
-
 
 
 map = COMPUTE_POWERMAPS( $
