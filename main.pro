@@ -1,7 +1,7 @@
 ;+
-;- main.pro
+;- 22 June 2022
 ;-
-;- 
+;- main.pro
 ;-
 ;- Set variables I'm tired of typing at the beginning of every single ML code
 ;-   ~parameters or pro2, but simpler, better to keep different things separate,
@@ -14,69 +14,6 @@
 
 ;- [] Merge with all the things? reference to filenames (aia/hmi, level 1.0 and 1.5),
 ;-     parameters, temp_path, ...
-
-
-
-;-- Define PATH
-;
-; Set path (if solarstorm is still down)
-;path='/home/astrobackup3/preupgradebackups/solarstorm/laurel07/'
-;path='/solarstorm/laurel07/'
-;
-; define TEMPORARY path (solarstorm still under maintenance?)
-;path_temp = '/home/astrobackup3/preupgradebackups' + path
-;path = '/solarstorm/laurel07/flares/' + class + '_' + date + '/'
-;
-; OR (alternate way to define temp path):
-@path_temp
-path = path_temp + 'flares/' + class + '_' + date + '/'
-print, path
-;
-
-;-- Save aligned DATA subsets and HEADERS to .sav files --> be CONSISTENT !!
-;
-;filename = class + '_' + date + '_' + strlowcase(instr) + strtrim(channel,1) + 'aligned.sav'
-;   includes date in the form yyyymmdd ... should filenames be changed to include this??
-filename = class + '_' + strlowcase(instr) + strtrim(channel,1) + 'aligned.sav'
-print, filename
-;   m73_aia1600aligned.sav
-;
-if FILE_EXIST(path + filename) then begin
-    restore, path + filename
-endif else begin
-    print, path + filename, ' does not exist.'
-    STOP
-endelse
-
-; Create a savefile object.
-sObj = OBJ_NEW('IDL_Savefile', path + filename)
-
-; Retrieve the names of the variables in the SAVE file.
-sNames = sObj->Names()
-
-print, sNames ; => 'CUBE'
-help, sNames  ; => SNAMES   STRING  = Array[1]
-help, cube    ; => CUBE   INT  = Array[700, 500, 749]
-
-; Can variable name be pulled straight from string?
-;  help, sNames[0] ==  IDL> help, "cube"  ... not IDL> help, cube
-
-
-; [] Restore HEADER from level 1.5 fits and re-save .sav file to include both 'cube' AND 'index'
-header_file = 'm73_aia1600header.sav'
-
-if FILE_EXIST(path + header_file) then restore, path + header_file else print, "Header file does not exist."
-
-
-sObj = OBJ_NEW('IDL_Savefile', path + header_file)
-sNames = sObj->Names()
-print, sNames  ; => 'INDEX'
-help, sNames  ; => SNAMES   STRING  = Array[1]
-help, index    ; =>  INDEX   STRUCT =  -> <Anonymous>  Array[749]
-
-
-;-------
-
 
 buffer = 1
 
@@ -609,6 +546,3 @@ for ii = 0, 1 do begin
     print, ''
 endfor
 print, ''
-
-
-end
