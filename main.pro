@@ -1,548 +1,187 @@
 ;+
 ;- 22 June 2022
 ;-
-;- main.pro
+;- FILENAME:
+;-   main.pro
 ;-
-;- Set variables I'm tired of typing at the beginning of every single ML code
-;-   ~parameters or pro2, but simpler, better to keep different things separate,
-;-   may be easier to put this at end of par2... but isn't really the 
-;-   This has single lines of code, no structure definitions or loops.
-;-
-;- Useage:
+;- USEAGE:
 ;-   IDL> @main
 
 
 ;- [] Merge with all the things? reference to filenames (aia/hmi, level 1.0 and 1.5),
 ;-     parameters, temp_path, ...
+;- [] Merge with par2.pro, with structure definitions in subroutine?
+;- []
+;- []
+;-
 
-buffer = 1
 
-instr = 'aia'
-cadence = 24
+function multiflare_struc
 
-channel = 1600
-;channel = 1700
+    ; Fill this in later (09 July 2021)
+    c30 = { $
+        ;flare, $
+        ;name : 'c46', $
+        AR     : '', $
+        class  : 'C4.6', $
+        date   : '23-Oct-2014', $
+        year   : '2014', $
+        month  : '10', $
+        day    : '23', $
+        tstart : '13:20', $
+        tpeak  : '00:00', $
+        tend   : '00:00', $
+        xcen   : 0, $
+        ycen   : 0 $
+    }
 
-@par2
+    c46 = { $
+        ;flare, $
+        ;name : 'c46', $
+        AR     : '', $
+        class  : 'C4.6', $
+        date   : '23-Oct-2014', $
+        year   : '2014', $
+        month  : '10', $
+        day    : '23', $
+        tstart : '13:20', $
+        tpeak  : '', $
+        tend   : '', $
+        xcen   : 0, $
+        ycen   : 0 $
+    }
 
-;flare = multiflare.c83
-flare = multiflare.m73
+    c83 = { $
+        ;flare, $
+        ;c83, $
+        AR     : '11836', $
+        class : 'C8.3', $
+        date  : '30-Aug-2013' , $
+        year : '2013', $
+        month : '08', $
+        day : '30', $
+        tstart : '02:04', $
+        tpeak  : '02:46', $
+        tend   : '04:06', $
+        xcen : -633.276, $ ; -43 degrees
+        ycen : 128.0748 $  ;  13 degrees
+    }
+
+    m10 = { $
+        ;flare, $
+        ;m10, $
+        AR     : '12205', $
+        class : 'M1.0', $
+        date  : '07-Nov-2014' , $
+        year : '2014', $
+        month : '11', $
+        day : '07', $
+    ;    ts_start : '08:15:00', $
+    ;    ts_end : '13:14:59', $
+        tstart : '10:13', $
+        tpeak  : '10:22', $
+        tend   : '10:30', $
+        xcen : -639.624, $  ; -43 degrees (? double check this..)
+        ycen :  206.1222 $  ; 15 degrees
+    }
+
+    m15 = { $
+        ;flare, $
+        ;m15, $
+        AR     : '11817', $
+        class : 'M1.5', $
+        date  : '12-Aug-2013' , $
+        year : '2013', $
+        month : '08', $
+        day : '12', $
+        tstart : '10:21', $
+        tpeak  : '10:41', $
+        tend   : '10:47', $
+        xcen : -268.8, $  ; -19 degrees
+        ycen : -422.4 $   ; -17 degrees
+    }
+
+    m73 = { $
+        ;flare, $
+        ;m73, $
+        AR     : '12036', $
+        class : 'M7.3', $
+        date  : '18-Apr-2014' , $
+        year : '2014', $
+        month : '04', $
+        day : '18', $
+        tstart : '12:31', $
+        tpeak  : '13:03', $
+        tend   : '13:20', $
+        xcen : 0, $
+        ycen : 0 $
+    }
+
+    x22 = { $
+        ;flare, $
+        ;x22, $
+        AR     : '11158', $
+        class : 'X2.2', $
+        date : '15-Feb-2011', $
+        year : '2011', $
+        month : '02', $
+        day : '15', $
+        tstart : '01:47', $
+        tpeak  : '01:56', $
+        tend   : '02:06', $
+        xcen : 0, $
+        ycen : 0 $
+    }
+
+
+    ; 27 April 2022
+    ;   COORDS (xcen, ycen) = loc of AR [center/corner] at flare [start/peak] time,
+    ;   in units of [arcsec/degrees/pixels] relative to [disk center/origin]
+    ;
+    ; xcen, ycen assumed to be in ARCSEC (see ./Prep/struc_aia.pro)
+
+    multiflare = { m15:m15, c83:c83, c46:c46, m10:m10, m73:m73, x22:x22 }
+
+    print, ''
+    print, '==-- Multiflare structure --=========================================='
+    help, multiflare
+    print, '======================================================================'
+    print, ''
+
+    return, multiflare
+
+end
+
+multiflare = multiflare_struc()
+
+
+;flare = multiflare.c46
+;flare = multiflare.m10
+;flare = multiflare.m15
+;
+flare = multiflare.c83
+;flare = multiflare.m73
 ;flare = multiflare.x22
 
 help, flare.class
 
 ; 1) Extract class into 2-element string array (without period)
 ; 2) Combine elements into one (lowercase) string
-class = strsplit(flare.class, '.', /extract)
-class = strlowcase(class[0] + class[1])
-help, class
-
-; OR do it in a single step using IDL's "Replace" method for strings:
+; e.g.  flare.class = M1.5 --> class = m15
+;
+;class = strsplit(flare.class, '.', /extract)
+;class = strlowcase(class[0] + class[1])
+;
+; OR do it like this:
+class = strlowcase(strjoin(strsplit(flare.class, '.', /extract)))
+;
+; OR use IDL's "Replace" method for strings, like this:
 class = strlowcase((flare.class).Replace('.',''))
+
 help, class
 
 date = flare.year + flare.month + flare.day
-print, date
+;- flare.date = 12-Aug-2013 --> date = 20130812
+help, date
 
-
-
-;- confirm channel is what I want it to be.
-print, index[0].wavelnth
-
-
-; Compute Powermap from pre-flare data
-
-z_ind = (where( strmid(index.date_obs, 11, 5 ) EQ flare.tstart ))[0]
-;  [] Need faster way to retrieve z-index of flare.tstart
-print, z_ind
-; NOTE: M7.3 flare has ~2.5 hours of pre-flare data..
-
-help, cube
-cube = CROP_DATA(cube)
-help, cube
-; [] crops to 500 x 330 by default... is this okay for M7.3 flare?
-
-; Check for missing images
-;   -> see ./Maps/compute_powermaps_main.pro
-
-; syntax (refernce)
-map = COMPUTE_POWERMAPS( /syntax )
-
-
-
-map = COMPUTE_POWERMAPS( $
-    cube[*,*,0:z_ind], cadence $
-)
-
-map_norm = COMPUTE_POWERMAPS( $
-    cube[*,*,0:z_ind], cadence, $
-    /norm $
-)
-
-
-;print, min(map), max(map)
-;print, min(map_norm), max(map_norm)
-
-; Image INTENSITY (context)
-imdata = AIA_INTSCALE( cube[*,*,z_ind], wave=channel, exptime=index[z_ind].exptime )
-;print, index[0].exptime
-;print, index[z_ind].exptime
-
-; Image map
-
-;imdata = alog10(map)
-;imdata = map_norm
-
-;print, min(cube[*,*,z_ind]), max(cube[*,*,z_ind])
-;print, min(imdata), max(imdata)
-
-
-dw
-im = image2( $
-    imdata, $
-    rgb_table = AIA_GCT( wave=fix(channel)), $
-    buffer=buffer $
-)
-
-;
-; Chage axis labels from pixels to arcsec
-im.xtickname = string( fix(im.xtickvalues * index[0].cdelt1 ))
-im.ytickname = string( fix(im.ytickvalues * index[0].cdelt2 ))
-im.xtitle = 'X (arcsec)'
-im.ytitle = 'Y (arcsec)'
-;
-;- Intensity image title
-im.title = strupcase(instr) + ' ' + strtrim(channel,1) + "$\AA$ " + strmid(index[z_ind].date_obs,11,8) + ' UT'
-;
-savefile = class + '_' + instr + strtrim(channel,1) + 'intensity'
-save2, savefile
-
-
-
-;- Maps
-im.title = strupcase(instr) + ' ' + strtrim(channel,1) + "$\AA$ " + $
-    flare.date + $
-    ' (' + strmid(index[0].date_obs,11,5) + '-' + strmid(index[z_ind].date_obs,11,5) + ')'
-
-
-
-; Save image to pdf file
-savefile = class + '_' + instr + strtrim(channel,1) + 'map_preflare'
-save2, savefile
-
-; save NORMALIZED map..
-savefile_norm = class + '_' + instr + strtrim(channel,1) + 'map_preflare_norm'
-save2, savefile_norm
-
-
-
-
-
-; PLAN for completing A2 / Chapter 5: "Multi-flare"
-;=====================================================================================================================
-;- 27 April 2022
-;-   Everything from here to EOF copied from 'tomorrow_powermaps.pro'
-;=====================================================================================================================
-
-; [] path_temp.pro
-;      Is this referenced or used somehow?
-; [] use 'main.pro' or something similar to define common ML variables that change too often to be in common
-;    block from startup files that I never look at.
-; [] Merge _README.pro with other references (i.e. aia_hmi_fits_filenames.pro, ToDo.pro, etc.)
-
-;-
-;- 05->06 April 2021
-;-
-;- TO DO:
-;-  [] re-align images
-;-       • interpolate
-;-       • align in pieces
-;-       • use subset outside flare to compute alignment for all pixels
-;-  [] interpolate to fill in missing 1700 images
-;-  [] compute powermaps
-;-
-
-
-;- IDL fun times --> Enote
-;-
-; Time in seconds since 1 January 1970
-;mtime = FILE_MODTIME(FILEPATH('dist.pro', SUBDIR = 'lib'))
-mtime = FILE_MODTIME('today.pro')
-print, mtime
-;
-; Convert to a date/time string
-PRINT, SYSTIME(0, mtime)
-
-
-
-
-STOP
-
-;----------------------------
-
-;- Active Variables :
-;-  index, cube, allshifts, ref, 
-;-
-
-
-
-
-;==================================================================================
-
-
-
-c83_aia1700header = index
-
-headersavfile = class + '_aia' + strtrim(channel,1) + 'header.sav'
-print, headersavfile
-;save, c83_aia1700header, filename = headersavfile
-
-
-
-;----
-
-path = './c83_20130830/'
-mapfile = 'c83_aia' + strtrim(channel,1) + 'map.sav'
-print, path + mapfile
-;
-
-restore, path + mapfile
-help, map
-print, max(map)
-
-c83_aia1700powermap = map
-help, c83_aia1700powermap
-
-print, max(c83_aia1700powermap)
-
-save, c83_aia1700powermap, filename = mapfile
-
-
-;
-;==================================================================================
-
-channel = 1600
-;channel = 1700
-
-;
-path = './c83_20130830/'
-
-headerfile = 'c83_aia' + strtrim(channel,1) + 'header.sav'
-
-mapfile = 'c83_aia' + strtrim(channel,1) + 'powermap.sav'
-;
-restore, path + headerfile
-
-help, c83_aia1700header
-
-
-restore, '../flares/c83_20130830/20130830_aia' + strtrim(channel,1) + 'cube.sav'
-help, index
-
-print, index[0].wavelnth
-
-c83_aia1600header = index
-help, c83_aia1600header
-
-save, c83_aia1600header, filename=headerfile
-
-;===========
-
-;channel = '1600'
-channel = '1700'
-;
-headerfile = 'c83_aia' + channel + 'header.sav'
-mapfile = 'c83_aia' + channel + 'powermap.sav'
-path = './c83_20130830/'
-
-
-help, c83_aia1600header
-help, c83_aia1700header
-help, c83_aia1600powermap
-help, c83_aia1700powermap
-
-restore, path + headerfile
-restore, path + mapfile
-
-
-undefine, c83_aia1600header
-undefine, c83_aia1600powermap
-
-stop
-
-
-;------
-basename = FILE_BASENAME(filename, '.sav')
-;
-filename2 = basename + '_OLD.sav'
-filename3 = basename + '_OLD_2.sav'
-;
-print, filename
-print, filename2
-print, filename3
-;------
-
-
-
-
-;- temporary cube to preserve ALIGNED cube
-cube2 = cube
-
-filename = date + '_' + strlowcase(instr) + strtrim(channel,1) + 'cube.sav'
-restore, path + filename
-
-;- confirm that cube and cube2 are not the same anymore, cube restored from
-;-    cube.sav files is same size, but pre-alignment.
-print, cube[0,0,0]
-print, cube2[0,0,0]
-
-;- return ALIGNED cube values to cube variable and get rid of backup.
-cube = cube2
-undefine, cube2
-
-
-filename = date + '_' + strlowcase(instr) + strtrim(channel,1) + 'aligned.sav'
-save, index, cube, allshifts, filename=filename
-
-
-stop;--------------------------------------------------------------------------
-
-;- new idl session, restore .sav file I just made and make sure all variables are there
-filename = date + '_' + strlowcase(instr) + strtrim(channel,1) + 'aligned.sav'
-restore, filename
-help, cube
-help, index
-help, allshifts
-
-
-
-
-;
-cadence = 24
-dz = 64
-;
-oldcube = cube
-cube = crop_data( oldcube, dimensions=[400,400], center=[ 400, 400 ] )
-help, cube
-
-undefine, oldcube
-
-;
-;print, array_equal( index.exptime, index[0].exptime )
-;
-;print, where( index.exptime le 2.90 )
-;print, where( index.exptime ge 2.91 )
-;-  -1 in both cases (04 March 2021)
-;exptime = 1.0
-exptime = index[0].exptime
-;print, exptime
-;
-sz = size(cube, /dimensions)
-;
-;satlocs = where( index.nsatpix gt 0 )
-;print, index[satlocs].nsatpix
-;
-;
-time = strmid(index.date_obs, 11, 8)
-;print, time[0]
-
-
-;============================================================
-
-;-
-z_start = [0:sz[2]-dz]
-;-  indices for full ts
-
-;- indices to compute power map from time series of length dz, starting at flare start.
-;z_start = (where( strmid(index.date_obs,11,5) eq flare.tstart ))[0]
-
-print, z_start[-1]
-print, z_start[-1] + dz -1
-
-;print, index[z_start].date_obs
-print, flare.tstart
-print, index[z_start[-1]+dz-1].date_obs
-print, flare.tend
-
-;aia_lct, rr, gg, bb, wavelnth=channel, /load
-;rgb_table=AIA_GCT( wave=channel )
-;
-;dw
-;imdata = cube[*,*,z_start]
-
-;z_peak = (where( strmid(index.date_obs,11,5) eq flare.tpeak ))[0]
-;print, z_start
-;print, z_peak
-
-
-STOP
-
-
-;====
-;print,  COMPUTE_POWERMAPS( /syntax )
-map = COMPUTE_POWERMAPS( cube/exptime, cadence, dz=dz, z_start=z_start )
-save, map, filename='1700map.sav'
-;-  started 23:58 04 March (Eastern time) for 1600Å, 2:52 05 March for 1700Å
-;-    Only put in "save" command for the latter... hopefully won't crash
-;-    before I get a chance to save 1600 map..
-;====
-
-
-print, '===---'
-;
-start_time = systime(/seconds)
-wait, 5.5
-minutes = (systime(/seconds) - start_time)/60
-hours = (systime(/seconds) - start_time)/3660
-format='( "Power maps calculated in ~", F0.2, " minutes (", F0.4, " hours)" )'
-print, format=format, minutes, hours
-;print, format='( "Power maps calculated in ~", F0.2, " minutes (", F0.4, " hours)" )', minutes, hours
-;print, format='( "    (", F0.4, " hours)." )', hours
-;
-print, '===---'
-
-
-;+
-;- IMAGE power maps
-;-
-
-impulsive_phase = (where( strmid(time,0,5) eq flare.tpeak ))[0] - dz
-decay_phase = impulsive_phase + dz
-
-;before = impulsive_phase - 
-before = (where( strmid(time,0,5) eq flare.tstart ))[0] - dz
-print, time[before]
-
-
-z_ind = [ $
-    (where( strmid(time,0,5) eq flare.tpeak ))[0] $
-]
-print, z_ind
-print, time[z_ind]
-print, flare.tpeak
-
-imdata = [ $
-    [[ AIA_INTSCALE( cube[*,*,z_peak], wave=channel, exptime=exptime ) ]], $
-    [[ AIA_INTSCALE( map, wave=channel, exptime=exptime ) ]] $
-]
-
-
-
-title = flare.class + '  ' + flare.year + '-' + flare.month + '-' + flare.day + '  '  $
-    + [ time[z_peak]+ ' (intensity) ' , time[z_start] + '-' + time[z_start+dz-1] + ' (power map)' ]
-;
-
-dw
-wx = 8.5
-wy = wx/2
-win=window( dimensions=[wx,wy]*dpi, buffer=buffer )
-im = objarr(2)
-for ii = 0, 1 do begin
-    im[ii] = image2( $
-        imdata[*,*,ii], $
-        /current, $
-        layout=[2,1,ii+1], $
-        margin=0.10, $
-        title=title[ii], $
-        rgb_table=rgb_table, $
-        buffer=buffer $
-    )
-endfor
-save2, 'test'
-
-
-stop;---------------------
-
-;save, map, map2, filename='M10_aia1600map.sav'
-;save, map, filename='M10_aia1600map.sav'
-
-filename = class + '_' + date + '_' + strlowcase(instr) + strtrim(channel,1)  + 'map.sav'
-print, filename
-
-save, map, filename=filename
-
-
-;-
-;==
-;============================================================================================
-
-
-print, max(cube2) / (max( cube2/exptime) )
-print, ( max(cube2) / (max( cube2/exptime) ) )^2
-
-print, exptime^2
-
-print, max(map) / max(map2)
-;print, min(map) / min(map2)
-;-  same factor whether min or max or in between, just like every pixel
-;-   in data cubes differes
-;-  by factor = exptime ... because one was divided by exptime... der.
-
-
-;- ===>>>  NO LONGER setting threshold. Compute power for ALL pixels,
-;-   Can easily compute MASK using threshold and original pixel values
-;-    (where "original" pixel values are the ones used to compute the map
-;-   in the first place).
-
-maps = [ [[map]], [[map2]] ]
-
-undefine, map
-undefine, map2
-   ;-  don't like these variable names anyway; espeically confusing when
-   ;-   concurrent with "cube" and "cube2", but DO NOT correspond to each
-   ;-  other AT ALL.
-
-
-title = [ 'raw data', 'exptime-corrected' ]
-;
-im = objarr(2)
-dw
-win = window(/buffer)
-
-imdata = maps
-locs = where( imdata gt 950 and imdata lt 1000 )
-
-help, array_indices( imdata, locs )
-print, imdata[(array_indices( imdata, locs ))[*,0]]
-
-print, imdata[ 228, 139, 0]
-
-print, ''
-print, min(imdata[*,*,0]), format=format
-print, min(imdata[*,*,1]), format=format
-print, max(imdata[*,*,0]), format=format
-print, max(imdata[*,*,1]), format=format
-print, ''
-;
-
-imdata = AIA_INTSCALE(maps, exptime=exptime, wave=channel )
-print, imdata[ 228, 139, 0]
-
-print, min(imdata[*,*,0]), format=format
-print, min(imdata[*,*,1]), format=format
-print, max(imdata[*,*,0]), format=format
-print, max(imdata[*,*,1]), format=format
-print, ''
-
-for ii = 0, 1 do begin
-    im[ii] = IMAGE2( $
-        imdata[*,*,ii], $
-        /current, $
-        layout=[2, 1, ii+1], $
-        margin=0.05, $
-        title=title[ii], $
-        rgb_table=rgb_table, $
-        /buffer $
-    )
-endfor
-;
-save2, 'M10_aia1600map', /timestamp
-
-
-print, ''
-format='(e0.4)'
-for ii = 0, 1 do begin
-    print, min(maps[*,*,ii]), max(maps[*,*,ii]), format=format
-    print, ''
-endfor
-print, ''
+end

@@ -24,32 +24,38 @@
 ;-   [] Organize into subroutine and main code, where ML code tests for existance of .sav files
 ;-       and restores header / data, QUICKLY and EASILY at beginning of each IDL session.
 ;-       Subroutine is only called if .sav files don't exist in path. Or something...
-;-
 
-
-
-;-- path to flare .sav files
 @path_temp
 print, path_temp
-flare_path = path_temp + 'flares/' + class + '_' + date + '/'
-print, flare_path
 
-;-- Save aligned DATA subsets and HEADERS to .sav files --> be CONSISTENT !!
-;filename = class + '_' + date + '_' + strlowcase(instr) + strtrim(channel,1) + 'aligned.sav'
-;   includes date in the form yyyymmdd ... should filenames be changed to include this??
-filename = class + '_' + strlowcase(instr) + strtrim(channel,1) + 'aligned.sav'
-print, filename
-;   m73_aia1600aligned.sav
-;
-if FILE_EXIST(path + filename) then begin
-    restore, path + filename
+instr = 'aia'
+cadence = 24
+
+;- edit main.pro to set flare and variables for "class" and "date"
+;- IDL> .run main
+
+channel = '1600'
+;channel = '1700'
+
+;-- path to flare .sav files
+flare_path = path_temp + 'flares/' + class + '_' + date + '/'
+
+;- file names for aligned data cube and/or header
+data_file = flare_path + class + '_' + strlowcase(instr) + strtrim(channel,1) + 'aligned.sav'
+header_file = flare_path + class + '_' + strlowcase(instr) + strtrim(channel,1) + 'header.sav'
+
+if FILE_EXIST(data_file) then begin
+    restore, data_file
 endif else begin
-    print, path + filename, ' does not exist.'
+    print, ''
+    print, '=======  "',  data_file, '" DOES NOT EXIST!! ========'
     STOP
 endelse
 
+stop
+
 ; Create a savefile object.
-sObj = OBJ_NEW('IDL_Savefile', path + filename)
+sObj = OBJ_NEW('IDL_Savefile', data_file)
 
 ; Retrieve the names of the variables in the SAVE file.
 sNames = sObj->Names()
@@ -62,11 +68,12 @@ help, cube    ; => CUBE   INT  = Array[700, 500, 749]
 ;  help, sNames[0] ==  IDL> help, "cube"  ... not IDL> help, cube
 
 ; [] Restore HEADER from level 1.5 fits and re-save .sav file to include both 'cube' AND 'index'
-header_file = 'm73_aia1600header.sav'
+header_file = class + '_' + instr + channel + 'header.sav'
+print, header_file
 
-if FILE_EXIST(path + header_file) then restore, path + header_file else print, "Header file does not exist."
+if FILE_EXIST(flare_path + header_file) then restore, flare_path + header_file else print, "Header file does not exist."
 
-sObj = OBJ_NEW('IDL_Savefile', path + header_file)
+sObj = OBJ_NEW('IDL_Savefile', flare_path + header_file)
 sNames = sObj->Names()
 print, sNames  ; => 'INDEX'
 help, sNames  ; => SNAMES   STRING  = Array[1]

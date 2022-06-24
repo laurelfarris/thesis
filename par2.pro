@@ -205,7 +205,7 @@ print, ''
 ;
 ;flare = multiflare.c83
 ;flare = multiflare.m73
-flare = multiflare.x22
+;flare = multiflare.x22
 
 class = strlowcase(strjoin(strsplit(flare.class, '.', /extract)))
 ;- flare.class = M1.5 --> class = m15

@@ -28,6 +28,11 @@
 
 ; What .sav files currently exist for each flare?
 ; '../flares/c83_20140418/*.sav'
+; c83_aia1600aligned.sav
+; c83_aia1700aligned.sav
+; c83_aia1600header.sav
+; c83_aia1700header.sav
+
 ; '../flares/m73_20140418/*.sav'
 ; '../flares/x22_20140418/*.sav'
 
@@ -35,7 +40,35 @@
 
 
 ; "main" code to set path (SS or astro/backup), cadence, instr, flare, run @par,  ...
-@main
+;@main
+
+instr = 'aia'
+
+channel = '1600'
+;channel = '1700'
+
+class = 'c83'
+date = '20130830'
+
+;class = 'm73'
+;date = '20140418'
+
+;class = 'x22'
+;class = '20110215'
+
+@path_temp
+flare_path = path_temp + 'flares/' + class + '_' + date + '/'
+
+stop
+
+restore, flare_path + class + '_' + instr + channel + 'header.sav'
+
+index1 = index
+
+restore, flare_path + class + '_' + instr + channel + 'aligned.sav'
+
+
+stop
 
 
 
