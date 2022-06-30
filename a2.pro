@@ -42,6 +42,21 @@
 ; "main" code to set path (SS or astro/backup), cadence, instr, flare, run @par,  ...
 ;@main
 
+
+@path_temp
+
+
+;---- 28 June 2022
+restore, '../flares/c83_20130830/c83_aia1600map.sav'
+help, map
+; MAP FLOAT  = Array [400, 400, 687]
+restore, '../flares/c83_20130830/c83_aia1700map.sav'
+help, map
+; MAP FLOAT  = Array [400, 400, 682]
+  ===>>> computed 1700 maps without interpolating missing obs first! Need to re-compute map cube :(
+;----
+
+
 instr = 'aia'
 
 channel = '1600'
@@ -56,7 +71,6 @@ date = '20130830'
 ;class = 'x22'
 ;class = '20110215'
 
-@path_temp
 flare_path = path_temp + 'flares/' + class + '_' + date + '/'
 
 stop

@@ -207,15 +207,17 @@ print, ''
 ;flare = multiflare.m73
 ;flare = multiflare.x22
 
-class = strlowcase(strjoin(strsplit(flare.class, '.', /extract)))
+;- PROBLEM: if flare isn't defined here, the following lines can't run...
+
+;class = strlowcase(strjoin(strsplit(flare.class, '.', /extract)))
 ;- flare.class = M1.5 --> class = m15
 
-date = flare.year + flare.month + flare.day
+;date = flare.year + flare.month + flare.day
 ;- flare.date = 12-Aug-2013 --> date = 20130812
 
 ;IDL> .run struc_aia
 
-buffer = 1
+;buffer = 1
 
 
 ;== End of latest version ==============================

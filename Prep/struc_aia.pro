@@ -300,20 +300,17 @@ end
 ;
 ;flare = multiflare.c30
 ;flare = multiflare.c46
-;flare = multiflare.c83
+flare = multiflare.c83
 ;flare = multiflare.m10
 ;flare = multiflare.m15
 ;flare = multiflare.m73
 ;flare = multiflare.x22
-
-
 
 aia1600 = STRUC_AIA( aia1600index, aia1600data, cadence=24., instr='aia', channel='1600', $
     flare=flare )
 
 aia1700 = STRUC_AIA( aia1700index, aia1700data, cadence=24., instr='aia', channel='1700', $
     flare=flare )
-
 
 print, aia1600index[0].t_obs
 print, aia1700index[0].t_obs

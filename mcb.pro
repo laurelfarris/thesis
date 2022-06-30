@@ -1,8 +1,8 @@
 ;Copied from clipboard
 
 
-; Retrieve the names of the variables in the SAVE file.
-sNames = sObj->Names()
+restore, '../flares/c83_20130830/c83_aia1700map.sav'
+help, map
 
 end
 

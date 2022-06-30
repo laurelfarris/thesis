@@ -1,6 +1,6 @@
 ;+
 ;- LAST MODIFIED:
-;-   28 June 2022
+;-   13 August 2019
 ;-
 ;- ROUTINE:
 ;-   get_power_from_maps.pro
@@ -20,6 +20,12 @@
 ;- INPUT:
 ;-   N/A (is a Main Level (ML) routine)
 ;-
+;- KEYWORDS:
+;-   N/A
+;-
+;- OUTPUT:
+;-   N/A
+;-
 ;- TO DO:
 ;-   [] write subroutine with data as input argument
 ;-   [] Add test codes
@@ -36,37 +42,55 @@
 
 buffer =1
 
+@parameters
+
 dz = 64
 
+;----------------------------------------------------------------------------------
 
-;- Restore AIA powermaps
+;- From IDL command line, run the following Main Level codes BEFORE
+;-   calling this one.
+
+; IDL> .run image_powermaps
+; IDL> .run contours
+; IDL> .run sub
+; IDL> .run get_power_from_maps
+
+
+;- Restore AIA powermaps from .sav files and read into A[0].map and A[1].map.
 ;@restore_maps
-@path_temp
 
-restore, path_temp + 'flares/c83_20130830/c83_aia1600map.sav'
-stop
-
-restore, path_temp + 'flares/c83_20130830/c83_aia1700map.sav'
-
-;restore, path_temp + 'flares/m73_20130830/m73_aia1600map.sav'
-;restore, path_temp + 'flares/m73_20130830/m73_aia1700map.sav'
-
-;restore, path_temp + 'flares/x22_20130830/x22_aia1600map.sav'
-;restore, path_temp + 'flares/x22_20130830/x22_aia1700map.sav'
 
 
 format = "(e0.5)"
+for cc = 0, n_elements(A)-1 do begin
+    print, ""
+    print, A[cc].channel, ":"
+    print, "  min PowerMap = ", min(A[cc].map);, format=format
+    print, "  max PowerMap = ", max(A[cc].map);, format=format
+endfor
 
 ;- Thu Jan 24 11:46:02 MST 2019
 ;-   Correct restored power map for saturation by multiplying by mask.
 
+
 ;sz = size( A.data, /dimensions )
 sz = size( A.map, /dimensions )
+  ;- not sure why I was using data dimensions... esp. since 15-Feb-2011 flare
+  ;-  power maps don't have correct z-dimensions, so can't base map_mask dimensions
+  ;-  on data, or what dimensions "should" be.
+  ;-  Wouldn't work if maps weren't computed or restored yet, and needed map_mask
+  ;-   first? Unlikely...
 
+
+;--------------------------------------------------------------------------
 
 ;- Initialize MAP mask
-map_mask = fltarr(sz)
+;map_mask = fltarr(sz[0],sz[1],sz[2]-dz+1,n_elements(A))
+;map_mask = fltarr(sz[0],sz[1],sz[2],n_elements(A))
+  ;- remove correction to z-dim (only needed when using data dims...)
 
+map_mask = fltarr(sz)  ;- I was making this way too complicated...
 ;- Compute MAP mask
 resolve_routine, 'powermap_mask', /either
 for cc = 0, 1 do $

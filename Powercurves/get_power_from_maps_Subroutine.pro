@@ -25,7 +25,9 @@
 ;-     •
 ;-
 ;- USEAGE:
-;-   IDL> .RUN get_power_from_maps
+;- plt = GET_POWER_FROM_MAPS( data, map, $
+;-          exptime, channel, $
+;-          dz, threshold, $
 ;-
 ;- INPUT:
 ;-   N/A (is a Main Level (ML) routine)
