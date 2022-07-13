@@ -1,8 +1,18 @@
 ;+
-;- Plot P(t) for several central periods:
-;- 2-minute power, 3-minute power, and 5-minute power.
+;- LAST MODIFIED:
+;-   13 July 2022
+;-     Moved code here from ../All_The_Things/power_time_dz.pro
+;-     One of several codes outlined for an idea that I may or may not have time
+;-       to put into practice.
 ;-
-
+;- FILENAME:
+;-   power_time_dz.pro
+;-
+;- PURPOSE:
+;-   Plot P(t) for several central periods:
+;-     2-minute power, 3-minute power, and 5-minute power.
+;-
+;-
 
 cc = 0
 cadence = A[cc].cadence

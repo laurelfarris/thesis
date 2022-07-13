@@ -1,7 +1,8 @@
-;; Last modified:   14 February 2018 14:38:58
-
 ;+
-; ROUTINE:      Main.pro
+;
+; ROUTINE:
+;
+; LAST MODIFIED:   13 July 2022
 ;
 ; PURPOSE:      This is primarily for use as a reference:
 ;               It describes each step in the data analysis,
@@ -18,7 +19,6 @@
 ; TO DO:        Update this file
 ;
 ;-
-
 
 ;--------------------------------------------------------------------------------------------
 ;- Merged this file (_README.pro) with text file "README" (below)
@@ -109,7 +109,8 @@
 
 
 ;---------------------------------------------------------------------------------------------
-;; Variables needed to prep data
+; Variables needed to prep data
+;   see also ./Prep/apply_aia_prep.pro and similar routines -- 13 July 2022
 
 ; Paths to data
 hmi_path = '/solarstorm/laurel07/Data/HMI/*hmi*.fits'

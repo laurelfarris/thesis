@@ -1,4 +1,18 @@
 ;+
+;
+;========================================================================
+; 13 Junly 2022
+;
+;   copied sdbwave.pro (not mine) to sdbwave2.pro and MODIFIED to generate
+;   graphics using OBJECTS, i.e. used FUNCTIONS for plot and image to return
+;   graphic objects, rather than procedures.
+;
+; NOTE: actually made the copy several years ago, but apparently failed
+;   to explicitly explain the difference between the two versions of sdbwave
+;   at top of code.
+;
+;========================================================================
+;
 ;NAME:
 ;       SDBWAVE
 ;

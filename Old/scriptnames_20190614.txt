@@ -1,10 +1,22 @@
+
+Last modified: 6/14/2019
+  according to date in ls -l output; last edit may have been even earlier.
+
+==================================================================================
+
 13 December 2018
 Trying to figure out why Acrux won't navigate between tmux panes
 while running vim.
 
 
-
-
+13 July 2022 ===>>> I figured it out!!
+Had same issue on new lappy a few months ago..
+found lines in tmux configuration file containing "if" statement testing
+something regarding the vim view, where return value of true or false (1 or 0)
+determined how the key bindings were set.
+Couldn't figure out what exactly was being tested, but removing the
+if statement and simply setting the key bindings to their expected values
+seems to have fixed the problem!
 
 # Acrux only:
 
@@ -12,13 +24,13 @@ while running vim.
     Sets filetype for *.stp and *.stpm. Harmless.
 
 
---------------------------------------------------------------------------------------
 --> /usr/share/vim/vimfiles/plugin/cctree.vim
     This might be mapping ctrl key to other things
     Doesn't exist when logged into SS.
     Pretty sure the problem is in this file somewhere.
     It's related to vim, as found from Google search for "cctree.vim"
---------------------------------------------------------------------------------------
+
+
 
 --> /usr/share/vim/vim74/ftplugin/sh.vim
     Probably also harmless.
