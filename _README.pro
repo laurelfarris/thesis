@@ -1,22 +1,27 @@
 ;+
-;
 ; ROUTINE:
+;   _README.pro
 ;
-; LAST MODIFIED:   13 July 2022
+; LAST MODIFIED:
+;   13 July 2022
 ;
-; PURPOSE:      This is primarily for use as a reference:
-;               It describes each step in the data analysis,
-;               provides syntax for all user-defined subroutines,
-;               and describes variable specs at each step (type, size, etc.)
+; PURPOSE:
+;   This is primarily for use as a reference:
+;   It describes each step in the data analysis,
+;   provides syntax for all user-defined subroutines,
+;   and describes variable specs at each step (type, size, etc.)
 ;
-;               Run this as a script to execute all routines to
-;                PREP data for analysis.
+;   Run this as a script to execute all routines to
+;   PREP data for analysis.
 ;
-; USEAGE:       IDL> @main.pro
+; USEAGE:
+;   IDL> @main.pro
 ;
-; AUTHOR:       Laurel Farris
+; AUTHOR:
+;   Laurel Farris
 ;
-; TO DO:        Update this file
+; TO DO:
+;   [] Update this file
 ;
 ;-
 

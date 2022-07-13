@@ -100,5 +100,36 @@ print, sNames
 
 ;========================================================================
 
+;+
+;- Structures
+;-
+
+
+
+;+
+;- Experiment with saving multiflare_struc's to .sav files...
+;-
+
+;restore, '../multiflare_struc.sav'
+;S = multiflare_struc
+;undefine, multiflare_struc
+;
+;help, S.s1[0]
+;help, S.s1[1]
+;- NOTE: s1, s2, and s3 are ARRAYs corresponding to three flares.
+;-  Each consists of two structures, one for each channel (~A for single flare).
+;-
+;- For each flare, should have one main structure/dictionary/array/whatever
+;-   with simple, single-value tags that are constant regardless of instr/channel
+;-  (e.g. flare date, AR #, GOES start/peak/end times, GOES class, etc.)
+;-  Final tag(s) has a value that is another structure that is unique to a
+;-   specific instr/channel (e.g. HMI B_LOS or AIA 1700Å continuum emission).
+;-
+;-
+
+;- Add tag/value to existing structure:
+;-   struc = CREATE_STRUCT( struc, 'new_tag', new_value )
+
+;S = create_struct( S, 'AR', '11158' )
 
 end
