@@ -46,6 +46,22 @@
 ;-
 
 
+
+;-
+;- TO DO (A2):
+;-
+;-   [] FIRST: ensure HEADERS (index) and aligned data subsets (data) are saved in .sav file
+;-        for each flare. Can be same file or separate, just needs to be CONSISTENT.
+;-      RESTORE .sav files, save headers / data in one file, easy to resotre in future.
+;-   [] AIA & GOES  LCs during flare only, dt covered by RHESSI (for CORRECT flares)
+;-   [] Detrended LCs showing QPPs
+;-   [] Power maps (see "today.pro")
+;-   [] FFTs -> power spectra showing power as function of freqeunciews between ~1 and 20 mHz (or w/e)
+;-       to compare BDA for individual flares, or same phase for different flares in one plot
+;-       (first one then the other... comparing flares to each other is followup / discussion section)
+;-
+
+
 ;+
 ;- 30 January 2021
 ;-
@@ -67,8 +83,9 @@
 ;-
 ;- A2 flares:
 ;-   C8.3 2013-08-30 T~02:04:00
-;-   M7.3
-;-   X2.2
+;-   M7.3 2014-04-18 T~
+;-   X2.2 2011-02-11 T~01:43:00
+;-
 ;-
 ;- Other flares:
 ;-   M1.0 2014-11-07 T~10:13:00
@@ -86,6 +103,75 @@
 ;path='/solarstorm/laurel07/'
 ;testfiles = 'Data/HMI_prepped/*20140418*.fits'
 ;if not file_test(path + testfiles) then print, 'files not found'
+
+
+
+
+;=====================================================================================================
+; a2.pro
+
+
+; What .sav files currently exist for each flare?
+; '../flares/c83_20140418/*.sav'
+; c83_aia1600aligned.sav
+; c83_aia1700aligned.sav
+; c83_aia1600header.sav
+; c83_aia1700header.sav
+
+; '../flares/m73_20140418/*.sav'
+; '../flares/x22_20140418/*.sav'
+
+; restore, '.../.sav'
+
+; "main" code to set path (SS or astro/backup), cadence, instr, flare, run @par,  ...
+;@main
+
+@path_temp
+
+;---- 28 June 2022
+restore, '../flares/c83_20130830/c83_aia1600map.sav'
+help, map
+; MAP FLOAT  = Array [400, 400, 687]
+restore, '../flares/c83_20130830/c83_aia1700map.sav'
+help, map
+; MAP FLOAT  = Array [400, 400, 682]
+  ===>>> computed 1700 maps without interpolating missing obs first! Need to re-compute map cube :(
+
+instr = 'aia'
+channel = '1600'
+;channel = '1700'
+class = 'c83'
+date = '20130830'
+;class = 'm73'
+;date = '20140418'
+;class = 'x22'
+;class = '20110215'
+
+flare_path = path_temp + 'flares/' + class + '_' + date + '/'
+
+restore, flare_path + class + '_' + instr + channel + 'header.sav'
+
+index1 = index
+
+restore, flare_path + class + '_' + instr + channel + 'aligned.sav'
+
+;- confirm channel is what I want it to be.
+print, index[0].wavelnth
+
+; • save headers (index) and aligned subsets ('data') to .sav files
+; • Choose flare and run @main
+; • Re-create AIA lightcurves using ./Lightcurves/plot_lc.pro (I think...)
+;    ==>> Every sub-directory under "work" should have easily identifiable "main" code that calls
+;            all the other modules / subroutines
+; • Re-plot  AIA LCs, over dt covered by RHESSI
+; • Re-plot GOES LCs, over dt covered by RHESSI
+
+; Compute Powermap from pre-flare data
+;  --> see notes from 10 May 2022
+
+end
+
+;=====================================================================================================
 
 buffer = 1
 

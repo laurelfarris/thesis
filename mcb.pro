@@ -1,8 +1,10 @@
 ;Copied from clipboard
 
 
-restore, '../flares/c83_20130830/c83_aia1700map.sav'
-help, map
+        <p>
+        <img src="hmi_aia_lc.png"
+          height=400 align="center" alt="FFT"></a>
+        </p>
 
-end
+        end
 
