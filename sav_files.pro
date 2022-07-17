@@ -71,13 +71,19 @@
 
 
 @path_temp
-print, path_temp
 
 instr = 'aia'
 cadence = 24
 
 channel = '1600'
 ;channel = '1700'
+
+
+;-  Will probably end up passing instr, channel, etc. to a function that
+;-    does all the filename definition, manipulating strings, all that messy
+;-    stuff out of the way, just returns values, or just creates them like vsoget.
+
+
 
 
 ;- Define path to .sav files for individual flares

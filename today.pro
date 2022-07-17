@@ -123,40 +123,69 @@
 
 ; restore, '.../.sav'
 
-; "main" code to set path (SS or astro/backup), cadence, instr, flare, run @par,  ...
-;@main
+
 
 @path_temp
-
-;---- 28 June 2022
-restore, '../flares/c83_20130830/c83_aia1600map.sav'
-help, map
-; MAP FLOAT  = Array [400, 400, 687]
-restore, '../flares/c83_20130830/c83_aia1700map.sav'
-help, map
-; MAP FLOAT  = Array [400, 400, 682]
-  ===>>> computed 1700 maps without interpolating missing obs first! Need to re-compute map cube :(
-
+buffer = 1
 instr = 'aia'
+
+
+;@par2
+;flare = multiflare_struc(flare_id='c83')
+;  Doesn't work ... structure tags aren't strings
+;
+multiflare = multiflare_struc()
+;
+flare=multiflare.c83
+;flare=multiflare.m73
+;flare=multiflare.x22
+
+
+;=== Use sav_files.pro to do all this! ================================================================
+
+;- Should iterate over channels on a loop, but that requires differnt ways of storing variables
+;-   since can't use strings for variable names...
+
 channel = '1600'
+;restore, '../flares/' + class + '/' + class + '_aia1600cube.sav'
+restore, '../flares/' + class + '/' + class + '_aia1600header.sav'
+help, index
+;help, cube
+;aia1600index = index
+;aia1600cube = cube
+print, aia1600index[0].wavelnth
+;undefine, index
+;undefine, cube
+
+channel = '1700'
+restore, '../flares/' + class + '/' + class + '_aia' + channel + 'cube.sav'
+help, index
+help, cube
+aia1700index = index
+aia1700cube = cube
+print, aia1700index[0].wavelnth
+;undefine, cube
+;undefine, index
+;
+;===================================================================================================
+
+
+;channel = '1600'
 ;channel = '1700'
-class = 'c83'
-date = '20130830'
+;class = 'c83'
+;date = '20130830'
 ;class = 'm73'
 ;date = '20140418'
 ;class = 'x22'
 ;class = '20110215'
-
-flare_path = path_temp + 'flares/' + class + '_' + date + '/'
-
-restore, flare_path + class + '_' + instr + channel + 'header.sav'
-
-index1 = index
-
-restore, flare_path + class + '_' + instr + channel + 'aligned.sav'
+;
+;flare_path = path_temp + 'flares/' + class + '_' + date + '/'
+;restore, flare_path + class + '_' + instr + channel + 'header.sav'
+;restore, flare_path + class + '_' + instr + channel + 'aligned.sav'
 
 ;- confirm channel is what I want it to be.
 print, index[0].wavelnth
+
 
 ; • save headers (index) and aligned subsets ('data') to .sav files
 ; • Choose flare and run @main
@@ -169,103 +198,13 @@ print, index[0].wavelnth
 ; Compute Powermap from pre-flare data
 ;  --> see notes from 10 May 2022
 
-end
-
 ;=====================================================================================================
 
-buffer = 1
-
-@par2
-
-; Define flare using index instead of tagname... confusing.
-;flare = multiflare.(1) ; index 1 => C8.3
-
-;flare = multiflare.c83
-flare = multiflare.m73
-;flare = multiflare.x22
 
 
-; Define variable for class (to use in filenames, I think...)
-;
-help, flare.class
-;
-; 1) Extract class into 2-element string array (without period)
-; 2) Combine elements into one (lowercase) string
-class = strsplit(flare.class, '.', /extract)
-class = strlowcase(class[0] + class[1])
-help, class
-;
-; OR do it in a single step using IDL's "Replace" method for strings:
-class = strlowcase((flare.class).Replace('.',''))
-help, class
-;
 
 
-date = flare.year + flare.month + flare.day
-print, date
-;
 
-instr = 'aia'
-channel = 1600
-;channel = 1700
-
-cadence = 24
-
-
-;
-; define TEMPORARY path (solarstorm still under maintenance?)
-;path_temp = '/home/astrobackup3/preupgradebackups' + path
-;path = '/solarstorm/laurel07/flares/' + class + '_' + date + '/'
-;
-; OR (alternate way to define temp path):
-@path_temp
-path = path_temp + 'flares/' + class + '_' + date + '/'
-print, path
-
-
-;filename = class + '_' + date + '_' + strlowcase(instr) + strtrim(channel,1) + 'aligned.sav'
-;   includes date in the form yyyymmdd ... should filenames be changed to include this??
-filename = class + '_' + strlowcase(instr) + strtrim(channel,1) + 'aligned.sav'
-print, filename
-;   m73_aia1600aligned.sav
-;
-if FILE_EXIST(path + filename) then begin
-    restore, path + filename
-endif else begin
-    print, path + filename, ' does not exist.'
-    STOP
-endelse
-
-
-; Create a savefile object.
-sObj = OBJ_NEW('IDL_Savefile', path + filename)
-;
-; Retrieve the names of the variables in the SAVE file.
-sNames = sObj->Names()
-;
-print, sNames ; => 'CUBE'
-help, sNames  ; => SNAMES   STRING  = Array[1]
-help, cube    ; => CUBE   INT  = Array[700, 500, 749]
-;
-; Can variable name be pulled straight from string?
-;  help, sNames[0] ==  IDL> help, "cube"  ... not IDL> help, cube
-
-
-; [] Restore HEADER from level 1.5 fits and re-save .sav file to include both 'cube' AND 'index'
-header_file = 'm73_aia1600header.sav'
-
-if FILE_EXIST(path + header_file) then restore, path + header_file else print, "Header file does not exist."
-
-
-sObj = OBJ_NEW('IDL_Savefile', path + header_file)
-sNames = sObj->Names()
-print, sNames  ; => 'INDEX'
-help, sNames  ; => SNAMES   STRING  = Array[1]
-help, index    ; =>  INDEX   STRUCT =  -> <Anonymous>  Array[749]
-
-
-;- confirm channel is what I want it to be.
-print, index[0].wavelnth
 
 
 

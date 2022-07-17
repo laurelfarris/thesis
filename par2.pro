@@ -1,9 +1,12 @@
 ;+
-;- last updated:
+;- LAST UPDATED:
 ;-   13 July 2022
 ;-     Merged parameters.pro, par_test.pro, and multiflare_struc.pro with par2.pro.
 ;-     par2.pro currently contains three function definitions (parameters, par_test, multiflare_struc)
 ;-        + consolidated ML code at the bottom.
+;-
+;-   NOTE: par2 no longer runs like a script, i.e. @par2
+;-     ML code calls function to return multiflare struc and set class/date variables.
 ;-
 ;- 13 July 2022
 ;-   Copied contents of parameters.pro (the "original" params module)
@@ -355,7 +358,7 @@ function parameters
 
 end
 
-function multiflare_struc
+function multiflare_struc, flare_id=flare_id
 
     ;+
     ;- 13 July 2022
@@ -511,7 +514,8 @@ function multiflare_struc
     print, ''
 
 
-    return, multiflare
+    if keyword_set(flare_id) then return, multiflare.flare_id else return, multiflare
+    ; Could also pass flare id using index notation, e.g. multiflare.(1) instead of multiflare.c83
 
 end
 
