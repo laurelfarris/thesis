@@ -130,7 +130,6 @@ function IMAGE3, data, $
     XX, YY, $
     _EXTRA=e
 
-
     common defaults
 
     ;- If data is 2D array (just one image), adjust dimensions to 2D, since
@@ -152,6 +151,8 @@ function IMAGE3, data, $
     if n_elements(XX) eq 0 then XX = indgen(sz[0])
     if n_elements(YY) eq 0 then YY = indgen(sz[1])
 
+;    if keyword_set(gap) then begin
+;    endif
 
     im = IMAGE3_wrapper( $
         data, $
@@ -170,6 +171,7 @@ function IMAGE3, data, $
         xgap = 0.2, $
         ygap = 0.2, $
         title = alph[0:sz[2]-1], $
+        rgb_table=rgb_table, $
         _EXTRA = e)
     return, im
 

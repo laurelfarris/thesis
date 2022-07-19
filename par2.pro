@@ -530,7 +530,7 @@ end
 
 
 multiflare = multiflare_struc()
-
+;
 flare = multiflare.c83
 ;flare = multiflare.m73
 ;flare = multiflare.x22

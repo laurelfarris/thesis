@@ -67,7 +67,6 @@ function PLOT_SPECTRA, frequency, power, $
         _EXTRA=e )
     ;help, plt --> 1 element so far...
 
-
     ax = plt[0].axes
 
     ;- oplot vertical lines at periods of interest.

@@ -13,22 +13,29 @@
 ;-   and return 2D power image
 ;-
 ;- USEAGE:
-;-   result = routine_name( arg1, arg2, kw=kw )
+;-   PLOT_FOURIER2, flux, delt, $
+;-       frequency, power, phase, amplitude, period, $
+;-       seconds=seconds, minutes=minutes, $
+;-       make_plot=make_plot, $
+;-       buffer=buffer, $
+;-       norm=norm
 ;-
-;- INPUT:
+;- REQUIRED INPUT ARGS:
 ;-   cube = data cube time series (i.e. same dt between each image).
 ;-   delt = time between each image, in seconds.
-;-
-;- KEYWORDS (optional):
-;-   kw     set <kw> to ...
+;- OPTIONAL INPUT ARGS (computed by subroutine; include to get values back at ML):
+;-   frequency, power, phase, amplitude, period
+;- OPTIONAL KEYWORDS:
+;-   seconds=seconds, minutes=minutes, $
+;-   make_plot=make_plot, $
+;-   buffer=buffer, $
+;-   norm=norm
 ;-
 ;- OUTPUT:
 ;-   result     blah
 ;-
 ;- TO DO:
-;-   [] item 1
-;-   [] item 2
-;-   [] ...
+;-   []
 ;-
 ;- KNOWN BUGS:
 ;-   Possible errors, harcoded variables, etc.
@@ -36,10 +43,9 @@
 ;- AUTHOR:
 ;-   Laurel Farris
 ;-
-;+
 
-
-pro PLOT_FOURIER2, flux, delt, $
+;pro PLOT_FOURIER2, flux, delt, $
+function PLOT_FOURIER2, flux, delt, $
     result, $
     frequency, power, phase, amplitude, $
     period, seconds=seconds, minutes=minutes, $
@@ -101,7 +107,6 @@ pro PLOT_FOURIER2, flux, delt, $
 
         plt[1].yrange = [-180,180]
 
-
         ;- Light curve
         plt[2] = PLOT2( flux, /current, layout=[cols,rows,3], $
             xtitle = "time", $
@@ -112,6 +117,10 @@ pro PLOT_FOURIER2, flux, delt, $
 ;                result[ii,*], /current, layout=[2,2,ii+1], $
 ;                ytitle=ytitle[ii], xtitle="index of frequencies" )
 ;        endfor
-    endif
+    return, plt
+    endif else begin
+        return, 0
+    endelse
 
+stop
 end

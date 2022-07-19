@@ -123,45 +123,171 @@
 @path_temp
 buffer = 1
 instr = 'aia'
+cadence = 24
+
+; IDL> .com par2
+multiflare = multiflare_struc()
+flare = multiflare.c83
+class = 'c83'
+restore, '../flares/c83/c83_struc.sav'
+
+;restore, '../flares/c83/c83_hmiMAGcube.sav'
+;restore, '../flares/c83/c83_hmiMAGheader.sav'
+;    cube [ 800, 800, 400]
+
+z_ind = (where( strmid(A[0].time, 0, 5 ) eq flare.tstart ))[0]
+;z_ind = (where( strmid(A[0].time, 0, 5 ) eq flare.tpeak ))[0]
+
+sz = size(A.data, /dimensions)
+
+dimensions = [100, 100]
+center = [280, 110]
+cube = fltarr(dimensions[0], dimensions[1], sz[2], sz[3])
+help, cube
 
 
-;z_ind = (where( strmid(A[0].time, 0, 5 ) eq flare.tstart ))[0]
-z_ind = (where( strmid(A[0].time, 0, 5 ) eq flare.tpeak ))[0]
-print, z_ind
-
-dw
 for cc = 0, 1 do begin
-    imdata = AIA_INTSCALE( A[cc].data[*,*,z_ind], wave=A[cc].channel, exptime=A[cc].exptime )
+    cube[*,*,*,cc] = CROP_DATA( A[cc].data, center=center, dimensions=dimensions )
+endfor
+help, cube
+
+
+for cc = 0, 1 do begin
+    ;imdata = AIA_INTSCALE( A[cc].data[*,*,z_ind], wave=A[cc].channel, exptime=A[cc].exptime )
+    imdata = AIA_INTSCALE( cube[*,*,cc], wave=A[cc].channel, exptime=A[cc].exptime )
     im = image2( $
         imdata, $
         rgb_table = AIA_GCT( wave=fix(A[cc].channel)), $
         title='AIA ' + A[cc].channel + '$\AA$ ' + A[cc].time[z_ind], $
         buffer=buffer $
         )
-    save2, class + '_' + instr + A[cc].channel + '_image_PEAK'
+    image_filename = class + '_' + instr + A[cc].channel + '_image_PEAK'
+    save2, image_filename
 endfor
+
+imdata = [ $
+    [[ AIA_INTSCALE( cube[*,*,z_ind[-1],0], wave=A[0].channel, exptime=A[0].exptime ) ]], $
+    [[ AIA_INTSCALE( cube[*,*,z_ind[-1],1], wave=A[1].channel, exptime=A[1].exptime ) ]] $
+]
+
+title='AIA ' + A.channel + '$\AA$ ' + A.time[z_ind[-1]]
+print, title
+
+dw
+im = image3( $
+    imdata, $
+    rows=1, cols=2, top = 0.5, $ bottom = 0.5, $ left = 0.5, xgap = 0.75, $
+    title=title, $
+    buffer=buffer $
+)
+im[0].rgb_table = AIA_GCT( wave=fix(A[0].channel))
+im[1].rgb_table = AIA_GCT( wave=fix(A[1].channel))
+
+cross = SYMBOL( $
+    62, 50, $
+    'plus', /data, target=im[0], sym_color='white' $
+)
+; NOTE: kw "target" not working as expected... symbol is on im[1].
+
+
+image_filename = class + '_' + instr + '_INTENSITY_pre-flare'
+save2,  image_filename
+
+
+;=====================================================================================================
+; FFT on single pixel to determine best value for bandwidth (\Delta\nu).
+
+
+ts = reform(cube[62,50,*,*])
+sz2 = size(ts, /dimensions)
+
+frequency = fltarr( sz2[0]/2, sz2[1])
+power = fltarr( sz2[0]/2, sz2[1])
+
+for cc = 0, 1 do begin
+    result = FOURIER2( ts[*,cc], cadence )
+    frequency[*,cc] = reform(result[0,*])
+    power[*,cc] = reform(result[1,*])
+endfor
+
+fmin = (where( frequency[*,0] ge 0.003))[ 0]
+fmax = (where( frequency[*,0] le 0.010))[-1]
+
+cc = 0
+dw
+plt = PLOT_SPECTRA( $
+    frequency[ fmin:fmax, cc ], $
+    power[ fmin:fmax, cc ], $
+;    xrange=[3.0, 10.0]/1000.0, $
+    leg=leg, $
+    /stairstep, $
+    buffer=buffer $
+)
+print, plt[0].xtickvalues
+;
+fft_filename = 'c83_' + strlowcase(instr) + A[0].channel +  '_FFT_pre-flare'
+;print, fft_filename
+save2, fft_filename
 
 
 
 ;=====================================================================================================
+; compute POWERMAP from pre-flare data
+
+;map = COMPUTE_POWERMAPS( /syntax )
+z_start = (where( strmid(A[0].time,0,5) eq flare.tstart ))[0]
+map = fltarr(dimensions[0],dimensions[1],sz[3])
+
+for cc = 0, 1 do begin
+    map[*,*,cc] = COMPUTE_POWERMAPS( $
+        aiacube[*,*,0:z_start,cc], $
+        cadence, $
+        bandwidth=0.005 $
+    )
+endfor
+
+    
+;== IMAGE powermaps
+
+for cc = 0, 1 do begin
+    imdata = alog10(map[*,*,cc])
+    im = image2( $
+        imdata, $
+        rgb_table = AIA_GCT( wave=fix(A[cc].channel)), $
+        title=title[cc], $
+        buffer=buffer $
+        )
+    image_filename = class + '_' + instr + A[cc].channel + '_MAP_5mHzBandwidth_pre-flare'
+    ;print, image_filename
+    save2, image_filename
+endfor
 
 
-; Compute Powermap from pre-flare data
+; Better way, using image3 to put both channels on one window, plus crop more
+
+imdata = alog10( CROP_DATA(map, center=[100,110], dimensions=[80,80] ) )
+title=A.channel + '$\AA$  ' + '$\Delta\nu$=5mHz  ' + strmid(A.time[0],0,5) + '-' + strmid(A.time[z_ind[-1]],0,5)
+;resolve_routine, 'Graphics/image3.pro', /is_function
+dw
+im = IMAGE3( $
+    imdata, $
+    rows=1, cols=2, $
+    top = 0.5, $ bottom = 0.5, $ left = 0.5, xgap = 0.75, $
+    title=title, $
+    buffer=buffer $
+)
+;
+im[0].rgb_table = AIA_GCT( wave=fix(A[0].channel))
+im[1].rgb_table = AIA_GCT( wave=fix(A[1].channel))
+;
+image_filename = class + '_' + instr + '_MAP_pre-flare'
+save2,  image_filename
 
 
-help, cube
-cube = CROP_DATA(cube)
-help, cube
-; [] crops to 500 x 330 by default... is this okay for M7.3 flare?
 
-; Check for missing images
-;   -> see ./Maps/compute_powermaps_main.pro
-
-; syntax (refernce)
-map = COMPUTE_POWERMAPS( /syntax )
+;=============================================================================================
 
 
-map      = COMPUTE_POWERMAPS( cube[*,*,0:z_ind], cadence        )
 map_norm = COMPUTE_POWERMAPS( cube[*,*,0:z_ind], cadence, /norm )
 
 
@@ -403,7 +529,6 @@ help, allshifts
 
 
 ;
-cadence = 24
 dz = 64
 ;
 oldcube = cube
