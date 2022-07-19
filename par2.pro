@@ -358,7 +358,8 @@ function parameters
 
 end
 
-function multiflare_struc, flare_id=flare_id
+function multiflare_struc, $
+    flare_id=flare_id
 
     ;+
     ;- 13 July 2022
@@ -524,8 +525,11 @@ end
 ;= ML code to call function "multiflare_struc" defined above
 ;=
 
-multiflare = multiflare_struc()
+;flare = multiflare_struc(flare_id='c83')
+;  -->> doesn't work! structure tags are not strings...
 
+
+multiflare = multiflare_struc()
 
 flare = multiflare.c83
 ;flare = multiflare.m73

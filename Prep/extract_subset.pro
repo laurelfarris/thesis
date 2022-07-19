@@ -2,6 +2,10 @@
 ;- LAST MODIFIED:
 ;-   02 February 2021
 ;-
+;-   18 July 2022
+;-     Merged with ./Prep/save_data_cubes.pro (copied below, indented, and commented).
+;-       relatively short code consisting of a procedure definition + one line of ML code.
+;-
 ;- ROUTINE:
 ;-   extract_subset.pro
 ;-
@@ -28,6 +32,42 @@
 ;-   []
 ;-
 
+;=  Prep/save_data_cubes.pro ====================================================================
+;
+
+;    ; Last modified:   13 June 2018
+;
+;    pro SAVE_DATA_CUBES, channel
+;
+;
+;        ; 2018-06-13
+;        ; Crop data cubes and save to .sav file.
+;        ; Intentionally made saved data cubes larger than AR because
+;        ;  they haven't been aligned yet.
+;
+;
+;        READ_MY_FITS, index, data, inst='aia', channel=channel, nodata=0;, /prepped
+;
+;        x0 = 2410
+;        y0 = 1660
+;        xl = 750
+;        yl = 500
+;
+;        ; make sure center coords are correct
+;        im = image2( crop_data(data[*,*,sz[2]/2], center=[x0,y0]))
+;        stop
+;
+;        data = crop_data( data, center=[x0,y0], dimensions=[xl,yl] )
+;        save, data, filename='aia' + channel + 'data.sav'
+;
+;    end
+;
+;    SAVE_DATA_CUBES, '1600'
+;    ;SAVE_DATA_CUBES, '1700'
+;
+;    end
+;
+;
 ;=====================================================================
 
 buffer=1
@@ -37,15 +77,14 @@ buffer=1
 ;channel = '1700'
 
 instr = 'hmi'
-;channel = 'mag'
-channel = 'cont'
+channel = 'mag'
+;channel = 'cont'
 ;channel = 'dop'
-
-@par2
-flare = multiflare.(0)
-
-
-;=====================================================================
+;
+;@par2
+;flare = multiflare.(0)
+;
+flare = multiflare.c83
 
 ;-
 ;--- § Read index and data from level 1.5 fits files
@@ -68,88 +107,84 @@ print, date
 ;- 'HMIyyyymmdd_hhmmss_dop.fits'
 ;-
 
-path = '/solarstorm/laurel07/Data/' + strupcase(instr) + '_prepped/'
+@path_temp
+hmi_path = path + 'Data/' + strupcase(instr) + '_prepped/'
+print, hmi_path
+
 fnames = strupcase(instr) + date + '*' + strtrim(channel,1) + '.fits'
-
-fls = FILE_SEARCH( path + fnames )
-help, fls
-
-stop;---------------------------------------------------------------------------------------------
-
+fls = FILE_SEARCH( hmi_path + fnames )
 READ_SDO, fls, index, data, /nodata
+
+
+;== Read full data cube with READ_SDO
+;=    NOTE: this can take a long time.. may need to loop through subsets of fls
 
 start_time = systime()
 start_time_seconds = systime(/seconds)
 READ_SDO, fls, index, data
-;-
+;
 print, "=========="
 print, "Started at ", start_time
 print, "Finished at ", systime()
 print, "Took ", (systime(/seconds)-start_time_seconds)/60., "minutes to run."
 print, "=========="
-;-
+help, data
+
+; 18 July 2022 -- took <~ 14 minutes for 400 HMI 'cont' images for C8.3 flare... not too bad.
+; IDL> help, data
+;   DATA   FLOAT  = Array [4069, 4069, 400]
 
 
 
+;= Extract subset centered on AR from full disk images by cropping x and y pixels
 
-;-----
-;-----------------
-;-- Convert center from arcsec (xcen,ycen) to pixels.
-;-
-;-
-;-
-;help, [flare.xcen, flare.ycen]
-;print, [flare.xcen, flare.ycen]
-;
+; Convert center from arcsec to pixels   -> see subroutines in ./Modules/
+;   [] need to rewriote these so subroutnes can be compiled individually from ML using resolve_routine
+;        currently have to do this: IDL> .com arcsec_pixel_conversion
+center = ARCSECONDS_TO_PIXELS( [flare.xcen,flare.ycen], index )
+print, center
+; Variables 'center' and 'dimensions' generally stay the same for all instr/channels for given flare,
+; but subroutine is easier to understand when variables are defined where they're used.
+;  e.g. center and dimensions used to crop the full disk (data) and define subset (cube).
 
-;spatial_scale = index[0].cdelt1
-spatial_scale = [ index[0].cdelt1, index[0].cdelt2 ]
-print, spatial_scale
-
-;
-;half_dimensions = [ index[0].crpix1, index[0].crpix2 ]
-;-   index.crpix[1|2] --> n_pix to center? = half naxis (2048)
-;center =  half_dimensions + ([flare.xcen, flare.ycen]/spatial_scale)
-;
-
-;- index.naxis[1|2] --> length of ccd (4096)
-full_dimensions = [ index[0].naxis1, index[0].naxis2 ]
-center = FIX( (full_dimensions/2) + ([flare.xcen, flare.ycen]/spatial_scale) )
-;-
-;-    Chose to convert (xcen,ycen) from arcsec to pixels using naxis instead of crpix
-;-    only because center doesn't compute as a fraction.. may be off by one pixel, if it matters..
-;-    "full_dimensions" avoids fractional pixel coords, if it matters...
-;-
-;-
-;--
-;-----------------
-
-
-stop;---------------------------------------------------------------------------------------------
-
-
-;-
-;--- § Extract subset centered on AR from full disk images by cropping x and y pixels
-
-print, minmax(data)
-
-im = image2( data[*,*,0], buffer=buffer )
-save2, 'hmi_test'
-
-
-;- size of subset [x,y], in pixels centered on AR
+; subset dimensions in pixels, centered on AR
 dimensions = [800,800]
-
 resolve_routine, 'crop_data', /either
-cube = CROP_DATA( $
-    data, $
-    center=center, $ ;- defined in @parameters
-    dimensions=dimensions $
-)
+cube = CROP_DATA( data, center=center, dimensions=dimensions )
 help, cube
 
-;---
-;-
+; check .sav filenames
+header_savefile = class + '_' + strlowcase(instr) + strupcase(channel) + 'header.sav'
+print, header_savefile
+cube_savefile = class + '_' + strlowcase(instr) + strupcase(channel) + 'cube.sav'
+print, cube_savefile
+
+; save to file
+save, index, filename=header_savefile
+save, cube, filename=cube_savefile
+
+;====
+
+
+;= Graphics :: save FULL DISK image and SUBSET image centered on AR.
+;
+; first, center, & last image in time series of 400 images (45 second cadence = 5-hour time series)
+;    CENTER ~ same time as reference image for AIA alignment (I think..)
+z_ind = [0, 199, 399]
+
+
+foreach zz, z_ind, ii do begin
+    imdata = cube[*,*,zz]
+    hmi_figfilename = class + '_' + instr + strupcase(channel) + '_SUBSET_' + strtrim(zz,1) + '_image'
+    dw
+    im = image2( $
+        imdata, $
+        title=index[zz].content + '  ' + index[zz].date_obs, $
+        buffer=buffer $
+    )
+    ;
+    save2, hmi_figfilename
+endforeach
 
 
 end

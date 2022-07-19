@@ -77,9 +77,12 @@ function STRUC_AIA, $
 
     ;path = '/solarstorm/laurel07/' + year + month + day + '/'
 
+    @path_temp
     ;path = '/solarstorm/laurel07/flares/' + class + '_' + year + month + day + '/'
-    path = '../flares/' + class + '_' + year + month + day + '/'
-    ;- 14 August 2021 relative path while solarstorm is down (usually not ideal...)
+    ;path = '../flares/' + class + '_' + year + month + day + '/'
+    ; 14 August 2021 relative path while solarstorm is down (usually not ideal...)
+    flare_path =  path + 'flares/' + class + '/'
+    ; 18 July 2022 -- removed date from flare directory and [future] file names
 
     ;=============================================================================
     ;===
@@ -89,17 +92,17 @@ function STRUC_AIA, $
 
     if n_elements(index) eq 0 then begin
 
-        index_file = class + '_' + instr + channel + 'header.sav'
+        index_file = flare_path + class + '_' + instr + channel + 'header.sav'
 
-        if FILE_EXIST( path + index_file ) then begin
+        if FILE_EXIST( index_file ) then begin
             print, ''
-            print, 'Restore EXISTING header file: ', path+index_file
+            print, 'Restore EXISTING header file: ', flare_path+index_file
             print, ''
-            restore, path + index_file
+            restore, index_file
         endif else begin
 
             print, ''
-            print, 'Call READ_MY_FITS and save header to file: ', path+index_file
+            print, 'Call READ_MY_FITS and save header to file: ', index_file
             print, ''
 
             resolve_routine, 'read_my_fits'
@@ -114,7 +117,8 @@ function STRUC_AIA, $
             ;- 15 June 2021
             ;-   Save index to .sav file in same location as aligned cube .sav files;
             ;-   much more straightforward to retrieve headers this way.
-            save, index, filename=path + index_file
+            save, index, filename = index_file + '_NEW'
+                ; may to rename from '<fname>.sav_NEW' so "NEW" (or date" is before the .sav extension...
 
         endelse
 
@@ -124,10 +128,13 @@ function STRUC_AIA, $
     endif
 
     ;- confirm level 1.5, not 1.0
-    print, ''
-    print, 'FITS headers are for level ', $
-        strtrim(index[0].lvl_num,1), ' data.'
-    print, ''
+    if strtrim(index[0].lvl_num,1) ne '1.5' then begin
+        print, ''
+        print, 'FITS headers are for level ', $
+            strtrim(index[0].lvl_num,1), ' data.'
+        print, 'Need to modify code to read level 1.5 data (i.e. processed with aia_prep)'
+        print, ''
+    endif
 
 
     ;+
@@ -143,25 +150,25 @@ function STRUC_AIA, $
 
 
     ;if n_elements(cube) eq 0 then begin
-      ;- Originally written to skip restoring cube from .sav file if this
-      ;-  routine had already been run, to save time.
-      ;-  Unfortunately, can't skip this step because
-      ;-  the variables 'time' and 'jd' are generated in the same code
-      ;-  that crops and interpolates cube.
-      ;-  Maybe those should be two separate routines... not top priority right now.
+      ;- Only restore cube from .sav file once...
+      ;-  Unfortunately, variables 'time' and 'jd' are generated in the same code
+      ;-      ( WHAT code?? Comments need to be CLEAR and unambiguous! Even if repetitive... -- 18 July 2022)
+      ;-    that crops and interpolates cube.
+      ;-  Maybe those should be two separate routines?
+      ;-
 
-
-    data_file  = class + '_' + instr + channel + 'aligned.sav'
-    if FILE_EXIST( path + data_file ) then begin
-        restore, path + data_file
-    endif else begin
-        print, '=========================================================='
-        print, '>>> aligned data cube file:'
-        print, '   ', path+data_file
-        print, ' not found!!  <<<'
-        print, '=========================================================='
-        stop
-    endelse
+        data_file  = class + '_' + instr + channel + 'aligned.sav'
+        if FILE_EXIST( flare_path + data_file ) then begin
+            restore, flare_path + data_file
+        endif else begin
+            print, '=========================================================='
+            print, '>>> aligned data cube file:'
+            print, '   ', flare_path+data_file
+            print, ' not found!!  <<<'
+            print, '=========================================================='
+            stop
+        endelse
+;    endif
 
     help, cube ; --> INT [1000, 800, 596]  (AIA 1600, 2013 flare)
 
@@ -174,7 +181,7 @@ function STRUC_AIA, $
     jd = GET_JD( index.date_obs + 'Z' )
 
     ;- Restore shifts to be interpolated (variable name = "shifts" or "aia1600shifts")
-    ;restore, path + instr + channel + 'shifts.sav'
+    ;restore, flare_path + instr + channel + 'shifts.sav'
 
     ;+
     ;- Check for MISSING DATA, compute INDICES where dt NE cadence
@@ -294,10 +301,11 @@ function STRUC_AIA, $
 end
 
 
-;- IDL> @parameters
+;== Call function to return structure with ALL flares
+;     (no longer using @parameters OR @par2)
+multiflare = multiflare_struc()
 
-@par2
-;
+;== Choose flare
 ;flare = multiflare.c30
 ;flare = multiflare.c46
 flare = multiflare.c83
@@ -306,16 +314,49 @@ flare = multiflare.c83
 ;flare = multiflare.m73
 ;flare = multiflare.x22
 
+
 aia1600 = STRUC_AIA( aia1600index, aia1600data, cadence=24., instr='aia', channel='1600', $
     flare=flare )
 
 aia1700 = STRUC_AIA( aia1700index, aia1700data, cadence=24., instr='aia', channel='1700', $
     flare=flare )
 
-print, aia1600index[0].t_obs
-print, aia1700index[0].t_obs
-print, aia1600index[-1].t_obs
-print, aia1700index[-1].t_obs
+
+
+if size(aia1600.data, /dimensions) ne size(aia1700.data, /dimensions) then begin
+
+    print, aia1600index[0].t_obs
+    print, aia1700index[0].t_obs
+    print, aia1600index[-1].t_obs
+    print, aia1700index[-1].t_obs
+
+    print, 'need to modify one of the channel structures by hand before continuing.'
+    stop
+
+    ; 18 July 2022
+    ;   Re-do aia1600 for c83 flare to remove first z-element in arrays for cube, jd, time, and flux
+    ;    since 1700 has missing obs at BEGINNING of time series and there's no way to interpolate
+    ;    (or TEST for existence for that matter, b/c no time difference to test for 'not equal 24 seconds'...
+    aia1600 = { $
+            date: aia1600.date, $
+            channel: aia1600.channel, $
+            cadence: aia1600.cadence, $
+            exptime: aia1600.exptime, $
+            data: aia1600.data[*,*,1:-1], $
+            X: aia1600.X, $
+            Y: aia1600.Y, $
+            flux: aia1600.flux[1:-1], $
+            ;flux: flux[0:-2], $
+            time: aia1600.time[1:-1], $
+            ;time: time[0:-2], $
+            jd: aia1600.jd[1:-1], $
+            ;jd: jd[0:-2], $
+            color: '', $
+            ct: aia1600.ct, $
+            ;map: map, $
+            name: aia1600.name $
+        }
+endif
 
 A = [ aia1600, aia1700 ]
 
@@ -334,6 +375,17 @@ undefine, aia1700data
 
 
 stop ;---------------------------------------------------------
+
+; 18 July 2022
+;   Seems like a good time to save 'A' so don't have to run this every time....
+save, A, filename='c83_struc.sav'
+
+
+stop ;---------------------------------------------------------
+
+
+; Not sure what the following code is for... should probably move to "par2.pro" and its
+;   collection of functions.
 
 
 ;help, /memory

@@ -79,11 +79,12 @@
 
 
 ;- NEW (the better way):
-date = [ '2013', '08', '12' ]
-;date = [ '2013', '08', '30' ]
-;date = [ '2014', '10', '23' ]
-;date = [ '2014', '11', '07' ]
-;
+;date = [ '2013', '08', '12' ]  ; ?
+;date = [ '2013', '08', '30' ]  ; C8.3 
+date = [ '2014', '04', '18' ]  ; M7.3
+;date = [ '2014', '10', '23' ]  ; M1.?
+;date = [ '2014', '11', '07' ]  ; M1.?
+;date = [ '2011', '02', '15' ]  ; X2.2
 
 
 ;==--
@@ -93,15 +94,20 @@ date = [ '2013', '08', '12' ]
 
 instr = 'hmi'
 ;channel = 'B_LOS'
-;channel = 'mag'
+channel = 'mag'
 ;channel = 'cont'
 
 ;- Set path(s) to level 1.0 fits and where new, level 1.5 fits are to be saved.
+@path_temp
 ;path_to_fits = '/solarstorm/laurel07/Data/AIA/'
-path_to_fits = '/solarstorm/laurel07/Data/' + strupcase(instr) + '/'
-outdir='/solarstorm/laurel07/Data/' + strupcase(instr) + '_prepped/'
-print, 'LVL 1.0 (input_dir)  = ', path_to_fits
-print, 'LVL 1.5 (outdir)     = ', outdir
+path_to_fits = path + 'Data/' + strupcase(instr) + '/'
+outdir = path + 'Data/' + strupcase(instr) + '_prepped/'
+
+print, ''
+print, 'Are these paths correct?:'
+print, '  LVL 1.0 (input_dir)  = ', path_to_fits
+print, '  LVL 1.5 (outdir)     = ', outdir
+print, ''
 
 
 if strlowcase(instr) eq 'aia' then delimiter = '-'
@@ -166,7 +172,7 @@ stop;---------------------------------------------------------------------------
 ;-    (13 January 2021)
 ;-
 
-stop;------------------------------------------------------------------------------------------
+;stop;------------------------------------------------------------------------------------------
 
 
 interval = 50

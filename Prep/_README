@@ -35,6 +35,9 @@ Routines in "work"/Prep/:
     - runs script "parameters"
     - Includes sample file names of both prepped and UNprepped fits files
         from AIA and HMI.
+   18 July 2022 ==> moved two old versions from 5/8/2020 and 1/5/2021
+       ( apply_aia_prep_20200508.pro and apply_aia_prep_20210105.pro)
+       to ../old/
 
   • data_struc.pro
     - general code for creating array of structures for either AIA or HMI.

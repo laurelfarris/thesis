@@ -44,7 +44,7 @@ pro PIXELS_TO_ARCSECONDS, $
 end
 
 
-pro arcseconds_to_pixels
+pro arcseconds_to_pixels_OLD
 
     ;; Pretty sure this was a hacky way to figure out which
     ;;  pixels to show so I could save hmi image to file
@@ -74,7 +74,8 @@ pro arcseconds_to_pixels
 end
 
 
-pro arcsec_pixel_conversion, x, y, index
+pro pixels_to_arcsecs, x, y
+
     ; Give x and y in pixels relative to lower left corner at 0,0.
     ; Get back x and y in arcseconds relative to disk center.
     ; Mess with output format LATER! This is NOT high priority!
@@ -100,10 +101,50 @@ pro arcsec_pixel_conversion, x, y, index
 
 end
 
-; center of AR11158
-x0 = 2400
-y0 = 1650
 
-arcsec_pixel_conversion, x0-(500./2), y0-(330./2), index
+function ARCSECONDS_TO_PIXELS, arcsec_coords, index
+    pixel_coords = $
+        ( arcsec_coords / [ index[0].cdelt1, index[0].cdelt2 ] ) $
+        + [2048.0, 2048.0]
+
+
+
+    ;    ;-------------------------------------------------------------------------------------------
+    ;    ; From Prep/extract_subset.pro (replaced with call to this function)
+    ;    ; -- 18 July 2022
+    ;    ;
+    ;    ;
+    ;    ;half_dimensions = [ index[0].crpix1, index[0].crpix2 ]
+    ;    ;-   index.crpix[1|2] --> n_pix to center? = half naxis (2048)
+    ;    ;center =  half_dimensions + ([flare.xcen, flare.ycen]/spatial_scale)
+    ;    ;
+    ;    ;- index.naxis[1|2] --> length of ccd (4096)
+    ;    full_dimensions = [ index[0].naxis1, index[0].naxis2 ]
+    ;    center = FIX( (full_dimensions/2) + ([flare.xcen, flare.ycen]/spatial_scale) )
+    ;    print, center
+    ;    ;
+    ;    ; Chose to convert (xcen,ycen) from arcsec to pixels using naxis instead of crpix
+    ;    ;  only because center doesn't compute as a fraction.. may be off by one pixel, if it matters..
+    ;    ;  "full_dimensions" avoids fractional pixel coords, if it matters...
+    ;    ;-------------------------------------------------------------------------------------------
+    ;
+
+    return, round(pixel_coords)
+end
+
+
+; center of AR11158
+;x0 = 2400
+;y0 = 1650
+;;
+;arcsec_pixel_conversion, x0-(500./2), y0-(330./2), index
+
+
+c83_arcsec_coords = [ flare.xcen, flare.ycen ]
+c83_pixel_coords = ARCSECONDS_TO_PIXELS( c83_arcsec_coords, index )
+help, c83_pixel_coords
+
+print, c83_pixel_coords
+print, round(c83_pixel_coords)
 
 end

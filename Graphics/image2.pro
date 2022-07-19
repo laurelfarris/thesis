@@ -10,7 +10,12 @@ function image2, data, x, y,  _EXTRA=e
 
     graphics
     common defaults
-    print, fontsize
+;    print, "fontsize = ", strtrim(fontsize,1), "  (see ./Graphics/image2.pro)"
+        ; 18 July 2022
+        ;  => should always say WHERE print statements are coming from...
+        ;     couldn't for the lif eof me understand why the number '10' kept showing up
+        ;      on its own line every time I imaged HMI disk from "extract_subset.pro"
+        ;
 
     sz = size(data, /dimensions)
     ;if n_elements(sz) eq 2 then $

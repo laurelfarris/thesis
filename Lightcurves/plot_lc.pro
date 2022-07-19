@@ -28,8 +28,10 @@
 
 
 buffer=1
-@par2
-;
+
+;@par2
+; 18 July 2022 -- now calling, e.g. multiflare = multiflare_struc(), then flare=multiflare.c83 or w/e
+;    Already did this in ML of Prep/aia_struc.pro
 
 aia_lc_filename = class + '_aia_lightcurve'
 print, aia_lc_filename

@@ -1,21 +1,34 @@
+
+;===========================================================================================
+;= NOTE:
+;=   This was copied on 18 July 2022 after many edits were made.
+;=   Didn't realize that today.pro was never copied after most recent pre-flare powermaps,
+;=     but better late than never..
+;=
+;===========================================================================================
+
+
 ;+
+;- 26 April 2022
+;-
+;- 10 May 2022
+;-   Started computing pre-flare powermaps,
+;-      trying to reproduce "well-known" chromospheric 3mOs in intensity...
 ;-
 ;- 18 July 2022
-;-   (most of previous stuff from 10 May 2022 was copied into notes dir.. a little late)
+;-   ...
 ;-
 ;- TO DO:
 ;-
-;-   [] Codes in .Prep/ to merge, move to ./old/, and/or delete
-;-       • Prep/check_my_fits.pro
-;-       • Prep/prep_flare_data_cube.pro
-;-       • All the struc's in ./Prep:
-;-           • struc_data
-;-           • struc_aia
-;-           • struc_aia_20200720
-;-           • struc_hmi
-;-
+;- 18 July 2022
 ;-   [] Replace 'savefile' with different variable name.. sounds like saving variables to some file.sav,
 ;-      not saving a graphic to a pdf file!
+;-
+;-   [] copy new stuff in a2.pro back in here and delete a2.pro
+;-
+;-   [] Clean up code, write module, move to ./Align/ with GOOD DOCUMENTATION!
+;-         ==>>  comments, update README, etc.
+;-
 ;-
 ;-   [] Prep for new science by commenting and outlining potential codes,
 ;-      new analysis methods, re-structure old methods (not just the science
@@ -29,7 +42,9 @@
 ;-      calls to routines that don't even exist anymore or were absorbed into
 ;-      another file, kws/args added or taken away, pros changed to funcs or
 ;-      vice versa... always something.
-
+;-      -
+;-      -
+;-
 ;-  What TYPE of results do I want to show for next research article?
 ;-  Depends on what I'm trying to accomplish, or what science questions
 ;-  I want to answer. So sort that out, THEN decide what figures to make at first.
@@ -38,7 +53,9 @@
 ;-      be answered by the values derived, relationships revealed in plots,
 ;-      or patterns displayed over images?
 ;-    •
-
+;-    •
+;-
+;-  [] see @Lit for tons of ideas
 ;-  [] Enote with collection of figure screenshots from variety of @Lit:
 ;-     can be relevant to my research/methods or just nice graphics.
 ;-  [] Codes/ATT/, other Figure ideas written in Enote, Greenie, wherever,
@@ -52,6 +69,9 @@
 ;-
 ;- TO DO (A2):
 ;-
+;-   [] FIRST: ensure HEADERS (index) and aligned data subsets (data) are saved in .sav file
+;-        for each flare. Can be same file or separate, just needs to be CONSISTENT.
+;-      RESTORE .sav files, save headers / data in one file, easy to resotre in future.
 ;-   [] AIA & GOES  LCs during flare only, dt covered by RHESSI (for CORRECT flares)
 ;-   [] Detrended LCs showing QPPs
 ;-   [] Power maps (see "today.pro")
@@ -84,6 +104,13 @@
 ;-   C8.3 2013-08-30 T~02:04:00
 ;-   M7.3 2014-04-18 T~
 ;-   X2.2 2011-02-11 T~01:43:00
+;-
+;-
+;- Other flares:
+;-   M1.0 2014-11-07 T~10:13:00
+;-   M1.5 2013-08-12 T~10:21:00
+;-
+
 
 ;- Need to rename variable saved in these files for C8.3 flare...
 ;restore, '../flares/c83_20130830/c83_aia1700header.sav'
@@ -97,6 +124,8 @@
 ;if not file_test(path + testfiles) then print, 'files not found'
 
 
+;=====================================================================================================
+; a2.pro
 
 ; What .sav files currently exist for each flare?
 ; '../flares/c83_20140418/*.sav'
@@ -108,39 +137,72 @@
 ; '../flares/m73_20140418/*.sav'
 ; '../flares/x22_20140418/*.sav'
 
+; restore, '.../.sav'
+
+
 
 ; IDL> .run par2
-
-;=====================================================================================================
-
-;- see 'sav_files.pro' for restoring headers and aligned cubes
-
-
-; 18 July 2022
-;   Image AR at flare start and/or peak time in 1600 and 1700 channels.
-
 
 @path_temp
 buffer = 1
 instr = 'aia'
 
+;=== Use sav_files.pro to do all this! ================================================================
 
-;z_ind = (where( strmid(A[0].time, 0, 5 ) eq flare.tstart ))[0]
-z_ind = (where( strmid(A[0].time, 0, 5 ) eq flare.tpeak ))[0]
-print, z_ind
+;- Loop through channels (eventually... need way to store variables after each iteration.)
+;channel = ['1600', '1700']
+;foreach cc, channel, ii do begin
+;    restore, '../flares/' + class + '/' + class + '_' + instr + channel[ii] + 'cube.sav'
+;    restore, '../flares/' + class + '/' + class + '_' + instr + channel[ii] + 'header.sav'
+;endforeach
+
+
+channel = '1600'
+restore, '../flares/' + class + '/' + class + '_aia' + channel + 'cube.sav'
+restore, '../flares/' + class + '/' + class + '_aia' + channel + 'header.sav'
+aia1600index = index
+aia1600cube = cube
+print, index[0].wavelnth
+
+
+channel = '1700'
+restore, '../flares/' + class + '/' + class + '_aia' + channel + 'cube.sav'
+restore, '../flares/' + class + '/' + class + '_aia' + channel + 'header.sav'
+help, index
+help, cube
+print, index[0].wavelnth
+
+aia1700index = index
+aia1700cube = cube
+;
+undefine, cube
+undefine, index
+
+
+
+;=====================================================================================================
+
+; 18 July 2022
+;   Image at flare start time
+
+
+z_start = (where( strmid(A[0].time, 0, 5 ) eq flare.tstart ))[0]
+
+imdata = A.data[*,*, z_start ,*]
+imdata = AIA_INTSCALE( A.data[*,*,z_ind], wave=channel, exptime=index[z_ind].exptime )
+
+im = image2( $
+    imdata
+)
+
+
 
 dw
-for cc = 0, 1 do begin
-    imdata = AIA_INTSCALE( A[cc].data[*,*,z_ind], wave=A[cc].channel, exptime=A[cc].exptime )
-    im = image2( $
-        imdata, $
-        rgb_table = AIA_GCT( wave=fix(A[cc].channel)), $
-        title='AIA ' + A[cc].channel + '$\AA$ ' + A[cc].time[z_ind], $
-        buffer=buffer $
-        )
-    save2, class + '_' + instr + A[cc].channel + '_image_PEAK'
-endfor
-
+im = image2( $
+    imdata, $
+    rgb_table = AIA_GCT( wave=fix(channel)), $
+    buffer=buffer $
+)
 
 
 ;=====================================================================================================
@@ -148,6 +210,10 @@ endfor
 
 ; Compute Powermap from pre-flare data
 
+z_ind = (where( strmid(index.date_obs, 11, 5 ) EQ flare.tstart ))[0]
+;  [] Need faster way to retrieve z-index of flare.tstart
+print, z_ind
+; NOTE: M7.3 flare has ~2.5 hours of pre-flare data..
 
 help, cube
 cube = CROP_DATA(cube)
