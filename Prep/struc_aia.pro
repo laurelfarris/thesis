@@ -95,10 +95,12 @@ function STRUC_AIA, $
         index_file = flare_path + class + '_' + instr + channel + 'header.sav'
 
         if FILE_EXIST( index_file ) then begin
+
             print, ''
             print, 'Restore EXISTING header file: ', flare_path+index_file
             print, ''
             restore, index_file
+
         endif else begin
 
             print, ''
@@ -117,6 +119,7 @@ function STRUC_AIA, $
             ;- 15 June 2021
             ;-   Save index to .sav file in same location as aligned cube .sav files;
             ;-   much more straightforward to retrieve headers this way.
+            help, index[0]
             save, index, filename = index_file + '_NEW'
                 ; may to rename from '<fname>.sav_NEW' so "NEW" (or date" is before the .sav extension...
 
@@ -128,13 +131,17 @@ function STRUC_AIA, $
     endif
 
     ;- confirm level 1.5, not 1.0
-    if strtrim(index[0].lvl_num,1) ne '1.5' then begin
-        print, ''
-        print, 'FITS headers are for level ', $
-            strtrim(index[0].lvl_num,1), ' data.'
-        print, 'Need to modify code to read level 1.5 data (i.e. processed with aia_prep)'
-        print, ''
-    endif
+
+
+; This is not working:
+;    if strmid( strtrim(index[0].lvl_num,1), 0,3) ne '1.5' then begin
+;        print, 'FITS headers are for level ', $
+;            strtrim(index[0].lvl_num,1), ' data.'
+;        print, 'Need to modify code to read level 1.5 data (i.e. processed with aia_prep)'
+;    endif
+    print, index[0].lvl_num
+    print, 'type ".c" if level is 1.5'
+    stop
 
 
     ;+
@@ -171,7 +178,6 @@ function STRUC_AIA, $
 ;    endif
 
     help, cube ; --> INT [1000, 800, 596]  (AIA 1600, 2013 flare)
-
 
     ;===
     ;=============================================================================
@@ -296,42 +302,47 @@ function STRUC_AIA, $
         name: name $
     }
 
-
     return, struc
 end
 
 
 ;== Call function to return structure with ALL flares
 ;     (no longer using @parameters OR @par2)
-multiflare = multiflare_struc()
+;multiflare = multiflare_struc()
 
 ;== Choose flare
 ;flare = multiflare.c30
 ;flare = multiflare.c46
-flare = multiflare.c83
+;flare = multiflare.c83
 ;flare = multiflare.m10
 ;flare = multiflare.m15
 ;flare = multiflare.m73
 ;flare = multiflare.x22
 
+;class = 'c83'
+;class = 'm73'
+class = 'x22'
 
-aia1600 = STRUC_AIA( aia1600index, aia1600data, cadence=24., instr='aia', channel='1600', $
-    flare=flare )
+flare = multiflare_struc(flare_id=class)
 
-aia1700 = STRUC_AIA( aia1700index, aia1700data, cadence=24., instr='aia', channel='1700', $
-    flare=flare )
+aia1600 = STRUC_AIA( aia1600index, aia1600data, cadence=24., instr='aia', channel='1600', flare=flare )
+aia1600.color='blue'
 
+aia1700 = STRUC_AIA( aia1700index, aia1700data, cadence=24., instr='aia', channel='1700', flare=flare )
+aia1700.color='red'
 
+mismatched_dimensions = where( size(aia1600.data, /dimensions) ne size(aia1700.data, /dimensions) )
+print, mismatched_dimensions
 
-if size(aia1600.data, /dimensions) ne size(aia1700.data, /dimensions) then begin
+if mismatched_dimensions ne -1 then begin
+
+    print, 'need to modify one of the channel structures by hand before continuing.'
+    stop
 
     print, aia1600index[0].t_obs
     print, aia1700index[0].t_obs
     print, aia1600index[-1].t_obs
     print, aia1700index[-1].t_obs
-
-    print, 'need to modify one of the channel structures by hand before continuing.'
-    stop
 
     ; 18 July 2022
     ;   Re-do aia1600 for c83 flare to remove first z-element in arrays for cube, jd, time, and flux
@@ -360,17 +371,13 @@ endif
 
 A = [ aia1600, aia1700 ]
 
-;
-A[0].color = 'blue'
-A[1].color = 'red'
-
 stop
 
 undefine, aia1600
-;undefine, aia1600index
+undefine, aia1600index
 undefine, aia1600data
 undefine, aia1700
-;undefine, aia1700index
+undefine, aia1700index
 undefine, aia1700data
 
 
@@ -378,33 +385,12 @@ stop ;---------------------------------------------------------
 
 ; 18 July 2022
 ;   Seems like a good time to save 'A' so don't have to run this every time....
-save, A, filename='c83_struc.sav'
-
-
-stop ;---------------------------------------------------------
-
-
-; Not sure what the following code is for... should probably move to "par2.pro" and its
-;   collection of functions.
+save, A, filename = class + '_struc.sav'
 
 
 ;help, /memory
     ;-  No idea how to interpret the output from this...
 
 print, A.date
-
-stop
-
-;s1 = A
-;s2 = A
-s3 = A
-
-stop
-
-multiflare_struc = { s1:s1, s2:s2, s3:s3 }
-
-help, multiflare_struc
-
-save, multiflare_struc, filename='multiflare_struc.sav'
 
 end

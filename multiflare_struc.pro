@@ -181,8 +181,30 @@ function multiflare_struc, $
     print, ''
 
 
-    if keyword_set(flare_id) then return, multiflare.flare_id else return, multiflare
-    ; Could also pass flare id using index notation, e.g. multiflare.(1) instead of multiflare.c83
+    ;flare = multiflare_struc(flare_id='c83')
+    ; =>> doesn't work! structure tags are not strings...
+    ;      Could pass flare id using index notation, e.g. multiflare.(1) instead of multiflare.c83..
+
+    if keyword_set(flare_id) then begin
+        ;return, multiflare.flare_id else 
+
+
+        if (flare_id eq 'c83') then begin
+            return, multiflare.c83
+        endif
+
+        if (flare_id eq 'm73') then begin
+            return, multiflare.m73
+        endif
+
+        if (flare_id eq 'x22') then begin
+            return, multiflare.x22
+        endif
+
+    endif else begin
+        return, multiflare
+    endelse
+
 
 end
 
@@ -191,13 +213,12 @@ end
 ;= ML code to call function "multiflare_struc" defined above
 ;=
 
-;flare = multiflare_struc(flare_id='c83')
-;  -->> doesn't work! structure tags are not strings...
 
+multiflare = multiflare_struc(flare_id='c83')
+;multiflare = multiflare_struc(flare_id='m73')
+;multiflare = multiflare_struc(flare_id='x22')
 
-multiflare = multiflare_struc()
-
-flare = multiflare.c83
+;flare = multiflare.c83
 ;flare = multiflare.m73
 ;flare = multiflare.x22
 

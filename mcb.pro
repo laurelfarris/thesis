@@ -1,21 +1,17 @@
 ;Copied from clipboard
 
 
-cc = 0
-dw
-plt = PLOT_SPECTRA( $
-    frequency[ fmin:fmax, cc ], $
-    power[ fmin:fmax, cc ], $
-;    xrange=[3.0, 10.0]/1000.0, $
-    leg=leg, $
-    /stairstep, $
-    buffer=buffer $
-)
-print, plt[0].xtickvalues
+for cc = 0, 1 do begin
+    map[*,*,cc] = COMPUTE_POWERMAPS( $
+        A[cc].data[*,*,z_imp], cadence, bandwidth=0.001)
+    map_mask[*,*,cc] = PRODUCT( data_mask[*,*,z_imp,cc], 3 )
+endfor
 ;
-fft_filename = 'c83_' + strlowcase(instr) + A[0].channel +  '_FFT_pre-flare'
-;print, fft_filename
-save2, fft_filename
+for cc = 0, 1 do begin
+    map[*,*,cc+2] = COMPUTE_POWERMAPS( $
+        A[cc].data[*,*,z_decay], cadence, bandwidth=0.001 )
+    map_mask[*,*,cc+2] = PRODUCT( data_mask[*,*,z_decay,cc], 3 )
+endfor
 
 end
 

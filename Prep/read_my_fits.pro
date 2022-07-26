@@ -69,6 +69,7 @@ pro READ_MY_FITS, index, data, fls, $
         return
     endif
 
+    @path_temp
 
     ;@parameters
 
@@ -121,8 +122,7 @@ pro READ_MY_FITS, index, data, fls, $
     strupcase(instr) eq 'AIA': begin
         if keyword_set(prepped) then begin
             print, 'NOTE: Reading PREPPED data from AIA.'
-            ;path = '/solarstorm/laurel07/Data/AIA_prepped/'
-            path = '/solarstorm/laurel07/Data/' + strupcase(instr) + '_prepped/'
+            fits_path = path + '/Data/' + strupcase(instr) + '_prepped/'
 
             ;- Prepped fits files pad channel with leading zeros.
             if strlen(channel) eq 3 then channel = '0' + channel
@@ -138,8 +138,7 @@ pro READ_MY_FITS, index, data, fls, $
 
         endif else begin
             print, 'NOTE: Reading UNPREPPED data from AIA.'
-            ;path = '/solarstorm/laurel07/Data/AIA/'
-            path = '/solarstorm/laurel07/Data/' + strupcase(instr) + '/'
+            fits_path = path + '/Data/' + strupcase(instr) + '/'
             ;files = '*aia*' + channel + '*2011-02-15*.fits'
             files = $
                 strlowcase(instr) + '.lev1.' + channel + 'A_' + $
@@ -158,14 +157,14 @@ pro READ_MY_FITS, index, data, fls, $
             print, 'NOTE: Reading PREPPED data from HMI.'
             ;path = '/solarstorm/laurel07/Data/HMI_prepped/'
             ;path = '/solarstorm/laurel07/Data/' + strupcase(instr) + '_prepped/'
-            path = '/home/astrobackup3/preupgradebackups/solarstorm/laurel07/Data/'+ strupcase(instr) + '_prepped/'
+            ;path = '/home/astrobackup3/preupgradebackups/solarstorm/laurel07/Data/'+ strupcase(instr) + '_prepped/'
+            fits_path = path + '/Data/'+ strupcase(instr) + '_prepped/'
 
             files = strupcase(instr) + year + month + day + '_*_' + channel + '.fits'
 
         endif else begin
             print, 'NOTE: Reading UNPREPPED data from HMI.'
-            ;path = '/solarstorm/laurel07/Data/HMI/'
-            path = '/solarstorm/laurel07/Data/' + strupcase(instr) + '/'
+            fits_path = path + 'Data/' + strupcase(instr) + '/'
 
             ;- HMI fits filenames (various channels) -- only changes are:
             ;-   • 'hmi.ic' --> 'hmi.m'
@@ -190,7 +189,7 @@ pro READ_MY_FITS, index, data, fls, $
 
     end ;- end of "case" statements
 
-    if not file_test( path + files ) then begin
+    if not file_test( fits_path + files ) then begin
         print, '==========================================='
         print, 'FILES NOT FOUND! (check path ...)'
         stop
@@ -198,7 +197,7 @@ pro READ_MY_FITS, index, data, fls, $
 
     ;- Confirm files with user.
 
-    fls = file_search( path + files )
+    fls = file_search( fits_path + files )
 
     if N_elements(ind) ne 0 then fls = fls[ind]
     print, '------------------------------------'
