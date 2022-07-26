@@ -122,6 +122,11 @@
 
 @path_temp
 buffer = 1
+
+; 25 July 2022
+;   Add variables 'instr' and 'cadence' to structure 'A' ??
+;   instr only used in directory and file names.. makes sense to add to same structure
+;   whose values are used to create graphics, and subsequently save those graphics to file??
 instr = 'aia'
 cadence = 24
 
