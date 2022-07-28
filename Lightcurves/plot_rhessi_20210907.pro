@@ -1,14 +1,12 @@
 ;+
 ;- LAST MODIFIED:
-;-   28 July 2022
-;-     Copied to plot_rhessi_20210907 (date in ls output) so that today
-;-     I can make changes with abandon.
+;-   30 August 2021
 ;-
 ;-   20 August 2021
 ;-      First LC's with RHESSI data, GOES overplotted, vertical lines
 ;-
 ;- PURPOSE:
-;-   Plot RHESSI light curves, oplot GOES
+;-   Plot RHESSI light curves, oplot GOES maybe
 ;-
 ;- INPUT:
 ;-
@@ -25,30 +23,21 @@
 ;-        or waste time defining paths, fits file names, etc. just so I can reference
 ;-        index.date_obs or w/e... MAKE THINGS AS EASY AS POSSIBLE!
 ;-   [] Replace hardcoded crap with something better
+;-   []
+;-   []
+;-   []
+;-
 
 
-;@par2
+@par2
 
 ;- 30 August 2021
 ;- Usual definitions (buffer, class, date, flare, ... ) now in par2.pro
 
-@path_temp
-
-
-class = 'c83'
-;class = 'm73'
-;class = 'x22'
-
-flare = MULTIFLARE_STRUC(flare_id=class)
-
-
 ;= RHESSI
 
 ;- text file with rhessi data
-;infile = './Lightcurves/' + class + '_rhessi_lightcurve_corr.txt'
-infile = path + 'thesis/Lightcurves/' + class + '_rhessi_lightcurve_corr.txt'
-
-
+infile = './Lightcurves/' + class + '_rhessi_lightcurve_corr.txt'
 
 READCOL, infile, time, v1, v2, v3, v4, atten, eclipse, $
     format='A,F,F,F,F,I,I', delimiter=','
@@ -147,11 +136,16 @@ rhessi_xdata = rebin(rhessi_xdata, sz[0], sz[1])
 ;print, goesjd[0], format=format
 ;print, rhessi_xdata[0,0], format=format
 ;print, rhessi_xdata[0,1], format=format
+;
+;
 
 xtickformat = '(C(CHI2.2, ":", CMI2.2))'
 ;
 xtitle = 'Start Time (' + goesdata.utbase + ')'
 ytitle = 'Count rate (s$^{-1}$ detector$^{-1}$)'
+;
+
+
 
 dw
 resolve_routine, 'batch_plot_2', /either
@@ -285,6 +279,7 @@ save2, rhessi_filename
 
 ;== AIA lightcurves below RHESSI/GOES (share x-axis)
 
+
 ;aia_ydata = [ $
 ;    [ A[0].flux / A[0].exptime ], $
 ;    [ A[1].flux / A[1].exptime ] $
@@ -295,5 +290,12 @@ save2, rhessi_filename
 ;  Not same size; 150 and 151... may not play nice. Fix later.
 
 ;aia_xdata = [ [A[0].jd[aia1600ind]], [A[0].jd[aia1600ind]]  ]
+
+
+
+
+;== 
+
+
 
 end
