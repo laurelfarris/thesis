@@ -4,17 +4,8 @@
 ;-     Copied to plot_rhessi_20210907 (date in ls output) so that today
 ;-     I can make changes with abandon.
 ;-
-;-   20 August 2021
-;-      First LC's with RHESSI data, GOES overplotted, vertical lines
-;-
 ;- PURPOSE:
 ;-   Plot RHESSI light curves, oplot GOES
-;-
-;- INPUT:
-;-
-;- KEYWORDS:
-;-
-;- OUTPUT:
 ;-
 ;- TO DO:
 ;-   [] Change RHESSI lightcurves to log scale, add remaining E-ranges, ...
@@ -27,13 +18,10 @@
 ;-   [] Replace hardcoded crap with something better
 
 
-;@par2
-
-;- 30 August 2021
-;- Usual definitions (buffer, class, date, flare, ... ) now in par2.pro
 
 @path_temp
-
+buffer = 1
+instr='aia'
 
 class = 'c83'
 ;class = 'm73'
@@ -41,6 +29,7 @@ class = 'c83'
 
 flare = MULTIFLARE_STRUC(flare_id=class)
 
+stop
 
 ;= RHESSI
 
@@ -52,14 +41,12 @@ infile = path + 'thesis/Lightcurves/' + class + '_rhessi_lightcurve_corr.txt'
 
 READCOL, infile, time, v1, v2, v3, v4, atten, eclipse, $
     format='A,F,F,F,F,I,I', delimiter=','
-
+;
 help, time
-
+;
 rhessi_filename = class + '_rhessi_lightcurve'
-; NOTE: class is defined in @par2
+print, rhessi_filename
 
-
-stop
 
 ;================================================
 ;= GOES
@@ -75,10 +62,10 @@ goesobj->help
 ;
 goesdata = goesobj->getdata(/struct)
 ;help, goesdata
-
+;
 print, 'Start time = ', time[ 0]
 print, '  End time = ', time[-1]
-
+;
 print, goesdata.utbase
 
 ;=
@@ -138,8 +125,8 @@ sz = size(rhessi_ydata,/dimensions)
 rhessi_xdata = GET_JD( time + 'Z' )
 rhessi_xdata = rebin(rhessi_xdata, sz[0], sz[1])
 
-;
-; added line to batch_plot_2 to rebin rhessi_xdata so it matches ydata (02 Sep 2021)
+
+; modified batch_plot_2 to rebin rhessi_xdata to match ydata (02 Sep 2021)
 ;  May not have worked, or changed after this... [] double check and update comments.
 ;   (03 Sep 2021)
 ;
@@ -199,8 +186,9 @@ x_vertices = [ $
 ;fill_color=['yellow', 'green', 'indigo']
 ;fill_color=['pale goldenrod', 'pale green', 'light sky blue']
 ;fill_color=['white smoke', 'light yellow', 'light blue']
-;fill_color=['eeeeee'X, 'e4e4e4'X, 'dadada'X]
+fill_color=['eeeeee'X, 'e4e4e4'X, 'dadada'X]
 ;fill_color=['ffffdf'X, 'dfffdf'X, 'afffff'X]
+;
 color=['ffaf5f'X, '87d7af'X, '5f5fd7'X]
 name = ['impulsive', 'peak', 'decay']
 ;
@@ -216,11 +204,12 @@ for ii = 0, n_elements(shaded)-1 do begin
         target=plt, $
         /data, $
         thick=0.5, $
-        linestyle=[1,'5555'X], $
-        color=color[ii], $
+        ;linestyle=[1,'5555'X], $
+        ;color=color[ii], $
+        color=fill_color[ii], $
         /fill_background, $
-        ;fill_color=fill_color[ii], $
-        fill_color='eeeeee'X, $
+        fill_color=fill_color[ii], $
+        ;fill_color='eeeeee'X, $
         ;fill_transparency=50, $
         name = name[ii] $
     )
@@ -235,10 +224,8 @@ endfor
 ;    shaded[ii].Order, /send_to_back
 ;endfor
 ;
-;
 ;win = GetWindows(/current)
 ;win.save, '~/Figures/' + rhessi_filename + ".png"
-;
 ;
 ;== OPLOT GOES lightcurve
 ;
@@ -276,9 +263,12 @@ plt = [plt, pltg]
 ;plt = [plt, pltg, vert]
 ;
 ;leg.delete
-leg = legend2( target=plt, /upperright )
-;leg = legend2( target=plt, /upperleft )
-;leg = legend2( target=plt, /lowerright )
+;
+if class eq 'c83' then leg = legend2( target=plt, /lowerright )
+if class eq 'm73' then leg = legend2( target=plt, /upperright )
+if class eq 'x22' then leg = legend2( target=plt, /upperleft )
+;
+;leg = legend2( target=plt, legend_pos=legend_pos )
 ;
 save2, rhessi_filename
 

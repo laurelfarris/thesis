@@ -29,9 +29,7 @@
 
 buffer=1
 
-;@par2
-; 18 July 2022 -- now calling, e.g. multiflare = multiflare_struc(), then flare=multiflare.c83 or w/e
-;    Already did this in ML of Prep/aia_struc.pro
+instr = 'aia'
 
 class = 'c83'
 ;class = 'm73'
@@ -40,24 +38,8 @@ class = 'c83'
 flare=multiflare_struc(flare_id=class)
 help, flare
 
-
-stop
-
-
-aia_lc_filename = class + '_aia_lightcurve'
+aia_lc_filename = class + '_' + strlowcase(instr) + '_lightcurve'
 print, aia_lc_filename
-
-;flare = multiflare.m73
-; Set flare at end of par2.pro, after multiflare structure def.
-;  ( 07 September 2021 )
-
-;instr = 'aia'
-;channel = '1600'
-;channel = '1700'
-;cc = 0
-;cc = 1
-;channel = A[cc].channel
-
 
 ;+
 ;--- create string variables to use in filenames (I guess)
@@ -65,10 +47,10 @@ print, aia_lc_filename
 ;- flare.class = M1.5 --> class = m15
 ;date = flare.year + flare.month + flare.day
 ;- flare.date = 12-Aug-2013 --> date = 20130812
-;==>> class and date both defined in par2.pro
-;       (07 Sep 2021)
-;------
+;==>> class and date both defined in par2.pro  (07 Sep 2021)
 
+restore, path + 'flares/' + class + '/' + class + '_' + 'struc.sav'
+help, A
 
 stop
 
@@ -77,6 +59,9 @@ stop
 ;= plot light curves for integrated AIA emission (the original)
 ;=
 
+
+; NOTE: code below refers to variable "rhessi_xdata",
+;   a 2D array defined in "plot_rhessi.pro"
 
 ; 07 September 2021 - use jd instead of integers
 loc1 = (where( A[0].jd ge rhessi_xdata[0,0] ))[0]
@@ -104,10 +89,6 @@ n_obs = (size(aia_ydata, /dimensions))[0]
 ;
 aia_xdata = FIX( [ [aia1600ind], [aia1600ind] ] )
 ;
-;
-;help, xdata
-;help, ydata
-;
 ;xdata = A.jd
 ;
 ;;xtickinterval = A[0].jd[75] - A[0].jd[0]
@@ -123,10 +104,6 @@ stairstep=1
 ;xminor = 5
 ytitle=A.name + ' (DN s$^{-1}$)'
 ;
-;stop
-;
-
-
 
 dw
 resolve_routine, 'batch_plot_2', /either
@@ -142,8 +119,8 @@ plt = BATCH_PLOT_2(  $
     color=A.color, $
     name=A.name, $
     buffer=buffer )
-;
-;-
+
+
 ;-  30 August 2019
 ;yoffset = 0.10
 ;plt[1].position = plt[1].position + [0, yoffset, 0, yoffset]
@@ -178,7 +155,6 @@ dy1600 = plt[0].yrange[1] - plt[0].yrange[0]
 dy1700 = plt[1].yrange[1] - plt[1].yrange[0]
 ;-
 ;-
-;-
 ;plt[0].yrange = [ plt[0].yrange[0]-0.2e7, plt[0].yrange[1]        ]
 ;plt[1].yrange = [ plt[1].yrange[0],       plt[1].yrange[1]+0.05e8 ]
 ;-
@@ -188,13 +164,9 @@ dy1700 = plt[1].yrange[1] - plt[1].yrange[0]
 ;
 plt[0].yrange = plt[0].yrange + [-(dy1600*0.05), 0.0]
 plt[1].yrange = plt[1].yrange + [0.0, dy1700*0.05]
-;
-;
-;-
-;-
-;-----------------------------------------------------
+
+
 ;- Add top and right axes for plt2 (excluded when axis_style=1)
-;-
 resolve_routine, 'axis2', /is_function
 ax2 = axis2( 'X', $
     location='top', $
@@ -213,8 +185,7 @@ ax3 = axis2( 'Y', $
     ;title = plt[1].name + ' 3-minute power', $
     showtext=1 $
 )
-;-----------------------------------------------------
-;-
+;
 ;increment = (max(ydata1)-min(ydata1))/ymajor
 ;-
 ;ax = plt[0].axes
@@ -242,6 +213,11 @@ ax[0].tickname = time[ax[0].tickvalues]
     ;-  date is defined in @parameters
 ;ax[0].title = 'Start time (' + flare.date + ' ' + A[0].time[0] + ')'
     ;- ==>> need better way to do this!
+
+
+;restore, path + 'flares/' + class + '/' + class + '_aia1600header.sav' ; hardcoded...
+;aia1600index = index
+
 ax[0].title = 'Start time (' + ANYTIM( aia1600index[0].t_obs, /stime ) + ')'
 ;
 ;-
@@ -251,20 +227,11 @@ ax[0].title = 'Start time (' + ANYTIM( aia1600index[0].t_obs, /stime ) + ')'
 ;resolve_routine, 'shift_ydata', /either
 ;SHIFT_YDATA, plt
 ;-
-;resolve_routine, 'oplot_flare_lines', /is_function
-;vert = OPLOT_FLARE_LINES( $
-;    plt, t_obs=A[0].time, send_to_back=1 )
-;-
-;
-;
-;fill_color=['yellow', 'green', 'indigo']
-;fill_color=['pale goldenrod', 'pale green', 'light sky blue']
-;fill_color=['white smoke', 'light yellow', 'light blue']
-;fill_color=['eeeeee'X, 'e4e4e4'X, 'dadada'X]
-;fill_color=['ffffdf'X, 'dfffdf'X, 'afffff'X]
-color=['ffaf5f'X, '87d7af'X, '5f5fd7'X]
-name = ['impulsive', 'peak', 'decay']
-;
+
+resolve_routine, 'oplot_flare_lines', /is_function
+vert = OPLOT_FLARE_LINES( $
+    plt, flare=flare, t_obs=A[0].time, send_to_back=1 )
+
 x_vertices=[ $
     [ $
         (where( strmid(A[0].time,0,5) eq strmid(impulsive[0],0,5)))[0], $
@@ -282,41 +249,19 @@ print, x_vertices
 ;
 y2 = max( [plt[0].yrange, plt[1].yrange])
 y1 = min( [plt[0].yrange, plt[1].yrange])
-;
-shaded = objarr(3)
-for ii = 0, n_elements(shaded)-1 do begin
-    x1 = x_vertices[0,ii]
-    x2 = x_vertices[1,ii]
-    shaded[ii] = POLYGON( $
-        [x1,x2,x2,x1], $
-        [y1,y1,y2,y2], $
-        target=plt, $
-        /data, $
-        thick=0.5, $
-        linestyle=[1,'5555'X], $
-        color=color[ii], $
-        /fill_background, $
-        ;fill_color=fill_color[ii], $
-        fill_color='eeeeee'X, $
-        ;fill_transparency=50, $
-        name = name[ii] $
-    )
-    shaded[ii].Order, /SEND_TO_BACK
-endfor
-;
+
+shaded = OPLOT_SHADED( x_vertices, plt )
+
+
 resolve_routine, 'legend2', /either
-leg = LEGEND2( $
-    target=plt, $
-    ;/upperleft, $
-    /upperright, $
-    sample_width=0.25 )
+leg = LEGEND2( target=plt, sample_width=0.25, $
+    ;/upperleft )
+    /upperright )
 ;
-;-
 ;- NO point in defining these twice (ax[1] and ax[3]) -- 17 January 2020
 ;ymajor = -1
 ;yminor = -1
-;-
-;-
+;
 ;- --> Y-major/minor aren't necessarily the same for both y-axes!
 ;-       1600A y-range is different from 1700A.
 ;- ...except the following values should work for both.. appear to be
@@ -324,9 +269,6 @@ leg = LEGEND2( $
 ;-     (14 March 2020)
 ymajor = 4
 yminor = 3
-;-
-;-
-;-
 ;
 ax[1].title = ytitle[0]
 ;ax[1].tickvalues = [2:8:2]*10.^7 ; -- hardcoded, 2011 flare
@@ -335,7 +277,6 @@ ax[1].title = ytitle[0]
 ;ax[1].major = ymajor
 ax[1].minor = yminor
 ;
-;-
 ;ax = plt[1].axes
 ax[3].title = ytitle[1]
 ;----ax[3].tickvalues = [2.2:2.8:0.2]*10.^8 ; -- hardcoded, 2011 flare
@@ -353,9 +294,8 @@ ax[1].text_color = A[0].color
 ax[3].text_color = A[1].color
 ;-
 save2, aia_lc_filename
-;
-stop
 
+stop
 
 print, class
 format = '(e0.2)'
@@ -364,7 +304,6 @@ for cc = 0, 1 do begin
 ;    print, max(A[cc].flux), format=format
     print, max(A[cc].flux)/min(A[cc].flux), format=format
 endfor
-
 
 ;==============================================================================================
 

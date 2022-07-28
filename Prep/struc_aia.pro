@@ -141,8 +141,6 @@ function STRUC_AIA, $
 ;    endif
     print, index[0].lvl_num
     print, 'type ".c" if level is 1.5'
-    stop
-
 
     ;+
     ;- Restore (aligned) DATA CUBE
@@ -172,6 +170,7 @@ function STRUC_AIA, $
             print, '>>> aligned data cube file:'
             print, '   ', flare_path+data_file
             print, ' not found!!  <<<'
+            print, 'Type RETALL to return to main level.'
             print, '=========================================================='
             stop
         endelse
@@ -321,20 +320,25 @@ end
 
 ;class = 'c83'
 ;class = 'm73'
-class = 'x22'
+;class = 'x22'
 
-flare = multiflare_struc(flare_id=class)
+;flare = multiflare_struc(flare_id=class)
 
 aia1600 = STRUC_AIA( aia1600index, aia1600data, cadence=24., instr='aia', channel='1600', flare=flare )
 aia1600.color='blue'
-
+;
 aia1700 = STRUC_AIA( aia1700index, aia1700data, cadence=24., instr='aia', channel='1700', flare=flare )
 aia1700.color='red'
-
+;
 mismatched_dimensions = where( size(aia1600.data, /dimensions) ne size(aia1700.data, /dimensions) )
 print, mismatched_dimensions
 
-if mismatched_dimensions ne -1 then begin
+if mismatched_dimensions eq -1 then begin
+
+    A = [ aia1600, aia1700 ]
+
+
+endif else begin
 
     print, 'need to modify one of the channel structures by hand before continuing.'
     stop
@@ -367,9 +371,7 @@ if mismatched_dimensions ne -1 then begin
             ;map: map, $
             name: aia1600.name $
         }
-endif
-
-A = [ aia1600, aia1700 ]
+endelse
 
 stop
 

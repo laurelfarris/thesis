@@ -45,6 +45,7 @@
 
 function OPLOT_FLARE_LINES, $
     plt, $
+    flare=flare, $
     t_obs=t_obs, $
     ;jd=jd, $  Not used anywhere in code... only appears in one comment, but
                       ; as an actual comment, not a line of code that's been shelved.
@@ -69,7 +70,7 @@ function OPLOT_FLARE_LINES, $
     ;-   e.g.: if STRLEN(gstart) ne 8 then gstart = gstart + ':00'
 
 
-    @parameters
+    ;@parameters
     ;-   21 April 2019
     ;-     call script "parameters" to set flare-specific variables
     ;-   16 August 2019
