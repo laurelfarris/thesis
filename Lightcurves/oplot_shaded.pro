@@ -28,8 +28,10 @@ function OPLOT_SHADED, $
     color=['ffaf5f'X, '87d7af'X, '5f5fd7'X]
     name = ['impulsive', 'peak', 'decay']
 
+
     y2 = max( [plt[0].yrange, plt[1].yrange])
     y1 = min( [plt[0].yrange, plt[1].yrange])
+    ; ==>> what if plt has more than two plots?? How to find min/max over all of them?
 
         shaded = objarr(3)
         for ii = 0, n_elements(shaded)-1 do begin

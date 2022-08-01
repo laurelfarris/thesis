@@ -19,24 +19,13 @@
 
 
 
-@path_temp
-buffer = 1
-instr='aia'
-
-class = 'c83'
-;class = 'm73'
-;class = 'x22'
-
-flare = MULTIFLARE_STRUC(flare_id=class)
-
-stop
+@main
 
 ;= RHESSI
 
 ;- text file with rhessi data
 ;infile = './Lightcurves/' + class + '_rhessi_lightcurve_corr.txt'
 infile = path + 'thesis/Lightcurves/' + class + '_rhessi_lightcurve_corr.txt'
-
 
 
 READCOL, infile, time, v1, v2, v3, v4, atten, eclipse, $
@@ -46,6 +35,27 @@ help, time
 ;
 rhessi_filename = class + '_rhessi_lightcurve'
 print, rhessi_filename
+
+
+;- HARDCODING: matched correct format, filled in START TIME for goes
+if class eq 'c83' then begin
+    jdbase_hardcopied = GET_JD('2013-08-30T02:03:26.089Z')
+    impulsive = ['02:06:14','02:15:55']
+    peak = ['02:15:57','02:19:55']
+    decay = ['02:24:53','02:28:47']
+endif
+if class eq 'm73' then begin
+    jdbase_hardcopied = GET_JD('2014-04-18T12:50:02.815Z')
+    impulsive = ['12:50:32','12:54:48'] + '.000'
+    peak = ['12:54:48','12:59:04'] + '.000'
+    decay = ['13:03:20','13:07:36'] + '.000'
+endif
+if class eq 'x22' then begin
+    jdbase_hardcopied = GET_JD('2011-02-15T01:26:37.429Z')
+    impulsive = ['01:48:08','01:52:28']
+    peak = ['01:52:28','01:57:12']
+    decay = ['02:06:44','02:13:23']
+endif
 
 
 ;================================================
@@ -72,27 +82,6 @@ print, goesdata.utbase
 ;================================================
 
 
-stop
-
-;- HARDCODING: matched correct format, filled in START TIME for goes
-if class eq 'c83' then begin
-    jdbase_hardcopied = GET_JD('2013-08-30T02:03:26.089Z')
-    impulsive = ['02:06:14','02:15:55']
-    peak = ['02:15:57','02:19:55']
-    decay = ['02:24:53','02:28:47']
-endif
-if class eq 'm73' then begin
-    jdbase_hardcopied = GET_JD('2014-04-18T12:50:02.815Z')
-    impulsive = ['12:50:32','12:54:48'] + '.000'
-    peak = ['12:54:48','12:59:04'] + '.000'
-    decay = ['13:03:20','13:07:36'] + '.000'
-endif
-if class eq 'x22' then begin
-    jdbase_hardcopied = GET_JD('2011-02-15T01:26:37.429Z')
-    impulsive = ['01:48:08','01:52:28']
-    peak = ['01:52:28','01:57:12']
-    decay = ['02:06:44','02:13:23']
-endif
 ;
 goesjd = goesdata.tarray/(60.*60.*24.) + jdbase_hardcopied[0]
 ;help, goesjd
@@ -125,6 +114,7 @@ sz = size(rhessi_ydata,/dimensions)
 rhessi_xdata = GET_JD( time + 'Z' )
 rhessi_xdata = rebin(rhessi_xdata, sz[0], sz[1])
 
+stop
 
 ; modified batch_plot_2 to rebin rhessi_xdata to match ydata (02 Sep 2021)
 ;  May not have worked, or changed after this... [] double check and update comments.
@@ -169,10 +159,11 @@ plt = BATCH_PLOT_2(  $
 ;testvar='THATCHED ROOF COTTAGEEESSSS!!!!'
 ;for testtest = 0, n_elements(testvar)-1 do print, testvar[0]
 ;
+
+
+
 yrange = plt[0].yrange
-;
-;
-format = '(F0.15)'
+
 resolve_routine, 'get_jd', /is_function
 x_vertices = [ $
     [GET_JD(flare.year+'-'+flare.month+'-'+flare.day+'T'+impulsive+'Z')], $
@@ -181,40 +172,12 @@ x_vertices = [ $
 ]
 ;help, x_vertices
 ;print, x_vertices
-;
-;
-;fill_color=['yellow', 'green', 'indigo']
-;fill_color=['pale goldenrod', 'pale green', 'light sky blue']
-;fill_color=['white smoke', 'light yellow', 'light blue']
-fill_color=['eeeeee'X, 'e4e4e4'X, 'dadada'X]
-;fill_color=['ffffdf'X, 'dfffdf'X, 'afffff'X]
-;
-color=['ffaf5f'X, '87d7af'X, '5f5fd7'X]
-name = ['impulsive', 'peak', 'decay']
-;
-shaded = objarr(3)
-for ii = 0, n_elements(shaded)-1 do begin
-    x1 = x_vertices[0,ii]
-    x2 = x_vertices[1,ii]
-    y1 = yrange[0]
-    y2 = yrange[1]
-    shaded[ii] = POLYGON( $
-        [x1,x2,x2,x1], $
-        [y1,y1,y2,y2], $
-        target=plt, $
-        /data, $
-        thick=0.5, $
-        ;linestyle=[1,'5555'X], $
-        ;color=color[ii], $
-        color=fill_color[ii], $
-        /fill_background, $
-        fill_color=fill_color[ii], $
-        ;fill_color='eeeeee'X, $
-        ;fill_transparency=50, $
-        name = name[ii] $
-    )
-    shaded[ii].Order, /SEND_TO_BACK
-endfor
+
+; Created subroutine to plot shaded areas -- July 2022
+shaded = OPLOT_SHADED( x_vertices, plt )
+
+
+format = '(F0.15)'
 ;
 ;for ii = 0, n_elements(shaded)-1 do begin
 ;    shaded[ii] = plot( [ x_vertices[0,ii], x_vertices[1,ii] ], $

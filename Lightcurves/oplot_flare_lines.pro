@@ -69,20 +69,17 @@ function OPLOT_FLARE_LINES, $
     ;- Or manually append the ":00" part?
     ;-   e.g.: if STRLEN(gstart) ne 8 then gstart = gstart + ':00'
 
-
     ;@parameters
     ;-   21 April 2019
     ;-     call script "parameters" to set flare-specific variables
     ;-   16 August 2019
     ;-     commented kws for gstart/peak/end since they're defined in @parameters
 
-    phases = [gstart, gpeak, gend]
-
 
     ;--- GOES ----------------
     if keyword_set(goes) then begin
 
-        flare_times = date + ' ' + phases
+        flare_times = date + ' ' + [flare.tstart, flare.tpeak, flare.tend]
         print, flare_times
         stop
 
@@ -117,30 +114,13 @@ function OPLOT_FLARE_LINES, $
     ;--- AIA -----------------
     endif else begin
 
-        ;flare_times = [ '01:44', '01:56', '02:06' ] ; --- HC...
-        ;-
-        ;- 17 April 2019
-        ;-   Instead, convert each time from "hh:mm:ss" to "hh:mm".
-        ;-   Variables already in the form "hh:mm" won't change.
-        flare_times = [ $
-            strmid( gstart, 0, 5 ), $
-            strmid( gpeak, 0, 5 ), $
-            strmid( gend, 0, 5 ) ]
-            ;- values for gstart, gpeak, and gend read in from @parameters
-        ;--
-        ;- 10 April 2020
-        ;-  Pretty sure the above line can be condensed to:
-        ;-    flare_times = strmid( [gstart, gpeak, gend], 0, 5 )
-        ;-  Should double check tho.
-        ;-------
+        flare_times = strmid( [flare.tstart, flare.tpeak, flare.tend], 0, 5 )
 
         ;-  For GOES, flare_times is of the form: "15-Feb-2011 00:00:01.725"
         ;-  For  AIA, flare_times is of the form: "15-Feb-2011 00:00"
         ;-    (or was... before I commented the HC and used variables).
 
         time = strmid( t_obs, 0, 5 )
-        ;-   As with start/peak/end times,
-
 
         nn = n_elements(flare_times)
 
@@ -152,20 +132,35 @@ function OPLOT_FLARE_LINES, $
             x_indices[ii] = (where( time eq flare_times[ii] ))[0]
     endelse
 
-    flare_times = [ $
-        strmid( gstart, 0, 5 ), $
-        strmid( gpeak, 0, 5 ), $
-        strmid( gend, 0, 5 ) ]
+    x_indices = x_indices[ where( x_indices ne -1 ) ]
+    print, x_indices
+    stop
+
+; Why is flare_times defined again?
+;    flare_times = [ $
+;        strmid( flare.tstart, 0, 5 ), $
+;        strmid( flare.tpeak, 0, 5 ), $
+;        strmid( flare.tend, 0, 5 ) ]
 
     name = flare_times + [ ' UT (start)', ' UT (peak)', ' UT (end)' ]
 
+    y1 = []
+    y2 = []
+    for ii = 0, n_elements(plt)-1 do begin
+       y1 = [y1, plt[ii].yrange[0]]
+       y2 = [y2, plt[ii].yrange[1]]
+    endfor
+    format = '(e0.2)'
+;    print, y1, format=format
+;    print, y2, format=format
 
     ;plt[0].GetData, xx, yy ;- only needed when xdata = jd... I think.
-    yrange = plt[1].yrange
+    ;yrange = plt[1].yrange
+    yrange = [ min(y1), max(y2) ]
 
     ;- [] Try to come up with better, more intuitive variable names here.
     ;-      These are just a mess.
-    vert = objarr(nn)
+    vert = objarr(n_elements(x_indices))
     linestyle = [1,2,4]
     foreach vx, x_indices, jj do begin
         vert[jj] = plot( $
@@ -184,13 +179,10 @@ function OPLOT_FLARE_LINES, $
             _EXTRA=e )
         if keyword_set(send_to_back) then vert[jj].Order, /SEND_TO_BACK
     endforeach
-    ;return, vert
-
 
     ; 27 April 2022
     ;   Moved examples of line patterns to Evernote:
     ;   "IDL graphics - linestyle" in IDL notebook.
-
 
     plt = [ plt, vert ]
     return, vert
