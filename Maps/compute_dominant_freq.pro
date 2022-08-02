@@ -115,12 +115,16 @@ end
 
 
 
-@par2
-instr = 'aia'
+;@par2
+@main
+
+;instr = 'aia'
+
 channel = '1600'
 ;channel = '1700'
 
-cadence = 24
+;cadence = 24
+;   defined in main.pro
 
 
 ;- Read headers from PREPPED fits files

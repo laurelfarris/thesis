@@ -107,30 +107,33 @@ end
 
 
 
-buffer=1
-display = 0
+;== OLD
+;;flare_index = 0 ; M1.5  2013-08-12
+;flare_index = 1 ; C8.3  2013-08-30
+;;;;flare_index = 2 ; C4.6  2014-10-23
+;;flare_index = 3 ; M1.0  2014-11-07
+;@par2
+;flare = multiflare.(flare_index)
+;date = flare.year + flare.month + flare.day
+;  main.pro does this
 
-;flare_index = 0 ; M1.5  2013-08-12
-flare_index = 1 ; C8.3  2013-08-30
-;;;flare_index = 2 ; C4.6  2014-10-23
-;flare_index = 3 ; M1.0  2014-11-07
+
+;== NEW (general variables defined in one script):
+@main
 
 
-instr = 'aia'
 ;channel = '1600'
 channel = '1700'
 
-@par2
-flare = multiflare.(flare_index)
-date = flare.year + flare.month + flare.day
 
-path = '/solarstorm/laurel07/flares/' + date + '/'
+;path = '/solarstorm/laurel07/flares/' + date + '/'
+flare_path = '/solarstorm/laurel07/flares/' + class + '/'
 filename = date + '_' + strlowcase(instr) + strtrim(channel,1) + 'cube.sav'
 newfilename = date + '_' + strlowcase(instr) + strtrim(channel,1) + 'aligned.sav'
 
-restore, path + filename
+restore, flare_path + filename
 oldcube = cube
-restore, path + newfilename
+restore, flare_path + newfilename
 
 
 ;-  COMPARE after alignment runs..
@@ -272,9 +275,10 @@ xstepper2, $
 ;-
 ;--- § Save cube and shifts to .sav files.
 
-path = '/solarstorm/laurel07/' + year + month + day + '/'
-print, path
-shifts_filename = path + instr + channel + 'shifts.sav'
+;path = '/solarstorm/laurel07/' + year + month + day + '/'
+   ; already defined path in this file... must have merged codes, or just forgot.
+   ; FWI renamed path as flare_path since path is variable name of primary path to my ss dir.
+shifts_filename = flare_path + instr + channel + 'shifts.sav'
 print, shifts_filename
 ;-
 save, shifts, filename=shifts_filename
@@ -293,7 +297,8 @@ save, shifts, filename=shifts_filename
 ;- 
 ;save, new_shifts, filename = path + instr + channel + 'new_shifts.sav'
 
-cube_filename = path + instr + channel + 'aligned.sav'
+;cube_filename = path + instr + channel + 'aligned.sav'
+cube_filename = flare_path + instr + channel + 'aligned.sav'
 print, cube_filename
 ;-
 save, cube, filename=cube_filename

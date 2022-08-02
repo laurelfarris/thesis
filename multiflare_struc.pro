@@ -1,5 +1,10 @@
 ;+
 ;- LAST UPDATED:
+;-   02 August 2022
+;-     Moved ML code that redefines class and date to main.pro,
+;-     commented remaining ML code so this is primarily an external function
+;-     to be called from a different file.
+;-
 ;-   13 July 2022
 ;-     Merged parameters.pro, par_test.pro, and multiflare_struc.pro with par2.pro.
 ;-     par2.pro currently contains three function definitions (parameters, par_test, multiflare_struc)
@@ -188,8 +193,23 @@ function multiflare_struc, $
     if keyword_set(flare_id) then begin
         ;return, multiflare.flare_id else 
 
+        read, response, prompt='GOES class = ', flare_id, ' ? Type Y or N'
+
+        while (strlowcase(response) NE 'n') || (strlowcase(response) NE 'y') do begin
+            print, '==>> ERROR! <<==========================='
+            read, response, prompt='Please type "n" or "y" only.'
+        endwhile
+
+        if strlowcase(response) eq 'n' then begin
+            read, flare_id, prompt='Type desired class: '
+        endif
+
+        ; 02 August 2022
+        ; not sure if this is correct use of 'continue'... may get error.
+        if strlowcase(response) eq 'y' then continue
 
         if (flare_id eq 'c83') then begin
+
             return, multiflare.c83
         endif
 
@@ -205,7 +225,6 @@ function multiflare_struc, $
         return, multiflare
     endelse
 
-
 end
 
 
@@ -214,47 +233,12 @@ end
 ;=
 
 
-multiflare = multiflare_struc(flare_id='c83')
+;multiflare = multiflare_struc(flare_id='c83')
 ;multiflare = multiflare_struc(flare_id='m73')
 ;multiflare = multiflare_struc(flare_id='x22')
 
 ;flare = multiflare.c83
 ;flare = multiflare.m73
 ;flare = multiflare.x22
-
-; 13 July 2022
-;   NOTE: In order to call flare.class, flare.date, etc.,
-;     must first define multiflare_struc (i.e. call function and return to ML...)
-;     AND define variable "flare" as multiflare.<flare_id>
-;     (restricts where these lines can go, basically).
-  
-
-help, flare.class
-help, flare.date
-
-;=
-;= Class: change format to all lowercase with no period delimiter
-;=     e.g. flare.class = 'M1.5' --> class = 'm15'
-
-; Two steps:
-;   1) Extract class into 2-element string array (without period)
-;   2) Combine elements into one (lowercase) string
-;class = strsplit(flare.class, '.', /extract)
-;class = strlowcase(class[0] + class[1])
-
-; Or accomplish this using a single line of code by
-;   splitting and re-joining string elements in one go,
-;   OR use IDL's "Replace" method for strings:
-;class = strlowcase(strjoin(strsplit(flare.class, '.', /extract)))
-class = strlowcase((flare.class).Replace('.',''))
-help, class
-
-;=
-;= Date: change format to 'yyyymmdd' for beginning of filenames so files are ordered by flare date.
-;=   e.g. flare.date = '12-Aug-2013' --> date = '20130812'
-
-date = flare.year + flare.month + flare.day
-help, date
-
 
 end

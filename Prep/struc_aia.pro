@@ -305,24 +305,7 @@ function STRUC_AIA, $
 end
 
 
-;== Call function to return structure with ALL flares
-;     (no longer using @parameters OR @par2)
-;multiflare = multiflare_struc()
-
-;== Choose flare
-;flare = multiflare.c30
-;flare = multiflare.c46
-;flare = multiflare.c83
-;flare = multiflare.m10
-;flare = multiflare.m15
-;flare = multiflare.m73
-;flare = multiflare.x22
-
-;class = 'c83'
-;class = 'm73'
-;class = 'x22'
-
-;flare = multiflare_struc(flare_id=class)
+@main
 
 aia1600 = STRUC_AIA( aia1600index, aia1600data, cadence=24., instr='aia', channel='1600', flare=flare )
 aia1600.color='blue'

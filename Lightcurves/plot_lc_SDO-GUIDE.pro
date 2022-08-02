@@ -29,8 +29,12 @@
 ;=
 
 ;- C8.3, 2013-08-30,  2:04, 2:46, 4:06
-@par2
-flare = multiflare.C83
+;@par2
+;flare = multiflare.C83
+
+;== NEW (variables defined in one script so dont' have to type same thing over and over
+;    in every single ML code every single session...):
+@main
 
 
 ssw_jsoc_time2data, $

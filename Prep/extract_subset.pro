@@ -70,21 +70,24 @@
 ;
 ;=====================================================================
 
-buffer=1
-;
+
+;== OLD
+;buffer=1
 ;instr = 'aia'
 ;channel = '1600'
 ;channel = '1700'
-
-instr = 'hmi'
-channel = 'mag'
+;instr = 'hmi'
+;channel = 'mag'
 ;channel = 'cont'
 ;channel = 'dop'
-;
 ;@par2
 ;flare = multiflare.(0)
-;
-flare = multiflare.c83
+;flare = multiflare.c83
+
+;== NEW
+@main ; defines all variables listed above
+
+
 
 ;-
 ;--- § Read index and data from level 1.5 fits files
