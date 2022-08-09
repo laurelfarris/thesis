@@ -1,11 +1,10 @@
-
-
-
+;+
 ;- 27 October 2018
 ;-
 ;- BDA power spectra from integrated emission, showing
 ;-  absolute values, log, normalized by max power (at whatever frequency),
 ;-  and also compare power from total emission to power from emission per pixel.
+;-
 
 pro scale_spectra, flux, _EXTRA=e
 
@@ -35,3 +34,4 @@ scale_spectra, flux, title = 'Integrated flux (DN s$^{-1}$)'
 
 scale_spectra, flux/n_pix, title = 'Spatial mean (DN s$^{-1}$ pixel$^{-1}$)'
 
+end

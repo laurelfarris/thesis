@@ -1,8 +1,18 @@
-;- 21 April 2019
-;- Moved these lines from prep_aia.pro to a separate file to get rid of clutter.
-;- Can probably be deleted.
+;+
+;- LAST MODIFIED:
+;-   08 August 2022
+;-
+;- PURPOSE
+;-   main level (ML) code to play with values (dt, d\nu, multiflares, etc.),
+;-   compute P(t), and call subroutines to create plots.
+;-
+
 
 function POWER_IN_STRUC, struc
+
+    ;- 21 April 2019: moved from prep_aia.pro
+    ;- 08 August 2022: moved from Modules/ to here
+    ;-   ("here" being code "main_pt.pro" in Powercurves/)
 
 
     ;power_flux = GET_POWER( $

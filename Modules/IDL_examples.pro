@@ -1,8 +1,10 @@
 ;+
-;- 09 July 2021
-;-   This file contains code for new IDL functions, classes, methods, etc.
-;-   so I can practice using them.
+;- 08 August 2022
 ;-
+;-  Use this to run example code to practice using and testing new
+;-     functions, classes, methods, etc. in IDL.
+;-
+
 
 ;========================================================================
 ;+
@@ -59,51 +61,10 @@ print, wave2.insert( '_20210709', 4, fill_character='x' )
 print, wave1.insert( '_20210709', 4) 
 
 
-;========================================================================
-
-;+
-;- IDL_Savefile => get information about .sav file without restoring
-;-
-
-
-savefile = '/solarstorm/laurel07/flares/m73_20140418/m73_aia1700header.sav'
-sObj = OBJ_NEW( 'IDL_Savefile', savefile )
-
-
-sContents = sObj->Contents()
-;sContents = sObj.Contents() ... same thing, I think
-help, sContents
-;- => structure
-
-help, sContents.N_VAR
-;- => LONG64 = 1
-
-help, sObj.Contents();.N_VAR
-;-  Structure
-
-help, sContents
-;- => Structure! with lots of info
-print, n_tags(sContents)
-print, tag_names(sContents)
-
-sNames = sObj->Names()
-print, sNames
-
-
-;- The class 'IDL_Savefile' has the following Methods:
-;-   • Cleanup
-;-   • Contents
-;-   • Init
-;-   • Names
-;-   • Restore
-;-   • Size
-
-;========================================================================
 
 ;+
 ;- Structures
 ;-
-
 
 
 ;+

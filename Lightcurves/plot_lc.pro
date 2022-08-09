@@ -11,13 +11,9 @@
 ;- PURPOSE:
 ;-   Plot light curves.
 ;-
-;- INPUT:
-;-
-;- KEYWORDS:
-;-
-;- OUTPUT:
 ;-
 ;- TO DO:
+;-
 ;-   [] Generalize variables currently hardcoded:
 ;-     * filename
 ;-     * ydata
@@ -26,6 +22,9 @@
 ;-     (see plot_lc_GENERAL.pro for early attempts)
 ;-
 ;-   [] See previous versions of plot_lc...pro for LOTS of commented code..
+;-
+;-   [] See Lightcurves/MAKE_PLOTS.pro
+;-
 
 
 @main

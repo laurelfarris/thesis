@@ -1,9 +1,8 @@
 
 ;===========================================================================================
 ;= NOTE:
-;=   This was copied on 18 July 2022 after many edits were made.
-;=   Didn't realize that today.pro was never copied after most recent pre-flare powermaps,
-;=     but better late than never..
+;=   Copied from "today.pro" on 18 July 2022 after many edits were made...
+;=   Edits from May vs. July may be unclear, but better late than never..
 ;=
 ;===========================================================================================
 

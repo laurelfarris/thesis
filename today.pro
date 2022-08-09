@@ -1,7 +1,7 @@
 ;+
-;-
 ;- 18 July 2022
 ;-   (most of previous stuff from 10 May 2022 was copied into notes dir.. a little late)
+;-
 ;-
 ;- TO DO:
 ;-
@@ -107,24 +107,7 @@
 ; '../flares/x22_20140418/*.sav'
 
 
-;=====================================================================================================
-
-@path_temp
-buffer = 1
-instr = 'aia'
-cadence = 24
-
-class = 'c83'
-;class = 'm73'
-;class = 'x22'
-;
-flare = multiflare_struc(flare_id=class)
-help, flare
-;
-restore, '../flares/' + class + '/' + class + '_struc.sav'
-;
-print, A.date
-
+@main
 
 ;=====================================================================================================
 ; compute POWERMAP from pre-flare data
@@ -218,45 +201,5 @@ print, image_filename
 stop
 save2,  image_filename
 
-stop
-
-
-;=====================================================================================================
-; FFT on single pixel to determine best value for bandwidth (\Delta\nu).
-
-ts = reform(cube[62,50,*,*])
-sz2 = size(ts, /dimensions)
-
-frequency = fltarr( sz2[0]/2, sz2[1])
-power = fltarr( sz2[0]/2, sz2[1])
-
-for cc = 0, 1 do begin
-    result = FOURIER2( ts[*,cc], cadence )
-    frequency[*,cc] = reform(result[0,*])
-    power[*,cc] = reform(result[1,*])
-endfor
-
-fmin = (where( frequency[*,0] ge 0.003))[ 0]
-fmax = (where( frequency[*,0] le 0.010))[-1]
-
-cc = 0
-dw
-plt = PLOT_SPECTRA( $
-    frequency[ fmin:fmax, cc ], $
-    power[ fmin:fmax, cc ], $
-;    xrange=[3.0, 10.0]/1000.0, $
-    leg=leg, $
-    /stairstep, $
-    buffer=buffer $
-)
-print, plt[0].xtickvalues
-;
-fft_filename = 'c83_' + strlowcase(instr) + A[0].channel +  '_FFT_pre-flare'
-;print, fft_filename
-save2, fft_filename
-
-
-
-;=============================================================================================
 
 end

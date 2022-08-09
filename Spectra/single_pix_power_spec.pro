@@ -1,5 +1,8 @@
 ;+
 ;- LAST MODIFIED:
+;-   08 August 2022 -- merged with "fft_single_pixel.pro"
+;- 
+;- 
 ;-   ls -lt --> 22 Feb 2019, so that's the "last modified" date
 ;-     I'm assigning to this file (31 July 2019)
 ;-
@@ -7,10 +10,52 @@
 ;-   Typical "today.pro", testing random stuff:
 ;-     • Fourier power spectrum for single pixel in umbra, compare
 ;-        to single pixel in penumbra, or various locations relative to boundaries
-;- TO DO:
-;-   Look over this, see if it should go with Power spectrum codes, rather
-;-    than power maps.
 ;-
+;- TO DO:
+;-  []
+;-
+
+
+
+;=====================================================================================================
+;= FFT on single pixel to determine best value for bandwidth (\Delta\nu).
+;=   18 July 2022 -- Copied from today.pro (08 August 2022)
+
+ts = reform(cube[62,50,*,*])
+sz2 = size(ts, /dimensions)
+
+frequency = fltarr( sz2[0]/2, sz2[1])
+power = fltarr( sz2[0]/2, sz2[1])
+
+for cc = 0, 1 do begin
+    result = FOURIER2( ts[*,cc], cadence )
+    frequency[*,cc] = reform(result[0,*])
+    power[*,cc] = reform(result[1,*])
+endfor
+
+fmin = (where( frequency[*,0] ge 0.003))[ 0]
+fmax = (where( frequency[*,0] le 0.010))[-1]
+
+cc = 0
+dw
+plt = PLOT_SPECTRA( $
+    frequency[ fmin:fmax, cc ], $
+    power[ fmin:fmax, cc ], $
+;    xrange=[3.0, 10.0]/1000.0, $
+    leg=leg, $
+    /stairstep, $
+    buffer=buffer $
+)
+print, plt[0].xtickvalues
+;
+fft_filename = 'c83_' + strlowcase(instr) + A[0].channel +  '_FFT_pre-flare'
+;print, fft_filename
+save2, fft_filename
+
+
+
+;=============================================================================================
+; The rest of this is reeeally old.. it has "goto" statements...
 
 
 goto, start
@@ -110,5 +155,8 @@ for ii = 0, 1 do begin
 endfor
 
 leg = legend( target = plt )
+
+;=============================================================================================
+
 
 end
