@@ -8,12 +8,6 @@
 ;- PURPOSE:
 ;-   Plot RHESSI light curves, oplot GOES maybe
 ;-
-;- INPUT:
-;-
-;- KEYWORDS:
-;-
-;- OUTPUT:
-;-
 ;- TO DO:
 ;-   [] Change RHESSI lightcurves to log scale, add remaining E-ranges, ...
 ;-          COMPLETE for A2
@@ -23,10 +17,6 @@
 ;-        or waste time defining paths, fits file names, etc. just so I can reference
 ;-        index.date_obs or w/e... MAKE THINGS AS EASY AS POSSIBLE!
 ;-   [] Replace hardcoded crap with something better
-;-   []
-;-   []
-;-   []
-;-
 
 
 @par2

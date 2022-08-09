@@ -1,6 +1,3 @@
-
-
-
 function SHIFT_YDATA_OLD, p
     ; Last modified: ... sometime before 18 November 2018.
     ;  (old version)

@@ -268,6 +268,7 @@ pro main_level_code
     ; Overplot GOES lightcurves (only if ydata is normalized)
     ;   ... and only when plotting flux, not power.
     ;g = OPLOT_GOES(gdata)
+    ;   09 August 2022 => oplot_goes.pro is not used anywhere else, moved to "old/"
 
     leg = MAKE_LEGEND()
 

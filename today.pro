@@ -109,6 +109,11 @@
 
 @main
 
+
+; display current nesting of procedures and functions (found in shift_ydata.pro 09 Aug 2022)
+help, /traceback
+
+
 ;=====================================================================================================
 ; compute POWERMAP from pre-flare data
 
