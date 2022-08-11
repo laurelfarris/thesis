@@ -15,15 +15,15 @@
 ;- TO DO:
 ;-
 ;-   [] Generalize variables currently hardcoded:
-;-     * filename
-;-     * ydata
-;-     * xtickinterval
+;-       * filename
+;-       * ydata
+;-       * xtickinterval
 ;-   [] Generalize entire routine for ANY lightcurve
-;-     (see plot_lc_GENERAL.pro for early attempts)
-;-
+;-        (see plot_lc_GENERAL.pro for early attempts)
 ;-   [] See previous versions of plot_lc...pro for LOTS of commented code..
-;-
 ;-   [] See Lightcurves/MAKE_PLOTS.pro
+;-   [] Merge w/ "plot_lc_GENERAL.pro"
+;-   []
 ;-
 
 
@@ -82,12 +82,14 @@ n_obs = (size(aia_ydata, /dimensions))[0]
 aia_xdata = FIX( [ [aia1600ind], [aia1600ind] ] )
 ;
 ;xdata = A.jd
-;
+
+
+;=== HARDCODED! Make this better!
 ;;xtickinterval = A[0].jd[75] - A[0].jd[0]
 ;xtickinterval = 75
-;
 xtickinterval = 5
-;
+
+
 ;- From ../WA/plot_filter.pro, though probably don't need to preserve these values
 ;xtickinterval = 25
 ;yticklen=0.010
@@ -95,8 +97,6 @@ stairstep=1
 ;
 ;xminor = 5
 ytitle=A.name + ' (DN s$^{-1}$)'
-
-
 
 dw
 resolve_routine, 'batch_plot_2', /either
@@ -114,27 +114,26 @@ plt = BATCH_PLOT_2(  $
     name=A.name, $
     buffer=buffer $
 )
-;
-;
-;
+
+
+; 14 March 2020 -- padding for yrange
 dy = plt[0].yrange[1] - plt[0].yrange[0]
 plt[0].yrange = [ $
     plt[0].yrange[0], $
-    ( plt[0].yrange[1] + (dy*0.2) )  $
-]
+    ( plt[0].yrange[1] + (dy*0.2) )  ]
 ;
 dy = plt[1].yrange[1] - plt[1].yrange[0]
 plt[1].yrange = [ $
     ( plt[1].yrange[0] - (dy*0.2) ), $
-    plt[1].yrange[1]  $
-]
+    plt[1].yrange[1]  ]
 ;
-; 14 March 2020 -- padding for yrange
 dy1600 = plt[0].yrange[1] - plt[0].yrange[0]
 dy1700 = plt[1].yrange[1] - plt[1].yrange[0]
 plt[0].yrange = plt[0].yrange + [-(dy1600*0.05), 0.0]
 plt[1].yrange = plt[1].yrange + [0.0, dy1700*0.05]
-;
+
+
+
 ;- Add top and right axes for plt2 (excluded when axis_style=1)
 resolve_routine, 'axis2', /is_function
 ax2 = axis2( 'X', $

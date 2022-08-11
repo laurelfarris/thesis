@@ -58,7 +58,7 @@ flare_path = path + 'flares/' + class + '/'
 
 
 ;= restore "A", array of structures created with ./Prep/struc_aia.pro
-restore, '../flares/' + class + '/' + class + '_struc.sav'
+;restore, '../flares/' + class + '/' + class + '_struc.sav'
 
 
 ;=

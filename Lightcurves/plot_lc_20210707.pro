@@ -50,7 +50,18 @@ center = FIX( ( [aia1600index[0].naxis1,aia1600index[0].naxis2]/2 ) + ( [flare.x
 help, channel
 help, strtrim(channel,1)
 
-path = '/solarstorm/laurel07/flares/' + class + '_' + date + '/'
+;=============================================================================
+;= 10 August 2022
+;== Redefined path (solarstorm down..) and removed date from flare directories
+;==   NOTE: change "path" to "flare_path" if using this code in the future.
+
+;path = '/solarstorm/laurel07/flares/' + class + '_' + date + '/'
+
+@main ; @path_temp is called here
+flare_path = path + 'flares/' + class + '/'
+
+;=============================================================================
+
 ;filename = class + '_' + instr + strtrim(channel,1) + 'cube.sav'
 filename = class + '_' + instr + strtrim(channel,1) + 'aligned.sav'
 print, file_exist(path+filename)

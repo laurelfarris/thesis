@@ -34,26 +34,36 @@
 ;-
 
 
-buffer =1
+; main.pro defines "flare_path" at ML after calling multiflare struc!
+@main
 
-dz = 64
 
+;==================================================================================
+;== 10 August 2022 : updated to include "@main" and better way to restore
 
 ;- Restore AIA powermaps
 ;@restore_maps
-@path_temp
 
-restore, path_temp + 'flares/c83_20130830/c83_aia1600map.sav'
-stop
+channel = '1600'
+;channel = '1700'
 
-restore, path_temp + 'flares/c83_20130830/c83_aia1700map.sav'
+; [] loop through flares and/or channels and
+;       APPEND restored data cube variable to one array or structure
 
+restore, flare_path + class + '_' + instr + channel + 'map.sav'
+
+
+;restore, path_temp + 'flares/c83_20130830/c83_aia1600map.sav'
+;restore, path_temp + 'flares/c83_20130830/c83_aia1700map.sav'
 ;restore, path_temp + 'flares/m73_20130830/m73_aia1600map.sav'
 ;restore, path_temp + 'flares/m73_20130830/m73_aia1700map.sav'
-
 ;restore, path_temp + 'flares/x22_20130830/x22_aia1600map.sav'
 ;restore, path_temp + 'flares/x22_20130830/x22_aia1700map.sav'
 
+
+;==================================================================================
+
+dz = 64
 
 format = "(e0.5)"
 
