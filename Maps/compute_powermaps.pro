@@ -37,6 +37,10 @@
 ;-      one for several different situations. Each of them call the
 ;-      general routine above, and all return essentially the same thing.
 ;-   [] Compute several power maps centered on 3-min with increasingly wide 𝝙𝝼
+;-   [] Make this the only place where dimensions of map cube are computed,
+;-       i.e.  = sz[2] - dz - 1 (or is it +1 ?  Shouldn't have to waste time re-figuring that
+;-        out every time I need to compute a PMM..
+;-       Make an optional keyword that loops through all possible 
 ;-
 ;-
 ;- NOTES:     (May 11 2018) Added /NORM keyword to fourier2.
