@@ -109,7 +109,6 @@
 
 @main
 
-
 ; display current nesting of procedures and functions (found in shift_ydata.pro 09 Aug 2022)
 help, /traceback
 
@@ -137,7 +136,10 @@ help, z_decay
 ;map = COMPUTE_POWERMAPS( /syntax )
 
 
+; Set saturation threshold (may be less than saturation value for a single pixel
+;   to account for pixels contaminated by blooming (i.e. extra counts, but not sat.)
 threshold = 15000.
+
 data_mask = A.data lt threshold
 help, data_mask
 
