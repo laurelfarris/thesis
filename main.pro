@@ -56,6 +56,10 @@ flare = MULTIFLARE_STRUC( flare_id=class )
 
 flare_path = path + 'flares/' + class + '/'
 
+; 30 August 2022
+;  [] flare.path? Could add specific path to each structure,
+;      OR combine all flare .sav files into one directory...
+
 
 ;= restore "A", array of structures created with ./Prep/struc_aia.pro
 ;restore, '../flares/' + class + '/' + class + '_struc.sav'
