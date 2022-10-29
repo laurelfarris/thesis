@@ -25,8 +25,10 @@
 
 ;- text file with rhessi data
 ;infile = './Lightcurves/' + class + '_rhessi_lightcurve_corr.txt'
-infile = path + 'thesis/Lightcurves/' + class + '_rhessi_lightcurve_corr.txt'
+;infile = path + 'thesis/Lightcurves/' + class + '_rhessi_lightcurve_corr.txt'
 
+; Renamed .txt files, and moved to ../RHESSI/
+infile = path + 'thesis/RHESSI/rhessi_' + class + '_lightcurve_corr.txt'
 
 READCOL, infile, time, v1, v2, v3, v4, atten, eclipse, $
     format='A,F,F,F,F,I,I', delimiter=','

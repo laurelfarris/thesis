@@ -39,7 +39,6 @@ instr = 'aia'
 cadence = 24
 ;cadence = 45
 
-
 ;class = 'c30'
 ;class = 'c46'
 ;class = 'm10'
