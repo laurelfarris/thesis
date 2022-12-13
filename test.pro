@@ -1,3 +1,53 @@
+
+;---------------------------------------------------------------------------------------------------------------
+;13 December 2022
+
+
+pro test, testid
+
+    test_flare_id = 'x22'
+
+    ; display nesting level of procedures/function
+    help, /traceback
+
+    print, 'The current flare id is: ', test_flare_id
+    print, '  Is this correct?'
+    ;read, 'Is this the flare you want?  ', response
+    response = ''
+    help, response
+    read, response;, format='(A1)'
+    help, response
+    ;
+    testid = ''
+    ;testid = 'n'
+    ;testid = 'y'
+    testid = 'q'
+    ;
+    if ( strlowcase(testid) ne ( 'n' || 'y' || 'q' ) ) then begin
+        print, "Incorrect input."
+    endif else print, 'Great job!'
+    ;
+    testid = 'm73'
+    print, 'Flare ID = ', testid
+    ;
+    read, testid, 'Type desired flare (or "enter" if already correct): '
+    print, ''
+    print, 'Flare ID = ', testid
+    print, ''
+    ;
+    ;help, testid
+end
+
+
+test, 'm73'
+
+
+
+
+
+
+
+;---------------------------------------------------------------------------------------------------------------
 ; 07 October 2022
 
 
@@ -33,8 +83,8 @@ print, ''
 
 
 
-;------------------------------------------------------------------------
 
+;-----------------------------------------------------------------------------------------------------------------
 ; 14 October 2022
 
 
@@ -83,8 +133,5 @@ print, (((theta_arcsec/0.6)/period) / 3600.) * 24.
 
 ; pixels over 5-hour time series
 print, ((theta_arcsec/0.6) / period) * 5.0
-
-
-;------------------------------------------------------------------------
 
 end

@@ -29,6 +29,12 @@
 
 @main
 
+;restore, path + 'flares/' + class + '/' + class + '_' + 'struc.sav'
+;help, A[0]
+;help, A[1]
+; ==>> main.pro takes care of this now (13 Dec 2022)
+
+
 aia_lc_filename = class + '_' + strlowcase(instr) + '_lightcurve'
 print, aia_lc_filename
 
@@ -39,12 +45,6 @@ print, aia_lc_filename
 ;date = flare.year + flare.month + flare.day
 ;- flare.date = 12-Aug-2013 --> date = 20130812
 ;==>> class and date both defined in par2.pro  (07 Sep 2021)
-
-restore, path + 'flares/' + class + '/' + class + '_' + 'struc.sav'
-help, A[0]
-help, A[1]
-
-stop
 
 ;=
 ;======================================================================

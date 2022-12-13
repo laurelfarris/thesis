@@ -254,6 +254,11 @@ function MULTIFLARE_STRUC, $
         ycen :  206.1222 $  ; 15 degrees
     }
 
+
+
+
+
+
     m15 = { $
         ;flare, $
         ;m15, $
@@ -263,13 +268,18 @@ function MULTIFLARE_STRUC, $
         year : '2013', $
         month : '08', $
         day : '12', $
-        month : '08', $
+        ;ts_start : '08:15:00', $
+        ;ts_end : '13:14:59', $
         tstart : '10:21', $
         tpeak  : '10:41', $
         tend   : '10:47', $
-        xcen : -268.8, $  ; -19 degrees
-        ycen : -422.4 $   ; -17 degrees
+        xcen : -268.800, $ ; -19 degrees
+        ycen : -422.400 $  ; -17 degrees
     }
+
+
+
+
 
     m73 = { $
         ;flare, $
@@ -325,37 +335,34 @@ function MULTIFLARE_STRUC, $
     if keyword_set(flare_id) then begin
         ;return, multiflare.flare_id else 
 
-        read, response, prompt='GOES class = ', flare_id, ' ? Type Y or N'
+        print, ''
+        print, 'Flare ID = ', flare_id, ' Is this correct?'
+        ; READ, [Prompt,] Var₁, ..., Varₙ 
+        response = ''
+        read, ' Type y or n, (or type q to quit) :  ', response
 
-        while (strlowcase(response) NE 'n') || (strlowcase(response) NE 'y') do begin
-            print, '==>> ERROR! <<==========================='
-            read, response, prompt='Please type "n" or "y" only.'
+        while (strlowcase(response) NE 'n') && (strlowcase(response) NE 'y') && (strlowcase(response) NE 'q') do begin
+            print, ' ==>> ERROR! Please type "n" or "y" only (or "q" to quit) '
+            read, response
         endwhile
 
+        if (strlowcase(response) EQ 'q') then return, 0
+
         if strlowcase(response) eq 'n' then begin
-            read, flare_id, prompt='Type desired class: '
+            read, flare_id, prompt='Type desired class ("c83", "m73", or "x22"): '
         endif
 
         ; 02 August 2022
-        ; not sure if this is correct use of 'continue'... may get error.
-        if strlowcase(response) eq 'y' then continue
+        ;   not sure if this is correct use of 'continue'... may get error.
+        ; 13 December 2022
+        ;   Did in fact get error because 'if' statements are only conditionals, not loops.
+        ;if strlowcase(response) eq 'y' then begin
 
-        if (flare_id eq 'c83') then begin
+        if (flare_id eq 'c83') then return, multiflare.c83
+        if (flare_id eq 'm73') then return, multiflare.m73
+        if (flare_id eq 'x22') then return, multiflare.x22
 
-            return, multiflare.c83
-        endif
-
-        if (flare_id eq 'm73') then begin
-            return, multiflare.m73
-        endif
-
-        if (flare_id eq 'x22') then begin
-            return, multiflare.x22
-        endif
-
-    endif else begin
-        return, multiflare
-    endelse
+    endif else return, multiflare
 
 end
 
@@ -388,4 +395,4 @@ end
 ;save, multiflare_struc, filename='multiflare_struc.sav'
 ;==============================================================
 
-end
+;end

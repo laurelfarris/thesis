@@ -44,9 +44,9 @@ cadence = 24
 ;class = 'm10'
 ;class = 'm15'
 
-class = 'c83'
+;class = 'c83'
 ;class = 'm73'
-;class = 'x22'
+class = 'x22'
 
 ;flare = multiflare_struc(flare_id=class)
 
@@ -54,6 +54,19 @@ class = 'c83'
 flare = MULTIFLARE_STRUC( flare_id=class )
 
 flare_path = path + 'flares/' + class + '/'
+
+; 12 December 2022
+;  Restore .sav file with variable "A" saved with two structures, one for each AIA UV channel
+if file_exist(flare_path + class + '_' + 'struc.sav') then begin
+    restore, flare_path + class + '_' + 'struc.sav'
+endif else begin
+    print, '  "A".sav either does not exist, or '
+    print, '     filename/location is inconsistent with that of X2.2 flare.'
+endelse
+
+
+
+
 
 ; 30 August 2022
 ;  [] flare.path? Could add specific path to each structure,
@@ -84,3 +97,5 @@ flare_path = path + 'flares/' + class + '/'
 ;=   e.g. flare.date = '12-Aug-2013' --> date = '20130812'
 ;
 ;date = flare.year + flare.month + flare.day
+
+
