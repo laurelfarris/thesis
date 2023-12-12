@@ -21,441 +21,399 @@
 ;-           Created 2020 Nov 03 ; commented 2022 April 27
 
 
+;==================================================================================================
+;= 1. "my_save_restore_readfits_routine.pro"
 
-;=
-;= 1.  "my_save_restore_readfits_routine.pro" ====================================================================================
-;=
+;-
+;- 27 April 2022
+;-   WTF is this for??
+;-
+;-
+;- 02 July 2021
+;-
+;- TO DO:
+;-  [] Lightcurves for all flares! (one at a time... deal with multiflare structures later)
+;-  [] ==>> see ML code in ./Lightcurves/plot_lc.pro
+;-
+;- DONE! :)
+;-  [] M7.3 power maps --> Sean S.
+;-       ( or data cube? or both?? )
+;-
+;-
+;- C8.3 2013-08-30 T~02:04:00
+;- M1.0 2014-11-07 T~10:13:00
+;- M1.5 2013-08-12 T~10:21:00
+;-
+
+
+;--- quick hardcoding just to restore maps & headers for Sean
+
+flareclass = 'm73'
+date = '20140418'
+path = '/solarstorm/laurel07/flares/' + flareclass + '_' + date + '/'
+print, path
+
+
+;channel = '1600'
+channel = '1700'
+
+
+header_file = flareclass + '_aia' + channel + 'header.sav'
+print, path + header_file
+print, FILE_EXIST( path + header_file )
+
+
+
+stop
+
+
+
+restore, path + header_file
+
+m73_aia1600header = index
+
+m73_aia1700header = aia1700index
+
+if channel eq '1600' then save, m73_aia1600header, filename = './' + header_file
+if channel eq '1700' then save, m73_aia1700header, filename = './' + header_file
+
+
+stop
+
+
+
+;+
+;- Define POWERMAP filename,
+;-   restore current .sav file w/ variable = 'map' (no flare or channel info),
+;-   copy map to more descriptive variable name ( e.g. 'm73_aia1600powermap.sav )
+;-   save new variable to file with same name
+;-      Replace existing?? may cause problems in generalized codes like struc_aia...
+;-    ==>> Can't define variable NAMES based on, e.g. string value of channel (if channel eq '1600' ...)
+;-           which is why simple generic variable names are used... 
+;-          This is probably why I created sub-directories called TAR_files/ inside flare dir...
+;-          only need descriptive variables names when sending to someone else via .tar[.gz] files...
+;-
+;-
+
+;channel = '1600'
+channel = '1700'
+;
+powermap_file = flareclass + '_aia' + channel + 'powermap.sav'
+;
+if FILE_EXIST( path + powermap_file ) then begin
+    restore, path + powermap_file
+endif else begin
+    print, 'Cannot restore file ', powermap_file, '... file does not exist!'
+endelse
+;
+if channel eq '1600' then begin
+    m73_aia1600powermap = map
+    save, m73_aia1600powermap, filename = './' + powermap_file
+endif
+;
+if channel eq '1700' then begin
+    m73_aia1700powermap = map
+    save, m73_aia1700powermap, filename = './' + powermap_file
+endif
+
+stop
+
+buffer = 1
+@par2
+
+;-
+;flare = multiflare.C83
+;flare = multiflare.M10
+flare = multiflare.M15
+;flare = multiflare.X22
+;-
+
+help, flare
+
+instr = 'aia'
+channel = 1600
+;channel = 1700
+;
+class = 'm15'
+date = flare.year + flare.month + flare.day
+print, date
+
+path = '/solarstorm/laurel07/flares/' + class + '_' + date + '/'
+filename = class + '_' + strlowcase(instr) + strtrim(channel,1) + 'aligned.sav'
+;
+print, file_exist(path+filename)
+
+restore, path + filename
+
+flux = total(total(cube,1),1)
+help, flux
+
+plt = plot2 ( flux, buffer=buffer )
+
+save2, "m15_lightcurve", /timestamp, idl_code="today.pro"
+
+end
+
+
+;==================================================================================================
+;= 2. "restore_sav.pro"
+
+;- 21 October 2021
+;-
+;- PURPOSE:
+;-   Generalized module to quickly and intuitively restore .sav file for any flare,
+;-    declutter routines that use these same lines over and over...
+;-
+;- USEAGE:
+;-   IDL> .RUN restore_save
+;-
+;- TO DO:
+;-   [] block to RE-save (under new filename or replace the current one)
+;-       to include additional variables, update current ones, or remove those I don't need.
+;-       (e.g. update *aligned.sav to include index variable returned from read_sdo)
+;-   [] RE-save if necessary, to same filename or new one,
+;-       with additional variables, updated existing ones, or exclude those no longer needed.
+;-
+;- Multi-flare useful reference info:
+;-   C8.3 2013-08-30 T~02:04:00
+;-   M1.0 2014-11-07 T~10:13:00
+;-   M1.5 2013-08-12 T~10:21:00
+;-   M7.3 2014-04-18 T~01:43:00
+;-
+@par2 ;   ==>> does "par2" still exist?
+;
+flare = multiflare.m73
+print, flare.class
+class = strlowcase((flare.class).Replace('.',''))
+print, class
+;
+; Path to .sav file(s)
+;
+; Filename(s), old and/or new
+;filenames = ['','']
+filename = ''
+;
+restore, path + filename
+;
+;- Need to rename variable saved in these files for C8.3 flare...
+;restore, '../flares/c83_20130830/c83_aia1700header.sav'
+;index = c83_aia1700header
+;help, index
+;save, index, filename='c83_aia1700header.sav'
+;
+;path='/home/astrobackup3/preupgradebackups/solarstorm/laurel07/'
+;path='/solarstorm/laurel07/'
+;testfiles = 'Data/HMI_prepped/*20140418*.fits'
+;if not file_test(path + testfiles) then print, 'files not found'
+;
+end
+
+
+;==================================================================================================
+;= 3. "restore_maps.pro"
+
+function RESTORE_MAPS
+
+    ; This is probably obsolete now that I don't think it makes sense to read huge data
+    ;  arrays into structure every IDL session, especially if not even using maps. 
+
     ;+
+    ;- LAST MODIFIED:
+    ;-   13 August 2019
     ;-
-    ;- 27 April 2022
-    ;-   WTF is this for??
+    ;- WRITTEN:
+    ;-   29 April 2019
     ;-
+    ;- USEAGE:
+    ;-   IDL> @restore_maps
     ;-
-    ;- 02 July 2021
+    ;- NOTE:
+    ;-  Doesn't work if maps have already been added to structure;
+    ;-    get "duplicate tag def." or whatever
+    ;-  Pretty sure test for tagname "MAP" takes care of this, but there
+    ;-    may be cases where it doesn't, so leaving this note here.
+    ;-     (23 January 2020)
     ;-
-    ;- TO DO:
-    ;-  [] Lightcurves for all flares! (one at a time... deal with multiflare structures later)
-    ;-  [] ==>> see ML code in ./Lightcurves/plot_lc.pro
-    ;-
-    ;- DONE! :)
-    ;-  [] M7.3 power maps --> Sean S.
-    ;-       ( or data cube? or both?? )
-    ;-
-    ;-
-    ;- C8.3 2013-08-30 T~02:04:00
-    ;- M1.0 2014-11-07 T~10:13:00
-    ;- M1.5 2013-08-12 T~10:21:00
+    ;- OLD PATH/FILENAMES:
+    ;-   restore, '/solarstorm/laurel07/aia1600map_2.sav'
+    ;-   restore, '/solarstorm/laurel07/aia1700map_2.sav'
+    ;-     ????????? (23 January 2020)
     ;-
 
+    @parameters
 
-    ;--- quick hardcoding just to restore maps & headers for Sean
+    path = '/solarstorm/laurel07/' + year+month+day + '/'
 
-    flareclass = 'm73'
-    date = '20140418'
-    path = '/solarstorm/laurel07/flares/' + flareclass + '_' + date + '/'
-    print, path
+    ;- TEST to see if struc already has tag "map"
+    ;-   NOTE: structure tag strings ARE case-sensitive (i.e. "map" doesn't match)
+    tagnames = tag_names(A)
+    test = where(tagnames eq "MAP")
+    print, tagnames
+    print, test
 
+    ;if test eq -1 then begin  -->  true even though test = 13... I don't get it.
 
-    ;channel = '1600'
-    channel = '1700'
+    if (test ge 0) then begin
+    ;- If map is already included in structures, simply set each A[cc].map = map,
+    ;-   where "map" is name of variable that has just been freshly restored.
 
+        print, 'Replace existing map with restored map.'
 
-    header_file = flareclass + '_aia' + channel + 'header.sav'
-    print, path + header_file
-    print, FILE_EXIST( path + header_file )
-
-
-
+        restore, path + 'aia1600map.sav'
+        ;restore, path + 'aia1600map_2.sav'
+    ;    help, map
+    ;    help, A[0].map
+        A[0].map = map
+        undefine, map
+        restore, path + 'aia1700map.sav'
+        ;restore, path + 'aia1700map_2.sav'
+        A[1].map = map
+        undefine, map
     stop
-
-
-
-    restore, path + header_file
-
-    m73_aia1600header = index
-
-    m73_aia1700header = aia1700index
-
-    if channel eq '1600' then save, m73_aia1600header, filename = './' + header_file
-    if channel eq '1700' then save, m73_aia1700header, filename = './' + header_file
-
-
-    stop
-
-
-
-    ;+
-    ;- Define POWERMAP filename,
-    ;-   restore current .sav file w/ variable = 'map' (no flare or channel info),
-    ;-   copy map to more descriptive variable name ( e.g. 'm73_aia1600powermap.sav )
-    ;-   save new variable to file with same name
-    ;-      Replace existing?? may cause problems in generalized codes like struc_aia...
-    ;-    ==>> Can't define variable NAMES based on, e.g. string value of channel (if channel eq '1600' ...)
-    ;-           which is why simple generic variable names are used... 
-    ;-          This is probably why I created sub-directories called TAR_files/ inside flare dir...
-    ;-          only need descriptive variables names when sending to someone else via .tar[.gz] files...
-    ;-
-    ;-
-
-    ;channel = '1600'
-    channel = '1700'
-    ;
-    powermap_file = flareclass + '_aia' + channel + 'powermap.sav'
-    ;
-    if FILE_EXIST( path + powermap_file ) then begin
-        restore, path + powermap_file
     endif else begin
-        print, 'Cannot restore file ', powermap_file, '... file does not exist!'
-    endelse
-    ;
-    if channel eq '1600' then begin
-        m73_aia1600powermap = map
-        save, m73_aia1600powermap, filename = './' + powermap_file
-    endif
-    ;
-    if channel eq '1700' then begin
-        m73_aia1700powermap = map
-        save, m73_aia1700powermap, filename = './' + powermap_file
-    endif
-
-
-
-
-
-
-    stop
-
-
-    buffer = 1
-    @par2
-
-
-    ;-
-    ;flare = multiflare.C83
-    ;flare = multiflare.M10
-    flare = multiflare.M15
-    ;flare = multiflare.X22
-    ;-
-
-
-    help, flare
-
-
-
-    instr = 'aia'
-    channel = 1600
-    ;channel = 1700
-    ;
-    class = 'm15'
-    date = flare.year + flare.month + flare.day
-    print, date
-
-    path = '/solarstorm/laurel07/flares/' + class + '_' + date + '/'
-    filename = class + '_' + strlowcase(instr) + strtrim(channel,1) + 'aligned.sav'
-    ;
-    print, file_exist(path+filename)
-
-    restore, path + filename
-
-    flux = total(total(cube,1),1)
-    help, flux
-
-    plt = plot2 ( flux, buffer=buffer )
-
-    save2, "m15_lightcurve", /timestamp, idl_code="today.pro"
-
-
-    end
-
-
-;=
-;= 2. "restore_sav.pro" ====================================================================================
-;=
-;    ;- 21 October 2021
-;    ;-
-;    ;- PURPOSE:
-;    ;-   Generalized module to quickly and intuitively restore .sav file for any flare,
-;    ;-    declutter routines that use these same lines over and over...
-;    ;-
-;    ;- USEAGE:
-;    ;-   IDL> .RUN restore_save
-;    ;-
-;    ;- TO DO:
-;    ;-   [] block to RE-save (under new filename or replace the current one)
-;    ;-       to include additional variables, update current ones, or remove those I don't need.
-;    ;-       (e.g. update *aligned.sav to include index variable returned from read_sdo)
-;    ;-   [] RE-save if necessary, to same filename or new one,
-;    ;-       with additional variables, updated existing ones, or exclude those no longer needed.
-;    ;-   []
-;    ;-   []
-;    ;-   []
-;    ;-
-;    ;- Multi-flare useful reference info:
-;    ;-   C8.3 2013-08-30 T~02:04:00
-;    ;-   M1.0 2014-11-07 T~10:13:00
-;    ;-   M1.5 2013-08-12 T~10:21:00
-;    ;-   M7.3 2014-04-18 T~01:43:00
-;    ;-
-;    ;-
-;    ;-
-;
-;    @par2
-;
-;    flare = multiflare.m73
-;
-;    print, flare.class
-;    class = strlowcase((flare.class).Replace('.',''))
-;    print, class
-;
-;
-;
-;    ; Path to .sav file(s)
-;
-;    ; Filename(s), old and/or new
-;    ;filenames = ['','']
-;    filename = ''
-;
-;    restore, path + filename
-;
-;
-;    ;- Need to rename variable saved in these files for C8.3 flare...
-;    ;restore, '../flares/c83_20130830/c83_aia1700header.sav'
-;    ;index = c83_aia1700header
-;    ;help, index
-;    ;save, index, filename='c83_aia1700header.sav'
-;
-;    ;path='/home/astrobackup3/preupgradebackups/solarstorm/laurel07/'
-;    ;path='/solarstorm/laurel07/'
-;    ;testfiles = 'Data/HMI_prepped/*20140418*.fits'
-;    ;if not file_test(path + testfiles) then print, 'files not found'
-;
-;    end
-
-
-
-;=
-;= 3. "restore_maps.pro" ==================================================================================
-;=
-
-    function RESTORE_MAPS
-
-        ; This is probably obsolete now that I don't think it makes sense to read huge data
-        ;  arrays into structure every IDL session, especially if not even using maps. 
-
-        ;+
-        ;- LAST MODIFIED:
-        ;-   13 August 2019
-        ;-
-        ;- WRITTEN:
-        ;-   29 April 2019
-        ;-
-        ;- USEAGE:
-        ;-   IDL> @restore_maps
-        ;-
-        ;- NOTE:
-        ;-  Doesn't work if maps have already been added to structure;
-        ;-    get "duplicate tag def." or whatever
-        ;-  Pretty sure test for tagname "MAP" takes care of this, but there
-        ;-    may be cases where it doesn't, so leaving this note here.
-        ;-     (23 January 2020)
-        ;-
-        ;- OLD PATH/FILENAMES:
-        ;-   restore, '/solarstorm/laurel07/aia1600map_2.sav'
-        ;-   restore, '/solarstorm/laurel07/aia1700map_2.sav'
-        ;-     ????????? (23 January 2020)
-        ;-
-
-        @parameters
-
-        path = '/solarstorm/laurel07/' + year+month+day + '/'
-
-        ;- TEST to see if struc already has tag "map"
-        ;-   NOTE: structure tag strings ARE case-sensitive (i.e. "map" doesn't match)
-        tagnames = tag_names(A)
-        test = where(tagnames eq "MAP")
-        print, tagnames
-        print, test
-
-        ;if test eq -1 then begin  -->  true even though test = 13... I don't get it.
-
-        if (test ge 0) then begin
-        ;- If map is already included in structures, simply set each A[cc].map = map,
-        ;-   where "map" is name of variable that has just been freshly restored.
-
-            print, 'Replace existing map with restored map.'
-
-            restore, path + 'aia1600map.sav'
-            ;restore, path + 'aia1600map_2.sav'
-        ;    help, map
-        ;    help, A[0].map
-            A[0].map = map
-            undefine, map
-
-            restore, path + 'aia1700map.sav'
-            ;restore, path + 'aia1700map_2.sav'
-            A[1].map = map
-            undefine, map
-
-        stop
-
-        endif else begin
-
         ;- If tag for "map" has not been added to structures in array "A", add them now.
         ;if (where(tagnames eq "MAP") eq -1) then begin
-
-            print, 'Adding tag "MAP" to struc array "A", set to restored maps.'
-            ;
-            restore, path + 'aia1600map.sav'
-            ;restore, path + 'aia1600map_2.sav'
-            aia1600 = A[0]
-            aia1600 = create_struct( aia1600, 'map', map )
-            ;
-            restore, path + 'aia1700map.sav'
-            ;restore, path + 'aia1700map_2.sav'
-            aia1700 = A[1]
-            aia1700 = create_struct( aia1700, 'map', map )
-            ;
-            A = [ aia1600, aia1700 ]
-            ;
-            undefine, map
-            undefine, aia1600
-            undefine, aia1700
-            ;delvar, map
-            ;delvar, aia1600
-            ;delvar, aia1700
-            ;
-            ;A[0].map = map
-            ;A[1].map = map
-
-        endelse
-    end
+        print, 'Adding tag "MAP" to struc array "A", set to restored maps.'
+        ;
+        restore, path + 'aia1600map.sav'
+        ;restore, path + 'aia1600map_2.sav'
+        aia1600 = A[0]
+        aia1600 = create_struct( aia1600, 'map', map )
+        ;
+        restore, path + 'aia1700map.sav'
+        ;restore, path + 'aia1700map_2.sav'
+        aia1700 = A[1]
+        aia1700 = create_struct( aia1700, 'map', map )
+        ;
+        A = [ aia1600, aia1700 ]
+        ;
+        undefine, map
+        undefine, aia1600
+        undefine, aia1700
+        ;delvar, map
+        ;delvar, aia1600
+        ;delvar, aia1700
+        ;
+        ;A[0].map = map
+        ;A[1].map = map
+    endelse
+end
 
 
-;=
-;= 4. "save2_procedure.pro" =======================================================================================
-;=
-    ;+
-    ;- 03 November 2020
-    ;-
-    ;- UPDATED:
-    ;-  27 April 2022 (just comments)
-    ;-
-    ;- ROUTINE:
-    ;-   save2_procedure.pro
-    ;-
-    ;- PURPOSE:
-    ;-  Save VARIABLES to <filename>.sav
-    ;-    Module to call SAVE procedure AFTER checking to see if filename exists.
-    ;-    (can't tell if existing filename is overwritten, or if default filename
-    ;-    of idlsave.dat is used, or what's going on, but don't get message of any
-    ;-    kind if attempt to save to file that exists...).
-    ;-
-    ;- TO DO:
-    ;-  []
-    ;-  []
-    ;-  []
-    ;-  []
-    ;-
-    ;- NOTE: To save FIGURES as pdf files, use ./Graphics/save2.pro
-    ;-    (uses IDL object METHOD to save graphics to file, e.g. IDL> graphic.SAVE, ... )
-    ;-
+;==================================================================================================
+;= 4. "save2_procedure.pro"
+;
+;- 03 November 2020
+;-
+;- UPDATED:
+;-  27 April 2022 (just comments)
+;-
+;- ROUTINE:
+;-   save2_procedure.pro
+;-
+;- PURPOSE:
+;-  Save VARIABLES to <filename>.sav
+;-    Module to call SAVE procedure AFTER checking to see if filename exists.
+;-    (can't tell if existing filename is overwritten, or if default filename
+;-    of idlsave.dat is used, or what's going on, but don't get message of any
+;-    kind if attempt to save to file that exists...).
+;-
+;- NOTE: To save FIGURES as pdf files, use ./Graphics/save2.pro
+;-    (uses IDL object METHOD to save graphics to file, e.g. IDL> graphic.SAVE, ... )
+;-
 
 
-    pro SAVE2_PROCEDURE, $
-        variables, $
-        filename=filename, $
-        _EXTRA=e
-
-            
-        if FILE_EXIST( filename ) then begin
-            print, '===================================================='
-            print, 'WARNING! File already exists!'
-            print, 'Try saving to different filename and/or path.'
-            print, '===================================================='
-            STOP
-        endif
-
-        SAVE, variables, filename=filename, _EXTRA=e
-
-
-    end
-
-
-    ;===
-    ; 27 April 2022
-    ;  Merged save2_procedure.pro (above) with ML code test_save.pro (below).
-    ;===
-
-
-    ;+
-    ;- 03 November 2020
-    ;-
-    ;- SAVE procedure does NOT overwrite existing FILENAME, but doesn't print
-    ;-  message saying nothing was saved... could lose a lot of work if user
-    ;-  doesn't realize this, and then closes session after thinking variables
-    ;-  were saved to file.
-    ;-
-
-
-    ;-
-    ;- (NOTE: already have x22 1600 .sav files)
-    ;-
-
-    ;filename = 'x22_1600_header.sav'
-    ;filename = 'x22_1600_powermap.sav'
-    filename = 'x22_1700_header.sav'
-    filename = 'x22_1700_powermap.sav'
-
-    filename = 'm73_1600_header.sav'
-    filename = 'm73_1600_powermap.sav'
-    filename = 'm73_1700_header.sav'
-    filename = 'm73_1700_powermap.sav'
-
-    filename = 'c30_1600_header.sav'
-    filename = 'c30_1600_powermap.sav'
-    filename = 'c30_1700_header.sav'
-
-
-    filename = 'x22_1600_powermap.sav'
-    help, FILE_TEST( filename )
-    help, FILE_EXIST( filename )
-
-    print, FILE_INFO(filename)
-
-    print, FILE_BASENAME(filename)
-
-    print, FILEPATH(filename)
-
+pro SAVE2_PROCEDURE, $
+    variables, $
+    filename=filename, $
+    _EXTRA=e
+        
     if FILE_EXIST( filename ) then begin
         print, '===================================================='
-        print, 'WARNING! File already exists! New file NOT written!'
+        print, 'WARNING! File already exists!'
         print, 'Try saving to different filename and/or path.'
         print, '===================================================='
         STOP
     endif
+    SAVE, variables, filename=filename, _EXTRA=e
+end
 
-    path = '/solarstorm/laurel07/thesis/'
-    file2save = path + filename 
-    print, file2save
-    print, FILE_BASENAME( file2save )
 
-    print, FILE_INFO( file2save )
+;===
+; 27 April 2022
+;  Merged save2_procedure.pro (above) with ML code test_save.pro (below).
+;===
 
-    help, /structure, FILE_INFO( file2save )
 
-    filename = 'test_save_file_exists.sav'
-    print, file_test(filename)
+;+
+;- 03 November 2020
+;-
+;- SAVE procedure does NOT overwrite existing FILENAME, but doesn't print
+;-  message saying nothing was saved... could lose a lot of work if user
+;-  doesn't realize this, and then closes session after thinking variables
+;-  were saved to file.
+;-
 
-    testvar = 2
-    save, testvar, filename=filename
 
-    save, $
-        /compress
-        description='', $
-        /verbose, $
-        filename=filename
+;-
+;- (NOTE: already have x22 1600 .sav files)
+;-
 
-    end
+;filename = 'x22_1600_header.sav'
+;filename = 'x22_1600_powermap.sav'
+filename = 'x22_1700_header.sav'
+filename = 'x22_1700_powermap.sav'
+
+filename = 'm73_1600_header.sav'
+filename = 'm73_1600_powermap.sav'
+filename = 'm73_1700_header.sav'
+filename = 'm73_1700_powermap.sav'
+
+filename = 'c30_1600_header.sav'
+filename = 'c30_1600_powermap.sav'
+filename = 'c30_1700_header.sav'
+
+
+filename = 'x22_1600_powermap.sav'
+help, FILE_TEST( filename )
+help, FILE_EXIST( filename )
+
+print, FILE_INFO(filename)
+
+print, FILE_BASENAME(filename)
+
+print, FILEPATH(filename)
+
+if FILE_EXIST( filename ) then begin
+    print, '===================================================='
+    print, 'WARNING! File already exists! New file NOT written!'
+    print, 'Try saving to different filename and/or path.'
+    print, '===================================================='
+    STOP
+endif
+
+path = '/solarstorm/laurel07/thesis/'
+file2save = path + filename 
+print, file2save
+print, FILE_BASENAME( file2save )
+
+print, FILE_INFO( file2save )
+
+help, /structure, FILE_INFO( file2save )
+
+filename = 'test_save_file_exists.sav'
+print, file_test(filename)
+
+testvar = 2
+save, testvar, filename=filename
+
+save, $
+    /compress
+    description='', $
+    /verbose, $
+    filename=filename
+
+end ; ML?
 
 
 ;===============================================================================================================
@@ -536,7 +494,6 @@
 ;== 18 July 2022 : Copied the following from today.pro
 
 
-
 ;- Loop through channels (eventually... need way to store variables after each iteration.)
 ;channel = ['1600', '1700']
 ;foreach cc, channel, ii do begin
@@ -544,14 +501,12 @@
 ;    restore, '../flares/' + class + '/' + class + '_' + instr + channel[ii] + 'header.sav'
 ;endforeach
 
-
 channel = '1600'
 restore, '../flares/' + class + '/' + class + '_aia' + channel + 'cube.sav'
 restore, '../flares/' + class + '/' + class + '_aia' + channel + 'header.sav'
 aia1600index = index
 aia1600cube = cube
 print, index[0].wavelnth
-
 
 channel = '1700'
 restore, '../flares/' + class + '/' + class + '_aia' + channel + 'cube.sav'
@@ -566,8 +521,6 @@ aia1700cube = cube
 undefine, cube
 undefine, index
 
-
-
 ;=====================================================================================================
 
 
@@ -577,13 +530,9 @@ cadence = 24
 channel = '1600'
 ;channel = '1700'
 
-
 ;-  Will probably end up passing instr, channel, etc. to a function that
 ;-    does all the filename definition, manipulating strings, all that messy
 ;-    stuff out of the way, just returns values, or just creates them like vsoget.
-
-
-
 
 ;- Define path to .sav files for individual flares
 
@@ -605,17 +554,12 @@ endif else begin
     STOP
 endelse
 
-
-
-
-;========================================================================
-;=
+;===================================================================================================
 ;= IDL_Savefile => get information about .sav file without restoring
-;=
+
 
 savefile = '/solarstorm/laurel07/flares/m73_20140418/m73_aia1700header.sav'
 sObj = OBJ_NEW( 'IDL_Savefile', savefile )
-
 
 sContents = sObj->Contents()
 ;sContents = sObj.Contents() ... same thing, I think
@@ -636,7 +580,6 @@ print, tag_names(sContents)
 sNames = sObj->Names()
 print, sNames
 
-
 ;- The class 'IDL_Savefile' has the following Methods:
 ;-   • Cleanup
 ;-   • Contents
@@ -645,8 +588,7 @@ print, sNames
 ;-   • Restore
 ;-   • Size
 
-;========================================================================
-
+;==================================================================================================
 
 ; Create a savefile object.
 sObj = OBJ_NEW('IDL_Savefile', data_file)
@@ -678,10 +620,8 @@ help, sNames  ; => SNAMES   STRING  = Array[1]
 help, index    ; =>  INDEX   STRUCT =  -> <Anonymous>  Array[749]
 
 
-;==================================================================================
-;-
+;=================================================================================================
 ;- save multiflare_struc to .sav files ??
-;-
 
 ;restore, '../multiflare_struc.sav'
 ;S = multiflare_struc
@@ -697,13 +637,10 @@ help, index    ; =>  INDEX   STRUCT =  -> <Anonymous>  Array[749]
 ;-  (e.g. flare date, AR #, GOES start/peak/end times, GOES class, etc.)
 ;-  Final tag(s) has a value that is another structure that is unique to a
 ;-   specific instr/channel (e.g. HMI B_LOS or AIA 1700Å continuum emission).
-;-
-;-
 
 ;- Add tag/value to existing structure:
 ;-   struc = CREATE_STRUCT( struc, 'new_tag', new_value )
 
 ;S = create_struct( S, 'AR', '11158' )
-
 
 end

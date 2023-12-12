@@ -1,3 +1,7 @@
+12 December 2023
+  Moving some .pro files here so they're not cluttering up my main "work" directory
+  .../thesis/.  Not necessarily "Modules", but doesn't matter right now.
+
 
 04 January 2021
   deleted copy of aia_prep.pro since my local directories come before system dirs

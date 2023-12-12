@@ -1,4 +1,11 @@
 ;+
+;----------------------------------------------------------------------------------
+;- 12 December 2023
+;-   Another "today.pro" up one directory from here,
+;-    last modified 2019-05-10 ...
+;-
+;----------------------------------------------------------------------------------
+;-
 ;- 18 July 2022
 ;-   (most of previous stuff from 10 May 2022 was copied into notes dir.. a little late)
 ;-
