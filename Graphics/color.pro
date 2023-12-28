@@ -1,7 +1,5 @@
 ;- Last modified:   Fri Dec 14 09:20:26 MST 2018
 
-
-
 color = [ $
     'blue', $
     'green', $
@@ -25,13 +23,16 @@ color = [ $
     'dark slate gray', $
     'indian red', $
     'dark olive green', $
-    '' ]
+    '' $
+]
 
 
+;-
 ;- 25 January 2019
-;- Copied from batch_plot.pro
-;- This may have caused some inconsistencies in plots that I thought
-;- should have shown the same colors, and in the same order...
+;-   Copied from batch_plot.pro
+;-   This may have caused some inconsistencies in plots that I thought
+;-   should have shown the same colors, and in the same order...
+;-
 ;    color = [ $
 ;        'black', $
 ;        'blue', $
@@ -44,7 +45,10 @@ color = [ $
 ;        'sienna', $
 ;        'dim gray', $
 ;        'hot pink', $
-;        '' ]
+;        '' $
+;    ]
+
+
 
 ;- NOTE:
 ;-  leaving empty string as last element allows me to

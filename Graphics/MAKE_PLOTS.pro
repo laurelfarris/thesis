@@ -1,14 +1,8 @@
-
-;++
-;+ 17 October 2018
-;+ Combined all plotting routines into one file called 'MAKE_PLOTS.pro'.
-;++
+;+
+;- 17 October 2018
+;-   Consolidated plotting routines from 6 separate files
 
 
-
-
-
-;----------------------------------------------------------------------------------
 ; (1)
 ; 24 July 2018
 function PLOT_TIME_SEGMENT_subroutine, $

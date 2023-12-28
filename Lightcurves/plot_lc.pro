@@ -1,29 +1,33 @@
 ;+
 ;- LAST MODIFIED:
+;-
+;-   12/27/2023:
+;-     File 'batch_plot_2.pro' no longer exists --> merged with 'batch_plot.pro'
+;-     tho still defined as its own function within  'batch_plot.pro', should be able to call
+;-     function BATCH_PLOT_2( ... ) for 'filename.pro' after running
+;-       IDL> RESOLVE_ROUTINE, <filename>
+;-  
 ;-   07 July 2021
 ;-     copied to plot_lc_20210707.pro to remove ML code that has nothing to do with LCs,
 ;-     but may be important and needs to be copied to more relevant routines, including:
 ;-       • ALIGNMENT routines: restoring and saving w/ extra variables (shifts, allshifts,..)
 ;-       • computes FLUX for each channel (wrote code here for this before modifying struc_aia
-;-         to work with multiflare structure / @par2
-;-       •
+;-           to work with multiflare structure / @par2
+;-
 ;-
 ;- PURPOSE:
-;-   Plot light curves.
-;-
+;-   General Lightcurve (LC) plotting routine
 ;-
 ;- TO DO:
-;-
 ;-   [] Generalize variables currently hardcoded:
-;-       * filename
-;-       * ydata
-;-       * xtickinterval
+;-       • filename
+;-       • ydata
+;-       • xtickinterval
 ;-   [] Generalize entire routine for ANY lightcurve
 ;-        (see plot_lc_GENERAL.pro for early attempts)
 ;-   [] See previous versions of plot_lc...pro for LOTS of commented code..
 ;-   [] See Lightcurves/MAKE_PLOTS.pro
 ;-   [] Merge w/ "plot_lc_GENERAL.pro"
-;-   []
 ;-
 
 
@@ -33,7 +37,6 @@
 ;help, A[0]
 ;help, A[1]
 ; ==>> main.pro takes care of this now (13 Dec 2022)
-
 
 aia_lc_filename = class + '_' + strlowcase(instr) + '_lightcurve'
 print, aia_lc_filename
@@ -99,8 +102,10 @@ stairstep=1
 ytitle=A.name + ' (DN s$^{-1}$)'
 
 dw
-resolve_routine, 'batch_plot_2', /either
-plt = BATCH_PLOT_2(  $
+resolve_routine, 'batch_plot', /either
+
+;plt = BATCH_PLOT_2(  $
+plt = BATCH_PLOT(  $
     aia_xdata, aia_ydata, $
 ;    ystyle=1, $
     ystyle=2, $

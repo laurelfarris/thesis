@@ -1,15 +1,15 @@
 ;+
 ;- LAST MODIFIED:
+;-
+;-   27 Dec 2023
+;-     Merged "batch_plot.pro" & "batch_plot_2.pro";
+;-      --> replacing all occurrences of "batch_plot_2" in .pro files with "batch_plot"
+;-
 ;-   10 June 2021
+;-
 ;-
 ;- PURPOSE:
 ;-   Plot light curves.
-;-
-;- INPUT:
-;-
-;- KEYWORDS:
-;-
-;- OUTPUT:
 ;-
 ;- TO DO:
 ;-   [] Generalize variables currently hardcoded:
@@ -19,7 +19,6 @@
 ;-   [] Generalize entire routine for ANY lightcurve
 ;-     (see plot_lc_GENERAL.pro for early attempts)
 ;-
-
 
 
 buffer=1
@@ -246,8 +245,9 @@ ytitle=A.name + ' (DN s$^{-1}$)'
 
 
 dw
-resolve_routine, 'batch_plot_2', /either
-plt = BATCH_PLOT_2(  $
+resolve_routine, 'batch_plot', /either
+;plt = BATCH_PLOT_2(  $
+plt = BATCH_PLOT(  $
     xdata, ydata, $
     ystyle=1, $
     xrange=[0,n_obs-1], $

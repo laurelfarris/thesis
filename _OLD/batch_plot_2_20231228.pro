@@ -1,82 +1,4 @@
-;+
-;- DATE CREATED:
-;-   13 August 2019
-;-
-;- ROUTINE:
-;-   batch_plot_2.pro
-;-
-;- EXTERNAL SUBROUTINES:
-;-
-;- PURPOSE:
-;-   copied content of batch_plot.pro to try replacing /overplot kw with new approach of
-;-   putting second plot on same window and graphic position as the first plot,
-;-   but without /overplot, plt2 stays "detached" and keeps its own y-labels.
-;-
-;-
-;-
-;- USEAGE:
-;-   plt = BATCH_PLOT_2( xdata, ydata, ... )
-;-      (same as batch_plot[1])
-;-
-;- INPUT:
-;-
-;- KEYWORDS (optional):
-;-
-;- OUTPUT:
-;-
-;- TO DO:
-;-
-;- KNOWN BUGS:
-;-   Errors when creating/accessing axes
-;-       (according to comments in plot_spectra.pro from 19 June 2019, which have now
-;-          been removed along with (commented) calls/references to version _2 so I won't
-;-          get as confused in the future, one less output file if I use grep again to
-;-          search for "batch_plot_2*" in */*.pro
-;-
-;-   Appears that most plotting routines are still using the first version...
-;-
-;-  ==>>  most of this file is unaltered since copied from batch_plot.pro (21 August 2020)
-;-
-;-
-;- AUTHOR:
-;-   Laurel Farris
-;-
-;-
-;- 26 April 2019
-;-   Added symbol kw
-;-
-;- 02 November 2018 (from Enote on subroutines):
-;-   Need to be able to call LC routine for any length of time (full data set, small
-;-   flares before and after, etc. Label ticks outside of main subroutine? Takes
-;-   longer, but may be easier way to separate things, and leave less important
-;-   stuff for later)
-;-
-;-
-;- xdata = m x n array
-;-   m: array of, e.g. JDs for each LC or frequencies for each Power spec.
-;-   n: one x array for each y array
-;- ydata = m x n array
-;-   m: array of data points for each LC, power spectrum, whatev.
-;-   n: # curves
-;-
-;--
-;- 16 November 2018
-;- color and name are currently required input.
-;- Wrote this for a specific task, so it's okay for now.
-;- Not likely to be plotting light curves without assigning names or colors.
-;-
-;- 25 January 2019
-;-   I assume that was before I added the wrapper... currently looks like
-;-   string array of colors can be defined using @color, and
-;-   NAME defaults to an array of empty strings, one for each plot.
-;--
-;-
-;- TO DO:
-;-   If x dimensions don't match y, replicate the array over dimension=2 so
-;-     it's the same size as y.
-;-
-
-
+;===== "batch_plot_2.pro" ============================================================================
 
 
 function WRAP_BATCH_PLOT_2, $
@@ -121,7 +43,6 @@ function WRAP_BATCH_PLOT_2, $
     x2 = wx - right
     y2 = wy - top
     position = [x1,y1,x2,y2]*dpi
-
 
 
     ; ---------------------------------------------------------------
@@ -217,8 +138,6 @@ function WRAP_BATCH_PLOT_2, $
     ;- an existing legend.
 end
 
-
-
 function BATCH_PLOT_2, $
     xdata, ydata, $
     _EXTRA = e
@@ -255,3 +174,9 @@ function BATCH_PLOT_2, $
 
     return, plt
 end
+
+;--- end of batch_plot_2.pro text ----------------------------------------------------------------
+
+
+
+;= END OF ALL batch_plot*.pro code ==============================================================

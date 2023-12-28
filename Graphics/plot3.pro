@@ -1,14 +1,23 @@
 ;- 16 December 2018
 ;-  (see comp book, page 12, for some notes on plot3.pro)
 
+;- PURPOSE:
+;-   Plot over multiple panels in one figure
 
-;- Purpose:
-;-  plot multiple plot graphics in one window.
 
-;-  Dimension of ydata:
+;- 2 functions:
+;-   PLOT3_WRAPPER
+;-   PLOT3
+
+;- CALLING SEQUENCE:
+;-   plt = PLOT3( x, y, kw=kw )
+
+
+;- Dimension of ydata:
 ;-    1:  data points in one plotline
 ;-    2:  plotlines overlaid on each panel
 ;-    3:  panels (ideally = rows x cols)
+
 
 
 function PLOT3_WRAPPER, $
@@ -28,7 +37,6 @@ function PLOT3_WRAPPER, $
     buffer=buffer, $
     _EXTRA=e
 
-
     common defaults
     resolve_routine, 'get_position', /either
 
@@ -41,7 +49,7 @@ function PLOT3_WRAPPER, $
     ;- to make arrays of images that didn't necessarily fit evenly
     ;- into grid...
 
-stop
+    stop
 
     for ii = 0, NN-1 do begin
 
@@ -55,12 +63,15 @@ stop
             left   = left, $
             right  = right, $
             top    = top $
-        )
+            )
 
+        plt = objarr(NN)
 
-    plt = objarr(NN)
-    dw
-    win = window( dimensions=[wx,wy]*dpi, buffer=buffer )
+        dw
+
+        win = window( dimensions=[wx,wy]*dpi, buffer=buffer )
+        ; window2 ???
+
         plt[ii] = plot2( $
             x, $
             y[*,ii], $
@@ -71,13 +82,14 @@ stop
             overplot = ii<1, $
             name = name[ii], $
             linestyle = ii, $
-            _EXTRA=e )
+            _EXTRA=e $
+            )
     endfor
     return, plt
 end
 
 
-function plot3,  $
+function PLOT3,  $
     x, y, $
     _EXTRA=e
 
@@ -88,8 +100,7 @@ function plot3,  $
     NN = (size( y, /dimensions))[1]
     name = alph[0:NN-1]
 
-    ;- Defaulting 'buffer' to 1 helps avoid crashing while
-    ;- working remotely.
+    ;- set buffer=1 as default to help avoid crashing while working remotely.
 
     plt = PLOT3_WRAPPER( $
         x, y, $
@@ -107,39 +118,5 @@ function plot3,  $
         color = color, $
         buffer = 1, $
         _EXTRA = e)
-    return, plt
-end
-
-
-
-;- simple code to quickly plot data
-;- or copy/paste to current code.
-
-function plot_test, x, y
-
-    common defaults
-    colors = [ 'black', 'blue', 'red' ]
-    n = 1
-
-    wx = 5.0
-    wy = wx
-
-    ;dw
-    win = window( dimensions=[wx,wy]*dpi, /buffer )
-    plt = objarr(n)
-
-    for ii = 0, n-1 do begin
-        plt[ii] = plot2( $
-            x, y, $
-            /current, $
-            layout=[1,1,1], $
-            margin=0.1, $
-            stairstep=1, $
-            _EXTRA=e )
-    endfor
-
-    file = 'test_histogram.pdf'
-    save2, file, /add_timestamp
-
     return, plt
 end

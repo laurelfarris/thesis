@@ -1,12 +1,17 @@
-;- --------------------------------------------------------------------------------
+;+
+;-
+;- 27 Dec 2023
+;-
+;- TO DO:
+;-   [] Move this file to Codes/Notes/  ???
+;-        May be useful reference for batch_plot[_2] ...
+
+
 ;- 13 August 2019
 ;-   copied batch_plot to try replacing /overplot kw with new approach of
 ;-   putting second plot on same window and graphic position as the first plot,
 ;-   but without /overplot, plt2 stays "detached" and keeps its own y-labels.
 ;-  Hopefully...
-;- --------------------------------------------------------------------------------
-
-
 
 ;-
 ;- Last modified:    26 April 2019

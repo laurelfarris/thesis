@@ -5,22 +5,15 @@ MAKE_PLOTS.pro
   some of which encompass lines of code originally all at Main Level (ML)...
   probably merged a bunch of files to clean up working directory
 
+batch_plot.pro
 
 
-batch_plot.pro      LAST MODIFIED: 26 April 2019
-batch_plot_2.pro    LAST MODIFIED: ??
-                      ==>> view timestamps in remote ssh directory
 
-
-color.pro
-  string array with color names... forget what this is for
-
+color.pro = IDL script to define 'color' = string array of color names to use in graphics
+  IDL> @color
 
 color_tables.pro
   Create custom color table
-
-
-histogram_tests.pro
 
 my_viridis.pro
   Custom color table similar to standard CT in python
@@ -88,4 +81,5 @@ arrow2.pro
 polygon2.pro
 text2.pro
 xstepper2.pro
+
 

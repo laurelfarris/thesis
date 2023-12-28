@@ -133,8 +133,9 @@ xtitle = 'Start Time (' + goesdata.utbase + ')'
 ytitle = 'Count rate (s$^{-1}$ detector$^{-1}$)'
 
 dw
-resolve_routine, 'batch_plot_2', /either
-plt = BATCH_PLOT_2(  $
+resolve_routine, 'batch_plot', /either
+;plt = BATCH_PLOT_2(  $
+plt = BATCH_PLOT(  $
     rhessi_xdata, rhessi_ydata, $
     axis_style=1, $
     overplot=1, $

@@ -8,9 +8,6 @@
 ;           2-element array with x and y dimensions (pixels)
 ; Output:   X, Y = arcsecond locations for x/y axes
 
-
-
-
 pro PIXELS_TO_ARCSECONDS, $
     center_pix, $
     dimensions, $
@@ -44,6 +41,34 @@ pro PIXELS_TO_ARCSECONDS, $
 end
 
 
+
+pro pixels_to_arcsecs, x, y
+
+    ; Give x and y in pixels relative to lower left corner at 0,0.
+    ; Get back x and y in arcseconds relative to disk center.
+    ; Mess with output format LATER! This is NOT high priority!
+    ; Also improve or get rid of other two subroutines in this file.
+
+    print, 'coordinates relative to lower left corner (pixels):  (', $
+        strtrim(x,1), ', ', $
+        strtrim(y,1), ')'
+
+
+    x = x - index.crpix1
+    y = y - index.crpix2
+    print, 'coordinates relative to disk center (pixels):        (', $
+        strtrim(x,1), ', ', $
+        strtrim(y,1), ')'
+
+
+    x = x * index.cdelt1
+    y = y * index.cdelt2
+    print, 'coordinates relative to disk center (arcseconds):    (', $
+        strtrim(x,1), ', ', $
+        strtrim(y,1), ')'
+
+end
+
 pro arcseconds_to_pixels_OLD
 
     ;; Pretty sure this was a hacky way to figure out which
@@ -70,34 +95,6 @@ pro arcseconds_to_pixels_OLD
 
     save2, 'hmi_image_2.pdf'
 
-
-end
-
-
-pro pixels_to_arcsecs, x, y
-
-    ; Give x and y in pixels relative to lower left corner at 0,0.
-    ; Get back x and y in arcseconds relative to disk center.
-    ; Mess with output format LATER! This is NOT high priority!
-    ; Also improve or get rid of other two subroutines in this file.
-
-    print, 'coordinates relative to lower left corner (pixels):  (', $
-        strtrim(x,1), ', ', $
-        strtrim(y,1), ')'
-
-    x = x - index.crpix1
-    y = y - index.crpix2
-
-    print, 'coordinates relative to disk center (pixels):        (', $
-        strtrim(x,1), ', ', $
-        strtrim(y,1), ')'
-
-    x = x * index.cdelt1
-    y = y * index.cdelt2
-
-    print, 'coordinates relative to disk center (arcseconds):    (', $
-        strtrim(x,1), ', ', $
-        strtrim(y,1), ')'
 
 end
 

@@ -1,8 +1,7 @@
 ;+
-
-;----------------------------------------------------------------------------------
 ;  27 December 2023
 ;   => copied the following bit from Oct. 2022 from test.pro
+
 
     ; 07 October 2022
     cadence = 24.0
@@ -33,12 +32,10 @@
     print, ''
 
 
-;----------------------------------------------------------------------------------
 ;- 12 December 2023
 ;-   Another "today.pro" up one directory from here,
 ;-    last modified 2019-05-10 ...
 
-;----------------------------------------------------------------------------------
 ;- 18 July 2022
 ;-   (most of previous stuff from 10 May 2022 was copied into notes dir.. a little late)
 ;-
@@ -151,8 +148,6 @@
 
 ; display current nesting of procedures and functions (found in shift_ydata.pro 09 Aug 2022)
 help, /traceback
-
-
 
 
 ;=====================================================================================================

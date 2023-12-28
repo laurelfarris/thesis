@@ -14,28 +14,16 @@
 ;-  Smoothed/filtered LCs are obtained from call to the FILTER function.
 ;-  Detrended LCs are obtined by subtracting the smoothed LC from the raw LC
 ;-     (or do you divide? I dunno...)
-;-
-;- USEAGE:
-;-
-;- TO DO:
-;-   []
-;-
-;- AUTHOR:
-;-   Laurel Farris
-;-
+
 
 ;=============================================================================================================
-;=====
 ;=
 
-
 buffer = 1
-
 
 ;+
 ;--- Plot original (raw) light curves
 ;-
-
 
 ;-  Can plot_lc.pro be used for this? No sense in having duplicate code...
 ;-   I'm thinking yes...
@@ -48,9 +36,18 @@ buffer = 1
 ;time = strmid(A[0].time,0,5)
 ;xdata = indgen( size(A.flux, /dimensions) )
 ;-  Defined at ML in plot_lc.pro
-
+;-
 ;- window dimensions
-;-   NOTE: batch_plot_2.pro defaults are wx=8.0 and wy=3.0
+;-   Note:  batch_plot_2.pro defaults are wx=8.0 and wy=3.0
+;-             defaults are wx=8.0 and wy=3.0
+;- 12/27/2023:
+;-   Second Note: batch_plot_2.pro no longer exists (merged w/ batch_plot.pro 12/27/2023),
+;-     but both functions (v1 and v2) are defined in batch_plot.pro
+
+
+
+
+
 wx = 8.0
 wy = 3.0
 

@@ -15,11 +15,6 @@
 ;-   • Images/difference_images.pro
 ;-   •
 ;-   • Spectra/
-;-   •
-;-
-
-
-
 
 @path_temp
 
@@ -65,17 +60,12 @@ endif else begin
 endelse
 
 
-
-
-
 ; 30 August 2022
 ;  [] flare.path? Could add specific path to each structure,
 ;      OR combine all flare .sav files into one directory...
 
-
 ;= restore "A", array of structures created with ./Prep/struc_aia.pro
 ;restore, '../flares/' + class + '/' + class + '_struc.sav'
-
 
 ;=
 ;= Define / re-format strings for 'class' and 'date'
@@ -97,5 +87,3 @@ endelse
 ;=   e.g. flare.date = '12-Aug-2013' --> date = '20130812'
 ;
 ;date = flare.year + flare.month + flare.day
-
-
