@@ -6,15 +6,15 @@
 ;-     (was very short.. not sure why it existed).
 ;-
 ;-  17 January 2020
-;-    Removed kw opt for "shaded". Created separate subroutine
-;-    called "shade_my_plot.pro" in same directory.
+;-    Removed kw opt "shaded" & created separate subroutine:
+;-        ../Graphics/shade_my_plot.pro
 ;-
 ;-  17 April 2019
 ;-    Used strmid( var, 0, 5 ) instead of hardcoding flare times...
 ;-    Not sure why I didn't do that in the first place, unless I just didn't
 ;-    realize that if variable was already 5 elements long, it wouldn't cause an error.
 ;-    Variable would remain unchanged.
-
+;-
 ;-  25 November 2018:
 ;-    Made a few changes to use this with GOES data: no time array from AIA
 ;-    ... what exactly did I do? Previously plotting GOES over AIA's obs times?
@@ -46,9 +46,6 @@
 ;-      could probably remove it altogether.
 ;-
 
-
-
-
 function OPLOT_FLARE_LINES_2, flare, plt, start_ind=start_ind
 
     ; Get JD for each phase using values in flare struc
@@ -78,8 +75,6 @@ function OPLOT_FLARE_LINES_2, flare, plt, start_ind=start_ind
     return, vert
 
 end
-
-
 
 function OPLOT_FLARE_LINES, $
     plt, $

@@ -1,11 +1,44 @@
 ;+
+
+;----------------------------------------------------------------------------------
+;  27 December 2023
+;   => copied the following bit from Oct. 2022 from test.pro
+
+    ; 07 October 2022
+    cadence = 24.0
+
+    print, ''
+    headings = ['power', 'N', 't (sec)', 't (min)']
+    print, '   ' + headings
+
+    for ii = 0, 8 do begin
+        NN = 2^ii
+        duration = cadence * NN
+        print, ii, NN, fix(duration), fix(duration/60.0)
+    ;    print, ii, round(duration)
+    ;    print, ii, round( 2^(float(ii)))
+    ;    print, ii, 2.0^ii
+    endfor
+
+    print, 1000. * (1./(64*24))
+
+    nuc = 5.6
+    nu = 5.4
+    res = 0.65
+    dnu = 1.0
+    ;
+    print, ''
+    print, nuc - (dnu/2), nuc + (dnu/2)
+    print, nu-res, nu+res
+    print, ''
+
+
 ;----------------------------------------------------------------------------------
 ;- 12 December 2023
 ;-   Another "today.pro" up one directory from here,
 ;-    last modified 2019-05-10 ...
-;-
+
 ;----------------------------------------------------------------------------------
-;-
 ;- 18 July 2022
 ;-   (most of previous stuff from 10 May 2022 was copied into notes dir.. a little late)
 ;-

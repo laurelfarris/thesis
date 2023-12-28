@@ -17,10 +17,6 @@
 ;-   unique to whatever is being movie-ed.
 ;-  
 
-
-
-
-
 pro xstepper2, $
     cube, $
     scale=scale, $
@@ -28,13 +24,10 @@ pro xstepper2, $
     invert_colors=invert_colors, $
     _EXTRA=e
 
-
-
     if keyword_set(invert_colors) then $
         default_colortable = 54 $
     else $
         default_colortable = 0
-
 
     if keyword_set(channel) then $
         aia_lct, wave=fix(channel), /load $

@@ -1,4 +1,10 @@
-"work"/Lightcurves/_README
+
+This directory ( Codes/Lightcurves/ )
+contains plotting procedures specifically for flare lightcurves
+
+
+==>> see ../Graphics/ for general plotting routines
+
 
 ---------------------------------------------------------------------------------
 
@@ -7,7 +13,6 @@
 2021 July 07 : renamed to "plot_lc_SDO-GUIDE.pro" ??
 
 
----------------------------------------------------------------------------------
 General routine for plotting a light curve:
   • plot_lc.pro
 
@@ -21,9 +26,13 @@ Overlay other plot lines:
   • oplot_background.pro
   • oplot_flare_lines.pro
 
+
 Other:
   • bda_lightcurves.pro
   • plot_bda_lightcurves.pro
   • plot_lightcurve_reference.pro
+  • utplot.pro
+     copied procedure code from interwebs
+     ==>> see "Guide to SDO data analysis" (SDO_guide_2019.pdf)
 
 ---------------------------------------------------------------------------------

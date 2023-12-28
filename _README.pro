@@ -217,5 +217,10 @@ get_bda_indices, aia_1700_index, a7t1, a7t2
 ;-  *
 
 
+;---------------------------------------------------------------------------------------------
+; 27 December 2023
+
+;Code backups on new lappy, copied 28 March 2022 (based on ls timestamps), located in:
+;    ~/Backups/codes_backup/
 
 end

@@ -4,7 +4,12 @@
 ;+ Combined all plotting routines into one file called 'MAKE_PLOTS.pro'.
 ;++
 
+
+
+
+
 ;----------------------------------------------------------------------------------
+; (1)
 ; 24 July 2018
 function PLOT_TIME_SEGMENT_subroutine, $
     xdata, ydata, xdata2=xdata2, ydata2=ydata2, $
@@ -89,6 +94,8 @@ function PLOT_TIME_SEGMENT_subroutine, $
     endif
     return, p
 end
+
+; (2)
 pro plot_TIME_SEGMENT
 
     dz = 64
@@ -167,6 +174,7 @@ end
 
 
 
+; (3)
 function PLOT_WITH_TIME, xdata, ydata, $
     offset=offset, $
     time=time, color=color, name=name, _EXTRA = e
@@ -218,6 +226,10 @@ function PLOT_WITH_TIME, xdata, ydata, $
 
     return, lc
 end
+
+
+
+; (4)
 pro main_level_code
 
     ; IDL> .run plot_structures
@@ -278,6 +290,7 @@ end
 
 ;; Call PLOT_WITH_TIME with one of these structures
 
+; (5)
 function PLOT_STRUCTURES, $
     ydata, $
     offset=offset, $
@@ -296,6 +309,8 @@ function PLOT_STRUCTURES, $
 
     return, struc
 end
+
+; (6)
 pro main_level_code
 
     ;xdata = A.jd-min(A.jd)

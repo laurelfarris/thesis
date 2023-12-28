@@ -54,9 +54,8 @@ print, max( index.datamean/index.exptime )
 
 stop;----
 
+; UTPLOT**
 UTPLOT, xdata, ydata, psym=1, yrange=[min(ydata),max(ydata)]
-
-
 
 stop
 
@@ -70,7 +69,15 @@ waves = '1600'
 
 ssw_jsoc_time2data, d_start, d_end, index, ds=ds, waves=waves, key=key, cadence=cadence
 
-
+; utplot**
 utplot, index.t_obs, index.datamean/index.exptime, psym=1
+
+
+
+; ** UTPLOT procedure
+;  => see "Guide to SDO Data Analysis" (p. 79-80 in SDO_guide_2019.pdf)
+;       for utplot useage + examples
+; -- 27 December 2023
+
 
 end

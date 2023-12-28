@@ -1,0 +1,91 @@
+27 December 2023
+
+MAKE_PLOTS.pro
+  plotting routines, organized into 6 separate procedures / functions,
+  some of which encompass lines of code originally all at Main Level (ML)...
+  probably merged a bunch of files to clean up working directory
+
+
+
+batch_plot.pro      LAST MODIFIED: 26 April 2019
+batch_plot_2.pro    LAST MODIFIED: ??
+                      ==>> view timestamps in remote ssh directory
+
+
+color.pro
+  string array with color names... forget what this is for
+
+
+color_tables.pro
+  Create custom color table
+
+
+histogram_tests.pro
+
+my_viridis.pro
+  Custom color table similar to standard CT in python
+  (dark -> light shading preserved in greyscale)
+
+
+normalize_ydata.pro
+  NO DOCUMENTATION OR COMMENTS OF ANY KIND!
+  Two subroutines:
+    • PRO  normalize_ydata
+    • FUNC normalize_ydata_OLD
+
+save2.pro
+    Save current graphic to pdf with current date appended
+     excellent module, if I do say so myself :)
+
+
+scinot.pro
+   Format tick mark labels in scientific notation
+     ==>> needs work
+
+
+win_quick.pro
+  Create window object quickly
+    ???
+
+
+line.pro
+  Three subroutines:
+   • oplot_vertical_lines
+   • hline
+   • vline
+ + linestyle reference in comments
+
+    
+
+
+plot3.pro
+image3.pro
+    Create multi-panel figures
+
+get_position.pro
+    Compute position coords for multi-panel figures:
+
+add_letters_to_figure.pro
+  overlay (a), (b), ... on multi-panel grahpics
+
+
+--------------------------------------------------------------------------------------------
+Modules to set preferred default settings and input KWs
+by calling COMMON block and setting other variables using conditionals before
+calling IDL graphic routines with new values (basename + "2.pro")
+or subroutines written &/or provided by my own collaborators:
+
+window2.pro
+plot2.pro
+scatterplot2.pro
+image2.pro
+legend2.pro
+colorbar2.pro
+axis2.pro
+contour2.pro
+  includes second function colorbar3 at bottom... unclear what the difference is.
+arrow2.pro
+polygon2.pro
+text2.pro
+xstepper2.pro
+

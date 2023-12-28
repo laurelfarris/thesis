@@ -14,21 +14,29 @@
 ;-   Use IDL's SAVE method on current window to save graphic as pdf
 ;-   with date appended in the form "_yyyymmdd".
 ;-
+;- USEAGE:
+;-   SAVE2, "myfilename", overwrite=0|1,
+    overwrite=overwrite, $
+    timestamp=timestamp, $
+    idl_code=idl_code, $
+    _EXTRA=e
+;-
 ;- INPUT:
 ;-   "filename"
 ;-     NOTE: extension (.pdf) is appended here.
 ;-
 ;- KEYWORDS:
-;-   TIMESTAMP
-;-      set /timestamp to add date and filename to bottom of page.
-;-   IDL_CODE
-;-      set = string name of code that generated figure;
-;-      appended to timestamp text.
+;-   /overwrite ;; set to overwrite existing file w/ same name
+;-   /timestamp ;; set to include date (& pdf filename) at bottom of page (~footer position)
+;-   idl_code = string name of IDL .pro code that generated figure; appended to timestamp text
 ;-        (NOTE: ignored if kw TIMESTAMP is not set).
-;-   _EXTRA is for keywords in call to IDL's text function.
-;-     (see documentation)
+;-   _EXTRA = keywords for call to  IDL's text function
+;-       (to change default values defined in source definition; see documentation)
+;-
 ;-
 ;- OUTPUT:
+;-  new/modifed external pdf file(s)
+;-    PRO - no output variables or modifed input args (as far as I know...)
 ;-
 ;- TO DO:
 ;-   [] for filenames that exist, append "_1", "_2", etc.
@@ -38,7 +46,6 @@
 ;-       This actually uses the save METHOD --> win.save, arg, kw=kw, ...
 ;-   [] scp figures directly to mac from astronomy,
 ;-        rather than separate command to run from mac (if possible)
-;-   []
 ;-
 
 pro SAVE2, filename, $
@@ -47,7 +54,6 @@ pro SAVE2, filename, $
     timestamp=timestamp, $
     idl_code=idl_code, $
     _EXTRA=e
-
 
 
     common defaults

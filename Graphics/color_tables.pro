@@ -2,7 +2,14 @@
 ; Last modified:    Fri 10 Mar 2017
 ; Programmer:       Laurel Farris
 ; Description:      Create custom color tables in a structure
-;                       Returns by reference to tag index
+;                       Returns by reference to tag index**
+;
+;   27 December 2023        
+;         **current version appears to return entire structure
+;     Looks like the type of routine where user modifies function content directly
+;       rather than calling from elsewhere with a few input args & kws..
+;     Seems simple and straighforward tho (not to mention SHORT)
+;       
 
 
 function color_tables;, desired_colors

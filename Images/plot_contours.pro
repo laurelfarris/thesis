@@ -15,6 +15,9 @@
 ;- OUTPUT:
 ;-    HMI image cropped to 500x330, to be used in CONTOUR arg.
 ;-
+;- SUBROUTINES:
+;-    Codes/Grahphics/contour2.pro 
+;-
 ;- NOTE(S):
 ;-  •  User must generate image prior to calling this routine;
 ;-       contours are overlaid on existing graphic (see IDL documenation for CONTOUR)
