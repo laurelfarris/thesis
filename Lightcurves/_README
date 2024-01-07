@@ -1,10 +1,7 @@
 
-This directory ( Codes/Lightcurves/ )
-contains plotting procedures specifically for flare lightcurves
-
-
-==>> see ../Graphics/ for general plotting routines
-
+Codes/Lightcurves/
+    contains IDL procedures for plotting flare lightcurves
+      -> for general plotting routines, see Codes/Graphics/
 
 ---------------------------------------------------------------------------------
 

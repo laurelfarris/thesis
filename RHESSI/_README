@@ -1,7 +1,58 @@
+07 January 2024
+
+
+
+    m73_rhessi_lightcurve.png
+      ... ??
+
+    3 text files with lightcurves data:
+        rhessi_c83_lightcurve_corr.txt
+        rhessi_m73_lightcurve_corr.txt
+        rhessi_x22_lightcurve_corr.txt
+
+
+  ./hsi_images/
+      20131228/
+        hsi_clean_image_...20-30kev.fits
+        hsi_pixon_image_...20-30kev.fits
+      20140418/
+        hsi_clean_image_...25-50kev.fits
+        hsi_pixon_image_...25-50kev.fits
+      20110215/
+        hsi_clean_image_...25-50kev_early_flare.fits
+        hsi_clean_image_...25-50kev_mid_flare_good_footpoints.fits
+        hsi_clean_image_...35-70kev_mid_flare_good_footpoints.fits
+        hsi_clean_image_...50-100kev_mid_flare.fits
+        hsi_clean_image_...25-50kev_late_flare_good_footpoints.fits
+        hsi_clean_image_...50-100kev_late_flare.fits
+
+
+  ./laurel_RHESSI_imgs/
+      20131228/
+          hsi_CLEAN_12-25kev_...smallFOV.fits
+          hsi_CLEAN_12-25kev_...wideFOV.fits
+      20140418/
+          hsi_CLEAN_20-25kev_...fits
+          hsi_CLEAN_25-50kev_...fits
+          hsi_PIXON_20-25kev_...fits
+      20110215/
+          hsi_CLEAN_20-25kev_...fits
+          hsi_CLEAN_25-50kev_...fits
+          hsi_PIXON_20-25kev_...fits
+
+
+
+07 January 2024
+
+  Re-visiting #work dir.. cleaning up files, organizing, improving
+  _README files where needed...
+
 28 July 2022
 
-  For plotting RHESSI light curves are in Lightcurves/ dir, not here...
-
+    Text files for plotting RHESSI light curves
+     -- actual code(s) is/are located in Lightcurves/
+         • plot_rhessi.pro
+         • ...
 
 16 July 2021
 
