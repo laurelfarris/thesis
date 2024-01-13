@@ -4,6 +4,7 @@
 ;-
 ;- PURPOSE:
 ;-   General for plotting light curves (any event).
+;-   "Early attempts to write subroutine that is COMPLETELY generalized
 ;-
 ;- INPUT:
 ;-   flux = 2D NxM array
