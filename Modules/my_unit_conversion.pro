@@ -302,11 +302,9 @@ pro PERIOD_FREQ_CONVERSION
     ; TO DO:        Add nicely formatted output to display each value + units
 
     freq_mHz = 5.5
+
     freq_Hz = freq_mHz / 1000.
     period_seconds = 1. / freq_Hz
     period_minutes = period_seconds / 60.
 
 end ;===============================================================================================
-
-
-
