@@ -1,13 +1,20 @@
 ;+
 ;- LAST MODIFIED:
+;-
+;-   19 February 2024
+;-    ★  moved "wa2_OLD_20200410.pro" to Main "Old stuff" dir: ../_OLD/
+;-          (can always pull it back up for reference, if needed)
+;-
 ;-   10 April 2020
 ;-     Changed rgb_table to "my_viridis", custom made by me using
 ;-     IDL routine COLORTABLE and a close examination of the viridis colortable
 ;-     found online.
+;-
 ;-   14 April 2020
 ;-     Removed codes from 4/10/2020 defining colortable directly in this routine.
 ;-     Copied lines creating viridis colortable into function "my_viridis",
 ;-     called simply as rgb_table = my_viridis().
+;-
 ;-   21 April 2020
 ;-     Added kw xminor=5 to creation of wa graphic.
 ;-

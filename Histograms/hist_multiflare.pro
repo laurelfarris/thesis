@@ -1,4 +1,16 @@
 ;+
+;====================================================================================
+;=
+;= 19 February 2024:
+;=
+;=    [] defined variable nbins=50, followed by hardcoded values = 50 ... Coincidence? 
+;=        Or should instances of value '50' be replaced by variable 'nbins' ??
+;=    [] Re-run to confirm bin size, nbins, xrange
+;=        (solve for the remaining unknown...)
+;=
+;====================================================================================
+;-
+;-
 ;- LAST MODIFIED:
 ;-   28 July 2020
 ;-
@@ -23,11 +35,9 @@
 
 
 
-
 ;====================================================================================
 ;= Old code : [] copy to research log for 18 August 2020, then delete these lines.
 ;===
-
 
 ;-
 ;print, min(aia1600maps), format=format
@@ -56,17 +66,14 @@
 ;endfor
 ;;
 
-
 ;====================================================================================
 ;= START HERE:
 ;===
-
 
 buffer = 1
 dz = 64
 @parameters
 format='(e0.2)'
-
 
 ;----
 ;-- Restore "headers" for multiflare
@@ -85,7 +92,6 @@ restore, '../multiflare_struc.sav'
 ;print, (multiflare_struc.(*))[cc].channel
 ;-    Error, can't use wildcard like this to access all tags in struc.
 ;-
-
 
 ;----
 ;-- Restore Power Maps
@@ -123,7 +129,6 @@ help, mask
 ;-
 
 
-
 ;- Define data array to represent in histogram plots:
 imdata = map * mask
 ;-  IMDATA       FLOAT   = Array[500, 330, 9, 2]
@@ -132,8 +137,7 @@ sz = size(imdata, /dimensions)
 
 STOP
 
-;=================================================================================
-
+;================================================================================================
 
 ;- Edit this code block to replace channel-specific vars with 4-dimension arrays... later.
 for frac = 0.0, 1.0, 0.05 do begin
@@ -147,20 +151,16 @@ for frac = 0.0, 1.0, 0.05 do begin
     endif
 endfor
 
-
 for ii = 0, 8 do print, min(imdata[*,*,ii,0]), format=format
 for ii = 0, 8 do print, max(imdata[*,*,ii,1]), format=format
 
 ;=================================================================================
 ;=================================================================================
-;
 
 
-;
 ;---
 ;- Compute histogram data
 ;-
-;
 ;binsize = 0.1
 nbins = 50
 ;
@@ -203,9 +203,8 @@ ydata = reform(ydata, 50, 3, 3, 2)
 ;
 
 
-;-
 ;---
-;- Plot histgram
+;- PLOT histgram
 ;-
 ;
 ;help, multiflare_struc.(0)[0]
