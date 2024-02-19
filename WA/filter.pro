@@ -35,10 +35,20 @@
 ;-       is computed from this output by subtracting or dividing
 ;-       the smoothed data from the raw data.
 ;-
+;-
 ;- TO DO:
+;-
 ;-   [] replace hardcoded cutoff for filter (in function "filter")
 ;-      used to create mask, and make new kw option, or something...
-;-    (2/12/2020)
+;- -- (2/12/2020)
+;-
+;-   [] Rename "filter.pro" function? Called in "main_filter.pro" with the form
+;-         > FILTER( flux, cadence, cutoff_period )
+;-      looks like a canned IDL routine, haven't looked at my own codes in a long time,
+;-      searched around the internet for source material
+;-      before realizing I wrote this function myself.. located in current directory.
+;- -- (2/19/2024)
+;-
 ;-
 ;- KNOWN BUGS:
 ;-   Possible errors, harcoded variables, etc.
