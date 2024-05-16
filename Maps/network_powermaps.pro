@@ -1,7 +1,13 @@
+;-
+;- 16 May 2024
+;-   > ls timestamp = 31 July 2019 (most recent edit time before today)
+;-
+;-
 ;- 20 December 2018
-;- Main Level, lots of hardcoded stuff...
+;-   Main Level, lots of hardcoded stuff...
 ;-
 ;-
+
 
 ;- 19 November 2018 (p. 73)
 
@@ -57,7 +63,15 @@ imdata = [ $
 ]
 
 
-
+    ; 16 May 2024 -- how I think these arrays were meant to be defined:
+    imdata = [ $
+        [[ mean(quiet[*,*,[z_start[0]:z_start[0]+dz-1] ,0], dim=3) ]], $
+        [[ mean(quiet[*,*,[z_start[1]:z_start[1]+dz-1] ,0], dim=3) ]], $
+        [[ mean(quiet[*,*,[z_start[2]:z_start[2]+dz-1] ,0], dim=3) ]], $
+        [[ quiet[*,*,z_start[0],1] ]], $
+        [[ quiet[*,*,z_start[1],1] ]], $
+        [[ quiet[*,*,z_start[2],1] ]] $
+    ]
 
 max_value = [ 239, 239, 239, 103, 103, 103 ]
 min_value = [ 50, 50, 50, 0.006, 0.006, 0.006 ]
@@ -80,6 +94,16 @@ min_value = [ 50, 50, 50, 0.006, 0.006, 0.006 ]
         time[z_start[1]] + '-' + time[z_start[2]+dz-1], $
         time[z_start[2]] + '-' + time[z_start[2]+dz-1] $
     ]
+
+        ; 16 May 2024 -- how I think these arrays were meant to be defined:
+        title = [ $
+            time[z_start[0]] + '-' + time[z_start[0]+dz-1], $
+            time[z_start[1]] + '-' + time[z_start[1]+dz-1], $
+            time[z_start[2]] + '-' + time[z_start[2]+dz-1], $
+            time[z_start[0]] + '-' + time[z_start[0]+dz-1], $
+            time[z_start[1]] + '-' + time[z_start[1]+dz-1], $
+            time[z_start[2]] + '-' + time[z_start[2]+dz-1] $
+        ]
 
     for ii = 0, 5 do begin
 

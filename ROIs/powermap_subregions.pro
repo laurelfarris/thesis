@@ -192,7 +192,6 @@ pro HMI_IMAGES, hmi_cont, hmi_mag, savefile=savefile
     im = IMAGE2( $
         data, $
         cols=cols, rows=rows, $
-
         xshowtext=0, yshowtext=0, $
         title = title )
 
