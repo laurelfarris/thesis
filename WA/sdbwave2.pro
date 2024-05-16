@@ -351,7 +351,8 @@ IF NOT KEYWORD_SET(ylog) THEN ytype=0 else ytype=1
 ;;- "horline" is an "undefined procedure/function"...
 
 
-;-
+
+;- 05/16/2024 -- plot COI ? Or contour around power higher than some threshold??
 mywin.SetCurrent
 cntr = CONTOUR2( $
     power, time, period, $
@@ -368,20 +369,20 @@ cntr = CONTOUR2( $
     c_label_show=0, $
 ;    min_value=1.0e4, $   ; Min/Max over 1600 and 1700...
 ;    max_value=1.68e7, $  ;  ... not comparing them, so commenting this for now.
-    xthick=lthick, ythick=lthick, $
-        ;- Not sure if I wanted this commented out or not...
+    xthick=lthick,
+    ythick=lthick, $
     xticklen=0.020, $
     yticklen=0.015, $
     yminor=0, $
     ytickvalues=[50, 100, 200, 500, 1000, 2000], $
     ylog=ylog, $
     yrange=[long,short], $
-    xstyle=1, ystyle=1, $
+    xstyle=1,
+    ystyle=1, $
     title=waveTitle, $
     xtitle='Time [s]', $
     ytitle='Period [s]' $
 )
-
 
 ;- Color bar for wavelet plot (b)
 ;cbar = colorbar( title='power', rgb_table=color, major=5, $
@@ -634,6 +635,8 @@ ENDIF ELSE begin
 ;    XYOUTS,0.85,0.960,'b) Fourier and Global Spectra',/norm,align=0.5,charsize=1.3
 ENDELSE
 
+
+; 05/16/2024 -- indicate COI on global spectrum (panel c) ?
 IF KEYWORD_SET(cone) THEN BEGIN
 
     ;OPLOT,norm_global_signif,period,LINES=3
@@ -644,13 +647,10 @@ IF KEYWORD_SET(cone) THEN BEGIN
         /overplot )
     p.Order, /send_to_back
 
-
     ;- The following was commented in original code:
     ;   plots,[MIN(global_ws),MAX(global_ws)],$
     ;   [max(coi(middle-20:middle+20)),$
     ;   max(coi(middle-20:middle+20))],line=1
-
-
 
     ;   horline,(elem-1)*delt/(3*sqrt(2)),line=2
     ;-      horline,(elem-1)*delt/(4*sqrt(2)),line=2
@@ -664,7 +664,6 @@ IF KEYWORD_SET(cone) THEN BEGIN
             color='gray' )
         horline.Order, /send_to_back
 END
-
 
 
 fser = FOURIER2(curve,delt,/norm)
@@ -701,7 +700,6 @@ bb = ( max(fser[1,*]) - aa ) / max(norm_global_signif)
 ;- Currently have plt_wavelet at pos3
 
 xrange = [0,20]
-
 
 
 plt_spectrum = plot2( $
