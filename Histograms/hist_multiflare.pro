@@ -1,5 +1,17 @@
 ;+
-;====================================================================================
+;-
+;---------------------------------------------------------------------------------------------------
+;-
+;- 19 May 2024
+;-
+;-   omin, omax  --  kw's passed to IDL's HISTOGRAM function, but
+;-     dont' appear to be defined anywhere... same for binsize... 
+;-      Did I start a wrapper somewhere, or plan to write one?
+;-  ==>> Might be RETURNED variables, get values AFTER calling histogram function
+;-        (need to at least pass binsize OR nbins, etc.. get other vars from this.
+;-
+;---------------------------------------------------------------------------------------------------
+;-
 ;=
 ;= 19 February 2024:
 ;=
@@ -8,7 +20,6 @@
 ;=    [] Re-run to confirm bin size, nbins, xrange
 ;=        (solve for the remaining unknown...)
 ;=
-;====================================================================================
 ;-
 ;-
 ;- LAST MODIFIED:
