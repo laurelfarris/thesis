@@ -1,14 +1,23 @@
+;+ 
 ;- LAST MODIFIED:
+;-   31 May 2024
+;-     • re-named file to "applyFourierFilter.pro" instead of "filter.pro"
+;-         (seems more descriptive, less ambiguous)
+;-
 ;-   15 May 2020
-;-     Added arg "cutoff_period" to function call.
+;-     • Added arg "cutoff_period" to function call.
 ;-
 ;- ROUTINE:
-;-   filter.pro
+;-   applyFourierFilter.pro
 ;-
 ;- EXTERNAL SUBROUTINES:
 ;-
+;-
 ;- PURPOSE:
-;-   compute SMOOTHED lc:
+;-   specify cutoff period and input signal for FFT below at ML
+;-    then define InverseTranform variable by passing
+;-    cutoff period and flux in call to FILTER function (defined in "filter.pro")
+
 ;-     1. Perform FFT to transform flux from time domain to frequency domain.
 ;-        "Compute a power spectrum and determine threshold to filter out noise"
 ;-         --> this should probably be determined independently, then set
@@ -68,10 +77,16 @@
 ;-
 
 
-function FILTER, flux, cadence, cutoff_period
+function applyFourierFilter, flux, cadence, cutoff_period
 
-    ;- NOTE: use "newflux" for computations to avoid changing
-    ;-   flux value at ML when modified value is passed back to caller.
+
+    ;- 1) Apply FFT to input signal (flux) at specified threshold (cutoff_period)
+
+
+    ;- ★ ★ ★ ★ ★ ★  IMPORTANT!!! ★ ★ ★ ★ ★ ★
+    ;-    Separate variable "newflux" defined b/c modifying variables passed to subroutine
+    ;- to avoid changing original value of 
+    ;-     "flux" variable at ML when modified value is passed back to caller.
     ;newflux = flux-(moment(flux))[0]
     newflux = flux
 

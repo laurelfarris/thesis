@@ -1,33 +1,26 @@
 
-
-
-
 "_README" file for Wavelet Analysis codes
     former #work path: /solarstorm/laurel07/thesis/WA/,
     current path:      /home/astrobackup3/preupgradebackups/solarstorm/laurel07/thesis/WA/
 
 Last modified:
 
+  31 May 2024
   29 May 2024
-
-
   19 February 2024
-
 
 =================================================================================
 
 MY CODES (described below)
-  • filter.pro
-  • my_wavelet.pro
+  • applyFourierFilter.pro
   • main_filter.pro
 
+IDL> .RUN applyFourierFilter
 
-IDL> .RUN filter
   returns variable "detrended", which is then passed in call to sdbwave2.pro ...
      (at least according to comments in IDL code "my_wavelet.pro" ...
 
-=================================================================================
-
+==============================================================================================================
 
 
     "My codes" = written from scratch or modified (most codes in this directory are NOT my work):
@@ -36,17 +29,20 @@ IDL> .RUN filter
           ML routine; calls sdbwave AND sdbwave2 ... to compare maybe?
           ==>> Actually that makes sense.. if I'm going to modify a fairly long, if not complicated
           code that I didn't even write,  better make sure my version reproduces
-          the plots/results generated in the original version!
-        (19 Feb. 2014)
+          the plots/results generated in the original version! (19 Feb. 2014)
 
-     filter.pro (subroutine; current version)
+ ==>>  merged contents of my_wavelet.pro with main_filter.pro
+       and renamed to "..._20240531.pro" to indicate this is now an OLD code (31 May 2024)
+
+     applyFourierFilter.pro (subroutine; current version)
          "inverseTransform" --> returned by function
 
      main_filter.pro (2020-06-08)
-          very short.. 
+        define variables for input time series and cutoff period,
+        pass to applyFourierFilter to compute inverse transform, aka detrended LC,
+        call sdbwave.pro and/or sdbwave2.pro to generate WA plots
 
-    ------------------------------------------------------------------------------------------------------
-    NOTE: two (2) versions of filter.pro:
+    NOTE: two (2) versions of "applyFourierFilter.pro" (neé "filter.pro"):
         • filter_OLD_20200416.pro
         • filter_OLD_20200515.pro
        copied with date appended for version control,
@@ -54,7 +50,7 @@ IDL> .RUN filter
 
     ★  19 Feb 2024 ➔  ➔  moved both old filter codes ../_OLD/ to clean up current directory,
         start @coding again!!
-    ------------------------------------------------------------------------------------------------------
+
 
     • sdbwave2.pro
          Copied sdbwave.pro and modified so graphics are created via obj-oriented functions:
@@ -64,13 +60,10 @@ IDL> .RUN filter
 
     ➔  CALLS sdbwave ... ??
 
-    ------------------------------------------------------------------------------------------------------
       • wa.pro & wa2.pro
          ➔  technically not wavelet analysis; compute "time-freq power plots"
                applying a "windowed Fourier transform")
 
-
-    ------------------------------------------------------------------------------------------------------
 
     NOT mine:
       • horline.pro
@@ -83,3 +76,5 @@ IDL> .RUN filter
           is randomwave.pro. Not sure why I didn't put it here to begin with.
           (05 April 2020)
 
+
+==============================================================================================================

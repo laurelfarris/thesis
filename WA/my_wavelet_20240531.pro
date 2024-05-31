@@ -20,15 +20,9 @@
 ;-
 ;- OUTPUT:
 ;-
-;-
-;-
 ;- TO DO:
 ;-   [] Remove "GOTO" & START: statements at beginning and
 ;-        replace w/ something more sophisticated
-;-   []
-;-   []
-;-
-;- KNOWN BUGS:
 ;-
 ;- AUTHOR:
 ;-   Laurel Farris
@@ -36,9 +30,7 @@
 ;- See notes in:
 ;-   • @coding (2020--2024), p. 126, ...
 ;-   • UL comp #1, p. 103-109
-;-   • 
 ;-   • Enotes "Detrending | FFT filter", "light curves - detrended"
-;-   • 
 
 
 ;+

@@ -126,6 +126,8 @@ mainTitle='Wavelet analysis and global power spectrum'  ;overall title for the m
 
 ;time interval betweend data points (in seconds), i.e. the cadence
 IF NOT KEYWORD_SET(delt) THEN delt=(1*10.)
+
+; 31 May 2024 ==>> what is "sig_fudge"  ???
 IF NOT KEYWORD_SET(sig_fudge) THEN sig_fudge=1.
 
 ;set the maximum frequency to be plotted,
@@ -369,7 +371,7 @@ cntr = CONTOUR2( $
     c_label_show=0, $
 ;    min_value=1.0e4, $   ; Min/Max over 1600 and 1700...
 ;    max_value=1.68e7, $  ;  ... not comparing them, so commenting this for now.
-    xthick=lthick,
+    xthick=lthick, $
     ythick=lthick, $
     xticklen=0.020, $
     yticklen=0.015, $
@@ -377,7 +379,7 @@ cntr = CONTOUR2( $
     ytickvalues=[50, 100, 200, 500, 1000, 2000], $
     ylog=ylog, $
     yrange=[long,short], $
-    xstyle=1,
+    xstyle=1, $
     ystyle=1, $
     title=waveTitle, $
     xtitle='Time [s]', $
@@ -399,7 +401,25 @@ cntr = CONTOUR2( $
     ;major=2 )
 
 
+;------------------------------------------------------------------------------------------------------
+
+;-
+;- 31 May 2024
+;-
+
 y_horline = (elem-1)*delt/(4*sqrt(2))
+;-  =  (N-1)𝞭 / (4 × √ 2)
+;-  =  T / 4×√ 2
+;-  ≈  600+ seconds
+;-
+;-
+
+
+STOP
+help, y_horline
+print, y_horline
+
+
 horline = plot2( $
     cntr.xrange, $
     [y_horline, y_horline], $
@@ -410,6 +430,7 @@ horline = plot2( $
     ;linestyle=[1, '4FF2'X], $
     color='gray' )
 
+;------------------------------------------------------------------------------------------------------
 
 ;- Horizontal line at 180 seconds (3-minute period):
 cutoff = plot2( $

@@ -1,48 +1,11 @@
 ;+
 ;- LAST MODIFIED:
-;-   29 May 2024
+;-   31 May 2024
 ;-     (Originally 27 Dec 2023, itself copied, at least partially, from  Oct. 2022 from test.pro)
 ;- TO DO:
 ;-   [] refer to notes/2023-12-27.pro or any notes from Oct. 2022 test.pro that may exist, 
 ;-      if needed (I'm deleting most of thge leftovers so I can have a clean code file to work with).
 ;-
-;- Wavelet plots maybe??
-;-
-;- First, do this from IDL> cmd line:
-;-   IDL> .run main_filter
-;- so far so good...
-;-
-
-
-;-
-;- IDL> @main
-;-       -- define flare of choice & restore 'A' strucure variables from .sav files
-;- IDL> .run main_filter
-;-       -- define cutoff period, input time series
-
-
-    for ii = 0, 8 do begin
-        NN = 2^ii
-        duration = cadence * NN
-        print, ii, NN, fix(duration), fix(duration/60.0)
-    ;    print, ii, round(duration)
-    ;    print, ii, round( 2^(float(ii)))
-    ;    print, ii, 2.0^ii
-    endfor
-
-    print, 1000. * (1./(64*24))
-
-    nuc = 5.6
-    nu = 5.4
-    res = 0.65
-    dnu = 1.0
-    ;
-    print, ''
-    print, nuc - (dnu/2), nuc + (dnu/2)
-    print, nu-res, nu+res
-    print, ''
-
-
 ;- 12 December 2023
 ;-   Another "today.pro" up one directory from here,
 ;-    last modified 2019-05-10 ...
@@ -97,15 +60,6 @@
 ;-
 
 ;-
-;- TO DO (A2):
-;-
-;-   [] AIA & GOES  LCs during flare only, dt covered by RHESSI (for CORRECT flares)
-;-   [] Detrended LCs showing QPPs
-;-   [] Power maps (see "today.pro")
-;-   [] FFTs -> power spectra showing power as function of freqeunciews between ~1 and 20 mHz (or w/e)
-;-       to compare BDA for individual flares, or same phase for different flares in one plot
-;-       (first one then the other... comparing flares to each other is followup / discussion section)
-
 
 ;+
 ;- 30 January 2021
@@ -155,10 +109,50 @@
 ; '../flares/x22_20140418/*.sav'
 
 
-@main
+;@main
 
 ; display current nesting of procedures and functions (found in shift_ydata.pro 09 Aug 2022)
-help, /traceback
+;help, /traceback
+
+
+;========================================================================================================
+
+;-
+;- Wavelet plots maybe??
+;-
+;- First, do this from IDL> cmd line:
+;-   IDL> .run main_filter
+;- so far so good...
+
+
+;-
+;- IDL> @main
+;-       -- define flare of choice & restore 'A' strucure variables from .sav files
+;- IDL> .run main_filter
+;-       -- define cutoff period, input time series
+
+
+    for ii = 0, 8 do begin
+        NN = 2^ii
+        duration = cadence * NN
+        print, ii, NN, fix(duration), fix(duration/60.0)
+    ;    print, ii, round(duration)
+    ;    print, ii, round( 2^(float(ii)))
+    ;    print, ii, 2.0^ii
+    endfor
+
+    print, 1000. * (1./(64*24))
+
+    nuc = 5.6
+    nu = 5.4
+    res = 0.65
+    dnu = 1.0
+    ;
+    print, ''
+    print, nuc - (dnu/2), nuc + (dnu/2)
+    print, nu-res, nu+res
+    print, ''
+
 
 
 end

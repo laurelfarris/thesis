@@ -62,6 +62,14 @@ flare = MULTIFLARE_STRUC( flare_id=class )
 
 flare_path = path + 'flares/' + class + '/'
 
+if FILE_EXIST(flare_path + class + '_' + 'struc.sav') then begin
+    print, '===='
+    print, flare_path + class + '_' + 'struc.sav'
+    restore, flare_path + class + '_' + 'struc.sav', /VERBOSE
+endif
+print, '===='
+stop
+
 ; 12 December 2022
 ;  Restore .sav file with variable "A" saved with two structures, one for each AIA UV channel
 if FILE_EXIST(flare_path + class + '_' + 'struc.sav') then begin
