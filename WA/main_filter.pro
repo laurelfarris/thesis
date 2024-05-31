@@ -1,24 +1,39 @@
 ;+
-;- Last modified:
-;-    05 June 2020
 ;-
-;- Purpose:
-;-   cutoff_period => defined
-;-   flux
+;- LAST MODIFIED:
+;-   29 May 2024
 ;-
-;- External subroutines:
+;-   05 June 2020
+;-
+;- PURPOSE:
+;-
+;- EXTERNAL SUBROUTINES:
 ;-   filter.pro
 ;-
-;- To Do
-;-   [] RENAME to s/t other than filter? Line where filter is called below looked like
-;-        a canned IDL routine.. serached around the internet for some source material
-;-        before remembered that "filter.pro" is a function I wrote,
-;-        located in the current directory...
+;- ROUTINE:
+;-   main_filter.pro
 ;-
+;- EXTERNAL SUBROUTINES:
+;-   FILTER.PRO (function)
+;-
+;- PURPOSE:
+;-  Specify cutoff period and input signal for FFT below at ML
+;-    then define InverseTranform variable by passing
+;-    cutoff period and flux in call to FILTER function (defined in "filter.pro")
+;-
+;- TO DO:
+;-   [] RENAME ? Call to function FILTER( ... ) looks like a canned IDL routine.
+;-      Took a prolonged internet search for some source material 
+;-      before I remembered this is a function I wrote myself, located under WA/ in "work" dir.
+;-
+;- AUTHOR:
+;-   Laurel Farris
+;-
+;+
 
-;- Keep period > 400 sec (freq < 2.5 mHz)
 
-;- pass to FILTER function
+
+;- Keep period > 400 sec (freq < 2.5 mHz) & pass to FILTER function below
 cutoff_period = 400.
 
 ;- Define flux
@@ -33,13 +48,16 @@ flux = A.flux
 
 
 ;+
-;--- Compute inverse transform
-;-
+;- Compute inverse transform
 inverseTransform = []
 for cc = 0, 1 do begin
     inverseTransform = [ $
         [ inverseTransform ], $
-        [ FILTER( flux[*,cc], A[cc].cadence, cutoff_period ) ] $
+        [ FILTER( $
+            flux[*,cc], $
+            A[cc].cadence, $
+            cutoff_period $
+        ) ] $
     ]
 endfor
 

@@ -1,25 +1,14 @@
 ;+
-;- LAST MODIFIED:
-;-   29 May 2024
-;-     (Originally 27 Dec 2023, itself copied, at least partially, from  Oct. 2022 from test.pro)
-;- TO DO:
-;-   [] refer to notes/2023-12-27.pro or any notes from Oct. 2022 test.pro that may exist, 
-;-      if needed (I'm deleting most of thge leftovers so I can have a clean code file to work with).
-;-
-;- Wavelet plots maybe??
-;-
-;- First, do this from IDL> cmd line:
-;-   IDL> .run main_filter
-;- so far so good...
-;-
+;  27 December 2023
+;   => copied the following bit from Oct. 2022 from test.pro
 
 
-;-
-;- IDL> @main
-;-       -- define flare of choice & restore 'A' strucure variables from .sav files
-;- IDL> .run main_filter
-;-       -- define cutoff period, input time series
+    ; 07 October 2022
+    cadence = 24.0
 
+    print, ''
+    headings = ['power', 'N', 't (sec)', 't (min)']
+    print, '   ' + headings
 
     for ii = 0, 8 do begin
         NN = 2^ii
@@ -159,6 +148,102 @@
 
 ; display current nesting of procedures and functions (found in shift_ydata.pro 09 Aug 2022)
 help, /traceback
+
+
+;=====================================================================================================
+; compute POWERMAP from pre-flare data
+
+z_start = ( where( strmid(A[0].time,0,5) eq flare.tstart ) );[0]
+z_peak = ( where( strmid(A[0].time,0,5) eq flare.tpeak ) );[0]
+z_end = ( where( strmid(A[0].time,0,5) eq flare.tend ) );[0]
+;
+z_imp = [ z_start[0] : z_peak[0] ]
+z_decay = [ z_peak[-1] : z_peak[-1] + n_elements(z_imp)-1 ]
+
+; X2.2 flare only, since time windows are so short
+dz = 64
+z_imp = [ z_peak[0]-dz+1 : z_peak[0] ]
+z_decay = [ z_peak[-1] : z_peak[-1]+dz-1 ]
+
+
+help, z_imp
+help, z_decay
+
+
+;map = COMPUTE_POWERMAPS( /syntax )
+
+
+; Set saturation threshold (may be less than saturation value for a single pixel
+;   to account for pixels contaminated by blooming (i.e. extra counts, but not sat.)
+threshold = 15000.
+
+data_mask = A.data lt threshold
+help, data_mask
+
+sz = size(A.data, /dimensions)
+map = fltarr(sz[0],sz[1], 4 )
+
+map_mask = fltarr(sz[0],sz[1], 4 )
+help, map_mask
+
+
+for cc = 0, 1 do begin
+    map[*,*,cc] = COMPUTE_POWERMAPS( $
+        A[cc].data[*,*,z_imp], cadence, bandwidth=0.001)
+    map_mask[*,*,cc] = PRODUCT( data_mask[*,*,z_imp,cc], 3 )
+endfor
+;
+for cc = 0, 1 do begin
+    map[*,*,cc+2] = COMPUTE_POWERMAPS( $
+        A[cc].data[*,*,z_decay], cadence, bandwidth=0.001 )
+    map_mask[*,*,cc+2] = PRODUCT( data_mask[*,*,z_decay,cc], 3 )
+endfor
+
+;c83_map = map
+;m73_map = map
+x22_map = map
+
+print, max(c83_map)
+print, max(m73_map)
+print, max(x22_map)
+
+
+;== IMAGE powermaps
+
+time = strmid(A.time,0,5)
+;
+title = strarr(4)
+title[0] = strupcase(instr) + ' ' + A.channel + '$\AA$ ' + time[z_imp[0]] + '-' + time[z_imp[-1]]
+title[2] = strupcase(instr) + ' ' + A.channel + '$\AA$ ' + time[z_decay[0]] + '-' + time[z_decay[-1]]
+for ii = 0, 3 do print, title[ii]
+
+imdata = alog10( c83_map )
+;
+dw
+im = IMAGE3( $
+    imdata, $
+    rows=2, cols=2, $
+    top = 0.5, $
+    bottom = 0.75, $
+    left = 0.75, $
+    xgap = 0.50, $
+    ygap = 0.50, $
+    title=title, $
+    buffer=buffer $
+)
+;
+im[0].rgb_table = AIA_GCT( wave=fix(A[0].channel))
+im[1].rgb_table = AIA_GCT( wave=fix(A[1].channel))
+im[2].rgb_table = AIA_GCT( wave=fix(A[0].channel))
+im[3].rgb_table = AIA_GCT( wave=fix(A[1].channel))
+;
+im[2].xtitle = 'X (pixels)'
+im[2].ytitle = 'Y (pixels)'
+;
+image_filename = class + '_' + instr + '_MAP'
+print, image_filename
+stop
+save2,  image_filename
 
 
 end

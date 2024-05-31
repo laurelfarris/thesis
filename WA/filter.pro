@@ -17,6 +17,12 @@
 ;-        --> removes variations with periods shorter than the cutoff.
 ;-     3. Perform inverse FFT to transform flux back to time domain.
 ;-
+;-   ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★
+;-     => FFT( array, -1)
+;-         where -1 argument means ... ??
+;-   ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★
+;-
+;-
 ;- USEAGE:
 ;-    inverseTransform = FILTER( flux, cadence, cutoff_period )
 ;-

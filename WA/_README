@@ -1,62 +1,85 @@
 
+
+
+
 "_README" file for Wavelet Analysis codes
     former #work path: /solarstorm/laurel07/thesis/WA/,
     current path:      /home/astrobackup3/preupgradebackups/solarstorm/laurel07/thesis/WA/
 
 Last modified:
+
+  29 May 2024
+
+
   19 February 2024
 
----------------------------------------------------------------------------------
-Codes I wrote or modified (note: most codes in this directory are NOT my work):
 
+=================================================================================
+
+MY CODES (described below)
+  • filter.pro
   • my_wavelet.pro
-      ML routine; calls sdbwave AND sdbwave2 ... to compare maybe?
-      ==>> Actually that makes sense.. if I'm going to modify a fairly long, if not complicated
-      code that I didn't even write,  better make sure my version reproduces
-      the plots/results generated in the original version!
-  (19 Feb. 2014)
-
-  • filter.pro (subroutine; current version)
-     "inverseTransform" --> returned by function
-
-  • main_filter.pro (2020-06-08)
-      very short.. 
-
-------------------------------------------------------------------------------------------------------
-NOTE: two (2) versions of filter.pro:
-    • filter_OLD_20200416.pro
-    • filter_OLD_20200515.pro
-   copied with date appended for version control,
-     to preserve code, comments, date, etc. for future reference.
-
-★  19 Feb 2024 ➔  ➔  moved both old filter codes ../_OLD/ to clean up current directory,
-    start @coding again!!
-------------------------------------------------------------------------------------------------------
-
-• sdbwave2.pro
-     Copied sdbwave.pro and modified so graphics are created via obj-oriented functions:
-       IDL>  plt=PLOT(x, y, ...)
-     instead of procedures:
-       IDL>  PLOT, x, y, ...
-
-➔  CALLS sdbwave ... ??
-
-------------------------------------------------------------------------------------------------------
-  • wa.pro & wa2.pro
-     ➔  technically not wavelet analysis; compute "time-freq power plots"
-           applying a "windowed Fourier transform")
+  • main_filter.pro
 
 
-------------------------------------------------------------------------------------------------------
+IDL> .RUN filter
+  returns variable "detrended", which is then passed in call to sdbwave2.pro ...
+     (at least according to comments in IDL code "my_wavelet.pro" ...
 
-NOT mine:
-  • horline.pro
-  • verline.pro
-  • pickpeakpower.pro
-  • randomwave.pro
-  • sdbwave.pro
-  • shuffle.pro
-      Moved here from top code directory since the only routine that calls it
-      is randomwave.pro. Not sure why I didn't put it here to begin with.
-      (05 April 2020)
+=================================================================================
+
+
+
+    "My codes" = written from scratch or modified (most codes in this directory are NOT my work):
+
+     my_wavelet.pro
+          ML routine; calls sdbwave AND sdbwave2 ... to compare maybe?
+          ==>> Actually that makes sense.. if I'm going to modify a fairly long, if not complicated
+          code that I didn't even write,  better make sure my version reproduces
+          the plots/results generated in the original version!
+        (19 Feb. 2014)
+
+     filter.pro (subroutine; current version)
+         "inverseTransform" --> returned by function
+
+     main_filter.pro (2020-06-08)
+          very short.. 
+
+    ------------------------------------------------------------------------------------------------------
+    NOTE: two (2) versions of filter.pro:
+        • filter_OLD_20200416.pro
+        • filter_OLD_20200515.pro
+       copied with date appended for version control,
+         to preserve code, comments, date, etc. for future reference.
+
+    ★  19 Feb 2024 ➔  ➔  moved both old filter codes ../_OLD/ to clean up current directory,
+        start @coding again!!
+    ------------------------------------------------------------------------------------------------------
+
+    • sdbwave2.pro
+         Copied sdbwave.pro and modified so graphics are created via obj-oriented functions:
+           IDL>  plt=PLOT(x, y, ...)
+         instead of procedures:
+           IDL>  PLOT, x, y, ...
+
+    ➔  CALLS sdbwave ... ??
+
+    ------------------------------------------------------------------------------------------------------
+      • wa.pro & wa2.pro
+         ➔  technically not wavelet analysis; compute "time-freq power plots"
+               applying a "windowed Fourier transform")
+
+
+    ------------------------------------------------------------------------------------------------------
+
+    NOT mine:
+      • horline.pro
+      • verline.pro
+      • pickpeakpower.pro
+      • randomwave.pro
+      • sdbwave.pro
+      • shuffle.pro
+          Moved here from top code directory since the only routine that calls it
+          is randomwave.pro. Not sure why I didn't put it here to begin with.
+          (05 April 2020)
 

@@ -15,6 +15,16 @@
 ;-   • Images/difference_images.pro
 ;-   •
 ;-   • Spectra/
+;-
+;- TO DO
+;-   [] 29 May 2024 -- After restoring contents of .sav files, display what exactly was restored
+;-        It's been so long, I have no idea what surprises "x22_struc.sav" may contain...
+;-
+
+
+
+;+
+;= Startup variables (sort of... tend to change during a single coding session)
 
 @path_temp
 
@@ -43,17 +53,20 @@ cadence = 24
 ;class = 'm73'
 class = 'x22'
 
-;flare = multiflare_struc(flare_id=class)
 
+;+
+;= Restore flare structure(s) from .sav files
 
+;flare = multiflare_struc(flare_id=class)  ;-  ????
 flare = MULTIFLARE_STRUC( flare_id=class )
 
 flare_path = path + 'flares/' + class + '/'
 
 ; 12 December 2022
 ;  Restore .sav file with variable "A" saved with two structures, one for each AIA UV channel
-if file_exist(flare_path + class + '_' + 'struc.sav') then begin
-    restore, flare_path + class + '_' + 'struc.sav'
+if FILE_EXIST(flare_path + class + '_' + 'struc.sav') then begin
+    restore, flare_path + class + '_' + 'struc.sav', /VERBOSE
+    ;- /VERBOSE prints infromation for restored object in case one forgets...
 endif else begin
     print, '  "A".sav either does not exist, or '
     print, '     filename/location is inconsistent with that of X2.2 flare.'
@@ -87,3 +100,6 @@ endelse
 ;=   e.g. flare.date = '12-Aug-2013' --> date = '20130812'
 ;
 ;date = flare.year + flare.month + flare.day
+
+
+END
