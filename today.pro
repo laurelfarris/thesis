@@ -109,6 +109,8 @@
 ; '../flares/x22_20140418/*.sav'
 
 
+;- Run script "main.pro" to define buffer=1, instr='aia', cadence=24, and
+;-    define flare structure for desired event
 ;@main
 
 ; display current nesting of procedures and functions (found in shift_ydata.pro 09 Aug 2022)

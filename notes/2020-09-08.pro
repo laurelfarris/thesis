@@ -1,9 +1,7 @@
 ;+
 ;- 27 October 2020
-;-   original filename was 2020-09-.pro ... not sure
-;-   what happened, but since date in code below is 09-08,
-;-   assume it's safe to rename it accordingly..
-;-
+;-   original filename was 2020-09-.pro (incomplete?).. not sure why.
+;-   Comment below says 09-08, so probably safe to modify filename accordingly.
 ;-
 
 
