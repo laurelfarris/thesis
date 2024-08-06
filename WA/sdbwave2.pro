@@ -624,6 +624,7 @@ IF NOT KEYWORD_SET(ylog) THEN ytype=0 else ytype=1
 
 ;--- [xyz]style = 0-nice, 1-exact, 2-nice+, 3-exact+
 
+;- plot GLOBAL wavelet curve
 mywin.SetCurrent
 plt_wavelet = PLOT2( $
     norm_global_ws, period, $
@@ -660,6 +661,8 @@ ENDELSE
 ; 05/16/2024 -- indicate COI on global spectrum (panel c) ?
 IF KEYWORD_SET(cone) THEN BEGIN
 
+    ;- plot curve to indicate COI on GLOBAL wavelet curve (panel c)
+
     ;OPLOT,norm_global_signif,period,LINES=3
     p = plot2( $
         norm_global_signif, $
@@ -673,8 +676,14 @@ IF KEYWORD_SET(cone) THEN BEGIN
     ;   [max(coi(middle-20:middle+20)),$
     ;   max(coi(middle-20:middle+20))],line=1
 
-    ;   horline,(elem-1)*delt/(3*sqrt(2)),line=2
-    ;-      horline,(elem-1)*delt/(4*sqrt(2)),line=2
+
+    ;- 08/05/2024
+    ;-   plot horizontal dotted line on plots (b) and (c) ...
+    ;-     (appears to divide total time series duration in seconds
+    ;-      by 3*sqrt(2) or 4*sqrt(2)  ...
+
+    ;   horline, (elem-1)*delt/(3*sqrt(2)), line=2
+    ;   horline, (elem-1)*delt/(4*sqrt(2)), line=2
         y_horline = (elem-1)*delt/(4*sqrt(2))
         horline = plot2( $
             cntr.xrange, $
