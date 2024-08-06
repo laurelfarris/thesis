@@ -116,6 +116,7 @@ detrended = InverseTransform
 ;-    .... I guess?
 
 
+;- Call ORIGINAL procedure... I guess to compare outputu plots??
 resolve_routine, 'sdbwave', /either
 SDBWAVE, detrended[*,cc], short = 50, long = 2000, $
     ;/fast, $
@@ -138,6 +139,8 @@ SDBWAVE2, $
     detrended[*,cc], $
     short = 50, long = 2000, $
     ylog=1, $
+    ;sigg=0.99 ;- desired confience level (default = 99%)  -- 05 August 2024
+    ;          ;-  sigg is input to wavelet.pro
     ;xtickname = time[ti:tf], $
     ;rgb_table=4, $
     rgb_table=20, $

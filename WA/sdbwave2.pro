@@ -5,8 +5,6 @@
 ;-
 
 
-
-;
 ;========================================================================
 ; 13 Junly 2022
 ;
@@ -17,8 +15,8 @@
 ; NOTE: actually made the copy several years ago, but apparently failed
 ;   to explicitly explain the difference between the two versions of sdbwave
 ;   at top of code.
-;
 ;========================================================================
+
 ;
 ;NAME:
 ;       SDBWAVE
@@ -277,6 +275,7 @@ IF NOT KEYWORD_SET(mother) THEN BEGIN
     ;-  global_signif = WAVE_SIGNIF(series,delt, ..., MOTHER=mother,param=param)
 END
 
+;- wavelet.pro -- applies actual WA transform (I think) -- 8/05/2024
 wave = WAVELET(series,delt,PERIOD=period,SCALE=scale,COI=coi,$
     SIGNIF=signif,siglvl=sigg,FFT_THEOR=fft_theor,mother=mother)
 
@@ -295,10 +294,6 @@ IF NOT KEYWORD_SET(long) THEN long=max(period)
 power=abs(wave)^2       ;the power plot from the complex image
 ;power=power*elem/(moment(curve))(1)
 power=power^0.5         ;decrease the power so you can actually see what's there
-
-
-
-
 
 
 ;
@@ -341,20 +336,22 @@ pickpeakperiod,power^2.,maxper,period,perpower
 IF NOT KEYWORD_SET(ylog) THEN ytype=0 else ytype=1
 
 ;CONTOUR,power,time,period,position=pos2, $
-;XSTYLE=1,XTITLE='Time [s]',YTITLE='Period [s]',$
-;TITLE=waveTitle,nLEVELS=25,/FILL,/NOERASE,$
-;ystyle=1,YRANGE=[short,long], $
-;ytype=ytype, $
-;xthick=lthick,ythick=lthick,$
-;;xtickinterval=xticksep,xtickformat='(I9)',$
-;background=0;,ytickinterval=0.002,/over,/normal
+;   XSTYLE=1,XTITLE='Time [s]',YTITLE='Period [s]',$
+;   TITLE=waveTitle,nLEVELS=25,/FILL,/NOERASE,$
+;   ystyle=1,YRANGE=[short,long], $
+;   ytype=ytype, $
+;   xthick=lthick,ythick=lthick,$
+;   ;xtickinterval=xticksep,xtickformat='(I9)',$
+;   background=0 ;,ytickinterval=0.002,/over,/normal
+
+
 ;;horline,(elem-1)*delt/(3*sqrt(2)),line=2,color=255
 ;;-    horline,(elem-1)*delt/(4*sqrt(2)),line=2,color=255
 ;;- "horline" is an "undefined procedure/function"...
 
 
-
 ;- 05/16/2024 -- plot COI ? Or contour around power higher than some threshold??
+;- 08/05/2024 -- pretty sure this is the main 3D wavelet plot ...
 mywin.SetCurrent
 cntr = CONTOUR2( $
     power, time, period, $
@@ -407,28 +404,34 @@ cntr = CONTOUR2( $
 ;- 31 May 2024
 ;-
 
-y_horline = (elem-1)*delt/(4*sqrt(2))
-;-  =  (N-1)𝞭 / (4 × √ 2)
-;-  =  T / 4×√ 2
-;-  ≈  600+ seconds
+
 ;-
+;- 8/5/2024:
+;-   commenting here b/c commented in original sdbwave.pro,
+;-   and i have no idea what this period value means...
+;-
+;- if <some comdition, i.e. kw> THEN :
+;-
+;
+;    y_horline = (elem-1)*delt/(4*sqrt(2))
+;    ;-   = (N-1)𝞭 / (4 × √ 2)  =  T / 4×√ 2  ≈   600+ seconds
+;
+;    STOP
+;    help, y_horline
+;    print, y_horline
+;    
+;    horline = plot2( $
+;        cntr.xrange, $
+;        [y_horline, y_horline], $
+;        ;/current, axis_style=4, position=pos2, $
+;        overplot=cntr, $
+;        ;axis_style=1, $
+;        linestyle=':', $
+;        ;linestyle=[1, '4FF2'X], $
+;        color='gray' )
 ;-
 
 
-STOP
-help, y_horline
-print, y_horline
-
-
-horline = plot2( $
-    cntr.xrange, $
-    [y_horline, y_horline], $
-    ;/current, axis_style=4, position=pos2, $
-    overplot=cntr, $
-    ;axis_style=1, $
-    linestyle=':', $
-    ;linestyle=[1, '4FF2'X], $
-    color='gray' )
 
 ;------------------------------------------------------------------------------------------------------
 
@@ -456,9 +459,6 @@ cutoff = plot2( $
 ;    p = plot2( $
 ;        [ time[ii],time[ii] ], [ maxper[ii],maxper[ii] ], $
 ;        /overplot, symbol='circle', color='black' )
-
-
-
 
 n=n_elements(series)
 
