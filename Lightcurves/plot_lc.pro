@@ -37,14 +37,11 @@
 ;-   General Lightcurve (LC) plotting routine
 
 ;- TO DO:
-;-
 ;-   [] Generalize variables currently hardcoded:
 ;-       • filename  • ydata  • xtickinterval
 ;-   [] See older versions of similar code (plot_lc*.pro) for LOTS of comments.. 
 ;-           (maybe helpful, maybe time waster)
 ;-   [] See Lightcurves/MAKE_PLOTS.pro
-;-
-;-
 ;-   [] Generalize entire routine for ANY lightcurve
 ;-       => merge this code w/ plot_lc_GENERAL.pro:
 ;-            procedure + ML code,

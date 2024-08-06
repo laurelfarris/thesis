@@ -1,4 +1,35 @@
 ;+
+;-
+;-
+;-
+;===================================================================================================
+;= 06 August 2024 --
+;-    copied from SDO_guide_2020.pdf, § 7.7.4  'Plotting an AIA Light Curve':
+;-
+;-  "Because the image headers are segregated from the images in the JSOC,
+;-   any quantity that can be derived directly from the keywords can be computed quickly.
+;-   For example, to plot an exposure-time-corrected AIA light curve as a function of time,
+;-   one can use data contained in the DATAMEAN and T_OBS keywords from the image headers...
+;-   
+;-  In this example, a light curve from the 335Å channel for two weeks in early
+;-    2011 is plotted using the SSW procedure utplot.pro.
+;-    (Incidentally, the jump in the light curve occurring late in the day of 24 February 2011
+;-     is a result of a bakeout of AIA Telescope #1 on this day,
+;-     an event listed on the SDO Joint Science Operations Calendar.)"
+
+ssw_jsoc_time2data, $
+    '2011-02-20', '2011-03-06', index, $
+    ds='aia.lev1_euv_12s', $
+    waves='335', $
+    key='t_obs, wavelnth, datamean, exptime', $
+    cadence='1h'
+
+utplot, index.t_obs, index.datamean/index.exptime, psym=1
+
+STOP
+
+
+;-
 ;- 10 March 2020
 ;-
 ;- Guide to SDO data analysis, September 12, 2019
@@ -78,6 +109,7 @@ utplot, index.t_obs, index.datamean/index.exptime, psym=1
 ;  => see "Guide to SDO Data Analysis" (p. 79-80 in SDO_guide_2019.pdf)
 ;       for utplot useage + examples
 ; -- 27 December 2023
+
 
 
 end
