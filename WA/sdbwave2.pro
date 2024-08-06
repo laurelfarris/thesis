@@ -276,8 +276,25 @@ IF NOT KEYWORD_SET(mother) THEN BEGIN
 END
 
 ;- wavelet.pro -- applies actual WA transform (I think) -- 8/05/2024
-wave = WAVELET(series,delt,PERIOD=period,SCALE=scale,COI=coi,$
-    SIGNIF=signif,siglvl=sigg,FFT_THEOR=fft_theor,mother=mother)
+;-   -> 3 subroutines in wavelet.pro for 'mother' (morlet, pual, dog).
+;-  function 'wavelet' calls the function defined by 'mother', which appears to
+;-  define a bunch of variable parameters to appropriate values for each type
+;-   e.g. fourier_factor, coi:
+;-       coi = fourier_factor / sqrt(2) ; Morlet
+;-       coi = fourier_factor * sqrt(2) ; Paul
+;-
+
+wave = WAVELET( $
+    series, $
+    delt, $
+    PERIOD=period, $
+    SCALE=scale, $
+    COI=coi,$
+    SIGNIF=signif, $
+    siglvl=sigg, $
+    FFT_THEOR=fft_theor, $
+    mother=mother $
+)
 
 ;get the number of wavelet scales actually used.
 nscale = N_ELEMENTS(period)
@@ -399,22 +416,15 @@ cntr = CONTOUR2( $
 
 
 ;------------------------------------------------------------------------------------------------------
-
-;-
-;- 31 May 2024
-;-
-
-
 ;-
 ;- 8/5/2024:
 ;-   commenting here b/c commented in original sdbwave.pro,
 ;-   and i have no idea what this period value means...
 ;-
-;- if <some comdition, i.e. kw> THEN :
-;-
+;- if <some comdition, i.e. kw> THEN : ...
 ;
 ;    y_horline = (elem-1)*delt/(4*sqrt(2))
-;    ;-   = (N-1)𝞭 / (4 × √ 2)  =  T / 4×√ 2  ≈   600+ seconds
+;    ;-  =   (N-1)𝞭/(4√ 2)  =  T/4√ 2  =  3600/(4√ 2) ≈ 636.4 seconds
 ;
 ;    STOP
 ;    help, y_horline
@@ -430,9 +440,6 @@ cntr = CONTOUR2( $
 ;        ;linestyle=[1, '4FF2'X], $
 ;        color='gray' )
 ;-
-
-
-
 ;------------------------------------------------------------------------------------------------------
 
 ;- Horizontal line at 180 seconds (3-minute period):
@@ -468,7 +475,6 @@ n=n_elements(series)
 power1 = (ABS(wave))^2
 global_ws = TOTAL(power1,1)/n    ; global wavelet spectrum (GWS)
 norm_global_ws = global_ws/(moment(curve))(1)
-
 
 ;
 ;================= CALCULATE THE GLOBAL SIGNIFICANCE FOR THE GLOBAL WAVELET SPECTRUM ==============
@@ -543,7 +549,6 @@ IF KEYWORD_SET(nocon) then GOTO,NO_CONTOURS
 ;controls the colour of the significance contours, the COI boundary and the
 ;COI cross-hatching. This is easily changed, too, though.
 
-
 ;- contour lines on panel b) with, e.g. "99%" labels
 ;CONTOUR, $
 ;power/signif, time, period, /OVERPLOT, $
@@ -551,8 +556,7 @@ IF KEYWORD_SET(nocon) then GOTO,NO_CONTOURS
 ;thick=3, C_CHARTHICK=lthick,$
 ;xtitle='Time [s]',yrange=[short,long],ystyle=1
 
-
-;- outline significance level (e.g. 99%)
+;- outline significance level (e.g. 99%), linestyle = solid curve
 mywin.SetCurrent
 cntr2 = CONTOUR2( $
     (power/signif), time, period, $
@@ -572,8 +576,6 @@ cntr2 = CONTOUR2( $
     ystyle=1 $
 )
 
-
-
 NO_CONTOURS:
 
 IF KEYWORD_SET(cone) THEN BEGIN
@@ -581,16 +583,14 @@ IF KEYWORD_SET(cone) THEN BEGIN
     x = [MIN(time),time,MAX(time)]
     y = [MAX(period),coi,MAX(period)]
 
-;    PLOTS,time,coi,COLOR=pc,NOCLIP=0,THICK=lthick
-
+    ;PLOTS,time,coi,COLOR=pc,NOCLIP=0,THICK=lthick
     mywin.SetCurrent
     plt_coi = plot2( time, coi, /overplot, COLOR=line_color )
 
+    ;POLYFILL,x,y,ORIEN=+45,SPACING=0.5,COLOR=pc,NOCLIP=0,THICK=lthick
+    ;POLYFILL,x,y,ORIEN=-45,SPACING=0.5,COLOR=pc,NOCLIP=0,THICK=lthick
+
     ;plt_fill = fill_plot
-
-;    POLYFILL,x,y,ORIEN=+45,SPACING=0.5,COLOR=pc,NOCLIP=0,THICK=lthick
-;    POLYFILL,x,y,ORIEN=-45,SPACING=0.5,COLOR=pc,NOCLIP=0,THICK=lthick
-
 
 END
 
@@ -599,6 +599,7 @@ END
 ;therefore the highest 'reliable' period.
 print,'Highest credible period is: '+$
     ARR2STR(max(coi(middle-20:middle+20)),/trim)+' seconds'
+STOP
 
 ;
 ;============= PLOT THE GLOBAL WAVELET SPECTRUM AND GLOBAL SIGNIFICANCE LEVEL ==============
@@ -658,7 +659,8 @@ ENDIF ELSE begin
 ENDELSE
 
 
-; 05/16/2024 -- indicate COI on global spectrum (panel c) ?
+;- 05/16/2024:
+;-   indicate COI on global spectrum _._._._._._._._._.
 IF KEYWORD_SET(cone) THEN BEGIN
 
     ;- plot curve to indicate COI on GLOBAL wavelet curve (panel c)
@@ -672,10 +674,10 @@ IF KEYWORD_SET(cone) THEN BEGIN
     p.Order, /send_to_back
 
     ;- The following was commented in original code:
-    ;   plots,[MIN(global_ws),MAX(global_ws)],$
-    ;   [max(coi(middle-20:middle+20)),$
-    ;   max(coi(middle-20:middle+20))],line=1
-
+    ;   plots, $
+    ;     [MIN(global_ws), MAX(global_ws)], $
+    ;     [max(coi(middle-20:middle+20)), max(coi(middle-20:middle+20))], $
+    ;     line=1
 
     ;- 08/05/2024
     ;-   plot horizontal dotted line on plots (b) and (c) ...

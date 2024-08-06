@@ -65,16 +65,28 @@ IDL> .RUN applyFourierFilter
                applying a "windowed Fourier transform")
 
 
-    NOT mine:
+NOT mine:
+
+      • sdbwave.pro
+
       • horline.pro
       • verline.pro
-      • pickpeakpower.pro
+
       • randomwave.pro
-      • sdbwave.pro
+
+      • pickpeakpower.pro
+          -> "find FREQUENCY of maximum power for each time step" (randomwave.pro)
+
+      • pickpeakperiod.pro  ; 8/05/2024 -- copied from astro ~/Dropbox/wavelet/
+           in: power, out: maxper, period, perpower
+         ... may simply return the maximum period... not used with y_horline tho..
+
       • shuffle.pro
           Moved here from top code directory since the only routine that calls it
           is randomwave.pro. Not sure why I didn't put it here to begin with.
           (05 April 2020)
+
+      • wavelet.pro  ; 8/05/2024 -- copied from astro ~/Dropbox/wavelet/
 
 
 ==============================================================================================================

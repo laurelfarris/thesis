@@ -412,7 +412,7 @@ IF KEYWORD_SET(cone) THEN BEGIN
 ;   [max(coi(middle-20:middle+20)),$
 ;   max(coi(middle-20:middle+20))],line=1
 ;   horline,(elem-1)*delt/(3*sqrt(2)),line=2
-        horline,(elem-1)*delt/(4*sqrt(2)),line=2
+;-        horline,(elem-1)*delt/(4*sqrt(2)),line=2
 
 END
 
