@@ -22,7 +22,6 @@
 ;-
 
 
-
 ;+
 ;= Startup variables (sort of... tend to change during a single coding session)
 
@@ -49,9 +48,9 @@ cadence = 24
 ;class = 'm10'
 ;class = 'm15'
 
-;class = 'c83'
+class = 'c83'
 ;class = 'm73'
-class = 'x22'
+;class = 'x22'
 
 
 ;+
@@ -59,27 +58,25 @@ class = 'x22'
 
 ;flare = multiflare_struc(flare_id=class)  ;-  ????
 flare = MULTIFLARE_STRUC( flare_id=class )
+help, flare
 
 flare_path = path + 'flares/' + class + '/'
-
-if FILE_EXIST(flare_path + class + '_' + 'struc.sav') then begin
-    print, '===='
-    print, flare_path + class + '_' + 'struc.sav'
-    restore, flare_path + class + '_' + 'struc.sav', /VERBOSE
-endif
-print, '===='
-stop
+print, flare_path
 
 ; 12 December 2022
 ;  Restore .sav file with variable "A" saved with two structures, one for each AIA UV channel
 if FILE_EXIST(flare_path + class + '_' + 'struc.sav') then begin
+;if FILE_EXIST(flare_path + class + '_' + 'struc.sav') then begin
+    print, flare_path + class + '_' + 'struc.sav'
     restore, flare_path + class + '_' + 'struc.sav', /VERBOSE
+    ;restore, flare_path + class + '_' + 'struc.sav', /VERBOSE
     ;- /VERBOSE prints infromation for restored object in case one forgets...
 endif else begin
-    print, '  "A".sav either does not exist, or '
-    print, '     filename/location is inconsistent with that of X2.2 flare.'
+    print, 'Either file "A.sav" does not exist OR filename/location is incorrect.'
 endelse
 
+
+;-----------------------------------------------------------------------------------------------------
 
 ; 30 August 2022
 ;  [] flare.path? Could add specific path to each structure,
@@ -107,6 +104,7 @@ endelse
 ;= Date: change format to 'yyyymmdd' for beginning of filenames so files are ordered by flare date.
 ;=   e.g. flare.date = '12-Aug-2013' --> date = '20130812'
 ;
+;date = flare.year + flare.month + flare.day
 ;date = flare.year + flare.month + flare.day
 
 

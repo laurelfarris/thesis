@@ -114,7 +114,7 @@ function OPLOT_FLARE_LINES, $
 
         flare_times = date + ' ' + [flare.tstart, flare.tpeak, flare.tend]
         print, flare_times
-        stop
+        ;stop
 
         ;- Each element in the FLARE_TIMES array is a string of the form
         ;-      "dd-Mon-yyyy hh:mm:ss.sss"
@@ -167,7 +167,7 @@ function OPLOT_FLARE_LINES, $
 
     x_indices = x_indices[ where( x_indices ne -1 ) ]
     print, x_indices
-    stop
+    ;stop
 
 ; Why is flare_times defined again?
 ;    flare_times = [ $

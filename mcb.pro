@@ -1,7 +1,7 @@
 ;Copied from clipboard
 
 
-restore, flare_path + class + '_' + 'struc.sav', /verbose
+    print, plt[0].yrange
 
-end
+    end
 

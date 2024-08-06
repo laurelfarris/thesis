@@ -304,8 +304,9 @@ function STRUC_AIA, $
     return, struc
 end
 
+; 06 August 2024 -- can't run main.pro as a script b/c of if/then/else statements...
+;IDL> .run main
 
-@main
 
 aia1600 = STRUC_AIA( aia1600index, aia1600data, cadence=24., instr='aia', channel='1600', flare=flare )
 aia1600.color='blue'

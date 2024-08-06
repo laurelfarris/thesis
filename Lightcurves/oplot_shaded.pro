@@ -35,12 +35,19 @@
 ;- TO DO:
 ;-   [] replace hardcoded values with input args/kws
 ;-   [] check variable type & dimensions (where applicable) of 'x_vertices' & 'shaded'
+;-   [] move hardcoded variables specific to RHESSI out of this routine to main lc code for rhessi, or s/t.
 ;-
 
 function OPLOT_SHADED, $
     x_vertices, $
     plt, $
     _EXTRA=e
+
+
+    sz = size(x_vertices)
+    if sz[0] eq 1 then x_vertices=REFORM(x_vertices, sz[1], 1)
+    sz = size(x_vertices)
+        ; re-define sz for reformed x_vertices array to pull corrected n_elem for 'shaded'
 
     ;fill_color=['yellow', 'green', 'indigo']
     ;fill_color=['pale goldenrod', 'pale green', 'light sky blue']
@@ -54,8 +61,13 @@ function OPLOT_SHADED, $
     y1 = min( [plt[0].yrange, plt[1].yrange])
     ; what if plt has more than two plots?? How to find min/max over all of them?
 
-    shaded = objarr(3)
-
+    ;shaded = objarr(3)
+    shaded = objarr(sz[2])
+    ;   8/6/2024
+    ;     ==> use number of separate x-ranges WITHIN x_vertices array passed by caller
+    ;         instead of hardcoding :)
+    ;
+    
     ; From "../Graphics/shade_my_plot.pro" (not needed...):
     ;     yrange = ( shaded[ii] ).yrange
     ;     v_shaded = PLOT2( $

@@ -28,8 +28,13 @@ Other:
   • bda_lightcurves.pro
   • plot_bda_lightcurves.pro
   • plot_lightcurve_reference.pro
+
   • utplot.pro
+         (NOT written by me..)
      copied procedure code from interwebs
-     ==>> see "Guide to SDO data analysis" (SDO_guide_2019.pdf)
+         ==>> see "Guide to SDO data analysis" (SDO_guide_2019.pdf)
+     8/6/2024 --
+        -> utplot is CALLED by plot_lc_SDO-GUIDE.pro;
+          moved here (Lightcurves/) from ../
 
 ---------------------------------------------------------------------------------

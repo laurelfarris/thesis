@@ -16,10 +16,10 @@
 ;-
 ;- USEAGE:
 ;-   SAVE2, "myfilename", overwrite=0|1,
-    overwrite=overwrite, $
-    timestamp=timestamp, $
-    idl_code=idl_code, $
-    _EXTRA=e
+;-    overwrite=overwrite, $
+;-    timestamp=timestamp, $
+;-    idl_code=idl_code, $
+;-    _EXTRA=e
 ;-
 ;- INPUT:
 ;-   "filename"

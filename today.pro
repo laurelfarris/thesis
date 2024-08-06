@@ -118,17 +118,43 @@
 
 
 
-
+;
+; 05 August 2024
+;   y_horline -> horizontal dotted line in wavelet plots (b) and global power spectra (c)
+;
 print, 3600.0 / (4.0*sqrt(2))
 print, (3600.0 / (4.0*sqrt(2))) / 60.0
-
 print, 3600.0 / (3.0*sqrt(2))
 print, 3600.0 / (3.0*sqrt(2)) / 60.0
+;
+; ... no idea what this value represents...
+;
 
-stop
+;-------------------------------------------------------------------------------------------
+; 06 August 2024
+;
+;   copied simple AIA light curve code from SDO guide pdf -> ./Lightcurves/plot_lc_SDO-GUIDE.pro
+;    uses PLOT procedure, and wouldn't you know it, just created a plot window!
+;    black background, scatterplot, ... kinda ugly, but at least it worked!
+;
+; ==>> A.X and A.Y arrays are 500x330 pixel arrays whose values are converted to arcseconds
+;      spanning 330" x 198" dimensions (with X = [-783.276 : -483.876] for the C8.3 flare,
+;      computed (I assume) from AIA 0.6" plate scale
+;      and shifted relative to disk center with cdelt instead of origin at (0,0).
+;
+;-------------------------------------------------------------------------------------------
+
+
+
+
+
 
 
 ;========================================================================================================
+;= OLD stuff from here to end:
+;=
+
+
 
 ;-
 ;- Wavelet plots maybe??

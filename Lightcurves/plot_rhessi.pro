@@ -18,8 +18,8 @@
 ;-   [] Replace hardcoded crap with something better
 
 
-
-@main
+; 06 August 2024 -- can't run main.pro as a script b/c of if/then/else statements...
+;IDL> .run main
 
 ;= RHESSI
 

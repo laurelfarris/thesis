@@ -36,6 +36,12 @@
 ;-           **what array? -27 Dec 2023
 ;-   [] overplot flare lines, periods of interest, etc. BEFORE generating legend,
 ;-          unless new targets may be added to an existing legend...
+;-
+;-     06 August 2024 --
+;-        ★ ★  /overplot not set for 1600 and 1700 curves b/c each has its own y-axis, 
+;-             but IS set for any additional plots, such as flare BDA times, shading, smoothed LC, etc.
+;-
+;-
 
 ;- Misc notes & comments (originally from either version, v1 &/or v2, who the heck knows):
 ;-
@@ -144,18 +150,19 @@ function WRAP_BATCH_PLOT, $
     ;    if not keyword_set(ytitle) then ytitle = " "
     ;    if not keyword_set(name) then name = strarr(sz[1])
 
-    symbol = [ 'Circle', 'Square' ]
+
+    ;symbol = [ 'Circle', 'Square' ]
+    ;  ??? ==>> symbol should NOT be re-defined (or oringally defined) here!
 
     plt = objarr(sz[1])
 
     for ii = 0, sz[1]-1 do begin
 
         if not keyword_set( overplot ) then begin
-            if ii eq 0 then axis_style = 1 else axis_style = 4
-        endif else begin
-            axis_style = 2
-        endelse
-
+            if ii eq 0 then $
+                axis_style = 1 $   ; single x/y axes
+            else axis_style = 4    ; No axes, but same margins as if axes were present
+        endif else axis_style = 2  ; Box axes (upper & lower x-axes; left & right y-axes)
 
         ; v2 (initial reason for copying to ..._2 ??)
         ;   tried replacing /overplot kw with new approach of
@@ -178,8 +185,10 @@ function WRAP_BATCH_PLOT, $
             thick = thick[ii], $
             ;symbol = symbol[ii], $
             ;xmajor=, $
-            xminor=5, $
-            ymajor=5, $
+            ;
+            ;xminor=5, ymajor=5, $
+            ;   8/6/2024  => what is difference defining plot kws here vs in wrapper call to this function... ??
+            ;
             ;yminor=, $
             ; x|y major|minor -- "set in CALL (point of wrapper... 3/14/20200)"  -v2
             xticklen=0.025, $
@@ -202,9 +211,11 @@ function WRAP_BATCH_PLOT, $
     xdata = reform(xdata)
     ydata = reform(ydata)
 
+;    print, plt[0].yrange
+;    print, plt[1].yrange
+
     return, plt
 end
-
 
 
 function BATCH_PLOT, $
@@ -225,9 +236,16 @@ function BATCH_PLOT, $
     ;-     IDL "script", e.g. myscript.pro run LINE BY LINE via:
     ;-       IDL> @myscript
 
+
+    ;- empty string array with n_elements = number of curves (data arrays) to plot;
+    ;-    passed to WRAP_BATCH_PLOT to be defined
+    ;-  (name is used to reference figure relative to window, and/or within code, ...
+    ;-     pretty sure it's not displaced on the figure itself anywhere...)
     name = strarr(sz[1])
+
     linestyle = make_array( sz[1], value='-', /string )
     thick = make_array( sz[1], value=0.5, /float )
+    print, thick
 
     symbol = make_array( sz[1], value="None" )
 
