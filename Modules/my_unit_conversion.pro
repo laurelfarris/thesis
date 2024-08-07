@@ -286,10 +286,16 @@ pro ANGSTROMS_TO_KEV
 end ;===============================================================================================
 
 
-pro PERIOD_FREQ_CONVERSION
+pro PERIODFREQCONVERSION, fmHz=fmHz, fHz=fHz, Tsec=Tsec, Tmin=Tmin
 
     ;+
-    ; DATE:         22 April 2022
+    ; DATE:
+    ;               07 August 2024
+    ;                 -- Added kws to input freq (in mHz or Hz), OR period (in seconds or minutes),
+    ;                     with intention of computing the other three based on kw that is passed to subroutine.
+    ;
+    ;
+    ;               22 April 2022
     ;
     ; ROUTINE:      period_freq_conversion.pro
     ;
@@ -301,10 +307,37 @@ pro PERIOD_FREQ_CONVERSION
     ;
     ; TO DO:        Add nicely formatted output to display each value + units
 
-    freq_mHz = 5.5
+    ;freq_mHz = 5.5
+    fmHz = 5.5
 
     freq_Hz = freq_mHz / 1000.
     period_seconds = 1. / freq_Hz
     period_minutes = period_seconds / 60.
+
+        ;----------------------------------------------------------------------------------
+        ;- 8/7/2024 --
+        ;-    ML code coped from ../hz.pro :
+
+        ; 13 January 2024
+        ;   quick code to convert frequency (mHz0) to period
+        ;   in seconds and/or minutes.
+
+
+        ;- 07 August 2024 -- ./Modules/my_unit_conversion.pro
+        ;-    -> pro PERIOD_FREQ_CONVERSION
+
+        mhz = 10.0
+
+        hz = mhz / 1000.
+
+        Tsec = 1.0/hz
+        Tmin = Tsec / 60.
+
+        print, Tsec
+        print, Tmin
+
+        ;-
+        ;----------------------------------------------------------------------------------
+
 
 end ;===============================================================================================

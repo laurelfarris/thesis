@@ -1,26 +1,39 @@
 ;+
-;- 27 December 2027
-;-  Merged "batch_plot.pro" & "batch_plot_2.pro"
-;-   Old notes (justified merging, if not already the better way...) 
-;-   • Appears that most plotting routines are still using the first version...
-;-   •  => most of this file is unaltered since copied from batch_plot.pro (21 August 2020)
-;-
 ;-
 ;- LAST MODIFIED*:
-;-   08/13/2019 (Created)
-;-   08/14/2021 (version 1: "batch_plot.pro")
-;-   09/02/2021 (version 2: "batch_plot_2.pro"),
+;-
+;-   07 August 2024
+;-     Added 'else' to conditional test of buffer value
+;-
+;-   27 December 2027
+;-           (Apparently I jumped forward in time... still only 2024 :)
+;-    Merged "batch_plot.pro" & "batch_plot_2.pro"
+;-     Old notes (justified merging, if not already the better way...) 
+;-     • Appears that most plotting routines are still using the first version...
+;-     •  => most of this file is unaltered since copied from batch_plot.pro (21 August 2020)
+;-
+;-   *08/13/2019 (Created)
+;-   *08/14/2021 (version 1: "batch_plot.pro")
+;-   *09/02/2021 (version 2: "batch_plot_2.pro"),
 ;-        before merging with current file: "batch_plot.pro" )
 ;- *based on ls timestamp in NMSU astro directory
 ;-
+
+
 ;- EXTERNAL FILES/SUBROUTINES:
-;-  • "_filenames_batch_plot.txt" = list of .pro files where "batch_plot*" appears
-;-  • Powercurves/batch_plot_2_OLD_20200613.pro ... ??
-
-
-;- CALLING SYNTAX:
-;-   plt = BATCH_PLOT( xdata, ydata, ... )
+;-   • Graphics/plot2.pro
+;-   •     "_filenames_batch_plot.txt" = list of .pro files where "batch_plot*" appears
+;-   •     Powercurves/batch_plot_2_OLD_20200613.pro ... ??
+;-            (not sure about these last two...)
 ;-
+
+;- PURPOSE:
+;-
+
+;- USEAGE / CALLING SYNTAX:
+;-   plt = BATCH_PLOT( xdata, ydata, kw*=kw*, ... )
+;-
+
 ;- INPUT: xdata, ydata = M x N arrays (x & y data points to plot)
 ;-    M = # data points / t_obs (JD, date/time, or simply numerical index)
 ;-    N = # plots, each a 1D array consisting of M data points,
@@ -29,19 +42,17 @@
 ;-   ydata[m,n] = intensity or other measurement, corresponding to xdata arrays
 ;-        NOTE: the N time arrays in xdata (of length M)
 ;-          may be idenetical in the M-direction if t_obs is the same for all N plots
+;- Optional kws (override defaults defined in batch_plot wrapper)
+;-
 
 ;- TO DO:
 ;-   [] If x and y dimensions don't initally match,
 ;-       replicate the array** over dimension=2 so it's the same size as y.
 ;-           **what array? -27 Dec 2023
+;-     8/7/2024 -- looks like I did this, but should test before deleting this task
+;-   
 ;-   [] overplot flare lines, periods of interest, etc. BEFORE generating legend,
 ;-          unless new targets may be added to an existing legend...
-;-
-;-     06 August 2024 --
-;-        ★ ★  /overplot not set for 1600 and 1700 curves b/c each has its own y-axis, 
-;-             but IS set for any additional plots, such as flare BDA times, shading, smoothed LC, etc.
-;-
-;-
 
 ;- Misc notes & comments (originally from either version, v1 &/or v2, who the heck knows):
 ;-
@@ -64,11 +75,7 @@
 ;-       string array of colors can be defined using @color, and
 ;-       NAME defaults to an array of empty strings, one for each plot.
 
-
-; function WRAP_BATCH_PLOT
-;    called by "wrapper" function BATCH_PLOT (defined below)
-
-function WRAP_BATCH_PLOT, $
+function WRAP_BATCH_PLOT, $  ; called by "wrapper" function BATCH_PLOT (defined below)
     xdata, ydata, $
     wx = wx, $
     wy = wy, $
@@ -85,7 +92,7 @@ function WRAP_BATCH_PLOT, $
     buffer=buffer, $
     symbol=symbol, $
     _EXTRA = e
-
+    
 
     common defaults
 
@@ -96,8 +103,11 @@ function WRAP_BATCH_PLOT, $
 
     if buffer eq 1 then $
         win = window( dimensions = [wx,wy]*dpi, buffer=1 ) $
-    else $
-        win = window( dimensions = [wx,wy]*dpi, location=[500,0] )
+    else if buffer eq 0 then $
+        win = window( dimensions = [wx,wy]*dpi, location=[500,0] ) $
+    else begin
+        print, "buffer = ", buffer, " ... may be defined incorrectly."
+    endelse
 
     x1 = left
     y1 = bottom
@@ -107,7 +117,6 @@ function WRAP_BATCH_PLOT, $
 
     sz = size(ydata, /dimensions)
 
-    ;---------------------------------------------------------------------------------------------
     ; Make sure input arrays are of equal dimensions, and adjust xdata to match ydata if needed
 
     ; 1. One way:
@@ -143,7 +152,6 @@ function WRAP_BATCH_PLOT, $
     xdata = reform(xdata)
     ydata = reform(ydata)
 
-
     ;+ PLOT +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
     ;    if not keyword_set(xtitle) then xtitle = " "
@@ -158,22 +166,35 @@ function WRAP_BATCH_PLOT, $
 
     for ii = 0, sz[1]-1 do begin
 
-        if not keyword_set( overplot ) then begin
-            if ii eq 0 then $
-                axis_style = 1 $   ; single x/y axes
-            else axis_style = 4    ; No axes, but same margins as if axes were present
-        endif else axis_style = 2  ; Box axes (upper & lower x-axes; left & right y-axes)
+        ;- Create new axes if overplot NOT set
+        ;-    (mostly for multiple overlaid plots within multi-panel figure... I think.)
+
+
+        ; 07 August 2024 -- not sure if any of this is necessary:
+        ;        if not keyword_set( overplot ) then begin
+        ;            if ii eq 0 then $
+        ;                axis_style = 1 $   ; single x/y axes
+        ;            else axis_style = 4    ; No axes, but same margins as if axes were present
+        ;        endif else axis_style = 2  ; Box axes (upper & lower x-axes; left & right y-axes)
+
 
         ; v2 (initial reason for copying to ..._2 ??)
         ;   tried replacing /overplot kw with new approach of
         ;     putting second plot on same window and graphic position as the first plot,
         ;     but without /overplot, plt2 stays "detached" and keeps its own y-labels.
+        ;
+        ; 06 August 2024 ★ ★ ★
+        ;   /overplot not set for 1600 and 1700 curves b/c each has its own y-axis, 
+        ;         but IS set for any additional plots, such as flare BDA times, shading, smoothed LC, etc.
 
         plt[ii] = PLOT2( $
-            xdata[*,ii], ydata[*,ii], $
-            /current, /device, $
+            xdata[*,ii], $
+            ydata[*,ii], $
+            /current, $
+            /device, $
             overplot = ii<1, $     ; v1
             ;overplot=overplot, $  ; v2
+            ;  (see comment about v2 and overplot above)
             position = position, $
             ;xtitle = xtitle, $
             ;ytitle = ytitle, $
@@ -184,15 +205,15 @@ function WRAP_BATCH_PLOT, $
             linestyle = linestyle[ii], $
             thick = thick[ii], $
             ;symbol = symbol[ii], $
-            ;xmajor=, $
             ;
-            ;xminor=5, ymajor=5, $
-            ;   8/6/2024  => what is difference defining plot kws here vs in wrapper call to this function... ??
+            ;xmajor= , $
+            ;xminor=5, $
+            ;ymajor=5, $
+            ;yminor= , $
+            ;xticklen=0.025, $
+            ;yticklen=0.010, $
+            ;  -- moved kw definitions to wrapper, which should pass them along to _EXTRA=e here...
             ;
-            ;yminor=, $
-            ; x|y major|minor -- "set in CALL (point of wrapper... 3/14/20200)"  -v2
-            xticklen=0.025, $
-            yticklen=0.010, $
             _EXTRA = e )
     endfor
 
@@ -210,6 +231,9 @@ function WRAP_BATCH_PLOT, $
     ;- args, modified versions are passed back to caller
     xdata = reform(xdata)
     ydata = reform(ydata)
+    help, xdata
+    help, ydata
+    stop
 
 ;    print, plt[0].yrange
 ;    print, plt[1].yrange
@@ -222,6 +246,17 @@ function BATCH_PLOT, $
     xdata, ydata, $
     _EXTRA = e
 
+    ;
+    ; 8/07/2024 --
+    ;   Function called directly from ML (or other module):
+    ;     all kws not explicitly listed in BATCH_PLOT definition are included in _EXTRA=e;
+    ;     call to WRAP_BATCH_PLOTS defined DEFAULT values of kws,
+    ;     which are OVERWRITTEN by values defined in _EXTRA=e
+    ;  
+    ;   REMINDIER: purpose of wrappers is to set default kw values;  
+    ;     necessary extra (and often confusing) step b/c can't set defaults in function definition
+    ;
+
     sz = size(ydata, /dimensions)
 
     ;- If ydata only contains one plot (no oplots):
@@ -231,23 +266,15 @@ function BATCH_PLOT, $
         sz = size(ydata, /dimensions)
     endif
 
+    ;- Graphics/color.pro -- IDL script (run LINE BY LINE)
     @color
-    ;-   color.pro in Codes/Graphics/ :
-    ;-     IDL "script", e.g. myscript.pro run LINE BY LINE via:
-    ;-       IDL> @myscript
 
-
-    ;- empty string array with n_elements = number of curves (data arrays) to plot;
-    ;-    passed to WRAP_BATCH_PLOT to be defined
-    ;-  (name is used to reference figure relative to window, and/or within code, ...
-    ;-     pretty sure it's not displaced on the figure itself anywhere...)
-    name = strarr(sz[1])
-
-    linestyle = make_array( sz[1], value='-', /string )
-    thick = make_array( sz[1], value=0.5, /float )
-    print, thick
-
-    symbol = make_array( sz[1], value="None" )
+    ; 8/07/2024 -- why are the following defined separately here instead of directly in call to wrapper?
+    ;name = strarr(sz[1])  ; string array used to refer to each graphic/plot
+    ;linestyle = make_array( sz[1], value='-', /string )
+    ;thick = make_array( sz[1], value=0.5, /float )
+    ;symbol = make_array( sz[1], value="None" )
+    ;
 
     plt = WRAP_BATCH_PLOT( $
         xdata, ydata, $
@@ -260,12 +287,25 @@ function BATCH_PLOT, $
         ;top = 0.3, $
         buffer = 1, $
         ;overplot = 0, $
-        ;   ??
-        name = name, $
         color = color, $
-        linestyle = linestyle, $
-        thick = thick, $
-        symbol = symbol, $
+        axis_style = 2, $
+        ;
+        ;linestyle = linestyle, $
+        linestyle = make_array( sz[1], value='-', /string ), $
+        ;thick = thick, $
+        thick = make_array( sz[1], value=0.5, /float ), $
+        ;symbol = symbol, $
+        symbol = make_array( sz[1], value="None" ), $
+        ;name = name, $
+        name = strarr(sz[1]), $
+        ;
+        ;
+        xminor=5, $
+        ymajor=5, $
+        xticklen=0.025, $
+        yticklen=0.010, $
+        ;
+        ;
         _EXTRA = e $
     )
     return, plt

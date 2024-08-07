@@ -1,22 +1,47 @@
 ;+
 ;-
-;- 09 August 2022
-;-   Merged with ML code in "my_goes.pro"
+;- CREATED:
+;-   07 August 2018
+;-
+;- LAST MODIFIED:
+;-
+;-   07 August 2024
+;-     [] Merge with plot_goes.pro ??
+;-  
+;-   09 August 2022
+;-     Merged with ML code in "my_goes.pro"
+;-  
+;-   08 July 2021
+;-     Subroutine that calls OGOES(), external routine that creates goes object.
+;-     Don't really need a subroutine for this, mostly commented, but maybe useful
+;-     for playing with different date/times or whatever else it can be used for.
+;-
+;-   12 August 2018
 ;-
 ;-
+;- PURPOSE:
+;-   Get GOES time series data to plot light curves.
 ;-
-;- 08 July 2021
-;-   Subroutine that calls OGOES(), external routine that creates goes object.
-;-   Don't really need a subroutine for this, mostly commented, but maybe useful
-;-   for playing with different date/times or whatever else it can be used for.
+;- USEAGE:
+;-    Function creates goes object at specified start and end times
+;-      (kws 'tstart' and 'tend')
+;-
+;- INPUT KEYWORDS:
+;-   tstart = 'dd-Mon-yyyy hh:mm:ss'
+;-   tend   = 'dd-Mon-yyyy hh:mm:ss'  (same form as tstart...)
+;-   sat    = 'goesN' where N = 15 by default.
+;-
+;- OUTPUT:
+;-   GOES data (time series, I assume...)
+;-
+;- TO DO:
+;-   [] Merge with plot_goes.pro ??
+;-   []
 ;-
 
 
 ;----------------------------------------------------------------------------------------
-
 ;--+
-; Created:       07 August 2018
-; Last Modified: 12 August 2018
 
 ; Extracting and plotting GOES data.
 
@@ -62,27 +87,6 @@
     ;YES_CLEAN INT 1               ; 0/1 means data wasn't / was cleaned
     ;YES_BSUB INT 1                ; 0/1 means background wasn't / was subtracted
 ; set using, e.g. a->set, kw=value
-
-
-
-;------------------------------------------------------------------------------------
-;-
-;- LAST MODIFIED:
-;-
-;- PURPOSE:
-;-
-;- INPUT:
-;-
-;- KEYWORDS:
-;-   tstart = 'dd-Mon-yyyy hh:mm:ss'
-;-   tend   = 'dd-Mon-yyyy hh:mm:ss'  (same form as tstart...)
-;-   sat    = 'goesN' where N = 15 by default.
-;-
-;- OUTPUT:
-;-
-;- TO DO:
-;-
-
 
 function GOES, tstart=tstart, tend=tend, sat=sat
 

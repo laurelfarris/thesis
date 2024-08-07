@@ -47,15 +47,19 @@
 ;-            procedure + ML code,
 ;-         (early attempts at generalizing.. apparently didn't take.)
 ;-
-;=======================================================================================================================
+;-
+
+
+;== Step (1)
 
 ; run @path_temp, set buffer=1, define instr, cadence, class,
-;   call MULTIFLARE_STRUC function to define structure for specified class,
-;  and either restore existing .sav files or 
-;
+;   define structure 'flare' = MULTIFLARE_STRUC(class=...) & restore .sav files if they exist...
+;     otherwise run appropriate Prep/ codes to create new 'A' array of structures
+;      -->> & then save to new .sav files to be restored next time :)
+
 ;@main
 ;IDL> .run main
-; ==>>   cannot run main.pro as a script, b/c contains if/then/else statements,
+; ==>> cannot run main.pro as a script, b/c contains if/then/else statements,
 ;           and scripts are run line-by-line.
 
 
@@ -145,6 +149,9 @@ aia_ydata = [ $
     [ A[0].flux[aia1600ind] / A[0].exptime ], $
     [ A[1].flux[aia1600ind] / A[1].exptime ] $
 ]
+; 8/7/2024 -- try this instead? simpler...
+;   aia_ydata = A.flux / A.exptime
+
 
 n_obs = (size(aia_ydata, /dimensions))[0]
 ;xdata = [ [indgen(n_obs)], [indgen(n_obs)] ]
@@ -179,8 +186,18 @@ xminor = 6  ; minor tick interval should = 5 minutes
 ytitle=A.name + ' (DN s$^{-1}$)'
 
 
+
+;-
+;- --> Y-major/minor aren't necessarily the same for both y-axes!
+;-       1600A y-range is different from 1700A.
+;-
+; 8/7/2024 -- generalized way to compute ytickinterval and/or # major ticks based on dy ??
+;ymajor = 4
+;yminor = 3
+
+
 ;help, aia_ydata
-;format='(E0.3)'
+format='(E0.3)'
 ;print, min(aia_ydata[*,0]), format=format
 ;print, max(aia_ydata[*,0]), format=format
 ;print, min(aia_ydata[*,1]), format=format
@@ -198,38 +215,36 @@ ytitle=A.name + ' (DN s$^{-1}$)'
 ; axis_style=4  ; no axes (margins perserved for adding graphics later)
 ;=
 
-dw
-resolve_routine, 'batch_plot', /either
 
-;
-plt = BATCH_PLOT(  $
-    aia_xdata, aia_ydata, $
-    ;ystyle=0, $   ; NICE range
-    ;ystyle=1, $   ; EXACT data range
-    ystyle=2, $   ; pad axes slightly BEYOND NICE range
-    ;ystyle=3, $   ; pad axes slightly BEYOND EXACT range
-    ;xrange=[0,n_obs-1], $
-    thick=[0.5, 0.8], $
-    ;   1700 slightly thicker plot curve than 1600, for grayscale printouts :)
-    xtickinterval=xtickinterval, $
-    xminor=xminor, $
-    ;yticklen=yticklen, $
-    ;stairstep=stairstep, $
-    color=A.color, $
-    name=A.name, $
-    ;symbol="None", $
-    buffer=buffer $
-)
-;
-print, plt[0].yrange, format=format
-print, plt[1].yrange, format=format
+
+
+            ;    dw
+            ;    resolve_routine, 'batch_plot', /either
+            ;
+            ;    plt = BATCH_PLOT(  $
+            ;        aia_xdata, aia_ydata, $
+            ;        ;ystyle=0, $   ; NICE range
+            ;        ;ystyle=1, $   ; EXACT data range
+            ;        ystyle=2, $   ; pad axes slightly BEYOND NICE range
+            ;        ;ystyle=3, $   ; pad axes slightly BEYOND EXACT range
+            ;        ;xrange=[0,n_obs-1], $
+            ;        thick=[0.5, 0.8], $
+            ;        ;   1700 slightly thicker plot curve than 1600, for grayscale printouts :)
+            ;        xtickinterval=xtickinterval, $
+            ;        xminor=xminor, $
+            ;        ;yticklen=yticklen, $
+            ;        ;stairstep=stairstep, $
+            ;        color=A.color, $
+            ;        name=A.name, $
+            ;        ;symbol="None", $
+            ;        buffer=buffer $
+            ;    )
 
 ;= 14 March 2020 --
 ;
 ; yrange padding
 ;    => ensures a yrange that can accomodate the full range of values in both 1600 and 1700 flux
 ;
-
 ;;pad = 0.2
 ;pad = 0.05
 ;;
@@ -254,9 +269,82 @@ print, plt[1].yrange, format=format
 ;
 ;print, plt[0].yrange
 ;print, plt[1].yrange
+
+;+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+    common defaults
+
+    wx = 8.0
+    wy = 3.0
+    left = 1.00
+    right = 1.10
+    bottom = 0.5
+    top = 0.2
+    ;top = 0.3
+    x1 = left
+    y1 = bottom
+    x2 = wx - right
+    y2 = wy - top
+    ;print, x2
+    ;print, x1 + wx
+    position = [x1,y1,x2,y2]*dpi
+
+    sz = size(aia_ydata, /dimensions)
+
+    thick=[0.5, 0.8]
+    @color
+    ;
+    dw
+    win = window( dimensions = [wx,wy]*dpi, buffer=1 )
+    plt = objarr(sz[1])
+    for ii = 0, 1 do begin
+        plt[ii] = PLOT2(  $
+            aia_xdata[*,ii], $
+            aia_ydata[*,ii], $
+            /current, $
+            /device, $
+            overplot = ii<1, $
+            position = position, $
+            axis_style=1, $
+            ;ystyle=2, $ ; pad axes beyond 'nice' range
+            ;yrange=[ min(aia_ydata), max(aia_ydata) ], $
+            ;  ==>> doesn't account for offset between 1600 and 1700 flux (even if dy is roughly the same).
+            ;
+            thick=thick[ii], $
+            color=A[ii].color, $
+            name=A[ii].name, $
+            ;
+            ;;xmajor=xmajor, $
+            ;xminor=xminor, $
+            ;ymajor=5, $
+            ;;yminor=yminor, $
+            ;xticklen=0.025, $
+            ;yticklen=0.010, $
+            ;;xtickinterval=xtickinterval, $
+            ;;ytickinterval=ytickinterval, $
+            ;
+            ;xtitle = xtitle, $
+            ;ytitle = ytitle, $
+            buffer=buffer, $
+            _EXTRA = e $
+        )
+    endfor
+
+;+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+;print, plt[0].yrange, format=format
+;print, plt[1].yrange, format=format
 ;stop
 
+;===========================================================================================
+;= Axes
+;=
+
+;
 ;- Add top and right axes for plt2 (excluded when axis_style=1)
+
+help, plt[0].axes
+help, plt[1].axes
 resolve_routine, 'axis2', /is_function
 ax2 = axis2( 'X', $
     location='top', $
@@ -271,22 +359,66 @@ ax3 = axis2( 'Y', $
     text_color = A[1].color, $
     showtext=1 $
 )
+help, plt[0].axes
+help, plt[1].axes
+; ==>>>
+;   adds extra axes .. plt[0] and plt[1] each have 6 now instead of 4 ...
+
+
 ;
+;- define axis object for ALL plots/objects:
 ax = [ plt[0].axes, plt[1].axes ]
 ;
-time = strmid( A[0].time, 0, 5 )
+
 ;
+;- Label x-axis with observation time
+;
+time = strmid( A[0].time, 0, 5 )
 ax[0].tickname = time[ax[0].tickvalues]
-;restore, path + 'flares/' + class + '/' + class + '_aia1600header.sav'
-;aia1600index = index
-;ax[0].title = 'Start time (' + ANYTIM( aia1600index[0].t_obs, /stime ) + ')'
-ax[0].title = 'Start time (' + flare.date + ' ' + A[0].time[aia1600ind[0]] + ')'
-;print, ax[0].title
+;
+    ;restore, path + 'flares/' + class + '/' + class + '_aia1600header.sav'
+    ;aia1600index = index
+    ;ax[0].title = 'Start time (' + ANYTIM( aia1600index[0].t_obs, /stime ) + ')'
+;
 ;resolve_routine, 'label_time', /either
 ;LABEL_TIME, plt, time=A.time;, jd=A.jd
-;resolve_routine, 'shift_ydata', /either
-;SHIFT_YDATA, plt
+ax[0].title = 'Start time (' + flare.date + ' ' + A[0].time[aia1600ind[0]] + ')'
+print, ax[0].title
 
+
+;-
+;- SHIFT Y-data (correct offset between dY spanned by 1600 vs 1700:
+resolve_routine, 'shift_ydata', /either
+help, plt
+SHIFT_YDATA, plt
+help, plt
+stop
+;print, plt[0].yrange, format=format
+;print, plt[1].yrange, format=format
+;stop
+
+
+;-
+;- Color y-axes, add labels, & set major/minor y tick marks
+;
+; y-axis titles
+;    =  [ 'AIA 1600 (DN sec ⁻¹)',  'AIA 1700 (DN sec ⁻¹)' ]
+ax[1].title = A[0].name + ' (DN s$^{-1}$)'
+ax[3].title = A[1].name + ' (DN s$^{-1}$)'
+;
+
+;ax[1].minor = yminor
+;ax[3].minor = yminor
+;ax[3].major = ymajor
+
+;- Color axes to match data
+ax[1].text_color = A[0].color
+ax[3].text_color = A[1].color
+
+
+;===========================================================================================
+;= Overplot flare lines ( dotted, dashed, dot-dashed == start, peak, end )
+;=
 
 ;==>> Problem w/ oplot_flare_lines... aia 1700 data is being pushed halfway across the plot..
 ;print, plt[1].xrange
@@ -295,13 +427,15 @@ vert = OPLOT_FLARE_LINES( $
     plt, $
     flare=flare, $
     t_obs=A[0].time[aia1600ind], $
-    send_to_back=1 )
+    send_to_back=1 $
+)
+;print, plt[0].xrange
+;print, plt[1].xrange
 
-print, plt[0].xrange
-print, plt[1].xrange
-;
 
-;
+;===========================================================================================
+;= Shade flare duration OR individual phases defined by RHESSI:
+;=
 
 if plot_rhessi eq 1 then begin
     x_vertices=[ $
@@ -338,7 +472,6 @@ print, strmid(A[0].time[x_vertices],0,5)
 ;     2 = 'type code' (?)
 ;     6 = n_elements(test)
 
-
 shaded = OPLOT_SHADED( $
     x_vertices, $
     plt, $
@@ -346,29 +479,19 @@ shaded = OPLOT_SHADED( $
     name = ['Flare Duration'] $
 )
 
+
+;===========================================================================================
+;= Legend
+;=
+
 resolve_routine, 'legend2', /either
-leg = LEGEND2( target=plt, sample_width=0.25, $
+leg = LEGEND2( $
+    target=plt, $
+    sample_width=0.25, $
     ;/upperleft )
-    /upperright )
-;
-;- --> Y-major/minor aren't necessarily the same for both y-axes!
-;-       1600A y-range is different from 1700A.
-ymajor = 4
-yminor = 3
-;
-ax[1].title = ytitle[0]
-ax[1].minor = yminor
-;
-ax[3].title = ytitle[1]
-ax[3].major = ymajor
-ax[3].minor = yminor
-;-
-ax[3].title = ytitle[1]
-;
-;- Color axes to match data
-ax[1].text_color = A[0].color
-ax[3].text_color = A[1].color
-;-
+    /upperright $
+)
+
 
 save2, aia_lc_filename
 

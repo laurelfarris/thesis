@@ -11,30 +11,25 @@
 ;-   Calls IDL's PLOT function
 ;-
 ;- PURPOSE:
-;- DESCRIPTION:      subroutines with custom default configurations
+;-   Set custom default parameters (kw values) for call to IDL's PLOT function
+;-
 ;-
 ;- USEAGE:
-;-   plt = plot2( arg1, arg2, kw=kw )
-;-     --> use just like IDL's PLOT function.
-;-
-;- INPUT:
-;-   Same as IDL PLOT function
-;-
-;- KEYWORDS (optional):
-;-   Same as IDL PLOT function
+;-   plt = PLOT2( arg1, arg2, kw=kw )
+;-     --> same calling format as IDL's PLOT function
 ;-
 ;- OUTPUT:
-;-   plot
+;-   graphic object
 ;-
 ;- TO DO:
 ;-   [] Make sure xinput is working correctly as an optional argument.
 ;-
-;- KNOWN BUGS:
+;- KNOWN BUGS / ISSUES:
+;-   •
 ;-
 ;- AUTHOR:
 ;-   Laurel Farris
 ;-
-;+
 
 
 function plot2, xinput, yinput, $
@@ -63,7 +58,7 @@ function plot2, xinput, yinput, $
     ;-   2 ("Italic" or "it")
     ;-   3 ("Bold Italic" or "bi")
 
-    p = plot( $
+    p = PLOT( $
         x, y, $
         font_size = fontsize, $
         ytickfont_size = fontsize, $

@@ -1,34 +1,14 @@
-function SHIFT_YDATA_OLD, p
-    ; Last modified: ... sometime before 18 November 2018.
-    ;  (old version)
-
-    ; Shift data in Y-direction
-    ;for i = 0, n_elements(p)-1 do begin
-    ;endfor
-    ;ytitle = 'Counts (DN s$^{-1}$)'
-
-    m = 1.0
-    format = '(F0.1)'
-    ;---
-    p[0].GetData, x, y
-    b = min(y)
-    p[0].SetData, x, y-b
-    ax = p[0].axes
-    ax[1].tickformat = format
-    ax[1].coord_transform = [b,m]
-    ;---
-    p[1].GetData, x, y
-    b = min(y)
-    p[1].SetData, x, y-b
-    ax = p[1].axes
-    ax[3].coord_transform = [b,m]
-    ax[3].tickformat = format
-    ax[3].showtext = 1
-
-    return, p
-end
-
-;----------------------------------------------------------------------------------
+;+
+;- LAST MODIFIED:
+;-   18 November 2018
+;-
+;-
+;-
+;-
+;-
+;-
+;-
+;-
 
 pro SHIFT_YDATA, $
     plt, $
@@ -36,15 +16,11 @@ pro SHIFT_YDATA, $
     delt=delt, $
     ytitle=ytitle
 
-    ; Last modified:    18 November 2018
-
     ; Shift data in Y-direction
     ;- by subtracting either mean or min,
     ;- using same notation as typical line formula: y = mx + b
     ;- where y = new coordinates, linearly transformed from old coordinates x
     ;- by a factor of the slope, m.
-
-
 
     ;- Get shift (aa) and slope (bb) to use for coord_transform
     ;aa = [ mean(ydata[*,0]), mean(ydata[*,1]) ]
@@ -65,7 +41,6 @@ pro SHIFT_YDATA, $
     for ii = 0, n_elements(plt)-1 do begin
         ax = plt[ii].axes
         plt[ii].GetData, xx, yy
-
 
         ;- subtract min, mean, or background
         ;- Or just have user input amount to shift...
@@ -102,4 +77,38 @@ pro SHIFT_YDATA, $
         ;ax[3].tickformat = format
 
     endfor
+end
+
+
+;----------------------------------------------------------------------------------------------------------------
+;- OLD version:
+
+function SHIFT_YDATA_OLD, p
+    ; Last modified: ... sometime before 18 November 2018.
+    ;  (old version)
+
+    ; Shift data in Y-direction
+    ;for i = 0, n_elements(p)-1 do begin
+    ;endfor
+    ;ytitle = 'Counts (DN s$^{-1}$)'
+
+    m = 1.0
+    format = '(F0.1)'
+    ;---
+    p[0].GetData, x, y
+    b = min(y)
+    p[0].SetData, x, y-b
+    ax = p[0].axes
+    ax[1].tickformat = format
+    ax[1].coord_transform = [b,m]
+    ;---
+    p[1].GetData, x, y
+    b = min(y)
+    p[1].SetData, x, y-b
+    ax = p[1].axes
+    ax[3].coord_transform = [b,m]
+    ax[3].tickformat = format
+    ax[3].showtext = 1
+
+    return, p
 end

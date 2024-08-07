@@ -9,8 +9,9 @@
 
 pro LABEL_TIME, plt, time=time, jd=jd
 
-    @parameters
-
+    ;@parameters
+    ;   8/7/2024 -- ERROR (file no longer exists)
+    ;      ...  pretty sure multi-flare struc, etc. defines the same variables 
 
     win = GetWindows(/current)
     ax = plt[0].axes
@@ -18,7 +19,9 @@ pro LABEL_TIME, plt, time=time, jd=jd
 ;    g = goes()
 ;    utbase = g.utbase
     ;ax[0].title = 'Start Time (15-Feb-2011 00:00:01 UT)'
-    ax[0].title = 'Start Time (' + date + ' ' + ts_start + ' UT)'
+    ;ax[0].title = 'Start Time (' + date + ' ' + ts_start + ' UT)'
+    ax[0].title = 'Start Time (' + flare.date + ' ' + ts_start + ' UT)'
+    ;   8/7/2024 -- variable 'date' now defined in 'flare' structure
 
     ;- Version1: LCs plotted as func of index, not jd.
     if keyword_set(time) then begin
