@@ -1,12 +1,16 @@
 ;+
-;- LAST MODIFIED
+;- LAST MODIFIED:
+;-   12 August 2024
+;-    -> see save_files.pro
+;-         (merger of 4 IDL codes, all involving aving and/or restoration of various .sav files)
+;-
 ;-   02 August 2022
 ;-
 ;- CALLING SYNTAX:
 ;-   IDL> @main
 ;-     run as a script, i.e. no 'end' statement at bottom of file.
 ;-
-;- REFERENCE CODES
+;- REFERENCE CODES:
 ;-   • ./today.pro
 ;-   •
 ;-   • Modules/stats.pro -- computes min, max, mean, variance, stddev, and returns structure
@@ -16,7 +20,7 @@
 ;-   •
 ;-   • Spectra/
 ;-
-;- TO DO
+;- TO DO:
 ;-   [] 29 May 2024 -- After restoring contents of .sav files, display what exactly was restored
 ;-        It's been so long, I have no idea what surprises "x22_struc.sav" may contain...
 ;-

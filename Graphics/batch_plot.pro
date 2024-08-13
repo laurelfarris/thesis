@@ -28,7 +28,7 @@
 ;-
 
 ;- PURPOSE:
-;-
+;-   Handles plotting multiple curves on one set of axes
 
 ;- USEAGE / CALLING SYNTAX:
 ;-   plt = BATCH_PLOT( xdata, ydata, kw*=kw*, ... )
@@ -231,12 +231,6 @@ function WRAP_BATCH_PLOT, $  ; called by "wrapper" function BATCH_PLOT (defined 
     ;- args, modified versions are passed back to caller
     xdata = reform(xdata)
     ydata = reform(ydata)
-    help, xdata
-    help, ydata
-    stop
-
-;    print, plt[0].yrange
-;    print, plt[1].yrange
 
     return, plt
 end
@@ -266,18 +260,22 @@ function BATCH_PLOT, $
         sz = size(ydata, /dimensions)
     endif
 
+
     ;- Graphics/color.pro -- IDL script (run LINE BY LINE)
     @color
 
     ; 8/07/2024 -- why are the following defined separately here instead of directly in call to wrapper?
-    ;name = strarr(sz[1])  ; string array used to refer to each graphic/plot
-    ;linestyle = make_array( sz[1], value='-', /string )
-    ;thick = make_array( sz[1], value=0.5, /float )
-    ;symbol = make_array( sz[1], value="None" )
-    ;
+
+
+    xticklen=0.025
+    yticklen=0.010
+    ;xticklen=0.03
+    ;yticklen=0.012
 
     plt = WRAP_BATCH_PLOT( $
-        xdata, ydata, $
+        xdata, $
+        ydata, $
+        ; 12 August 2024 -- added line to define wx (not sure why not included already...)
         wx = 8.0, $
         wy = 3.0, $
         left = 1.00, $
@@ -289,23 +287,22 @@ function BATCH_PLOT, $
         ;overplot = 0, $
         color = color, $
         axis_style = 2, $
-        ;
-        ;linestyle = linestyle, $
         linestyle = make_array( sz[1], value='-', /string ), $
+        ;thick = [0.5,0.8], $
         ;thick = thick, $
         thick = make_array( sz[1], value=0.5, /float ), $
-        ;symbol = symbol, $
         symbol = make_array( sz[1], value="None" ), $
         ;name = name, $
-        name = strarr(sz[1]), $
-        ;
-        ;
+        name = STRARR(sz[1]), $  ; string array used to refer to each graphic/plot
+        ;ytitle = STRARR(sz[1]), $
+        ;xtitle = STRARR(), $
         xminor=5, $
         ymajor=5, $
-        xticklen=0.025, $
-        yticklen=0.010, $
-        ;
-        ;
+        xticklen=xticklen, $
+        yticklen=yticklen, $
+        ;xticklen=xticklen*1.2, $
+        ;yticklen=yticklen*1.2, $
+        ;stairstep=1  ;- e.g. detrended/flattend LCs, ~ { Milligan2017 }
         _EXTRA = e $
     )
     return, plt

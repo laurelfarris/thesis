@@ -194,7 +194,19 @@ function OPLOT_FLARE_LINES, $
     ;- [] Try to come up with better, more intuitive variable names here.
     ;-      These are just a mess.
     vert = objarr(n_elements(x_indices))
-    linestyle = [1,2,4]
+    ;linestyle = [1,2,4]
+
+    linestyle = [ $
+        ;[ 1, '5555'X ], $  ; dotted - close together
+        [ 1, '1111'X ], $  ; dotted - more spread out
+        ;
+        [ 1, '3333'X ], $  ; dashed -
+        ;[ 1, 'F0F0'X ], $  ; dashed -
+        ;
+        ;[ 1, '7272'X ]  $  ; dot-dashed
+    ]
+
+
     foreach vx, x_indices, jj do begin
         vert[jj] = plot( $
             ;[ xx[vx], xx[vx] ], $
@@ -204,7 +216,8 @@ function OPLOT_FLARE_LINES, $
             /overplot, $
             ;overplot = plt[0], $
             thick = 0.5, $
-            linestyle = linestyle[jj], $
+            ;linestyle = linestyle[jj], $
+            linestyle = linestyle[*,jj], $
             ystyle = 1, $
             name = name[jj], $
             color = 'black', $

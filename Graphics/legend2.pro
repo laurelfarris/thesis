@@ -1,12 +1,28 @@
-; Last modified:    06 April 2018
-; Programmer:       Laurel Farris
-; Description:      subroutines with custom default configurations
+;+
+; LAST MODIFIED:
+;   12 August 2024 --   
+;     replaced the following kws:
+;        upperleft=upperleft, $
+;        upperright=upperright, $
+;        lowerright=lowerright, $
+;     with ONE kw "legend_position" (see below)
+;
+;   06 April 2018 --
+;
+; PURPOSE:
+;   custom default configurations for IDL's LEGEND function
+;
+; KEYWORDS:
+;   legend_position =  [ UL | UR | LL | LR ] (upper left, upper right, lower left, lower right)
+;
+; PROGRAMMER:
+;   Laurel Farris
+;-
+
 
 function LEGEND2, $
     target=target, $
-    upperleft=upperleft, $
-    upperright=upperright, $
-    lowerright=lowerright, $
+    legend_position=legend_position, $
     _EXTRA=e
 
     common defaults
@@ -28,47 +44,70 @@ function LEGEND2, $
 
     ;- Set legend position
 
-;    xoffset = 0.10
-;    yoffset = 0.05
-    xoffset = 0.00
-    yoffset = 0.00
+    ;xoffset = 0.10
+    ;yoffset = 0.05
+    xoffset = 0.10
+    yoffset = xoffset * (wy/wx)
+;    print, yoffset
+;    stop
 
-    ;- upper LEFT corner
-    if keyword_set(upperleft) then begin
-        lx = pos[0] + xoffset
-        ly = pos[3] - yoffset
-        horizontal_alignment = 0.0  ; left
-        vertical_alignment = 1.0    ; top
-    ;endif
-    endif else $
+    ; New kw for legend position (8/12/2024):
 
-    ;- upper RIGHT corner
-    if keyword_set(upperright) then begin
-        lx = pos[2] - xoffset
-        ly = pos[3] - yoffset
-        horizontal_alignment = 1.0  ; right
-        vertical_alignment = 1.0    ; top
-    ;endif
-    endif else $
-
-    ;- LOWER RIGHT corner
-    if keyword_set(lowerright) then begin
-        xoffset = 0.50
-        yoffset = 0.05
-        lx = pos[2] - xoffset
-        ly = pos[1] + yoffset
-        horizontal_alignment = 1.0  ; right
-        vertical_alignment = 0.0    ; bottom
-
-    ;- LOWER LEFT (default)
+    if not keyword_set(legend_position) then begin
+        legend_position = 'UL' ;; DEFAULT
     endif else begin
-        xoffset = 0.50
-        yoffset = 0.05
-        lx = pos[0] + xoffset
-        ly = pos[1] + yoffset
-        horizontal_alignment = 0.0  ; left
-        vertical_alignment = 0.0    ; bottom
+
+        legend_position = STRING(legend_position)
+
+        ;- upper LEFT corner
+        if (legend_position eq 'UL') then begin
+        ;if keyword_set(upperleft) then begin
+            lx = pos[0] + xoffset
+            ly = pos[3] - yoffset
+            horizontal_alignment = 0.0  ; left
+            vertical_alignment = 1.0    ; top
+        ;endif
+        endif else $
+
+        ;- upper RIGHT corner
+        if (legend_position eq 'UR') then begin
+        ;if keyword_set(upperright) then begin
+            lx = pos[2] - xoffset
+            ly = pos[3] - yoffset
+            horizontal_alignment = 1.0  ; right
+            vertical_alignment = 1.0    ; top
+        ;endif
+        endif else $
+
+        ;- LOWER RIGHT corner
+        if (legend_position eq 'LR') then begin
+        ;if keyword_set(lowerright) then begin
+            xoffset = 0.50
+            yoffset = 0.05
+            lx = pos[2] - xoffset
+            ly = pos[1] + yoffset
+            horizontal_alignment = 1.0  ; right
+            vertical_alignment = 0.0    ; bottom
+        ;endif
+        endif else $
+
+        ;- LOWER LEFT (default)
+        if (legend_position eq 'LL') then begin
+            xoffset = 0.50
+            yoffset = 0.05
+            lx = pos[0] + xoffset
+            ly = pos[1] + yoffset
+            horizontal_alignment = 0.0  ; left
+            vertical_alignment = 0.0    ; bottom
+        endif else begin
+            print, '======================================================'
+            print, 'Invalid kw value for legend_position!'
+            print, '======================================================'
+            stop
+        endelse
+
     endelse
+
 
     ;target.GetData, image, X, Y
     ;x = X[-5]
