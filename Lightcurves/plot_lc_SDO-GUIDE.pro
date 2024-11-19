@@ -4,19 +4,13 @@
 ;-      copied brief paragraph + code from
 ;-      SDO_guide_2020.pdf, § 7.7.4:  'Plotting an AIA Light Curve':
 ;-     
-
-
-
-;-
-;- 10 March 2020
-;-
-;- Guide to SDO data analysis, September 12, 2019
-;-   6  How to process AIA Data
-;-   6.7.4  Plotting an AIA Light Curve
+;- 10 March 2020 --
+;-   Guide to SDO data analysis, September 12, 2019
+;-     6  How to process AIA Data
+;-     6.7.4  Plotting an AIA Light Curve
 ;-
 ;- Plot an exposure-time-corrected  (!!)
 ;-   LC, using DATAMEAN and T_OBS from headers.
-;-
 ;-
 ;- 14 December 2020
 ;- Examples from source code "ssw_jsoc_time2data.pro":
@@ -29,9 +23,7 @@
 ;-     drms, urls, /urls_only, cadence='1h', waves='171, 193, 304', /jsoc2
 ;-
 
-
 ;M1.5 2013-08-12 T~10:21:00
-
 
 ;=======================================================================================================
 ;= 05 March 2021
@@ -44,7 +36,6 @@
 ;== NEW (variables defined in one script so dont' have to type same thing over and over
 ;    in every single ML code every single session...):
 @main
-
 
 ssw_jsoc_time2data, $
     ;'01:30 2011-02-15', '02:30 2011-02-15', $

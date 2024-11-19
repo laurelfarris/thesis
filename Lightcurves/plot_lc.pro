@@ -13,9 +13,6 @@
 ;-           AND
 ;-              checks for existance of .sav files (if yes, restore struc, if not, prints error)
 ;-      • defines filename to save pdf of figure
-;-      • 
-;-      • 
-;-  
 ;-  
 ;-   12/27/2023:
 ;-     File 'batch_plot_2.pro' no longer exists --> merged with 'batch_plot.pro'
@@ -55,7 +52,6 @@
 ;-   [] Replace hardcoded values with generalized code.
 ;-        including computation of [xyz]tickinterval, [xyz]major[minor], etc. (using dy ??)
 ;-           -- 8/7/2024
-;-
 
 ; Quick IDL REF:
 ;    IDL> SIZE(array)
@@ -68,10 +64,7 @@
 ; axis_style=2  ; box axes
 ; axis_style=3  ; crosshair axes
 ; axis_style=4  ; no axes (margins perserved for adding graphics later)
-;
-;=
 ;+
-
 
 
 ;== Step (1)

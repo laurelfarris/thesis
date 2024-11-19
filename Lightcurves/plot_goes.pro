@@ -21,7 +21,6 @@
 ;-
 
 
-
 function PLOT_GOES, gdata, buffer=buffer
 
     if n_elements(gdata) eq 0 then gdata = GOES()

@@ -1,40 +1,102 @@
-
 Codes/Lightcurves/
     contains IDL procedures for plotting flare lightcurves
       -> for general plotting routines, see Codes/Graphics/
 
+
+
+19 November 2024 --
+   Updated _README with (several) files in directory not even mentioned here ...
+
+
+2021 January 13 --
+  moved "plot_aia_lc.pro" here from main working dir (one level up).
+  Uses plotting procedures and routines from SDO guide examples.
+2021 July 07 --
+  renamed to "plot_lc_SDO-GUIDE.pro" ??
+
+
 ---------------------------------------------------------------------------------
 
-2021 January 13 : moved "plot_aia_lc.pro" here from main working dir (one level up).
-  Uses plotting procedures and routines from SDO guide examples.
-2021 July 07 : renamed to "plot_lc_SDO-GUIDE.pro" ??
+General routine(s) for plotting light curves:
+  ★ plot_lc.pro
+  • plot_lightcurve_reference.pro
+     -> used as reference while doing research (not for publications or presentations)
+  • plot_lc_GENERAL.pro
+  • plot_lc_20210707.pro
+     copied plot_lc.pro on 07 July 2021 to preserve extra ML code
+      (poss. relevant to Alignment procedures and flux computation,
+           according to comments)
+
+BDA:
+  • bda_lightcurves.pro
+  • plot_bda_lightcurves.pro
 
 
-General routine for plotting a light curve:
-  • plot_lc.pro
 
 Axis labels:
   • label_time.pro
+      -> Last modified 17 November 2018 !!
+         [] Needs improvements in comments & documentation
+              (at some point)
 
-Shift curves in y-dir (+ coord_transform)
+
+Shift plots in y-direction (+ COORD_TRANSFORM) for better visibility 
+  (two overlaid curves span the full y-range; axis labels set to true values,
+       which may or may not be similar for both plots).
   • shift_ydata.pro
 
-Overlay other plot lines:
+OVERLAYS:
   • oplot_background.pro
   • oplot_flare_lines.pro
+  • oplot_shaded.pro
 
 
-Other:
-  • bda_lightcurves.pro
-  • plot_bda_lightcurves.pro
-  • plot_lightcurve_reference.pro
+
+GOES:
+
+  • goes.pro
+      -> creates GOES object ('gdata') by calling OGOES()
+          at user specifed times (string variables "tstart" and "tend")
+  • plot_goes.pro
+      -> subroutine (function definition only, no ML code afterward)
+           with 'gdata' as only argument (besides "buffer" kw).
+
+
+
+----
 
   • utplot.pro
-         (NOT written by me..)
-     copied procedure code from interwebs
-         ==>> see "Guide to SDO data analysis" (SDO_guide_2019.pdf)
-     8/6/2024 --
-        -> utplot is CALLED by plot_lc_SDO-GUIDE.pro;
-          moved here (Lightcurves/) from ../
+          ☆ ★ ☆  Code copied from interwebs, NOT my own work!  ☆ ★ ☆ 
 
----------------------------------------------------------------------------------
+  • plot_lc_SDO-GUIDE.pro
+     -> calls utplot.pro
+
+
+see "Guide to SDO data analysis"
+   provided in "SDO_guide_2019.pdf" ->
+
+
+
+
+RHESSI:
+
+    • plot_rhessi.pro
+
+
+.
+.
+.
+.
+.
+
+
+No clue:
+
+  • aia_flare_start_end_times.pro
+      -> Last modified 28 November 2018 !!
+          "Big ugly light curves", according to my own comments
+          (may be similar to "plot_lightcurve_reference.pro",
+            for my own use, not for sharing).
+      Documentation is poor, borderline non-existant... 
+         doesn't seem too important or useful at current stage of this dissertation project...
+

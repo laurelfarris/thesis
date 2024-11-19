@@ -1,11 +1,13 @@
-
-
-; Last modified:    17 November 2018
-
-
+;+
+;-
+;- LAST MODIFIED:    17 November 2018
+;-
+;-
 ;- Do axes already need to be labeled with the desired
 ;- xtickinterval or xtickvalues?
-;-  --> YES.
+;-     -> YES.
+;-
+
 
 pro LABEL_TIME, plt, time=time, jd=jd
 

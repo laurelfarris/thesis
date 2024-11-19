@@ -10,11 +10,9 @@
 ;-       kw "shaded" removed from ../Lightcurves/oplot_flare_lines.pro on 17 January 2020
 ;-         (better to call separate subroutine to do this)
 ;-
-;-
 ;- PURPOSE:
-;-   subroutine to add shading to any
-;-   Shade plot background between x1 and x2
-;-   time windows within plots to cover impulsive, peak, and decay flare phases
+;-   Shade plot background over full y-range between x-indices [x1:x2] (user-input)
+;-     time windows within plots to cover impulsive, peak, and decay flare phases
 ;-
 ;- EXTERNAL SUBROUTINES:
 ;-   XXX plot2.pro XXX
@@ -25,24 +23,27 @@
 ;-   result = OPLOT_SHADED( x_vertices, plt, kw=kw )
 ;-
 ;- INPUT:
-;-   x_vertices = 2-element array (I think...)
+;-   x_vertices = 2 x N  array, where N = number of shaded regions to color (3 for phase2)
 ;-   plt = current active graphic object
 ;-
 ;- OUTPUT:
-;-   plt = [ plt, shaded ]
-;-   shaded = ??
-;-
+;-   plt = [ plt, shaded ]   ;;  shaded = ??
+;-      
 ;- TO DO:
+;-   [] double-check / confirm variable type & dimensions of 'x_vertices' & 'shaded'
 ;-   [] replace hardcoded values with input args/kws
-;-   [] check variable type & dimensions (where applicable) of 'x_vertices' & 'shaded'
-;-   [] move hardcoded variables specific to RHESSI out of this routine to main lc code for rhessi, or s/t.
-;-
+;-   [] move hardcoded variables specific to RHESSI to main rhessi lc code
+;-       
+;+
+
 
 function OPLOT_SHADED, $
     x_vertices, $
     plt, $
     _EXTRA=e
 
+
+    ;----
 
     sz = size(x_vertices)
     if sz[0] eq 1 then x_vertices=REFORM(x_vertices, sz[1], 1)
