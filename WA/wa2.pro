@@ -76,17 +76,30 @@ fname = 'wa'
 
 dz = 64
 
+;- 06 November 2024
+;-  added user-defined variables for period, frequency bandwidth,
+;-  Better way to handle variables (less hardcode-y)
+
+
+;- Oscillatory period (seconds)
+period = 180.0
+
+;- Frequency bandwidth (mHz)
+df = 1.0e-3
+
 ;- coords for horizontal lines marking upper/lower boundaries of
-fcenter = 1./180
-flower = 0.005
-fupper = 0.006
+; fcenter = 1./180
+; flower = 0.005
+; fupper = 0.006
+fcenter = 1.0/period
+flower = fcenter - (df/2.0)
+fupper = fcenter + (df/2.0)
 
 ;- number of points available with chosen dz
 ;-   [] when more awake, figure out a better way to word this...
 NN = n_elements(A[0].flux) - dz + 1
 
-;- min/max frequencies to display on figure.
-;-   aka: y-range
+;- min/max frequencies to display on figure (y tick labels)
 fmin = 0.0025
 fmax = 0.0200
 
@@ -100,10 +113,7 @@ z_start = [ 0 : NN : dz/step ]
 
 @parameters
 
-;-
 ;- NOTE:  A.flux is NOT exptime-corrected.
-;-
-
 
 dw
 
@@ -121,7 +131,6 @@ for cc = 0, 1 do begin
     aia_wa_maps = [ [[aia_wa_maps]], [[wmap_out]] ]
 endfor
 
-
 ;- min/max values for comparable scaling between 1600 and 1700.
 min_value = min(aia_wa_maps)
 max_value = max(aia_wa_maps)
@@ -133,7 +142,6 @@ rows = 2
 wx = 7.5
 wy = 9.0
 win = window( dimensions=[wx,wy]*dpi, location=[500,0], buffer=buffer )
-
 
 ;+
 ;- 14 April 2020
@@ -184,11 +192,9 @@ for cc = 0, 1 do begin
     ax[3].title = "Period (s)"
     ax[3].showtext = 1
 
-
     ;-
     ;- Colorbar
     ;-
-
 
     ;- Convert image position to inches
     ;-  (easier to tinker with colorbar position when units make sense)
