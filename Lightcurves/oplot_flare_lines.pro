@@ -46,7 +46,12 @@
 ;-      could probably remove it altogether.
 ;-
 
-function OPLOT_FLARE_LINES_2, flare, plt, start_ind=start_ind
+function OPLOT_FLARE_LINES_2, $
+    plt, $
+    flare=flare, $
+    t_obs=t_obs, $
+    start_ind=start_ind, $
+    _EXTRA=e
 
     ; Get JD for each phase using values in flare struc
     vx = GET_JD( $
@@ -68,7 +73,8 @@ function OPLOT_FLARE_LINES_2, flare, plt, start_ind=start_ind
             thick=0.5, $
             color='gainsboro', $
             name=vertname[ii], $
-            buffer=buffer $
+            buffer=buffer, $
+            _EXTRA=e $
         )
     endfor
 
@@ -147,27 +153,64 @@ function OPLOT_FLARE_LINES, $
     ;--- AIA -----------------
     endif else begin
 
-        flare_times = strmid( [flare.tstart, flare.tpeak, flare.tend], 0, 5 )
+        time = strmid( t_obs, 0, 5 )
+
+
+    ;linestyle = [1,2,4]
+;    linestyle = [ $
+;        ;[ 1, '5555'X ], $  ; dotted - close together
+;        [ 1, '1111'X ], $  ; dotted - more spread out
+;        ;[ 1, '3333'X ], $  ; dashed - shorter dashes
+;        [ 1, 'F0F0'X ], $  ; dashed - longer dashes
+;        [ 1, '7272'X ]  $  ; dot-dashed
+;        ;[ 1, '4FF2'X ]  $  ; dot-dashed
+;    ]
+
+        if flare.class eq 'M7.3' then begin
+            flare_times = strmid( [flare.tpeak, flare.tend], 0, 5 )
+            name = flare_times + [ ' UT (peak)', ' UT (end)' ]
+            linestyle = [ $
+                [ 1, 'F0F0'X ], $
+                [ 1, '7272'X ]  $
+            ]
+        endif
+        if flare.class eq 'C8.3' then begin
+            flare_times = strmid( [flare.tstart, flare.tpeak], 0, 5 )
+            name = flare_times + [ ' UT (start)', ' UT (peak)']
+            linestyle = [ $
+                [ 1, '1111'X ], $
+                [ 1, 'F0F0'X ] $
+            ]
+        endif
+        if flare.class eq 'X2.2' then begin
+            flare_times = strmid( [flare.tstart, flare.tpeak, flare.tend], 0, 5 )
+            name = flare_times + [ ' UT (start)', ' UT (peak)', ' UT (end)' ]
+            linestyle = [ $
+                [ 1, '1111'X ], $
+                [ 1, 'F0F0'X ], $
+                [ 1, '7272'X ]  $
+            ]
+        endif
 
         ;-  For GOES, flare_times is of the form: "15-Feb-2011 00:00:01.725"
         ;-  For  AIA, flare_times is of the form: "15-Feb-2011 00:00"
         ;-    (or was... before I commented the HC and used variables).
 
-        time = strmid( t_obs, 0, 5 )
-
-        nn = n_elements(flare_times)
-
         ;- Extract INDICES (x_indices) for x-axis values (time) that match the
         ;-   start, peak, and end times for the flare.
         ;-  Should have 3 elements for start/peak/end.
-        x_indices = intarr(nn)
-        for ii = 0, nn-1 do $
+
+        x_indices = intarr(n_elements(flare_times))
+        for ii = 0, n_elements(x_indices)-1 do begin
+            print, ii
             x_indices[ii] = (where( time eq flare_times[ii] ))[0]
+        endfor
+
+        ;x_ind_2 = where( time eq flare_times[ii] );[0]
+
     endelse
 
     x_indices = x_indices[ where( x_indices ne -1 ) ]
-    print, x_indices
-    ;stop
 
 ; Why is flare_times defined again?
 ;    flare_times = [ $
@@ -175,7 +218,6 @@ function OPLOT_FLARE_LINES, $
 ;        strmid( flare.tpeak, 0, 5 ), $
 ;        strmid( flare.tend, 0, 5 ) ]
 
-    name = flare_times + [ ' UT (start)', ' UT (peak)', ' UT (end)' ]
 
     y1 = []
     y2 = []
@@ -183,7 +225,7 @@ function OPLOT_FLARE_LINES, $
        y1 = [y1, plt[ii].yrange[0]]
        y2 = [y2, plt[ii].yrange[1]]
     endfor
-    format = '(e0.2)'
+    format = '(E0.2)'
 ;    print, y1, format=format
 ;    print, y2, format=format
 
@@ -194,20 +236,9 @@ function OPLOT_FLARE_LINES, $
     ;- [] Try to come up with better, more intuitive variable names here.
     ;-      These are just a mess.
     vert = objarr(n_elements(x_indices))
-    ;linestyle = [1,2,4]
-
-    linestyle = [ $
-        ;[ 1, '5555'X ], $  ; dotted - close together
-        [ 1, '1111'X ], $  ; dotted - more spread out
-        ;
-        [ 1, '3333'X ], $  ; dashed -
-        ;[ 1, 'F0F0'X ], $  ; dashed -
-        ;
-        ;[ 1, '7272'X ]  $  ; dot-dashed
-    ]
-
 
     foreach vx, x_indices, jj do begin
+        print, jj
         vert[jj] = plot( $
             ;[ xx[vx], xx[vx] ], $
             [ vx, vx ], $

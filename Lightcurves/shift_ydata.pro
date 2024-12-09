@@ -2,13 +2,6 @@
 ;- LAST MODIFIED:
 ;-   18 November 2018
 ;-
-;-
-;-
-;-
-;-
-;-
-;-
-;-
 
 pro SHIFT_YDATA, $
     plt, $
@@ -31,8 +24,6 @@ pro SHIFT_YDATA, $
     ;ax[1].coord_transform = [aa[0],bb[0]]
     ;ax[3].coord_transform = [aa[1],bb[1]]
 
-
-
     ;- 01 December 2018
     ;- Pretty sure aa is the only variable that changes
     ;-    depending on how you want to shift the data.
@@ -45,11 +36,11 @@ pro SHIFT_YDATA, $
         ;- subtract min, mean, or background
         ;- Or just have user input amount to shift...
 
-        if not keyword_set(delt) then $
-            aa = mean(yy) $
+        if keyword_set(delt) then aa = delt[ii] else $
+            aa = min(yy)
+            ;aa = mean(yy)
             ;aa = background[ii]
-            ;aa = min(yy)
-        else aa = delt[ii]
+            ;aa = mean[yy]
 
         plt[ii].SetData, xx, yy-aa
 
@@ -77,6 +68,7 @@ pro SHIFT_YDATA, $
         ;ax[3].tickformat = format
 
     endfor
+
 end
 
 

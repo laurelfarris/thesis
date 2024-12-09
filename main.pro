@@ -26,62 +26,10 @@
 ;-
 
 
-;+
-;= Startup variables (sort of... tend to change during a single coding session)
-
-@path_temp
-
-buffer = 1
-;display = 0
-;   What does this do?
-
-;instr = 'hmi'
-;channel = 'mag'
-;channel = 'cont'
-;channel = 'dop'
-
-instr = 'aia'
-;channel = '1600'
-;channel = '1700'
-
-cadence = 24
-;cadence = 45
-
-;class = 'c30'
-;class = 'c46'
-;class = 'm10'
-;class = 'm15'
-
-class = 'c83'
-;class = 'm73'
-;class = 'x22'
-
-
-;+
-;= Restore flare structure(s) from .sav files
-
-;flare = multiflare_struc(flare_id=class)  ;-  ????
-flare = MULTIFLARE_STRUC( flare_id=class )
-help, flare
-
-flare_path = path + 'flares/' + class + '/'
-print, flare_path
-
-; 12 December 2022
-;  Restore .sav file with variable "A" saved with two structures, one for each AIA UV channel
-if FILE_EXIST(flare_path + class + '_' + 'struc.sav') then begin
-;if FILE_EXIST(flare_path + class + '_' + 'struc.sav') then begin
-    print, flare_path + class + '_' + 'struc.sav'
-    restore, flare_path + class + '_' + 'struc.sav', /VERBOSE
-    ;restore, flare_path + class + '_' + 'struc.sav', /VERBOSE
-    ;- /VERBOSE prints infromation for restored object in case one forgets...
-endif else begin
-    print, 'Either file "A.sav" does not exist OR filename/location is incorrect.'
-endelse
-
-
 ;-----------------------------------------------------------------------------------------------------
-
+;-- Old stuff, moved here from bottom of code to separate from current ML code
+;-- 
+;
 ; 30 August 2022
 ;  [] flare.path? Could add specific path to each structure,
 ;      OR combine all flare .sav files into one directory...
@@ -110,6 +58,63 @@ endelse
 ;
 ;date = flare.year + flare.month + flare.day
 ;date = flare.year + flare.month + flare.day
+
+;--
+;-----------------------------------------------------------------------------------------------------
+
+
+;+
+;= Startup variables (sort of... tend to change during a single coding session)
+
+@path_temp
+
+buffer = 1
+;display = 0
+;   What does this do?
+
+;instr = 'hmi'
+;channel = 'mag'
+;channel = 'cont'
+;channel = 'dop'
+
+instr = 'aia'
+;channel = '1600'
+;channel = '1700'
+
+cadence = 24
+;cadence = 45
+
+;class = 'c30'
+;class = 'c46'
+;class = 'm10'
+;class = 'm15'
+
+;class = 'c83'
+class = 'm73'
+;class = 'x22'
+
+
+;+
+;= Restore flare structure(s) from .sav files
+
+;flare = multiflare_struc(flare_id=class)  ;-  ????
+flare = MULTIFLARE_STRUC( flare_id=class )
+help, flare
+
+flare_path = path + 'flares/' + class + '/'
+print, flare_path
+
+; 12 December 2022
+;  Restore .sav file with variable "A" saved with two structures, one for each AIA UV channel
+if FILE_EXIST(flare_path + class + '_' + 'struc.sav') then begin
+;if FILE_EXIST(flare_path + class + '_' + 'struc.sav') then begin
+    print, flare_path + class + '_' + 'struc.sav'
+    restore, flare_path + class + '_' + 'struc.sav', /VERBOSE
+    ;restore, flare_path + class + '_' + 'struc.sav', /VERBOSE
+    ;- /VERBOSE prints infromation for restored object in case one forgets...
+endif else begin
+    print, 'Either file "A.sav" does not exist OR filename/location is incorrect.'
+endelse
 
 
 END
